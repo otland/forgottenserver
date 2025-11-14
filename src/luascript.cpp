@@ -10,20 +10,17 @@
 #include "configmanager.h"
 #include "databasemanager.h"
 #include "databasetasks.h"
-#include "depotchest.h"
 #include "events.h"
 #include "game.h"
 #include "globalevent.h"
 #include "housetile.h"
-#include "inbox.h"
 #include "iologindata.h"
 #include "iomapserialize.h"
 #include "iomarket.h"
+#include "item.h"
 #include "luavariant.h"
 #include "matrixarea.h"
-#include "monster.h"
 #include "movement.h"
-#include "npc.h"
 #include "outfit.h"
 #include "party.h"
 #include "player.h"
@@ -33,11 +30,8 @@
 #include "script.h"
 #include "spectators.h"
 #include "spells.h"
-#include "storeinbox.h"
 #include "teleport.h"
 #include "weapons.h"
-
-#include <ranges>
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -72,9 +66,6 @@ enum LuaDataType
 	LuaData_Npc,
 	LuaData_Tile,
 };
-
-// temporary item list
-std::multimap<ScriptEnvironment*, Item*> tempItems = {};
 
 // result map
 uint32_t lastResultId = 0;
@@ -257,17 +248,6 @@ bool getArea(lua_State* L, std::vector<uint32_t>& vec, uint32_t& rows)
 	return (rows != 0);
 }
 
-template <class T>
-std::shared_ptr<T>& getSharedPtr(lua_State* L, int32_t arg)
-{
-	return *static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
-}
-template <class T>
-void pushSharedPtr(lua_State* L, T value)
-{
-	new (lua_newuserdata(L, sizeof(T))) T(std::move(value));
-}
-
 } // namespace
 
 ScriptEnvironment::ScriptEnvironment() { resetEnv(); }
@@ -282,16 +262,6 @@ void ScriptEnvironment::resetEnv()
 	interface = nullptr;
 	localMap.clear();
 	tempResults.clear();
-
-	auto pair = tempItems.equal_range(this);
-	auto it = pair.first;
-	while (it != pair.second) {
-		Item* item = it->second;
-		if (item && item->getParent() == VirtualCylinder::virtualCylinder) {
-			g_game.ReleaseItem(item);
-		}
-		it = tempItems.erase(it);
-	}
 }
 
 bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
@@ -309,25 +279,24 @@ bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* sc
 	return true;
 }
 
-uint32_t ScriptEnvironment::addThing(Thing* thing)
+uint32_t ScriptEnvironment::addThing(const std::shared_ptr<Thing>& thing)
 {
 	if (!thing || thing->isRemoved()) {
 		return 0;
 	}
 
-	Creature* creature = thing->getCreature();
-	if (creature) {
+	if (const auto& creature = thing->getCreature()) {
 		return creature->getID();
 	}
 
-	Item* item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (item && item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		return item->getUniqueId();
 	}
 
-	for (const auto& it : localMap) {
-		if (it.second == item) {
-			return it.first;
+	for (const auto& [uid, localItem] : localMap) {
+		if (localItem == item) {
+			return uid;
 		}
 	}
 
@@ -335,7 +304,7 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 	return lastUID;
 }
 
-void ScriptEnvironment::insertItem(uint32_t uid, Item* item)
+void ScriptEnvironment::insertItem(uint32_t uid, const std::shared_ptr<Item>& item)
 {
 	auto result = localMap.emplace(uid, item);
 	if (!result.second) {
@@ -343,23 +312,24 @@ void ScriptEnvironment::insertItem(uint32_t uid, Item* item)
 	}
 }
 
-Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
+std::shared_ptr<Thing> ScriptEnvironment::getThingByUID(uint32_t uid)
 {
 	if (uid >= CREATURE_ID_MIN) {
 		return g_game.getCreatureByID(uid);
 	}
 
 	if (uid <= std::numeric_limits<uint16_t>::max()) {
-		Item* item = g_game.getUniqueItem(uid);
-		if (item && !item->isRemoved()) {
-			return item;
+		if (const auto& item = g_game.getUniqueItem(uid)) {
+			if (!item->isRemoved()) {
+				return item;
+			}
 		}
 		return nullptr;
 	}
 
 	auto it = localMap.find(uid);
 	if (it != localMap.end()) {
-		Item* item = it->second;
+		const auto& item = it->second;
 		if (!item->isRemoved()) {
 			return item;
 		}
@@ -367,18 +337,18 @@ Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 	return nullptr;
 }
 
-Item* ScriptEnvironment::getItemByUID(uint32_t uid)
+std::shared_ptr<Item> ScriptEnvironment::getItemByUID(uint32_t uid)
 {
-	Thing* thing = getThingByUID(uid);
+	const auto& thing = getThingByUID(uid);
 	if (!thing) {
 		return nullptr;
 	}
 	return thing->getItem();
 }
 
-Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
+std::shared_ptr<Container> ScriptEnvironment::getContainerByUID(uint32_t uid)
 {
-	Item* item = getItemByUID(uid);
+	const auto& item = getItemByUID(uid);
 	if (!item) {
 		return nullptr;
 	}
@@ -392,17 +362,7 @@ void ScriptEnvironment::removeItemByUID(uint32_t uid)
 		return;
 	}
 
-	auto it = localMap.find(uid);
-	if (it != localMap.end()) {
-		localMap.erase(it);
-	}
-}
-
-static void addTempItem(Item* item) { tempItems.emplace(tfs::lua::getScriptEnv(), item); }
-
-void tfs::lua::removeTempItem(Item* item)
-{
-	std::erase_if(tempItems, [item](const auto& pair) { return pair.second == item; });
+	localMap.erase(uid);
 }
 
 static uint32_t addResult(DBResult_ptr res)
@@ -498,7 +458,7 @@ int tfs::lua::protectedCall(lua_State* L, int nargs, int nresults)
 	return ret;
 }
 
-int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = nullptr*/)
+int32_t LuaScriptInterface::loadFile(const std::string& file, const std::shared_ptr<Npc>& npc /* = nullptr*/)
 {
 	// loads file as a chunk at stack top
 	int ret = luaL_loadfile(L, file.data());
@@ -764,7 +724,7 @@ void tfs::lua::pushVariant(lua_State* L, const LuaVariant& var)
 	setMetatable(L, -1, "Variant");
 }
 
-void tfs::lua::pushThing(lua_State* L, Thing* thing)
+void tfs::lua::pushThing(lua_State* L, const std::shared_ptr<Thing>& thing)
 {
 	if (!thing) {
 		lua_createtable(L, 0, 4);
@@ -775,30 +735,15 @@ void tfs::lua::pushThing(lua_State* L, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
-		pushUserdata(L, item);
+	if (const auto& creature = thing->getCreature()) {
+		pushSharedPtr(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else if (const auto& item = thing->getItem()) {
+		pushSharedPtr(L, item);
 		setItemMetatable(L, -1, item);
-	} else if (Creature* creature = thing->getCreature()) {
-		pushUserdata(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else {
-		lua_pushnil(L);
-	}
-}
-
-void tfs::lua::pushCylinder(lua_State* L, Cylinder* cylinder)
-{
-	if (Creature* creature = cylinder->getCreature()) {
-		pushUserdata(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else if (Item* parentItem = cylinder->getItem()) {
-		pushUserdata(L, parentItem);
-		setItemMetatable(L, -1, parentItem);
-	} else if (Tile* tile = cylinder->getTile()) {
-		pushUserdata(L, tile);
+	} else if (const auto& tile = thing->getTile()) {
+		pushSharedPtr(L, tile);
 		setMetatable(L, -1, "Tile");
-	} else if (cylinder == VirtualCylinder::virtualCylinder) {
-		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -862,7 +807,7 @@ static void setWeakMetatable(lua_State* L, int32_t index, const std::string& nam
 	lua_setmetatable(L, index - 1);
 }
 
-void tfs::lua::setItemMetatable(lua_State* L, int32_t index, const Item* item)
+void tfs::lua::setItemMetatable(lua_State* L, int32_t index, const std::shared_ptr<const Item>& item)
 {
 	if (item->getContainer()) {
 		luaL_getmetatable(L, "Container");
@@ -876,7 +821,7 @@ void tfs::lua::setItemMetatable(lua_State* L, int32_t index, const Item* item)
 	lua_setmetatable(L, index - 1);
 }
 
-void tfs::lua::setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
+void tfs::lua::setCreatureMetatable(lua_State* L, int32_t index, const std::shared_ptr<const Creature>& creature)
 {
 	if (creature->getPlayer()) {
 		luaL_getmetatable(L, "Player");
@@ -1004,35 +949,32 @@ static LuaVariant getVariant(lua_State* L, int32_t arg)
 	return var;
 }
 
-Thing* tfs::lua::getThing(lua_State* L, int32_t arg)
+std::shared_ptr<Thing> tfs::lua::getThing(lua_State* L, int32_t arg)
 {
-	Thing* thing;
+	std::shared_ptr<Thing> thing = nullptr;
 	if (lua_getmetatable(L, arg) != 0) {
 		lua_rawgeti(L, -1, 't');
 		switch (getNumber<uint32_t>(L, -1)) {
 			case LuaData_Item:
-				thing = getUserdata<Item>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Item>(L, arg));
 				break;
 			case LuaData_Container:
-				thing = getUserdata<Container>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Container>(L, arg));
 				break;
 			case LuaData_Teleport:
-				thing = getUserdata<Teleport>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Teleport>(L, arg));
 				break;
 			case LuaData_Podium:
-				thing = getUserdata<Podium>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Podium>(L, arg));
 				break;
 			case LuaData_Player:
-				thing = getUserdata<Player>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Player>(L, arg));
 				break;
 			case LuaData_Monster:
-				thing = getUserdata<Monster>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Monster>(L, arg));
 				break;
 			case LuaData_Npc:
-				thing = getUserdata<Npc>(L, arg);
-				break;
-			default:
-				thing = nullptr;
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Npc>(L, arg));
 				break;
 		}
 		lua_pop(L, 2);
@@ -1042,18 +984,18 @@ Thing* tfs::lua::getThing(lua_State* L, int32_t arg)
 	return thing;
 }
 
-Creature* tfs::lua::getCreature(lua_State* L, int32_t arg)
+std::shared_ptr<Creature> tfs::lua::getCreature(lua_State* L, int32_t arg)
 {
 	if (lua_isuserdata(L, arg)) {
-		return getUserdata<Creature>(L, arg);
+		return getSharedPtr<Creature>(L, arg);
 	}
 	return g_game.getCreatureByID(getNumber<uint32_t>(L, arg));
 }
 
-Player* tfs::lua::getPlayer(lua_State* L, int32_t arg)
+std::shared_ptr<Player> tfs::lua::getPlayer(lua_State* L, int32_t arg)
 {
 	if (lua_isuserdata(L, arg)) {
-		return getUserdata<Player>(L, arg);
+		return getSharedPtr<Player>(L, arg);
 	}
 	return g_game.getPlayerByID(getNumber<uint32_t>(L, arg));
 }
@@ -3590,7 +3532,7 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 	// doPlayerAddItem(cid, itemid, <optional: default: 1> count/subtype, <optional: default: 1> canDropOnMap)
 	// doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional:
 	// default: 1>subtype)
-	Player* player = tfs::lua::getPlayer(L, 1);
+	const auto& player = tfs::lua::getPlayer(L, 1);
 	if (!player) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -3626,7 +3568,7 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 			stackCount = ITEM_STACK_SIZE;
 		}
 
-		Item* newItem = Item::CreateItem(itemId, stackCount);
+		const auto& newItem = Item::CreateItem(itemId, stackCount);
 		if (!newItem) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -3639,7 +3581,6 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 
 		ReturnValue ret = g_game.internalPlayerAddItem(player, newItem, canDropOnMap);
 		if (ret != RETURNVALUE_NOERROR) {
-			delete newItem;
 			tfs::lua::pushBoolean(L, false);
 			return 1;
 		}
@@ -3730,7 +3671,7 @@ int LuaScriptInterface::luaDoAreaCombat(lua_State* L)
 {
 	// doAreaCombat(cid, type, pos, area, min, max, effect[, origin = ORIGIN_SPELL[, blockArmor = false[, blockShield =
 	// false[, ignoreResistances = false]]]])
-	Creature* creature = tfs::lua::getCreature(L, 1);
+	const auto& creature = tfs::lua::getCreature(L, 1);
 	if (!creature && (!isNumber(L, 1) || tfs::lua::getNumber<uint32_t>(L, 1) != 0)) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -3768,14 +3709,14 @@ int LuaScriptInterface::luaDoTargetCombat(lua_State* L)
 {
 	// doTargetCombat(cid, target, type, min, max, effect[, origin = ORIGIN_SPELL[, blockArmor = false[, blockShield =
 	// false[, ignoreResistances = false]]]])
-	Creature* creature = tfs::lua::getCreature(L, 1);
+	const auto& creature = tfs::lua::getCreature(L, 1);
 	if (!creature && (!isNumber(L, 1) || tfs::lua::getNumber<uint32_t>(L, 1) != 0)) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	Creature* target = tfs::lua::getCreature(L, 2);
+	const auto& target = tfs::lua::getCreature(L, 2);
 	if (!target) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -3809,14 +3750,14 @@ int LuaScriptInterface::luaDoTargetCombat(lua_State* L)
 int LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 {
 	// doChallengeCreature(cid, target[, force = false])
-	Creature* creature = tfs::lua::getCreature(L, 1);
+	const auto& creature = tfs::lua::getCreature(L, 1);
 	if (!creature) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	Creature* target = tfs::lua::getCreature(L, 2);
+	const auto& target = tfs::lua::getCreature(L, 2);
 	if (!target) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -3838,7 +3779,7 @@ int LuaScriptInterface::luaIsValidUID(lua_State* L)
 int LuaScriptInterface::luaIsDepot(lua_State* L)
 {
 	// isDepot(uid)
-	Container* container = tfs::lua::getScriptEnv()->getContainerByUID(tfs::lua::getNumber<uint32_t>(L, -1));
+	const auto& container = tfs::lua::getScriptEnv()->getContainerByUID(tfs::lua::getNumber<uint32_t>(L, -1));
 	tfs::lua::pushBoolean(L, container && container->getDepotLocker());
 	return 1;
 }
@@ -3847,7 +3788,7 @@ int LuaScriptInterface::luaIsMoveable(lua_State* L)
 {
 	// isMoveable(uid)
 	// isMovable(uid)
-	Thing* thing = tfs::lua::getScriptEnv()->getThingByUID(tfs::lua::getNumber<uint32_t>(L, -1));
+	const auto& thing = tfs::lua::getScriptEnv()->getThingByUID(tfs::lua::getNumber<uint32_t>(L, -1));
 	tfs::lua::pushBoolean(L, thing && thing->isPushable());
 	return 1;
 }
@@ -3857,14 +3798,14 @@ int LuaScriptInterface::luaGetDepotId(lua_State* L)
 	// getDepotId(uid)
 	uint32_t uid = tfs::lua::getNumber<uint32_t>(L, -1);
 
-	Container* container = tfs::lua::getScriptEnv()->getContainerByUID(uid);
+	const auto& container = tfs::lua::getScriptEnv()->getContainerByUID(uid);
 	if (!container) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	DepotLocker* depotLocker = container->getDepotLocker();
+	const auto& depotLocker = container->getDepotLocker();
 	if (!depotLocker) {
 		reportErrorFunc(L, "Depot not found");
 		tfs::lua::pushBoolean(L, false);
@@ -4038,14 +3979,14 @@ int LuaScriptInterface::luaCleanMap(lua_State* L)
 int LuaScriptInterface::luaIsInWar(lua_State* L)
 {
 	// isInWar(cid, target)
-	Player* player = tfs::lua::getPlayer(L, 1);
+	const auto& player = tfs::lua::getPlayer(L, 1);
 	if (!player) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	Player* targetPlayer = tfs::lua::getPlayer(L, 2);
+	const auto& targetPlayer = tfs::lua::getPlayer(L, 2);
 	if (!targetPlayer) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -4559,8 +4500,8 @@ int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 	lua_createtable(L, spectators.size(), 0);
 
 	int index = 0;
-	for (Creature* creature : spectators) {
-		tfs::lua::pushUserdata(L, creature);
+	for (const auto& creature : spectators) {
+		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4570,11 +4511,12 @@ int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 int LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 {
 	// Game.getPlayers()
-	lua_createtable(L, g_game.getPlayersOnline(), 0);
+	const auto& players = g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, players.size(), 0);
 
 	int index = 0;
-	for (const auto& playerEntry : g_game.getPlayers()) {
-		tfs::lua::pushUserdata(L, playerEntry.second);
+	for (const auto& player : players) {
+		tfs::lua::pushSharedPtr(L, player);
 		tfs::lua::setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4584,11 +4526,12 @@ int LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 int LuaScriptInterface::luaGameGetNpcs(lua_State* L)
 {
 	// Game.getNpcs()
-	lua_createtable(L, g_game.getNpcsOnline(), 0);
+	const auto& npcs = g_game.getNpcs() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, npcs.size(), 0);
 
 	int index = 0;
-	for (const auto& npcEntry : g_game.getNpcs()) {
-		tfs::lua::pushUserdata(L, npcEntry.second);
+	for (const auto& npc : npcs) {
+		tfs::lua::pushSharedPtr(L, npc);
 		tfs::lua::setMetatable(L, -1, "Npc");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4598,11 +4541,12 @@ int LuaScriptInterface::luaGameGetNpcs(lua_State* L)
 int LuaScriptInterface::luaGameGetMonsters(lua_State* L)
 {
 	// Game.getMonsters()
-	lua_createtable(L, g_game.getMonstersOnline(), 0);
+	const auto& monsters = g_game.getMonsters() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, monsters.size(), 0);
 
 	int index = 0;
-	for (const auto& monsterEntry : g_game.getMonsters()) {
-		tfs::lua::pushUserdata(L, monsterEntry.second);
+	for (const auto& monster : monsters) {
+		tfs::lua::pushSharedPtr(L, monster);
 		tfs::lua::setMetatable(L, -1, "Monster");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4757,7 +4701,7 @@ int LuaScriptInterface::luaGameGetTowns(lua_State* L)
 	lua_createtable(L, towns.size(), 0);
 
 	int index = 0;
-	for (const auto& [_, town] : towns) {
+	for (const auto& town : towns | std::views::values) {
 		pushTown(L, *town);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4846,13 +4790,13 @@ int LuaScriptInterface::luaGameGetVocations(lua_State* L)
 int LuaScriptInterface::luaGameGetRuneSpells(lua_State* L)
 {
 	// Game.getRuneSpells()
-	auto runeSpells = g_spells->getRuneSpells();
+	const auto& runeSpells = g_spells->getRuneSpells();
 
 	lua_createtable(L, runeSpells.size(), 0);
 
 	int index = 0;
-	for (auto& spell : runeSpells | std::views::values) {
-		tfs::lua::pushUserdata<Spell>(L, &spell);
+	for (const auto& spell : runeSpells | std::views::values) {
+		tfs::lua::pushUserdata<const Spell>(L, &spell);
 		tfs::lua::setMetatable(L, -1, "Spell");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4863,13 +4807,13 @@ int LuaScriptInterface::luaGameGetRuneSpells(lua_State* L)
 int LuaScriptInterface::luaGameGetInstantSpells(lua_State* L)
 {
 	// Game.getInstantSpells()
-	auto instantSpells = g_spells->getInstantSpells();
+	const auto& instantSpells = g_spells->getInstantSpells();
 
 	lua_createtable(L, instantSpells.size(), 0);
 
 	int index = 0;
-	for (auto& spell : instantSpells | std::views::values) {
-		tfs::lua::pushUserdata<Spell>(L, &spell);
+	for (const auto& spell : instantSpells | std::views::values) {
+		tfs::lua::pushUserdata<const Spell>(L, &spell);
 		tfs::lua::setMetatable(L, -1, "Spell");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4944,7 +4888,7 @@ int LuaScriptInterface::luaGameCreateItem(lua_State* L)
 		count = std::min<uint16_t>(count, ITEM_STACK_SIZE);
 	}
 
-	Item* item = Item::CreateItem(id, count);
+	const auto& item = Item::CreateItem(id, count);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -4952,20 +4896,16 @@ int LuaScriptInterface::luaGameCreateItem(lua_State* L)
 
 	if (lua_gettop(L) >= 3) {
 		const Position& position = tfs::lua::getPosition(L, 3);
-		Tile* tile = g_game.map.getTile(position);
+		const auto& tile = g_game.map.getTile(position);
 		if (!tile) {
-			delete item;
 			lua_pushnil(L);
 			return 1;
 		}
 
 		g_game.internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
-	} else {
-		addTempItem(item);
-		item->setParent(VirtualCylinder::virtualCylinder);
 	}
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 	return 1;
 }
@@ -4985,7 +4925,7 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 		}
 	}
 
-	Container* container = Item::CreateItemAsContainer(id, size);
+	const auto& container = Item::CreateItemAsContainer(id, size);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;
@@ -4993,20 +4933,16 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 
 	if (lua_gettop(L) >= 3) {
 		const Position& position = tfs::lua::getPosition(L, 3);
-		Tile* tile = g_game.map.getTile(position);
+		const auto& tile = g_game.map.getTile(position);
 		if (!tile) {
-			delete container;
 			lua_pushnil(L);
 			return 1;
 		}
 
 		g_game.internalAddItem(tile, container, INDEX_WHEREEVER, FLAG_NOLIMIT);
-	} else {
-		addTempItem(container);
-		container->setParent(VirtualCylinder::virtualCylinder);
 	}
 
-	tfs::lua::pushUserdata(L, container);
+	tfs::lua::pushSharedPtr(L, container);
 	tfs::lua::setMetatable(L, -1, "Container");
 	return 1;
 }
@@ -5014,7 +4950,7 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 {
 	// Game.createMonster(monsterName, position[, extended = false[, force = false[, magicEffect = CONST_ME_TELEPORT]]])
-	Monster* monster = Monster::createMonster(tfs::lua::getString(L, 1));
+	const auto& monster = Monster::createMonster(tfs::lua::getString(L, 1));
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
@@ -5026,14 +4962,12 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 	MagicEffectClasses magicEffect = tfs::lua::getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
 	if (tfs::events::monster::onSpawn(monster, position, false, true) || force) {
 		if (g_game.placeCreature(monster, position, extended, force, magicEffect)) {
-			tfs::lua::pushUserdata(L, monster);
+			tfs::lua::pushSharedPtr(L, monster);
 			tfs::lua::setMetatable(L, -1, "Monster");
 		} else {
-			delete monster;
 			lua_pushnil(L);
 		}
 	} else {
-		delete monster;
 		lua_pushnil(L);
 	}
 	return 1;
@@ -5042,7 +4976,7 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 int LuaScriptInterface::luaGameCreateNpc(lua_State* L)
 {
 	// Game.createNpc(npcName, position[, extended = false[, force = false[, magicEffect = CONST_ME_TELEPORT]]])
-	Npc* npc = Npc::createNpc(tfs::lua::getString(L, 1));
+	const auto& npc = Npc::createNpc(tfs::lua::getString(L, 1));
 	if (!npc) {
 		lua_pushnil(L);
 		return 1;
@@ -5053,10 +4987,9 @@ int LuaScriptInterface::luaGameCreateNpc(lua_State* L)
 	bool force = tfs::lua::getBoolean(L, 4, false);
 	MagicEffectClasses magicEffect = tfs::lua::getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
 	if (g_game.placeCreature(npc, position, extended, force, magicEffect)) {
-		tfs::lua::pushUserdata(L, npc);
+		tfs::lua::pushSharedPtr(L, npc);
 		tfs::lua::setMetatable(L, -1, "Npc");
 	} else {
-		delete npc;
 		lua_pushnil(L);
 	}
 	return 1;
@@ -5078,18 +5011,18 @@ int LuaScriptInterface::luaGameCreateTile(lua_State* L)
 		isDynamic = tfs::lua::getBoolean(L, 4, false);
 	}
 
-	Tile* tile = g_game.map.getTile(position);
+	auto tile = g_game.map.getTile(position);
 	if (!tile) {
 		if (isDynamic) {
-			tile = new DynamicTile(position.x, position.y, position.z);
+			tile = std::make_shared<DynamicTile>(position.x, position.y, position.z);
 		} else {
-			tile = new StaticTile(position.x, position.y, position.z);
+			tile = std::make_shared<StaticTile>(position.x, position.y, position.z);
 		}
 
 		g_game.map.setTile(position, tile);
 	}
 
-	tfs::lua::pushUserdata(L, tile);
+	tfs::lua::pushSharedPtr(L, tile);
 	tfs::lua::setMetatable(L, -1, "Tile");
 	return 1;
 }
@@ -5177,7 +5110,7 @@ int LuaScriptInterface::luaVariantCreate(lua_State* L)
 	// Variant(number or string or position or thing)
 	LuaVariant variant;
 	if (lua_isuserdata(L, 2)) {
-		if (Thing* thing = tfs::lua::getThing(L, 2)) {
+		if (const auto& thing = tfs::lua::getThing(L, 2)) {
 			variant.setTargetPosition(thing->getPosition());
 		}
 	} else if (lua_istable(L, 2)) {
@@ -5269,9 +5202,8 @@ int LuaScriptInterface::luaPositionSendMagicEffect(lua_State* L)
 	// position:sendMagicEffect(magicEffect[, player = nullptr])
 	SpectatorVec spectators;
 	if (lua_gettop(L) >= 3) {
-		Player* player = tfs::lua::getPlayer(L, 3);
-		if (player) {
-			spectators.emplace_back(player);
+		if (const auto& player = tfs::lua::getPlayer(L, 3)) {
+			spectators.emplace(player);
 		}
 	}
 
@@ -5297,9 +5229,8 @@ int LuaScriptInterface::luaPositionSendDistanceEffect(lua_State* L)
 	// position:sendDistanceEffect(positionEx, distanceEffect[, player = nullptr])
 	SpectatorVec spectators;
 	if (lua_gettop(L) >= 4) {
-		Player* player = tfs::lua::getPlayer(L, 4);
-		if (player) {
-			spectators.emplace_back(player);
+		if (const auto& player = tfs::lua::getPlayer(L, 4)) {
+			spectators.emplace(player);
 		}
 	}
 
@@ -5321,7 +5252,7 @@ int LuaScriptInterface::luaTileCreate(lua_State* L)
 {
 	// Tile(x, y, z)
 	// Tile(position)
-	Tile* tile;
+	std::shared_ptr<Tile> tile;
 	if (lua_istable(L, 2)) {
 		tile = g_game.map.getTile(tfs::lua::getPosition(L, 2));
 	} else {
@@ -5332,7 +5263,7 @@ int LuaScriptInterface::luaTileCreate(lua_State* L)
 	}
 
 	if (tile) {
-		tfs::lua::pushUserdata(L, tile);
+		tfs::lua::pushSharedPtr(L, tile);
 		tfs::lua::setMetatable(L, -1, "Tile");
 	} else {
 		lua_pushnil(L);
@@ -5343,7 +5274,7 @@ int LuaScriptInterface::luaTileCreate(lua_State* L)
 int LuaScriptInterface::luaTileRemove(lua_State* L)
 {
 	// tile:remove()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5361,8 +5292,7 @@ int LuaScriptInterface::luaTileRemove(lua_State* L)
 int LuaScriptInterface::luaTileGetPosition(lua_State* L)
 {
 	// tile:getPosition()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
-	if (tile) {
+	if (const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1)) {
 		tfs::lua::pushPosition(L, tile->getPosition());
 	} else {
 		lua_pushnil(L);
@@ -5373,9 +5303,9 @@ int LuaScriptInterface::luaTileGetPosition(lua_State* L)
 int LuaScriptInterface::luaTileGetGround(lua_State* L)
 {
 	// tile:getGround()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (tile && tile->getGround()) {
-		tfs::lua::pushUserdata(L, tile->getGround());
+		tfs::lua::pushSharedPtr(L, tile->getGround());
 		tfs::lua::setItemMetatable(L, -1, tile->getGround());
 	} else {
 		lua_pushnil(L);
@@ -5387,23 +5317,23 @@ int LuaScriptInterface::luaTileGetThing(lua_State* L)
 {
 	// tile:getThing(index)
 	int32_t index = tfs::lua::getNumber<int32_t>(L, 2);
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Thing* thing = tile->getThing(index);
+	const auto& thing = tile->getThing(index);
 	if (!thing) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (Creature* creature = thing->getCreature()) {
-		tfs::lua::pushUserdata(L, creature);
+	if (const auto& creature = thing->getCreature()) {
+		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
-	} else if (Item* item = thing->getItem()) {
-		tfs::lua::pushUserdata(L, item);
+	} else if (const auto& item = thing->getItem()) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -5414,8 +5344,7 @@ int LuaScriptInterface::luaTileGetThing(lua_State* L)
 int LuaScriptInterface::luaTileGetThingCount(lua_State* L)
 {
 	// tile:getThingCount()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
-	if (tile) {
+	if (const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1)) {
 		lua_pushnumber(L, tile->getThingCount());
 	} else {
 		lua_pushnil(L);
@@ -5426,24 +5355,24 @@ int LuaScriptInterface::luaTileGetThingCount(lua_State* L)
 int LuaScriptInterface::luaTileGetTopVisibleThing(lua_State* L)
 {
 	// tile:getTopVisibleThing(creature)
-	Creature* creature = tfs::lua::getCreature(L, 2);
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& creature = tfs::lua::getCreature(L, 2);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Thing* thing = tile->getTopVisibleThing(creature);
+	const auto& thing = tile->getTopVisibleThing(creature);
 	if (!thing) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (Creature* visibleCreature = thing->getCreature()) {
-		tfs::lua::pushUserdata(L, visibleCreature);
+	if (const auto& visibleCreature = thing->getCreature()) {
+		tfs::lua::pushSharedPtr(L, visibleCreature);
 		tfs::lua::setCreatureMetatable(L, -1, visibleCreature);
-	} else if (Item* visibleItem = thing->getItem()) {
-		tfs::lua::pushUserdata(L, visibleItem);
+	} else if (const auto& visibleItem = thing->getItem()) {
+		tfs::lua::pushSharedPtr(L, visibleItem);
 		tfs::lua::setItemMetatable(L, -1, visibleItem);
 	} else {
 		lua_pushnil(L);
@@ -5454,15 +5383,14 @@ int LuaScriptInterface::luaTileGetTopVisibleThing(lua_State* L)
 int LuaScriptInterface::luaTileGetTopTopItem(lua_State* L)
 {
 	// tile:getTopTopItem()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item* item = tile->getTopTopItem();
-	if (item) {
-		tfs::lua::pushUserdata(L, item);
+	if (const auto& item = tile->getTopTopItem()) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -5473,15 +5401,14 @@ int LuaScriptInterface::luaTileGetTopTopItem(lua_State* L)
 int LuaScriptInterface::luaTileGetTopDownItem(lua_State* L)
 {
 	// tile:getTopDownItem()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item* item = tile->getTopDownItem();
-	if (item) {
-		tfs::lua::pushUserdata(L, item);
+	if (const auto& item = tile->getTopDownItem()) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -5492,15 +5419,14 @@ int LuaScriptInterface::luaTileGetTopDownItem(lua_State* L)
 int LuaScriptInterface::luaTileGetFieldItem(lua_State* L)
 {
 	// tile:getFieldItem()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item* item = tile->getFieldItem();
-	if (item) {
-		tfs::lua::pushUserdata(L, item);
+	if (const auto& item = tile->getFieldItem()) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -5511,7 +5437,7 @@ int LuaScriptInterface::luaTileGetFieldItem(lua_State* L)
 int LuaScriptInterface::luaTileGetItemById(lua_State* L)
 {
 	// tile:getItemById(itemId[, subType = -1])
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5529,9 +5455,8 @@ int LuaScriptInterface::luaTileGetItemById(lua_State* L)
 	}
 	int32_t subType = tfs::lua::getNumber<int32_t>(L, 3, -1);
 
-	Item* item = g_game.findItemOfType(tile, itemId, false, subType);
-	if (item) {
-		tfs::lua::pushUserdata(L, item);
+	if (const auto& item = g_game.findItemOfType(tile, itemId, false, subType)) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -5542,7 +5467,7 @@ int LuaScriptInterface::luaTileGetItemById(lua_State* L)
 int LuaScriptInterface::luaTileGetItemByType(lua_State* L)
 {
 	// tile:getItemByType(itemType)
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5580,20 +5505,20 @@ int LuaScriptInterface::luaTileGetItemByType(lua_State* L)
 		return 1;
 	}
 
-	if (Item* item = tile->getGround()) {
+	if (const auto& item = tile->getGround()) {
 		const ItemType& it = Item::items[item->getID()];
 		if (it.type == itemType) {
-			tfs::lua::pushUserdata(L, item);
+			tfs::lua::pushSharedPtr(L, item);
 			tfs::lua::setItemMetatable(L, -1, item);
 			return 1;
 		}
 	}
 
 	if (const TileItemVector* items = tile->getItemList()) {
-		for (Item* item : *items) {
+		for (const auto& item : *items) {
 			const ItemType& it = Item::items[item->getID()];
 			if (it.type == itemType) {
-				tfs::lua::pushUserdata(L, item);
+				tfs::lua::pushSharedPtr(L, item);
 				tfs::lua::setItemMetatable(L, -1, item);
 				return 1;
 			}
@@ -5607,7 +5532,7 @@ int LuaScriptInterface::luaTileGetItemByType(lua_State* L)
 int LuaScriptInterface::luaTileGetItemByTopOrder(lua_State* L)
 {
 	// tile:getItemByTopOrder(topOrder)
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5615,13 +5540,13 @@ int LuaScriptInterface::luaTileGetItemByTopOrder(lua_State* L)
 
 	int32_t topOrder = tfs::lua::getNumber<int32_t>(L, 2);
 
-	Item* item = tile->getItemByTopOrder(topOrder);
+	const auto& item = tile->getItemByTopOrder(topOrder);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 	return 1;
 }
@@ -5629,7 +5554,7 @@ int LuaScriptInterface::luaTileGetItemByTopOrder(lua_State* L)
 int LuaScriptInterface::luaTileGetItemCountById(lua_State* L)
 {
 	// tile:getItemCountById(itemId[, subType = -1])
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5655,19 +5580,19 @@ int LuaScriptInterface::luaTileGetItemCountById(lua_State* L)
 int LuaScriptInterface::luaTileGetBottomCreature(lua_State* L)
 {
 	// tile:getBottomCreature()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	const Creature* creature = tile->getBottomCreature();
+	const auto& creature = tile->getBottomCreature();
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 	return 1;
 }
@@ -5675,19 +5600,19 @@ int LuaScriptInterface::luaTileGetBottomCreature(lua_State* L)
 int LuaScriptInterface::luaTileGetTopCreature(lua_State* L)
 {
 	// tile:getTopCreature()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* creature = tile->getTopCreature();
+	const auto& creature = tile->getTopCreature();
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 	return 1;
 }
@@ -5695,21 +5620,20 @@ int LuaScriptInterface::luaTileGetTopCreature(lua_State* L)
 int LuaScriptInterface::luaTileGetBottomVisibleCreature(lua_State* L)
 {
 	// tile:getBottomVisibleCreature(creature)
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* creature = tfs::lua::getCreature(L, 2);
+	const auto& creature = tfs::lua::getCreature(L, 2);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	const Creature* visibleCreature = tile->getBottomVisibleCreature(creature);
-	if (visibleCreature) {
-		tfs::lua::pushUserdata(L, visibleCreature);
+	if (const auto& visibleCreature = tile->getBottomVisibleCreature(creature)) {
+		tfs::lua::pushSharedPtr(L, visibleCreature);
 		tfs::lua::setCreatureMetatable(L, -1, visibleCreature);
 	} else {
 		lua_pushnil(L);
@@ -5720,21 +5644,20 @@ int LuaScriptInterface::luaTileGetBottomVisibleCreature(lua_State* L)
 int LuaScriptInterface::luaTileGetTopVisibleCreature(lua_State* L)
 {
 	// tile:getTopVisibleCreature(creature)
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* creature = tfs::lua::getCreature(L, 2);
+	const auto& creature = tfs::lua::getCreature(L, 2);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* visibleCreature = tile->getTopVisibleCreature(creature);
-	if (visibleCreature) {
-		tfs::lua::pushUserdata(L, visibleCreature);
+	if (const auto& visibleCreature = tile->getTopVisibleCreature(creature)) {
+		tfs::lua::pushSharedPtr(L, visibleCreature);
 		tfs::lua::setCreatureMetatable(L, -1, visibleCreature);
 	} else {
 		lua_pushnil(L);
@@ -5745,7 +5668,7 @@ int LuaScriptInterface::luaTileGetTopVisibleCreature(lua_State* L)
 int LuaScriptInterface::luaTileGetItems(lua_State* L)
 {
 	// tile:getItems()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5760,8 +5683,8 @@ int LuaScriptInterface::luaTileGetItems(lua_State* L)
 	lua_createtable(L, itemVector->size(), 0);
 
 	int index = 0;
-	for (Item* item : *itemVector) {
-		tfs::lua::pushUserdata(L, item);
+	for (const auto& item : *itemVector) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -5771,7 +5694,7 @@ int LuaScriptInterface::luaTileGetItems(lua_State* L)
 int LuaScriptInterface::luaTileGetItemCount(lua_State* L)
 {
 	// tile:getItemCount()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5784,8 +5707,7 @@ int LuaScriptInterface::luaTileGetItemCount(lua_State* L)
 int LuaScriptInterface::luaTileGetDownItemCount(lua_State* L)
 {
 	// tile:getDownItemCount()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
-	if (tile) {
+	if (const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1)) {
 		lua_pushnumber(L, tile->getDownItemCount());
 	} else {
 		lua_pushnil(L);
@@ -5796,7 +5718,7 @@ int LuaScriptInterface::luaTileGetDownItemCount(lua_State* L)
 int LuaScriptInterface::luaTileGetTopItemCount(lua_State* L)
 {
 	// tile:getTopItemCount()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5809,7 +5731,7 @@ int LuaScriptInterface::luaTileGetTopItemCount(lua_State* L)
 int LuaScriptInterface::luaTileGetCreatures(lua_State* L)
 {
 	// tile:getCreatures()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5824,8 +5746,8 @@ int LuaScriptInterface::luaTileGetCreatures(lua_State* L)
 	lua_createtable(L, creatureVector->size(), 0);
 
 	int index = 0;
-	for (Creature* creature : *creatureVector) {
-		tfs::lua::pushUserdata(L, creature);
+	for (const auto& creature : *creatureVector) {
+		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -5835,7 +5757,7 @@ int LuaScriptInterface::luaTileGetCreatures(lua_State* L)
 int LuaScriptInterface::luaTileGetCreatureCount(lua_State* L)
 {
 	// tile:getCreatureCount()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5848,17 +5770,15 @@ int LuaScriptInterface::luaTileGetCreatureCount(lua_State* L)
 int LuaScriptInterface::luaTileHasProperty(lua_State* L)
 {
 	// tile:hasProperty(property[, item])
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item* item;
+	std::shared_ptr<Item> item = nullptr;
 	if (lua_gettop(L) >= 3) {
-		item = tfs::lua::getUserdata<Item>(L, 3);
-	} else {
-		item = nullptr;
+		item = tfs::lua::getSharedPtr<Item>(L, 3);
 	}
 
 	ITEMPROPERTY property = tfs::lua::getNumber<ITEMPROPERTY>(L, 2);
@@ -5873,14 +5793,13 @@ int LuaScriptInterface::luaTileHasProperty(lua_State* L)
 int LuaScriptInterface::luaTileGetThingIndex(lua_State* L)
 {
 	// tile:getThingIndex(thing)
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Thing* thing = tfs::lua::getThing(L, 2);
-	if (thing) {
+	if (const auto& thing = tfs::lua::getThing(L, 2)) {
 		lua_pushnumber(L, tile->getThingIndex(thing));
 	} else {
 		lua_pushnil(L);
@@ -5891,8 +5810,7 @@ int LuaScriptInterface::luaTileGetThingIndex(lua_State* L)
 int LuaScriptInterface::luaTileHasFlag(lua_State* L)
 {
 	// tile:hasFlag(flag)
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
-	if (tile) {
+	if (const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1)) {
 		tileflags_t flag = tfs::lua::getNumber<tileflags_t>(L, 2);
 		tfs::lua::pushBoolean(L, tile->hasFlag(flag));
 	} else {
@@ -5904,16 +5822,15 @@ int LuaScriptInterface::luaTileHasFlag(lua_State* L)
 int LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 {
 	// tile:queryAdd(thing[, flags])
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Thing* thing = tfs::lua::getThing(L, 2);
-	if (thing) {
+	if (const auto& thing = tfs::lua::getThing(L, 2)) {
 		uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 3, 0);
-		lua_pushnumber(L, tile->queryAdd(0, *thing, 1, flags));
+		lua_pushnumber(L, tile->queryAdd(0, thing, 1, flags));
 	} else {
 		lua_pushnil(L);
 	}
@@ -5923,7 +5840,7 @@ int LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 int LuaScriptInterface::luaTileAddItem(lua_State* L)
 {
 	// tile:addItem(itemId[, count/subType = 1[, flags = 0]])
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
@@ -5942,7 +5859,7 @@ int LuaScriptInterface::luaTileAddItem(lua_State* L)
 
 	uint32_t subType = tfs::lua::getNumber<uint32_t>(L, 3, 1);
 
-	Item* item = Item::CreateItem(itemId, std::min<uint32_t>(subType, ITEM_STACK_SIZE));
+	const auto& item = Item::CreateItem(itemId, std::min<uint32_t>(subType, ITEM_STACK_SIZE));
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -5952,10 +5869,9 @@ int LuaScriptInterface::luaTileAddItem(lua_State* L)
 
 	ReturnValue ret = g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags);
 	if (ret == RETURNVALUE_NOERROR) {
-		tfs::lua::pushUserdata(L, item);
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
-		delete item;
 		lua_pushnil(L);
 	}
 	return 1;
@@ -5964,43 +5880,39 @@ int LuaScriptInterface::luaTileAddItem(lua_State* L)
 int LuaScriptInterface::luaTileAddItemEx(lua_State* L)
 {
 	// tile:addItemEx(item[, flags = 0])
-	Item* item = tfs::lua::getUserdata<Item>(L, 2);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (item->getParent() != VirtualCylinder::virtualCylinder) {
+	if (item->hasParent()) {
 		reportErrorFunc(L, "Item already has a parent");
 		lua_pushnil(L);
 		return 1;
 	}
 
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 3, 0);
-	ReturnValue ret = g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags);
-	if (ret == RETURNVALUE_NOERROR) {
-		tfs::lua::removeTempItem(item);
-	}
-	lua_pushnumber(L, ret);
+	lua_pushnumber(L, g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags));
 	return 1;
 }
 
 int LuaScriptInterface::luaTileGetHouse(lua_State* L)
 {
 	// tile:getHouse()
-	Tile* tile = tfs::lua::getUserdata<Tile>(L, 1);
+	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tile)) {
+	if (const auto& houseTile = tile->getHouseTile()) {
 		tfs::lua::pushUserdata(L, houseTile->getHouse());
 		tfs::lua::setMetatable(L, -1, "House");
 	} else {
@@ -6201,7 +6113,7 @@ int LuaScriptInterface::luaNetworkMessageAddDouble(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageAddItem(lua_State* L)
 {
 	// networkMessage:addItem(item)
-	Item* item = tfs::lua::getUserdata<Item>(L, 2);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
 	if (!item) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		lua_pushnil(L);
@@ -6315,8 +6227,7 @@ int LuaScriptInterface::luaNetworkMessageSendToPlayer(lua_State* L)
 		return 1;
 	}
 
-	Player* player = tfs::lua::getPlayer(L, 2);
-	if (player) {
+	if (const auto& player = tfs::lua::getPlayer(L, 2)) {
 		player->sendNetworkMessage(*message);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -6545,7 +6456,7 @@ int LuaScriptInterface::luaModalWindowSetPriority(lua_State* L)
 int LuaScriptInterface::luaModalWindowSendToPlayer(lua_State* L)
 {
 	// modalWindow:sendToPlayer(player)
-	Player* player = tfs::lua::getPlayer(L, 2);
+	const auto& player = tfs::lua::getPlayer(L, 2);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -6569,9 +6480,8 @@ int LuaScriptInterface::luaItemCreate(lua_State* L)
 	// Item(uid)
 	uint32_t id = tfs::lua::getNumber<uint32_t>(L, 2);
 
-	Item* item = tfs::lua::getScriptEnv()->getItemByUID(id);
-	if (item) {
-		tfs::lua::pushUserdata(L, item);
+	if (const auto& item = tfs::lua::getScriptEnv()->getItemByUID(id)) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -6582,14 +6492,18 @@ int LuaScriptInterface::luaItemCreate(lua_State* L)
 int LuaScriptInterface::luaItemIsItem(lua_State* L)
 {
 	// item:isItem()
-	tfs::lua::pushBoolean(L, tfs::lua::getUserdata<const Item>(L, 1) != nullptr);
+	if (const auto& thing = tfs::lua::getThing(L, 1)) {
+		tfs::lua::pushBoolean(L, thing->getItem() != nullptr);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaItemHasParent(lua_State* L)
 {
 	// item:hasParent()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -6602,46 +6516,45 @@ int LuaScriptInterface::luaItemHasParent(lua_State* L)
 int LuaScriptInterface::luaItemGetParent(lua_State* L)
 {
 	// item:getParent()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Cylinder* parent = item->getParent();
+	const auto& parent = item->getParent();
 	if (!parent) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, parent);
+	tfs::lua::pushThing(L, parent);
 	return 1;
 }
 
 int LuaScriptInterface::luaItemGetTopParent(lua_State* L)
 {
 	// item:getTopParent()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Cylinder* topParent = item->getTopParent();
+	const auto& topParent = item->getTopParent();
 	if (!topParent) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, topParent);
+	tfs::lua::pushThing(L, topParent);
 	return 1;
 }
 
 int LuaScriptInterface::luaItemGetId(lua_State* L)
 {
 	// item:getId()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(L, item->getID());
 	} else {
 		lua_pushnil(L);
@@ -6652,22 +6565,19 @@ int LuaScriptInterface::luaItemGetId(lua_State* L)
 int LuaScriptInterface::luaItemClone(lua_State* L)
 {
 	// item:clone()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item* clone = item->clone();
+	const auto& clone = item->clone();
 	if (!clone) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	addTempItem(clone);
-	clone->setParent(VirtualCylinder::virtualCylinder);
-
-	tfs::lua::pushUserdata(L, clone);
+	tfs::lua::pushSharedPtr(L, clone);
 	tfs::lua::setItemMetatable(L, -1, clone);
 	return 1;
 }
@@ -6675,13 +6585,13 @@ int LuaScriptInterface::luaItemClone(lua_State* L)
 int LuaScriptInterface::luaItemSplit(lua_State* L)
 {
 	// item:split([count = 1])
-	Item** itemPtr = tfs::lua::getRawUserdata<Item>(L, 1);
+	auto* itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item* item = *itemPtr;
+	const auto& item = *itemPtr;
 	if (!item || !item->isStackable()) {
 		lua_pushnil(L);
 		return 1;
@@ -6690,7 +6600,7 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 	uint16_t count = std::min<uint16_t>(tfs::lua::getNumber<uint16_t>(L, 2, 1), item->getItemCount());
 	uint16_t diff = item->getItemCount() - count;
 
-	Item* splitItem = item->clone();
+	const auto& splitItem = item->clone();
 	if (!splitItem) {
 		lua_pushnil(L);
 		return 1;
@@ -6701,21 +6611,18 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	uint32_t uid = env->addThing(item);
 
-	Item* newItem = g_game.transformItem(item, item->getID(), diff);
 	if (item->isRemoved()) {
 		env->removeItemByUID(uid);
 	}
 
+	const auto& newItem = g_game.transformItem(item, item->getID(), diff);
 	if (newItem && newItem != item) {
 		env->insertItem(uid, newItem);
 	}
 
 	*itemPtr = newItem;
 
-	splitItem->setParent(VirtualCylinder::virtualCylinder);
-	addTempItem(splitItem);
-
-	tfs::lua::pushUserdata(L, splitItem);
+	tfs::lua::pushSharedPtr(L, splitItem);
 	tfs::lua::setItemMetatable(L, -1, splitItem);
 	return 1;
 }
@@ -6723,8 +6630,7 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 int LuaScriptInterface::luaItemRemove(lua_State* L)
 {
 	// item:remove([count = -1])
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		int32_t count = tfs::lua::getNumber<int32_t>(L, 2, -1);
 		tfs::lua::pushBoolean(L, g_game.internalRemoveItem(item, count) == RETURNVALUE_NOERROR);
 	} else {
@@ -6736,8 +6642,7 @@ int LuaScriptInterface::luaItemRemove(lua_State* L)
 int LuaScriptInterface::luaItemGetUniqueId(lua_State* L)
 {
 	// item:getUniqueId()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		uint32_t uniqueId = item->getUniqueId();
 		if (uniqueId == 0) {
 			uniqueId = tfs::lua::getScriptEnv()->addThing(item);
@@ -6752,8 +6657,7 @@ int LuaScriptInterface::luaItemGetUniqueId(lua_State* L)
 int LuaScriptInterface::luaItemGetActionId(lua_State* L)
 {
 	// item:getActionId()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(L, item->getActionId());
 	} else {
 		lua_pushnil(L);
@@ -6765,8 +6669,7 @@ int LuaScriptInterface::luaItemSetActionId(lua_State* L)
 {
 	// item:setActionId(actionId)
 	uint16_t actionId = tfs::lua::getNumber<uint16_t>(L, 2);
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		item->setActionId(actionId);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -6778,8 +6681,7 @@ int LuaScriptInterface::luaItemSetActionId(lua_State* L)
 int LuaScriptInterface::luaItemGetCount(lua_State* L)
 {
 	// item:getCount()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(L, item->getItemCount());
 	} else {
 		lua_pushnil(L);
@@ -6790,8 +6692,7 @@ int LuaScriptInterface::luaItemGetCount(lua_State* L)
 int LuaScriptInterface::luaItemGetCharges(lua_State* L)
 {
 	// item:getCharges()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(L, item->getCharges());
 	} else {
 		lua_pushnil(L);
@@ -6802,8 +6703,7 @@ int LuaScriptInterface::luaItemGetCharges(lua_State* L)
 int LuaScriptInterface::luaItemGetFluidType(lua_State* L)
 {
 	// item:getFluidType()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(L, item->getFluidType());
 	} else {
 		lua_pushnil(L);
@@ -6814,8 +6714,7 @@ int LuaScriptInterface::luaItemGetFluidType(lua_State* L)
 int LuaScriptInterface::luaItemGetWeight(lua_State* L)
 {
 	// item:getWeight()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(L, item->getWeight());
 	} else {
 		lua_pushnil(L);
@@ -6826,8 +6725,7 @@ int LuaScriptInterface::luaItemGetWeight(lua_State* L)
 int LuaScriptInterface::luaItemGetWorth(lua_State* L)
 {
 	// item:getWorth()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(L, item->getWorth());
 	} else {
 		lua_pushnil(L);
@@ -6838,8 +6736,7 @@ int LuaScriptInterface::luaItemGetWorth(lua_State* L)
 int LuaScriptInterface::luaItemGetSubType(lua_State* L)
 {
 	// item:getSubType()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(L, item->getSubType());
 	} else {
 		lua_pushnil(L);
@@ -6850,8 +6747,7 @@ int LuaScriptInterface::luaItemGetSubType(lua_State* L)
 int LuaScriptInterface::luaItemGetName(lua_State* L)
 {
 	// item:getName()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		tfs::lua::pushString(L, item->getName());
 	} else {
 		lua_pushnil(L);
@@ -6862,8 +6758,7 @@ int LuaScriptInterface::luaItemGetName(lua_State* L)
 int LuaScriptInterface::luaItemGetPluralName(lua_State* L)
 {
 	// item:getPluralName()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		tfs::lua::pushString(L, item->getPluralName());
 	} else {
 		lua_pushnil(L);
@@ -6874,8 +6769,7 @@ int LuaScriptInterface::luaItemGetPluralName(lua_State* L)
 int LuaScriptInterface::luaItemGetArticle(lua_State* L)
 {
 	// item:getArticle()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		tfs::lua::pushString(L, item->getArticle());
 	} else {
 		lua_pushnil(L);
@@ -6886,8 +6780,7 @@ int LuaScriptInterface::luaItemGetArticle(lua_State* L)
 int LuaScriptInterface::luaItemGetPosition(lua_State* L)
 {
 	// item:getPosition()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		tfs::lua::pushPosition(L, item->getPosition());
 	} else {
 		lua_pushnil(L);
@@ -6898,15 +6791,14 @@ int LuaScriptInterface::luaItemGetPosition(lua_State* L)
 int LuaScriptInterface::luaItemGetTile(lua_State* L)
 {
 	// item:getTile()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Tile* tile = item->getTile();
-	if (tile) {
-		tfs::lua::pushUserdata(L, tile);
+	if (const auto& tile = item->getTile()) {
+		tfs::lua::pushSharedPtr(L, tile);
 		tfs::lua::setMetatable(L, -1, "Tile");
 	} else {
 		lua_pushnil(L);
@@ -6917,7 +6809,7 @@ int LuaScriptInterface::luaItemGetTile(lua_State* L)
 int LuaScriptInterface::luaItemHasAttribute(lua_State* L)
 {
 	// item:hasAttribute(key)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -6939,7 +6831,7 @@ int LuaScriptInterface::luaItemHasAttribute(lua_State* L)
 int LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 {
 	// item:getAttribute(key)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -6967,19 +6859,17 @@ int LuaScriptInterface::luaItemGetAttribute(lua_State* L)
 int LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 {
 	// item:setAttribute(key, value)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	itemAttrTypes attribute;
+	itemAttrTypes attribute = ITEM_ATTRIBUTE_NONE;
 	if (isNumber(L, 2)) {
 		attribute = tfs::lua::getNumber<itemAttrTypes>(L, 2);
 	} else if (lua_isstring(L, 2)) {
 		attribute = stringToItemAttribute(tfs::lua::getString(L, 2));
-	} else {
-		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 
 	if (ItemAttributes::isIntAttrType(attribute)) {
@@ -7003,19 +6893,17 @@ int LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 int LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 {
 	// item:removeAttribute(key)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	itemAttrTypes attribute;
+	itemAttrTypes attribute = ITEM_ATTRIBUTE_NONE;
 	if (isNumber(L, 2)) {
 		attribute = tfs::lua::getNumber<itemAttrTypes>(L, 2);
 	} else if (lua_isstring(L, 2)) {
 		attribute = stringToItemAttribute(tfs::lua::getString(L, 2));
-	} else {
-		attribute = ITEM_ATTRIBUTE_NONE;
 	}
 
 	bool ret = attribute != ITEM_ATTRIBUTE_UNIQUEID;
@@ -7031,7 +6919,7 @@ int LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L)
 {
 	// item:getCustomAttribute(key)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -7058,7 +6946,7 @@ int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L)
 int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L)
 {
 	// item:setCustomAttribute(key, value)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -7099,7 +6987,7 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L)
 int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L)
 {
 	// item:removeCustomAttribute(key)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -7117,46 +7005,46 @@ int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L)
 
 int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 {
-	// item:moveTo(position or cylinder[, flags])
-	Item** itemPtr = tfs::lua::getRawUserdata<Item>(L, 1);
+	// item:moveTo(position or thing[, flags])
+	auto* itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item* item = *itemPtr;
-	if (!item || item->isRemoved()) {
+	const auto& item = *itemPtr;
+	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Cylinder* toCylinder;
+	std::shared_ptr<Thing> toThing;
 	if (lua_isuserdata(L, 2)) {
 		const LuaDataType type = getUserdataType(L, 2);
 		switch (type) {
 			case LuaData_Container:
-				toCylinder = tfs::lua::getUserdata<Container>(L, 2);
+				toThing = tfs::lua::getSharedPtr<Container>(L, 2);
 				break;
 			case LuaData_Player:
-				toCylinder = tfs::lua::getUserdata<Player>(L, 2);
+				toThing = tfs::lua::getSharedPtr<Player>(L, 2);
 				break;
 			case LuaData_Tile:
-				toCylinder = tfs::lua::getUserdata<Tile>(L, 2);
+				toThing = tfs::lua::getSharedPtr<Tile>(L, 2);
 				break;
 			default:
-				toCylinder = nullptr;
+				toThing = nullptr;
 				break;
 		}
 	} else {
-		toCylinder = g_game.map.getTile(tfs::lua::getPosition(L, 2));
+		toThing = g_game.map.getTile(tfs::lua::getPosition(L, 2));
 	}
 
-	if (!toCylinder) {
+	if (!toThing) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (item->getParent() == toCylinder) {
+	if (item->getParent() == toThing) {
 		tfs::lua::pushBoolean(L, true);
 		return 1;
 	}
@@ -7164,12 +7052,11 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(
 	    L, 3, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
 
-	if (item->getParent() == VirtualCylinder::virtualCylinder) {
-		tfs::lua::pushBoolean(L,
-		                      g_game.internalAddItem(toCylinder, item, INDEX_WHEREEVER, flags) == RETURNVALUE_NOERROR);
+	if (!item->hasParent()) {
+		tfs::lua::pushBoolean(L, g_game.internalAddItem(toThing, item, INDEX_WHEREEVER, flags) == RETURNVALUE_NOERROR);
 	} else {
-		Item* moveItem = nullptr;
-		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toCylinder, INDEX_WHEREEVER, item,
+		std::shared_ptr<Item> moveItem = nullptr;
+		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toThing, INDEX_WHEREEVER, item,
 		                                          item->getItemCount(), &moveItem, flags);
 		if (moveItem) {
 			*itemPtr = moveItem;
@@ -7182,13 +7069,13 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 int LuaScriptInterface::luaItemTransform(lua_State* L)
 {
 	// item:transform(itemId[, count/subType = -1])
-	Item** itemPtr = tfs::lua::getRawUserdata<Item>(L, 1);
+	auto* itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item*& item = *itemPtr;
+	const auto& item = *itemPtr;
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -7219,7 +7106,7 @@ int LuaScriptInterface::luaItemTransform(lua_State* L)
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	uint32_t uid = env->addThing(item);
 
-	Item* newItem = g_game.transformItem(item, itemId, subType);
+	const auto& newItem = g_game.transformItem(item, itemId, subType);
 	if (item->isRemoved()) {
 		env->removeItemByUID(uid);
 	}
@@ -7228,7 +7115,7 @@ int LuaScriptInterface::luaItemTransform(lua_State* L)
 		env->insertItem(uid, newItem);
 	}
 
-	item = newItem;
+	*itemPtr = newItem;
 	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
@@ -7236,8 +7123,7 @@ int LuaScriptInterface::luaItemTransform(lua_State* L)
 int LuaScriptInterface::luaItemDecay(lua_State* L)
 {
 	// item:decay(decayId)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		if (isNumber(L, 2)) {
 			item->setDecayTo(tfs::lua::getNumber<int32_t>(L, 2));
 		}
@@ -7253,8 +7139,7 @@ int LuaScriptInterface::luaItemDecay(lua_State* L)
 int LuaScriptInterface::luaItemGetSpecialDescription(lua_State* L)
 {
 	// item:getSpecialDescription()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		tfs::lua::pushString(L, item->getSpecialDescription());
 	} else {
 		lua_pushnil(L);
@@ -7265,8 +7150,7 @@ int LuaScriptInterface::luaItemGetSpecialDescription(lua_State* L)
 int LuaScriptInterface::luaItemHasProperty(lua_State* L)
 {
 	// item:hasProperty(property)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		ITEMPROPERTY property = tfs::lua::getNumber<ITEMPROPERTY>(L, 2);
 		tfs::lua::pushBoolean(L, item->hasProperty(property));
 	} else {
@@ -7278,8 +7162,7 @@ int LuaScriptInterface::luaItemHasProperty(lua_State* L)
 int LuaScriptInterface::luaItemIsLoadedFromMap(lua_State* L)
 {
 	// item:isLoadedFromMap()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		tfs::lua::pushBoolean(L, item->isLoadedFromMap());
 	} else {
 		lua_pushnil(L);
@@ -7290,7 +7173,7 @@ int LuaScriptInterface::luaItemIsLoadedFromMap(lua_State* L)
 int LuaScriptInterface::luaItemSetStoreItem(lua_State* L)
 {
 	// item:setStoreItem(storeItem)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -7303,8 +7186,7 @@ int LuaScriptInterface::luaItemSetStoreItem(lua_State* L)
 int LuaScriptInterface::luaItemIsStoreItem(lua_State* L)
 {
 	// item:isStoreItem()
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		tfs::lua::pushBoolean(L, item->isStoreItem());
 	} else {
 		lua_pushnil(L);
@@ -7315,7 +7197,7 @@ int LuaScriptInterface::luaItemIsStoreItem(lua_State* L)
 int LuaScriptInterface::luaItemSetReflect(lua_State* L)
 {
 	// item:setReflect(combatType, reflect)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -7335,8 +7217,7 @@ int LuaScriptInterface::luaItemSetReflect(lua_State* L)
 int LuaScriptInterface::luaItemGetReflect(lua_State* L)
 {
 	// item:getReflect(combatType[, total = true])
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		const Reflect& reflect =
 		    item->getReflect(tfs::lua::getNumber<CombatType_t>(L, 2), tfs::lua::getBoolean(L, 3, true));
 
@@ -7352,7 +7233,7 @@ int LuaScriptInterface::luaItemGetReflect(lua_State* L)
 int LuaScriptInterface::luaItemSetBoostPercent(lua_State* L)
 {
 	// item:setBoostPercent(combatType, percent)
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -7366,8 +7247,7 @@ int LuaScriptInterface::luaItemSetBoostPercent(lua_State* L)
 int LuaScriptInterface::luaItemGetBoostPercent(lua_State* L)
 {
 	// item:getBoostPercent(combatType[, total = true])
-	Item* item = tfs::lua::getUserdata<Item>(L, 1);
-	if (item) {
+	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
 		lua_pushnumber(
 		    L, item->getBoostPercent(tfs::lua::getNumber<CombatType_t>(L, 2), tfs::lua::getBoolean(L, 3, true)));
 	} else {
@@ -7382,9 +7262,8 @@ int LuaScriptInterface::luaContainerCreate(lua_State* L)
 	// Container(uid)
 	uint32_t id = tfs::lua::getNumber<uint32_t>(L, 2);
 
-	Container* container = tfs::lua::getScriptEnv()->getContainerByUID(id);
-	if (container) {
-		tfs::lua::pushUserdata(L, container);
+	if (const auto& container = tfs::lua::getScriptEnv()->getContainerByUID(id)) {
+		tfs::lua::pushSharedPtr(L, container);
 		tfs::lua::setMetatable(L, -1, "Container");
 	} else {
 		lua_pushnil(L);
@@ -7395,8 +7274,7 @@ int LuaScriptInterface::luaContainerCreate(lua_State* L)
 int LuaScriptInterface::luaContainerGetSize(lua_State* L)
 {
 	// container:getSize()
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
-	if (container) {
+	if (const auto& container = tfs::lua::getSharedPtr<Container>(L, 1)) {
 		lua_pushnumber(L, container->size());
 	} else {
 		lua_pushnil(L);
@@ -7407,8 +7285,7 @@ int LuaScriptInterface::luaContainerGetSize(lua_State* L)
 int LuaScriptInterface::luaContainerGetCapacity(lua_State* L)
 {
 	// container:getCapacity()
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
-	if (container) {
+	if (const auto& container = tfs::lua::getSharedPtr<Container>(L, 1)) {
 		lua_pushnumber(L, container->capacity());
 	} else {
 		lua_pushnil(L);
@@ -7419,7 +7296,7 @@ int LuaScriptInterface::luaContainerGetCapacity(lua_State* L)
 int LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 {
 	// container:getEmptySlots([recursive = false])
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
+	const auto& container = tfs::lua::getSharedPtr<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;
@@ -7429,7 +7306,7 @@ int LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 	bool recursive = tfs::lua::getBoolean(L, 2, false);
 	if (recursive) {
 		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-			if (Container* tmpContainer = (*it)->getContainer()) {
+			if (const auto& tmpContainer = (*it)->getContainer()) {
 				slots += tmpContainer->capacity() - tmpContainer->size();
 			}
 		}
@@ -7441,8 +7318,7 @@ int LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 int LuaScriptInterface::luaContainerGetItemHoldingCount(lua_State* L)
 {
 	// container:getItemHoldingCount()
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
-	if (container) {
+	if (const auto& container = tfs::lua::getSharedPtr<Container>(L, 1)) {
 		lua_pushnumber(L, container->getItemHoldingCount());
 	} else {
 		lua_pushnil(L);
@@ -7453,16 +7329,15 @@ int LuaScriptInterface::luaContainerGetItemHoldingCount(lua_State* L)
 int LuaScriptInterface::luaContainerGetItem(lua_State* L)
 {
 	// container:getItem(index)
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
+	const auto& container = tfs::lua::getSharedPtr<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	uint32_t index = tfs::lua::getNumber<uint32_t>(L, 2);
-	Item* item = container->getItemByIndex(index);
-	if (item) {
-		tfs::lua::pushUserdata(L, item);
+	if (const auto& item = container->getItemByIndex(index)) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -7473,9 +7348,8 @@ int LuaScriptInterface::luaContainerGetItem(lua_State* L)
 int LuaScriptInterface::luaContainerHasItem(lua_State* L)
 {
 	// container:hasItem(item)
-	Item* item = tfs::lua::getUserdata<Item>(L, 2);
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
-	if (container) {
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
+	if (const auto& container = tfs::lua::getSharedPtr<Container>(L, 1)) {
 		tfs::lua::pushBoolean(L, container->isHoldingItem(item));
 	} else {
 		lua_pushnil(L);
@@ -7486,7 +7360,7 @@ int LuaScriptInterface::luaContainerHasItem(lua_State* L)
 int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 {
 	// container:addItem(itemId[, count/subType = 1[, index = INDEX_WHEREEVER[, flags = 0]]])
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
+	const auto& container = tfs::lua::getSharedPtr<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;
@@ -7532,7 +7406,7 @@ int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 
 	for (int32_t i = 1; i <= itemCount; ++i) {
 		int32_t stackCount = std::min<int32_t>(subType, ITEM_STACK_SIZE);
-		Item* item = Item::CreateItem(itemId, stackCount);
+		const auto& item = Item::CreateItem(itemId, stackCount);
 		if (!item) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 			if (!hasTable) {
@@ -7547,7 +7421,6 @@ int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 
 		ReturnValue ret = g_game.internalAddItem(container, item, index, flags);
 		if (ret != RETURNVALUE_NOERROR) {
-			delete item;
 			if (!hasTable) {
 				lua_pushnil(L);
 			}
@@ -7556,11 +7429,11 @@ int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 
 		if (hasTable) {
 			lua_pushnumber(L, i);
-			tfs::lua::pushUserdata(L, item);
+			tfs::lua::pushSharedPtr(L, item);
 			tfs::lua::setItemMetatable(L, -1, item);
 			lua_settable(L, -3);
 		} else {
-			tfs::lua::pushUserdata(L, item);
+			tfs::lua::pushSharedPtr(L, item);
 			tfs::lua::setItemMetatable(L, -1, item);
 		}
 	}
@@ -7570,19 +7443,19 @@ int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 int LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 {
 	// container:addItemEx(item[, index = INDEX_WHEREEVER[, flags = 0]])
-	Item* item = tfs::lua::getUserdata<Item>(L, 2);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
+	const auto& container = tfs::lua::getSharedPtr<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (item->getParent() != VirtualCylinder::virtualCylinder) {
+	if (item->hasParent()) {
 		reportErrorFunc(L, "Item already has a parent");
 		lua_pushnil(L);
 		return 1;
@@ -7590,19 +7463,14 @@ int LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 
 	int32_t index = tfs::lua::getNumber<int32_t>(L, 3, INDEX_WHEREEVER);
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 4, 0);
-	ReturnValue ret = g_game.internalAddItem(container, item, index, flags);
-	if (ret == RETURNVALUE_NOERROR) {
-		tfs::lua::removeTempItem(item);
-	}
-	lua_pushnumber(L, ret);
+	lua_pushnumber(L, g_game.internalAddItem(container, item, index, flags));
 	return 1;
 }
 
 int LuaScriptInterface::luaContainerGetCorpseOwner(lua_State* L)
 {
 	// container:getCorpseOwner()
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
-	if (container) {
+	if (const auto& container = tfs::lua::getSharedPtr<Container>(L, 1)) {
 		lua_pushnumber(L, container->getCorpseOwner());
 	} else {
 		lua_pushnil(L);
@@ -7613,7 +7481,7 @@ int LuaScriptInterface::luaContainerGetCorpseOwner(lua_State* L)
 int LuaScriptInterface::luaContainerGetItemCountById(lua_State* L)
 {
 	// container:getItemCountById(itemId[, subType = -1])
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
+	const auto& container = tfs::lua::getSharedPtr<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;
@@ -7638,20 +7506,20 @@ int LuaScriptInterface::luaContainerGetItemCountById(lua_State* L)
 int LuaScriptInterface::luaContainerGetItems(lua_State* L)
 {
 	// container:getItems([recursive = false])
-	Container* container = tfs::lua::getUserdata<Container>(L, 1);
+	const auto& container = tfs::lua::getSharedPtr<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	bool recursive = tfs::lua::getBoolean(L, 2, false);
-	std::vector<Item*> items = container->getItems(recursive);
+	const auto& items = container->getItems(recursive);
 
 	lua_createtable(L, items.size(), 0);
 
 	int index = 0;
-	for (Item* item : items) {
-		tfs::lua::pushUserdata(L, item);
+	for (const auto& item : items) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -7664,9 +7532,9 @@ int LuaScriptInterface::luaTeleportCreate(lua_State* L)
 	// Teleport(uid)
 	uint32_t id = tfs::lua::getNumber<uint32_t>(L, 2);
 
-	Item* item = tfs::lua::getScriptEnv()->getItemByUID(id);
+	const auto& item = tfs::lua::getScriptEnv()->getItemByUID(id);
 	if (item && item->getTeleport()) {
-		tfs::lua::pushUserdata(L, item);
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setMetatable(L, -1, "Teleport");
 	} else {
 		lua_pushnil(L);
@@ -7677,8 +7545,7 @@ int LuaScriptInterface::luaTeleportCreate(lua_State* L)
 int LuaScriptInterface::luaTeleportGetDestination(lua_State* L)
 {
 	// teleport:getDestination()
-	Teleport* teleport = tfs::lua::getUserdata<Teleport>(L, 1);
-	if (teleport) {
+	if (const auto& teleport = tfs::lua::getSharedPtr<Teleport>(L, 1)) {
 		tfs::lua::pushPosition(L, teleport->getDestPos());
 	} else {
 		lua_pushnil(L);
@@ -7689,8 +7556,7 @@ int LuaScriptInterface::luaTeleportGetDestination(lua_State* L)
 int LuaScriptInterface::luaTeleportSetDestination(lua_State* L)
 {
 	// teleport:setDestination(position)
-	Teleport* teleport = tfs::lua::getUserdata<Teleport>(L, 1);
-	if (teleport) {
+	if (const auto& teleport = tfs::lua::getSharedPtr<Teleport>(L, 1)) {
 		teleport->setDestPos(tfs::lua::getPosition(L, 2));
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -7705,9 +7571,9 @@ int LuaScriptInterface::luaPodiumCreate(lua_State* L)
 	// Podium(uid)
 	uint32_t id = tfs::lua::getNumber<uint32_t>(L, 2);
 
-	Item* item = tfs::lua::getScriptEnv()->getItemByUID(id);
+	const auto& item = tfs::lua::getScriptEnv()->getItemByUID(id);
 	if (item && item->getPodium()) {
-		tfs::lua::pushUserdata(L, item);
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setMetatable(L, -1, "Podium");
 	} else {
 		lua_pushnil(L);
@@ -7718,8 +7584,7 @@ int LuaScriptInterface::luaPodiumCreate(lua_State* L)
 int LuaScriptInterface::luaPodiumGetOutfit(lua_State* L)
 {
 	// podium:getOutfit()
-	const Podium* podium = tfs::lua::getUserdata<const Podium>(L, 1);
-	if (podium) {
+	if (const auto& podium = tfs::lua::getSharedPtr<const Podium>(L, 1)) {
 		tfs::lua::pushOutfit(L, podium->getOutfit());
 	} else {
 		lua_pushnil(L);
@@ -7730,8 +7595,7 @@ int LuaScriptInterface::luaPodiumGetOutfit(lua_State* L)
 int LuaScriptInterface::luaPodiumSetOutfit(lua_State* L)
 {
 	// podium:setOutfit(outfit)
-	Podium* podium = tfs::lua::getUserdata<Podium>(L, 1);
-	if (podium) {
+	if (const auto& podium = tfs::lua::getSharedPtr<Podium>(L, 1)) {
 		podium->setOutfit(getOutfit(L, 2));
 		g_game.updatePodium(podium);
 		tfs::lua::pushBoolean(L, true);
@@ -7744,8 +7608,7 @@ int LuaScriptInterface::luaPodiumSetOutfit(lua_State* L)
 int LuaScriptInterface::luaPodiumHasFlag(lua_State* L)
 {
 	// podium:hasFlag(flag)
-	Podium* podium = tfs::lua::getUserdata<Podium>(L, 1);
-	if (podium) {
+	if (const auto& podium = tfs::lua::getSharedPtr<Podium>(L, 1)) {
 		PodiumFlags flag = tfs::lua::getNumber<PodiumFlags>(L, 2);
 		tfs::lua::pushBoolean(L, podium->hasFlag(flag));
 	} else {
@@ -7759,7 +7622,7 @@ int LuaScriptInterface::luaPodiumSetFlag(lua_State* L)
 	// podium:setFlag(flag, value)
 	uint8_t value = tfs::lua::getBoolean(L, 3);
 	PodiumFlags flag = tfs::lua::getNumber<PodiumFlags>(L, 2);
-	Podium* podium = tfs::lua::getUserdata<Podium>(L, 1);
+	const auto& podium = tfs::lua::getSharedPtr<Podium>(L, 1);
 
 	if (podium) {
 		podium->setFlagValue(flag, value);
@@ -7774,8 +7637,7 @@ int LuaScriptInterface::luaPodiumSetFlag(lua_State* L)
 int LuaScriptInterface::luaPodiumGetDirection(lua_State* L)
 {
 	// podium:getDirection()
-	const Podium* podium = tfs::lua::getUserdata<const Podium>(L, 1);
-	if (podium) {
+	if (const auto& podium = tfs::lua::getSharedPtr<const Podium>(L, 1)) {
 		lua_pushnumber(L, podium->getDirection());
 	} else {
 		lua_pushnil(L);
@@ -7786,8 +7648,7 @@ int LuaScriptInterface::luaPodiumGetDirection(lua_State* L)
 int LuaScriptInterface::luaPodiumSetDirection(lua_State* L)
 {
 	// podium:setDirection(direction)
-	Podium* podium = tfs::lua::getUserdata<Podium>(L, 1);
-	if (podium) {
+	if (const auto& podium = tfs::lua::getSharedPtr<Podium>(L, 1)) {
 		podium->setDirection(tfs::lua::getNumber<Direction>(L, 2));
 		g_game.updatePodium(podium);
 		tfs::lua::pushBoolean(L, true);
@@ -7801,7 +7662,7 @@ int LuaScriptInterface::luaPodiumSetDirection(lua_State* L)
 int LuaScriptInterface::luaCreatureCreate(lua_State* L)
 {
 	// Creature(id or name or userdata)
-	Creature* creature;
+	std::shared_ptr<Creature> creature = nullptr;
 	if (isNumber(L, 2)) {
 		creature = g_game.getCreatureByID(tfs::lua::getNumber<uint32_t>(L, 2));
 	} else if (lua_isstring(L, 2)) {
@@ -7812,13 +7673,11 @@ int LuaScriptInterface::luaCreatureCreate(lua_State* L)
 			lua_pushnil(L);
 			return 1;
 		}
-		creature = tfs::lua::getUserdata<Creature>(L, 2);
-	} else {
-		creature = nullptr;
+		creature = tfs::lua::getSharedPtr<Creature>(L, 2);
 	}
 
 	if (creature) {
-		tfs::lua::pushUserdata(L, creature);
+		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 	} else {
 		lua_pushnil(L);
@@ -7829,7 +7688,7 @@ int LuaScriptInterface::luaCreatureCreate(lua_State* L)
 int LuaScriptInterface::luaCreatureGetEvents(lua_State* L)
 {
 	// creature:getEvents(type)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -7850,8 +7709,7 @@ int LuaScriptInterface::luaCreatureGetEvents(lua_State* L)
 int LuaScriptInterface::luaCreatureRegisterEvent(lua_State* L)
 {
 	// creature:registerEvent(name)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		const std::string& name = tfs::lua::getString(L, 2);
 		tfs::lua::pushBoolean(L, creature->registerCreatureEvent(name));
 	} else {
@@ -7864,8 +7722,7 @@ int LuaScriptInterface::luaCreatureUnregisterEvent(lua_State* L)
 {
 	// creature:unregisterEvent(name)
 	const std::string& name = tfs::lua::getString(L, 2);
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		tfs::lua::pushBoolean(L, creature->unregisterCreatureEvent(name));
 	} else {
 		lua_pushnil(L);
@@ -7876,8 +7733,7 @@ int LuaScriptInterface::luaCreatureUnregisterEvent(lua_State* L)
 int LuaScriptInterface::luaCreatureIsRemoved(lua_State* L)
 {
 	// creature:isRemoved()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		tfs::lua::pushBoolean(L, creature->isRemoved());
 	} else {
 		lua_pushnil(L);
@@ -7888,15 +7744,14 @@ int LuaScriptInterface::luaCreatureIsRemoved(lua_State* L)
 int LuaScriptInterface::luaCreatureIsCreature(lua_State* L)
 {
 	// creature:isCreature()
-	tfs::lua::pushBoolean(L, tfs::lua::getUserdata<const Creature>(L, 1) != nullptr);
+	tfs::lua::pushBoolean(L, tfs::lua::getSharedPtr<const Creature>(L, 1) != nullptr);
 	return 1;
 }
 
 int LuaScriptInterface::luaCreatureIsInGhostMode(lua_State* L)
 {
 	// creature:isInGhostMode()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		tfs::lua::pushBoolean(L, creature->isInGhostMode());
 	} else {
 		lua_pushnil(L);
@@ -7907,8 +7762,7 @@ int LuaScriptInterface::luaCreatureIsInGhostMode(lua_State* L)
 int LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
 {
 	// creature:isHealthHidden()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		tfs::lua::pushBoolean(L, creature->isHealthHidden());
 	} else {
 		lua_pushnil(L);
@@ -7919,8 +7773,7 @@ int LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
 int LuaScriptInterface::luaCreatureIsMovementBlocked(lua_State* L)
 {
 	// creature:isMovementBlocked()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		tfs::lua::pushBoolean(L, creature->isMovementBlocked());
 	} else {
 		lua_pushnil(L);
@@ -7931,8 +7784,7 @@ int LuaScriptInterface::luaCreatureIsMovementBlocked(lua_State* L)
 int LuaScriptInterface::luaCreatureCanSee(lua_State* L)
 {
 	// creature:canSee(position)
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		const Position& position = tfs::lua::getPosition(L, 2);
 		tfs::lua::pushBoolean(L, creature->canSee(position));
 	} else {
@@ -7944,9 +7796,8 @@ int LuaScriptInterface::luaCreatureCanSee(lua_State* L)
 int LuaScriptInterface::luaCreatureCanSeeCreature(lua_State* L)
 {
 	// creature:canSeeCreature(creature)
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
-		const Creature* otherCreature = tfs::lua::getCreature(L, 2);
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
+		const auto& otherCreature = tfs::lua::getCreature(L, 2);
 		if (!otherCreature) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -7963,9 +7814,8 @@ int LuaScriptInterface::luaCreatureCanSeeCreature(lua_State* L)
 int LuaScriptInterface::luaCreatureCanSeeGhostMode(lua_State* L)
 {
 	// creature:canSeeGhostMode(creature)
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
-		const Creature* otherCreature = tfs::lua::getCreature(L, 2);
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
+		const auto& otherCreature = tfs::lua::getCreature(L, 2);
 		if (!otherCreature) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -7982,8 +7832,7 @@ int LuaScriptInterface::luaCreatureCanSeeGhostMode(lua_State* L)
 int LuaScriptInterface::luaCreatureCanSeeInvisibility(lua_State* L)
 {
 	// creature:canSeeInvisibility()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		tfs::lua::pushBoolean(L, creature->canSeeInvisibility());
 	} else {
 		lua_pushnil(L);
@@ -7994,7 +7843,7 @@ int LuaScriptInterface::luaCreatureCanSeeInvisibility(lua_State* L)
 int LuaScriptInterface::luaCreatureHasParent(lua_State* L)
 {
 	// creature:hasParent()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8007,27 +7856,26 @@ int LuaScriptInterface::luaCreatureHasParent(lua_State* L)
 int LuaScriptInterface::luaCreatureGetParent(lua_State* L)
 {
 	// creature:getParent()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Cylinder* parent = creature->getParent();
+	const auto& parent = creature->getParent();
 	if (!parent) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, parent);
+	tfs::lua::pushThing(L, parent);
 	return 1;
 }
 
 int LuaScriptInterface::luaCreatureGetId(lua_State* L)
 {
 	// creature:getId()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		lua_pushnumber(L, creature->getID());
 	} else {
 		lua_pushnil(L);
@@ -8038,8 +7886,7 @@ int LuaScriptInterface::luaCreatureGetId(lua_State* L)
 int LuaScriptInterface::luaCreatureGetName(lua_State* L)
 {
 	// creature:getName()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		tfs::lua::pushString(L, creature->getName());
 	} else {
 		lua_pushnil(L);
@@ -8050,15 +7897,14 @@ int LuaScriptInterface::luaCreatureGetName(lua_State* L)
 int LuaScriptInterface::luaCreatureGetTarget(lua_State* L)
 {
 	// creature:getTarget()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* target = creature->getAttackedCreature();
-	if (target) {
-		tfs::lua::pushUserdata(L, target);
+	if (const auto& target = creature->getAttackedCreature()) {
+		tfs::lua::pushSharedPtr(L, target);
 		tfs::lua::setCreatureMetatable(L, -1, target);
 	} else {
 		lua_pushnil(L);
@@ -8069,15 +7915,13 @@ int LuaScriptInterface::luaCreatureGetTarget(lua_State* L)
 int LuaScriptInterface::luaCreatureSetTarget(lua_State* L)
 {
 	// creature:setTarget(target)
-	auto creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
-
 		return 1;
 	}
 
-	auto target = tfs::lua::getCreature(L, 2);
-	if (target) {
+	if (const auto& target = tfs::lua::getCreature(L, 2)) {
 		creature->setAttackedCreature(target);
 		tfs::lua::pushBoolean(L, creature->canAttackCreature(target));
 	} else {
@@ -8090,15 +7934,14 @@ int LuaScriptInterface::luaCreatureSetTarget(lua_State* L)
 int LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
 {
 	// creature:getFollowCreature()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* followCreature = creature->getFollowCreature();
-	if (followCreature) {
-		tfs::lua::pushUserdata(L, followCreature);
+	if (const auto& followCreature = creature->getFollowCreature()) {
+		tfs::lua::pushSharedPtr(L, followCreature);
 		tfs::lua::setCreatureMetatable(L, -1, followCreature);
 	} else {
 		lua_pushnil(L);
@@ -8109,14 +7952,13 @@ int LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
 int LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 {
 	// creature:setFollowCreature(followedCreature)
-	auto creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	auto followedCreature = tfs::lua::getCreature(L, 2);
-	if (followedCreature) {
+	if (const auto& followedCreature = tfs::lua::getCreature(L, 2)) {
 		creature->setFollowCreature(followedCreature);
 		tfs::lua::pushBoolean(L, creature->canFollowCreature(followedCreature));
 	} else {
@@ -8129,19 +7971,19 @@ int LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 int LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
 {
 	// creature:getMaster()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* master = creature->getMaster();
+	const auto& master = creature->getMaster();
 	if (!master) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushUserdata(L, master);
+	tfs::lua::pushSharedPtr(L, master);
 	tfs::lua::setCreatureMetatable(L, -1, master);
 	return 1;
 }
@@ -8149,7 +7991,7 @@ int LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
 int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 {
 	// creature:setMaster(master)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8165,7 +8007,7 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 int LuaScriptInterface::luaCreatureGetLight(lua_State* L)
 {
 	// creature:getLight()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8180,7 +8022,7 @@ int LuaScriptInterface::luaCreatureGetLight(lua_State* L)
 int LuaScriptInterface::luaCreatureSetLight(lua_State* L)
 {
 	// creature:setLight(color, level)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8198,8 +8040,7 @@ int LuaScriptInterface::luaCreatureSetLight(lua_State* L)
 int LuaScriptInterface::luaCreatureGetSpeed(lua_State* L)
 {
 	// creature:getSpeed()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		lua_pushnumber(L, creature->getSpeed());
 	} else {
 		lua_pushnil(L);
@@ -8210,8 +8051,7 @@ int LuaScriptInterface::luaCreatureGetSpeed(lua_State* L)
 int LuaScriptInterface::luaCreatureGetBaseSpeed(lua_State* L)
 {
 	// creature:getBaseSpeed()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		lua_pushnumber(L, creature->getBaseSpeed());
 	} else {
 		lua_pushnil(L);
@@ -8222,7 +8062,7 @@ int LuaScriptInterface::luaCreatureGetBaseSpeed(lua_State* L)
 int LuaScriptInterface::luaCreatureChangeSpeed(lua_State* L)
 {
 	// creature:changeSpeed(delta)
-	Creature* creature = tfs::lua::getCreature(L, 1);
+	const auto& creature = tfs::lua::getCreature(L, 1);
 	if (!creature) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -8238,8 +8078,7 @@ int LuaScriptInterface::luaCreatureChangeSpeed(lua_State* L)
 int LuaScriptInterface::luaCreatureSetDropLoot(lua_State* L)
 {
 	// creature:setDropLoot(doDrop)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		creature->setDropLoot(tfs::lua::getBoolean(L, 2));
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -8251,8 +8090,7 @@ int LuaScriptInterface::luaCreatureSetDropLoot(lua_State* L)
 int LuaScriptInterface::luaCreatureSetSkillLoss(lua_State* L)
 {
 	// creature:setSkillLoss(skillLoss)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		creature->setSkillLoss(tfs::lua::getBoolean(L, 2));
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -8264,8 +8102,7 @@ int LuaScriptInterface::luaCreatureSetSkillLoss(lua_State* L)
 int LuaScriptInterface::luaCreatureGetPosition(lua_State* L)
 {
 	// creature:getPosition()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		tfs::lua::pushPosition(L, creature->getPosition());
 	} else {
 		lua_pushnil(L);
@@ -8276,15 +8113,14 @@ int LuaScriptInterface::luaCreatureGetPosition(lua_State* L)
 int LuaScriptInterface::luaCreatureGetTile(lua_State* L)
 {
 	// creature:getTile()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Tile* tile = creature->getTile();
-	if (tile) {
-		tfs::lua::pushUserdata(L, tile);
+	if (const auto& tile = creature->getTile()) {
+		tfs::lua::pushSharedPtr(L, tile);
 		tfs::lua::setMetatable(L, -1, "Tile");
 	} else {
 		lua_pushnil(L);
@@ -8295,8 +8131,7 @@ int LuaScriptInterface::luaCreatureGetTile(lua_State* L)
 int LuaScriptInterface::luaCreatureGetDirection(lua_State* L)
 {
 	// creature:getDirection()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		lua_pushnumber(L, creature->getDirection());
 	} else {
 		lua_pushnil(L);
@@ -8307,8 +8142,7 @@ int LuaScriptInterface::luaCreatureGetDirection(lua_State* L)
 int LuaScriptInterface::luaCreatureSetDirection(lua_State* L)
 {
 	// creature:setDirection(direction)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		tfs::lua::pushBoolean(L, g_game.internalCreatureTurn(creature, tfs::lua::getNumber<Direction>(L, 2)));
 	} else {
 		lua_pushnil(L);
@@ -8319,8 +8153,7 @@ int LuaScriptInterface::luaCreatureSetDirection(lua_State* L)
 int LuaScriptInterface::luaCreatureGetHealth(lua_State* L)
 {
 	// creature:getHealth()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		lua_pushnumber(L, creature->getHealth());
 	} else {
 		lua_pushnil(L);
@@ -8331,17 +8164,16 @@ int LuaScriptInterface::luaCreatureGetHealth(lua_State* L)
 int LuaScriptInterface::luaCreatureSetHealth(lua_State* L)
 {
 	// creature:setHealth(health)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	creature->health = std::min<int32_t>(tfs::lua::getNumber<uint32_t>(L, 2), creature->healthMax);
+	creature->setHealth(std::min<int32_t>(tfs::lua::getNumber<uint32_t>(L, 2), creature->getMaxHealth()));
 	g_game.addCreatureHealth(creature);
 
-	Player* player = creature->getPlayer();
-	if (player) {
+	if (const auto& player = creature->getPlayer()) {
 		player->sendStats();
 	}
 	tfs::lua::pushBoolean(L, true);
@@ -8351,7 +8183,7 @@ int LuaScriptInterface::luaCreatureSetHealth(lua_State* L)
 int LuaScriptInterface::luaCreatureAddHealth(lua_State* L)
 {
 	// creature:addHealth(healthChange)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8371,8 +8203,7 @@ int LuaScriptInterface::luaCreatureAddHealth(lua_State* L)
 int LuaScriptInterface::luaCreatureGetMaxHealth(lua_State* L)
 {
 	// creature:getMaxHealth()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		lua_pushnumber(L, creature->getMaxHealth());
 	} else {
 		lua_pushnil(L);
@@ -8383,18 +8214,17 @@ int LuaScriptInterface::luaCreatureGetMaxHealth(lua_State* L)
 int LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 {
 	// creature:setMaxHealth(maxHealth)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	creature->healthMax = tfs::lua::getNumber<uint32_t>(L, 2);
-	creature->health = std::min<int32_t>(creature->health, creature->healthMax);
+	creature->setMaxHealth(tfs::lua::getNumber<uint32_t>(L, 2));
+	creature->setHealth(std::min<int32_t>(creature->getHealth(), creature->getMaxHealth()));
 	g_game.addCreatureHealth(creature);
 
-	Player* player = creature->getPlayer();
-	if (player) {
+	if (const auto& player = creature->getPlayer()) {
 		player->sendStats();
 	}
 	tfs::lua::pushBoolean(L, true);
@@ -8404,8 +8234,7 @@ int LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 int LuaScriptInterface::luaCreatureSetHiddenHealth(lua_State* L)
 {
 	// creature:setHiddenHealth(hide)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		creature->setHiddenHealth(tfs::lua::getBoolean(L, 2));
 		g_game.addCreatureHealth(creature);
 		tfs::lua::pushBoolean(L, true);
@@ -8418,8 +8247,7 @@ int LuaScriptInterface::luaCreatureSetHiddenHealth(lua_State* L)
 int LuaScriptInterface::luaCreatureSetMovementBlocked(lua_State* L)
 {
 	// creature:setMovementBlocked(state)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		creature->setMovementBlocked(tfs::lua::getBoolean(L, 2));
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -8431,8 +8259,7 @@ int LuaScriptInterface::luaCreatureSetMovementBlocked(lua_State* L)
 int LuaScriptInterface::luaCreatureGetSkull(lua_State* L)
 {
 	// creature:getSkull()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		lua_pushnumber(L, creature->getSkull());
 	} else {
 		lua_pushnil(L);
@@ -8443,8 +8270,7 @@ int LuaScriptInterface::luaCreatureGetSkull(lua_State* L)
 int LuaScriptInterface::luaCreatureSetSkull(lua_State* L)
 {
 	// creature:setSkull(skull)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		creature->setSkull(tfs::lua::getNumber<Skulls_t>(L, 2));
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -8456,8 +8282,7 @@ int LuaScriptInterface::luaCreatureSetSkull(lua_State* L)
 int LuaScriptInterface::luaCreatureGetOutfit(lua_State* L)
 {
 	// creature:getOutfit()
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		tfs::lua::pushOutfit(L, creature->getCurrentOutfit());
 	} else {
 		lua_pushnil(L);
@@ -8468,10 +8293,9 @@ int LuaScriptInterface::luaCreatureGetOutfit(lua_State* L)
 int LuaScriptInterface::luaCreatureSetOutfit(lua_State* L)
 {
 	// creature:setOutfit(outfit)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
-		creature->defaultOutfit = getOutfit(L, 2);
-		g_game.internalCreatureChangeOutfit(creature, creature->defaultOutfit);
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
+		creature->setDefaultOutfit(getOutfit(L, 2));
+		g_game.internalCreatureChangeOutfit(creature, creature->getDefaultOutfit());
 		tfs::lua::pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -8482,7 +8306,7 @@ int LuaScriptInterface::luaCreatureSetOutfit(lua_State* L)
 int LuaScriptInterface::luaCreatureGetCondition(lua_State* L)
 {
 	// creature:getCondition(conditionType[, conditionId = CONDITIONID_COMBAT[, subId = 0]])
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8505,7 +8329,7 @@ int LuaScriptInterface::luaCreatureGetCondition(lua_State* L)
 int LuaScriptInterface::luaCreatureAddCondition(lua_State* L)
 {
 	// creature:addCondition(condition[, force = false])
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	Condition* condition = tfs::lua::getUserdata<Condition>(L, 2);
 	if (creature && condition) {
 		bool force = tfs::lua::getBoolean(L, 3, false);
@@ -8520,7 +8344,7 @@ int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 {
 	// creature:removeCondition(conditionType[, conditionId = CONDITIONID_COMBAT[, subId = 0[, force = false]]])
 	// creature:removeCondition(condition[, force = false])
-	Creature* const creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8556,7 +8380,7 @@ int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 int LuaScriptInterface::luaCreatureHasCondition(lua_State* L)
 {
 	// creature:hasCondition(conditionType[, subId = 0])
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8571,7 +8395,7 @@ int LuaScriptInterface::luaCreatureHasCondition(lua_State* L)
 int LuaScriptInterface::luaCreatureIsImmune(lua_State* L)
 {
 	// creature:isImmune(condition or conditionType)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8590,20 +8414,19 @@ int LuaScriptInterface::luaCreatureIsImmune(lua_State* L)
 int LuaScriptInterface::luaCreatureRemove(lua_State* L)
 {
 	// creature:remove()
-	Creature** creaturePtr = tfs::lua::getRawUserdata<Creature>(L, 1);
+	auto* creaturePtr = tfs::lua::getRawSharedPtr<Creature>(L, 1);
 	if (!creaturePtr) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* creature = *creaturePtr;
+	const auto& creature = *creaturePtr;
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Player* player = creature->getPlayer();
-	if (player) {
+	if (const auto& player = creature->getPlayer()) {
 		player->kickPlayer(true);
 	} else {
 		g_game.removeCreature(creature);
@@ -8620,7 +8443,7 @@ int LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 	bool pushMovement = tfs::lua::getBoolean(L, 3, false);
 
 	const Position& position = tfs::lua::getPosition(L, 2);
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8664,7 +8487,7 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 		}
 	}
 
-	Creature* target = nullptr;
+	std::shared_ptr<Creature> target = nullptr;
 	if (parameters >= 5) {
 		target = tfs::lua::getCreature(L, 5);
 	}
@@ -8673,7 +8496,7 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 
 	SpeakClasses type = tfs::lua::getNumber<SpeakClasses>(L, 3, TALKTYPE_MONSTER_SAY);
 	const std::string& text = tfs::lua::getString(L, 2);
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8681,7 +8504,7 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 
 	SpectatorVec spectators;
 	if (target) {
-		spectators.emplace_back(target);
+		spectators.emplace(target);
 	}
 
 	// Prevent infinity echo on event onHear
@@ -8698,18 +8521,19 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 int LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 {
 	// creature:getDamageMap()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	lua_createtable(L, creature->damageMap.size(), 0);
-	for (const auto& damageEntry : creature->damageMap) {
+	const auto& damageMap = creature->getDamageMap();
+	lua_createtable(L, damageMap.size(), 0);
+	for (const auto& [index, damageEntry] : damageMap) {
 		lua_createtable(L, 0, 2);
-		setField(L, "total", damageEntry.second.total);
-		setField(L, "ticks", damageEntry.second.ticks);
-		lua_rawseti(L, -2, damageEntry.first);
+		setField(L, "total", damageEntry.total);
+		setField(L, "ticks", damageEntry.ticks);
+		lua_rawseti(L, -2, index);
 	}
 	return 1;
 }
@@ -8717,17 +8541,18 @@ int LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 int LuaScriptInterface::luaCreatureGetSummons(lua_State* L)
 {
 	// creature:getSummons()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	lua_createtable(L, creature->getSummonCount(), 0);
+	const auto summons = creature->getSummons() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, summons.size(), 0);
 
 	int index = 0;
-	for (Creature* summon : creature->getSummons()) {
-		tfs::lua::pushUserdata(L, summon);
+	for (const auto& summon : summons) {
+		tfs::lua::pushSharedPtr(L, summon);
 		tfs::lua::setCreatureMetatable(L, -1, summon);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -8738,8 +8563,7 @@ int LuaScriptInterface::luaCreatureGetDescription(lua_State* L)
 {
 	// creature:getDescription(distance)
 	int32_t distance = tfs::lua::getNumber<int32_t>(L, 2);
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		tfs::lua::pushString(L, creature->getDescription(distance));
 	} else {
 		lua_pushnil(L);
@@ -8751,7 +8575,7 @@ int LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 {
 	// creature:getPathTo(pos[, minTargetDist = 0[, maxTargetDist = 1[, fullPathSearch = true[, clearSight = true[,
 	// maxSearchDist = 0]]]]])
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8785,7 +8609,7 @@ int LuaScriptInterface::luaCreatureMove(lua_State* L)
 {
 	// creature:move(direction)
 	// creature:move(tile[, flags = 0])
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8799,12 +8623,12 @@ int LuaScriptInterface::luaCreatureMove(lua_State* L)
 		}
 		lua_pushnumber(L, g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT));
 	} else {
-		Tile* tile = tfs::lua::getUserdata<Tile>(L, 2);
+		const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 2);
 		if (!tile) {
 			lua_pushnil(L);
 			return 1;
 		}
-		lua_pushnumber(L, g_game.internalMoveCreature(*creature, *tile, tfs::lua::getNumber<uint32_t>(L, 3)));
+		lua_pushnumber(L, g_game.internalMoveCreature(creature, tile, tfs::lua::getNumber<uint32_t>(L, 3)));
 	}
 	return 1;
 }
@@ -8812,8 +8636,7 @@ int LuaScriptInterface::luaCreatureMove(lua_State* L)
 int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
 {
 	// creature:getZone()
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		lua_pushnumber(L, creature->getZone());
 	} else {
 		lua_pushnil(L);
@@ -8824,8 +8647,7 @@ int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
 int LuaScriptInterface::luaCreatureHasIcon(lua_State* L)
 {
 	// creature:hasIcon(iconId)
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
-	if (creature) {
+	if (const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1)) {
 		auto iconId = tfs::lua::getNumber<CreatureIcon_t>(L, 2);
 		tfs::lua::pushBoolean(L, creature->getIcons().contains(iconId));
 	} else {
@@ -8837,7 +8659,7 @@ int LuaScriptInterface::luaCreatureHasIcon(lua_State* L)
 int LuaScriptInterface::luaCreatureSetIcon(lua_State* L)
 {
 	// creature:setIcon(iconId, value)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8859,7 +8681,7 @@ int LuaScriptInterface::luaCreatureSetIcon(lua_State* L)
 int LuaScriptInterface::luaCreatureGetIcon(lua_State* L)
 {
 	// creature:getIcon(iconId)
-	const Creature* creature = tfs::lua::getUserdata<const Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<const Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8879,7 +8701,7 @@ int LuaScriptInterface::luaCreatureGetIcon(lua_State* L)
 int LuaScriptInterface::luaCreatureRemoveIcon(lua_State* L)
 {
 	// creature:removeIcon(iconId)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8902,7 +8724,7 @@ int LuaScriptInterface::luaCreatureRemoveIcon(lua_State* L)
 int LuaScriptInterface::luaCreatureGetStorageValue(lua_State* L)
 {
 	// creature:getStorageValue(key)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8920,7 +8742,7 @@ int LuaScriptInterface::luaCreatureGetStorageValue(lua_State* L)
 int LuaScriptInterface::luaCreatureSetStorageValue(lua_State* L)
 {
 	// creature:setStorageValue(key, value)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
@@ -8948,7 +8770,7 @@ int LuaScriptInterface::luaCreatureSetStorageValue(lua_State* L)
 int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
 	// Player(id or guid or name or userdata)
-	Player* player;
+	std::shared_ptr<Player> player = nullptr;
 	if (isNumber(L, 2)) {
 		uint32_t id = tfs::lua::getNumber<uint32_t>(L, 2);
 		if (id >= CREATURE_ID_MIN && id <= Player::playerIDLimit) {
@@ -8968,13 +8790,11 @@ int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 			lua_pushnil(L);
 			return 1;
 		}
-		player = tfs::lua::getUserdata<Player>(L, 2);
-	} else {
-		player = nullptr;
+		player = tfs::lua::getSharedPtr<Player>(L, 2);
 	}
 
 	if (player) {
-		tfs::lua::pushUserdata(L, player);
+		tfs::lua::pushSharedPtr(L, player);
 		tfs::lua::setMetatable(L, -1, "Player");
 	} else {
 		lua_pushnil(L);
@@ -8985,15 +8805,18 @@ int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 int LuaScriptInterface::luaPlayerIsPlayer(lua_State* L)
 {
 	// player:isPlayer()
-	tfs::lua::pushBoolean(L, tfs::lua::getUserdata<const Player>(L, 1) != nullptr);
+	if (const auto& creature = tfs::lua::getCreature(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->getPlayer() != nullptr);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaPlayerGetGuid(lua_State* L)
 {
 	// player:getGuid()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getGUID());
 	} else {
 		lua_pushnil(L);
@@ -9004,8 +8827,7 @@ int LuaScriptInterface::luaPlayerGetGuid(lua_State* L)
 int LuaScriptInterface::luaPlayerGetIp(lua_State* L)
 {
 	// player:getIp()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		tfs::lua::pushString(L, player->getIP().to_string());
 	} else {
 		lua_pushnil(L);
@@ -9016,8 +8838,7 @@ int LuaScriptInterface::luaPlayerGetIp(lua_State* L)
 int LuaScriptInterface::luaPlayerGetAccountId(lua_State* L)
 {
 	// player:getAccountId()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getAccount());
 	} else {
 		lua_pushnil(L);
@@ -9028,8 +8849,7 @@ int LuaScriptInterface::luaPlayerGetAccountId(lua_State* L)
 int LuaScriptInterface::luaPlayerGetLastLoginSaved(lua_State* L)
 {
 	// player:getLastLoginSaved()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getLastLoginSaved());
 	} else {
 		lua_pushnil(L);
@@ -9040,8 +8860,7 @@ int LuaScriptInterface::luaPlayerGetLastLoginSaved(lua_State* L)
 int LuaScriptInterface::luaPlayerGetLastLogout(lua_State* L)
 {
 	// player:getLastLogout()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getLastLogout());
 	} else {
 		lua_pushnil(L);
@@ -9052,8 +8871,7 @@ int LuaScriptInterface::luaPlayerGetLastLogout(lua_State* L)
 int LuaScriptInterface::luaPlayerGetAccountType(lua_State* L)
 {
 	// player:getAccountType()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getAccountType());
 	} else {
 		lua_pushnil(L);
@@ -9064,10 +8882,9 @@ int LuaScriptInterface::luaPlayerGetAccountType(lua_State* L)
 int LuaScriptInterface::luaPlayerSetAccountType(lua_State* L)
 {
 	// player:setAccountType(accountType)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		player->accountType = tfs::lua::getNumber<AccountType_t>(L, 2);
-		IOLoginData::setAccountType(player->getAccount(), player->accountType);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		player->setAccountType(tfs::lua::getNumber<AccountType_t>(L, 2));
+		IOLoginData::setAccountType(player->getAccount(), player->getAccountType());
 		tfs::lua::pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -9078,8 +8895,7 @@ int LuaScriptInterface::luaPlayerSetAccountType(lua_State* L)
 int LuaScriptInterface::luaPlayerGetCapacity(lua_State* L)
 {
 	// player:getCapacity()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getCapacity());
 	} else {
 		lua_pushnil(L);
@@ -9090,9 +8906,8 @@ int LuaScriptInterface::luaPlayerGetCapacity(lua_State* L)
 int LuaScriptInterface::luaPlayerSetCapacity(lua_State* L)
 {
 	// player:setCapacity(capacity)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		player->capacity = tfs::lua::getNumber<uint32_t>(L, 2);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		player->setCapacity(tfs::lua::getNumber<uint32_t>(L, 2));
 		player->sendStats();
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9104,8 +8919,7 @@ int LuaScriptInterface::luaPlayerSetCapacity(lua_State* L)
 int LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
 {
 	// player:getFreeCapacity()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getFreeCapacity());
 	} else {
 		lua_pushnil(L);
@@ -9116,7 +8930,7 @@ int LuaScriptInterface::luaPlayerGetFreeCapacity(lua_State* L)
 int LuaScriptInterface::luaPlayerGetDepotChest(lua_State* L)
 {
 	// player:getDepotChest(depotId[, autoCreate = false])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -9124,10 +8938,9 @@ int LuaScriptInterface::luaPlayerGetDepotChest(lua_State* L)
 
 	uint32_t depotId = tfs::lua::getNumber<uint32_t>(L, 2);
 	bool autoCreate = tfs::lua::getBoolean(L, 3, false);
-	const auto& depotChest = player->getDepotChest(depotId, autoCreate);
-	if (depotChest) {
-		pushSharedPtr(L, depotChest);
-		tfs::lua::setItemMetatable(L, -1, depotChest.get());
+	if (const auto& depotChest = player->getDepotChest(depotId, autoCreate)) {
+		tfs::lua::pushSharedPtr(L, depotChest);
+		tfs::lua::setItemMetatable(L, -1, depotChest);
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}
@@ -9137,16 +8950,15 @@ int LuaScriptInterface::luaPlayerGetDepotChest(lua_State* L)
 int LuaScriptInterface::luaPlayerGetInbox(lua_State* L)
 {
 	// player:getInbox()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	const auto& inbox = player->getInbox();
-	if (inbox) {
-		pushSharedPtr(L, inbox);
-		tfs::lua::setItemMetatable(L, -1, inbox.get());
+	if (const auto& inbox = player->getInbox()) {
+		tfs::lua::pushSharedPtr(L, inbox);
+		tfs::lua::setItemMetatable(L, -1, inbox);
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}
@@ -9156,8 +8968,7 @@ int LuaScriptInterface::luaPlayerGetInbox(lua_State* L)
 int LuaScriptInterface::luaPlayerGetSkullTime(lua_State* L)
 {
 	// player:getSkullTime()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getSkullTicks());
 	} else {
 		lua_pushnil(L);
@@ -9168,8 +8979,7 @@ int LuaScriptInterface::luaPlayerGetSkullTime(lua_State* L)
 int LuaScriptInterface::luaPlayerSetSkullTime(lua_State* L)
 {
 	// player:setSkullTime(skullTime)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->setSkullTicks(tfs::lua::getNumber<int64_t>(L, 2));
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9181,8 +8991,7 @@ int LuaScriptInterface::luaPlayerSetSkullTime(lua_State* L)
 int LuaScriptInterface::luaPlayerGetDeathPenalty(lua_State* L)
 {
 	// player:getDeathPenalty()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getLostPercent() * 100);
 	} else {
 		lua_pushnil(L);
@@ -9193,8 +9002,7 @@ int LuaScriptInterface::luaPlayerGetDeathPenalty(lua_State* L)
 int LuaScriptInterface::luaPlayerGetExperience(lua_State* L)
 {
 	// player:getExperience()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getExperience());
 	} else {
 		lua_pushnil(L);
@@ -9205,8 +9013,7 @@ int LuaScriptInterface::luaPlayerGetExperience(lua_State* L)
 int LuaScriptInterface::luaPlayerAddExperience(lua_State* L)
 {
 	// player:addExperience(experience[, sendText = false])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint64_t experience = tfs::lua::getNumber<uint64_t>(L, 2);
 		bool sendText = tfs::lua::getBoolean(L, 3, false);
 		player->addExperience(nullptr, experience, sendText);
@@ -9220,8 +9027,7 @@ int LuaScriptInterface::luaPlayerAddExperience(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveExperience(lua_State* L)
 {
 	// player:removeExperience(experience[, sendText = false])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint64_t experience = tfs::lua::getNumber<uint64_t>(L, 2);
 		bool sendText = tfs::lua::getBoolean(L, 3, false);
 		player->removeExperience(experience, sendText);
@@ -9235,8 +9041,7 @@ int LuaScriptInterface::luaPlayerRemoveExperience(lua_State* L)
 int LuaScriptInterface::luaPlayerGetLevel(lua_State* L)
 {
 	// player:getLevel()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getLevel());
 	} else {
 		lua_pushnil(L);
@@ -9247,8 +9052,7 @@ int LuaScriptInterface::luaPlayerGetLevel(lua_State* L)
 int LuaScriptInterface::luaPlayerGetLevelPercent(lua_State* L)
 {
 	// player:getLevelPercent()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getLevelPercent());
 	} else {
 		lua_pushnil(L);
@@ -9259,8 +9063,7 @@ int LuaScriptInterface::luaPlayerGetLevelPercent(lua_State* L)
 int LuaScriptInterface::luaPlayerGetMagicLevel(lua_State* L)
 {
 	// player:getMagicLevel()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getMagicLevel());
 	} else {
 		lua_pushnil(L);
@@ -9271,8 +9074,7 @@ int LuaScriptInterface::luaPlayerGetMagicLevel(lua_State* L)
 int LuaScriptInterface::luaPlayerGetMagicLevelPercent(lua_State* L)
 {
 	// player:getMagicLevelPercent()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getMagicLevelPercent());
 	} else {
 		lua_pushnil(L);
@@ -9283,8 +9085,7 @@ int LuaScriptInterface::luaPlayerGetMagicLevelPercent(lua_State* L)
 int LuaScriptInterface::luaPlayerGetBaseMagicLevel(lua_State* L)
 {
 	// player:getBaseMagicLevel()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getBaseMagicLevel());
 	} else {
 		lua_pushnil(L);
@@ -9295,8 +9096,7 @@ int LuaScriptInterface::luaPlayerGetBaseMagicLevel(lua_State* L)
 int LuaScriptInterface::luaPlayerGetMana(lua_State* L)
 {
 	// player:getMana()
-	const Player* player = tfs::lua::getUserdata<const Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<const Player>(L, 1)) {
 		lua_pushnumber(L, player->getMana());
 	} else {
 		lua_pushnil(L);
@@ -9307,7 +9107,7 @@ int LuaScriptInterface::luaPlayerGetMana(lua_State* L)
 int LuaScriptInterface::luaPlayerAddMana(lua_State* L)
 {
 	// player:addMana(manaChange[, animationOnLoss = false])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -9330,8 +9130,7 @@ int LuaScriptInterface::luaPlayerAddMana(lua_State* L)
 int LuaScriptInterface::luaPlayerGetMaxMana(lua_State* L)
 {
 	// player:getMaxMana()
-	const Player* player = tfs::lua::getUserdata<const Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<const Player>(L, 1)) {
 		lua_pushnumber(L, player->getMaxMana());
 	} else {
 		lua_pushnil(L);
@@ -9342,10 +9141,9 @@ int LuaScriptInterface::luaPlayerGetMaxMana(lua_State* L)
 int LuaScriptInterface::luaPlayerSetMaxMana(lua_State* L)
 {
 	// player:setMaxMana(maxMana)
-	Player* player = tfs::lua::getPlayer(L, 1);
-	if (player) {
-		player->manaMax = tfs::lua::getNumber<int32_t>(L, 2);
-		player->mana = std::min<int32_t>(player->mana, player->manaMax);
+	if (const auto& player = tfs::lua::getPlayer(L, 1)) {
+		player->setMaxMana(tfs::lua::getNumber<int32_t>(L, 2));
+		player->setMana(std::min<int32_t>(player->getMana(), player->getMaxMana()));
 		player->sendStats();
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9357,8 +9155,7 @@ int LuaScriptInterface::luaPlayerSetMaxMana(lua_State* L)
 int LuaScriptInterface::luaPlayerSetManaShieldBar(lua_State* L)
 {
 	// player:setManaShieldBar(capacity, value)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->setMaxManaShieldBar(tfs::lua::getNumber<uint16_t>(L, 2));
 		player->setManaShieldBar(tfs::lua::getNumber<uint16_t>(L, 3));
 		player->sendStats();
@@ -9372,8 +9169,7 @@ int LuaScriptInterface::luaPlayerSetManaShieldBar(lua_State* L)
 int LuaScriptInterface::luaPlayerGetManaSpent(lua_State* L)
 {
 	// player:getManaSpent()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getSpentMana());
 	} else {
 		lua_pushnil(L);
@@ -9384,8 +9180,7 @@ int LuaScriptInterface::luaPlayerGetManaSpent(lua_State* L)
 int LuaScriptInterface::luaPlayerAddManaSpent(lua_State* L)
 {
 	// player:addManaSpent(amount)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->addManaSpent(tfs::lua::getNumber<uint64_t>(L, 2));
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9397,8 +9192,7 @@ int LuaScriptInterface::luaPlayerAddManaSpent(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveManaSpent(lua_State* L)
 {
 	// player:removeManaSpent(amount[, notify = true])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->removeManaSpent(tfs::lua::getNumber<uint64_t>(L, 2), tfs::lua::getBoolean(L, 3, true));
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9410,9 +9204,8 @@ int LuaScriptInterface::luaPlayerRemoveManaSpent(lua_State* L)
 int LuaScriptInterface::luaPlayerGetBaseMaxHealth(lua_State* L)
 {
 	// player:getBaseMaxHealth()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		lua_pushnumber(L, player->healthMax);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		lua_pushnumber(L, player->getMaxHealth());
 	} else {
 		lua_pushnil(L);
 	}
@@ -9422,9 +9215,8 @@ int LuaScriptInterface::luaPlayerGetBaseMaxHealth(lua_State* L)
 int LuaScriptInterface::luaPlayerGetBaseMaxMana(lua_State* L)
 {
 	// player:getBaseMaxMana()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		lua_pushnumber(L, player->manaMax);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		lua_pushnumber(L, player->getMaxMana());
 	} else {
 		lua_pushnil(L);
 	}
@@ -9435,9 +9227,9 @@ int LuaScriptInterface::luaPlayerGetSkillLevel(lua_State* L)
 {
 	// player:getSkillLevel(skillType)
 	skills_t skillType = tfs::lua::getNumber<skills_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
-		lua_pushnumber(L, player->skills[skillType].level);
+		lua_pushnumber(L, player->getSkillLevel(skillType));
 	} else {
 		lua_pushnil(L);
 	}
@@ -9448,7 +9240,7 @@ int LuaScriptInterface::luaPlayerGetEffectiveSkillLevel(lua_State* L)
 {
 	// player:getEffectiveSkillLevel(skillType)
 	skills_t skillType = tfs::lua::getNumber<skills_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
 		lua_pushnumber(L, player->getSkillLevel(skillType));
 	} else {
@@ -9461,9 +9253,9 @@ int LuaScriptInterface::luaPlayerGetSkillPercent(lua_State* L)
 {
 	// player:getSkillPercent(skillType)
 	skills_t skillType = tfs::lua::getNumber<skills_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
-		lua_pushnumber(L, player->skills[skillType].percent);
+		lua_pushnumber(L, player->getSkillPercent(skillType));
 	} else {
 		lua_pushnil(L);
 	}
@@ -9474,9 +9266,9 @@ int LuaScriptInterface::luaPlayerGetSkillTries(lua_State* L)
 {
 	// player:getSkillTries(skillType)
 	skills_t skillType = tfs::lua::getNumber<skills_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (player && skillType <= SKILL_LAST) {
-		lua_pushnumber(L, player->skills[skillType].tries);
+		lua_pushnumber(L, player->getSkillTries(skillType));
 	} else {
 		lua_pushnil(L);
 	}
@@ -9486,8 +9278,7 @@ int LuaScriptInterface::luaPlayerGetSkillTries(lua_State* L)
 int LuaScriptInterface::luaPlayerAddSkillTries(lua_State* L)
 {
 	// player:addSkillTries(skillType, tries)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		skills_t skillType = tfs::lua::getNumber<skills_t>(L, 2);
 		uint64_t tries = tfs::lua::getNumber<uint64_t>(L, 3);
 		player->addSkillAdvance(skillType, tries);
@@ -9501,8 +9292,7 @@ int LuaScriptInterface::luaPlayerAddSkillTries(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveSkillTries(lua_State* L)
 {
 	// player:removeSkillTries(skillType, tries[, notify = true])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		skills_t skillType = tfs::lua::getNumber<skills_t>(L, 2);
 		uint64_t tries = tfs::lua::getNumber<uint64_t>(L, 3);
 		player->removeSkillTries(skillType, tries, tfs::lua::getBoolean(L, 4, true));
@@ -9517,7 +9307,7 @@ int LuaScriptInterface::luaPlayerGetSpecialSkill(lua_State* L)
 {
 	// player:getSpecialSkill(specialSkillType)
 	SpecialSkills_t specialSkillType = tfs::lua::getNumber<SpecialSkills_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (player && specialSkillType <= SPECIALSKILL_LAST) {
 		lua_pushnumber(L, player->getSpecialSkill(specialSkillType));
 	} else {
@@ -9529,7 +9319,7 @@ int LuaScriptInterface::luaPlayerGetSpecialSkill(lua_State* L)
 int LuaScriptInterface::luaPlayerAddSpecialSkill(lua_State* L)
 {
 	// player:addSpecialSkill(specialSkillType, value)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -9550,8 +9340,7 @@ int LuaScriptInterface::luaPlayerAddSpecialSkill(lua_State* L)
 int LuaScriptInterface::luaPlayerAddOfflineTrainingTime(lua_State* L)
 {
 	// player:addOfflineTrainingTime(time)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		int32_t time = tfs::lua::getNumber<int32_t>(L, 2);
 		player->addOfflineTrainingTime(time);
 		player->sendStats();
@@ -9565,8 +9354,7 @@ int LuaScriptInterface::luaPlayerAddOfflineTrainingTime(lua_State* L)
 int LuaScriptInterface::luaPlayerGetOfflineTrainingTime(lua_State* L)
 {
 	// player:getOfflineTrainingTime()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getOfflineTrainingTime());
 	} else {
 		lua_pushnil(L);
@@ -9577,8 +9365,7 @@ int LuaScriptInterface::luaPlayerGetOfflineTrainingTime(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveOfflineTrainingTime(lua_State* L)
 {
 	// player:removeOfflineTrainingTime(time)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		int32_t time = tfs::lua::getNumber<int32_t>(L, 2);
 		player->removeOfflineTrainingTime(time);
 		player->sendStats();
@@ -9592,8 +9379,7 @@ int LuaScriptInterface::luaPlayerRemoveOfflineTrainingTime(lua_State* L)
 int LuaScriptInterface::luaPlayerAddOfflineTrainingTries(lua_State* L)
 {
 	// player:addOfflineTrainingTries(skillType, tries)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		skills_t skillType = tfs::lua::getNumber<skills_t>(L, 2);
 		uint64_t tries = tfs::lua::getNumber<uint64_t>(L, 3);
 		tfs::lua::pushBoolean(L, player->addOfflineTrainingTries(skillType, tries));
@@ -9606,8 +9392,7 @@ int LuaScriptInterface::luaPlayerAddOfflineTrainingTries(lua_State* L)
 int LuaScriptInterface::luaPlayerGetOfflineTrainingSkill(lua_State* L)
 {
 	// player:getOfflineTrainingSkill()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getOfflineTrainingSkill());
 	} else {
 		lua_pushnil(L);
@@ -9618,8 +9403,7 @@ int LuaScriptInterface::luaPlayerGetOfflineTrainingSkill(lua_State* L)
 int LuaScriptInterface::luaPlayerSetOfflineTrainingSkill(lua_State* L)
 {
 	// player:setOfflineTrainingSkill(skillId)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		int32_t skillId = tfs::lua::getNumber<int32_t>(L, 2);
 		player->setOfflineTrainingSkill(skillId);
 		tfs::lua::pushBoolean(L, true);
@@ -9632,7 +9416,7 @@ int LuaScriptInterface::luaPlayerSetOfflineTrainingSkill(lua_State* L)
 int LuaScriptInterface::luaPlayerGetItemCount(lua_State* L)
 {
 	// player:getItemCount(itemId[, subType = -1])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -9657,7 +9441,7 @@ int LuaScriptInterface::luaPlayerGetItemCount(lua_State* L)
 int LuaScriptInterface::luaPlayerGetItemById(lua_State* L)
 {
 	// player:getItemById(itemId, deepSearch[, subType = -1])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -9676,9 +9460,8 @@ int LuaScriptInterface::luaPlayerGetItemById(lua_State* L)
 	bool deepSearch = tfs::lua::getBoolean(L, 3);
 	int32_t subType = tfs::lua::getNumber<int32_t>(L, 4, -1);
 
-	Item* item = g_game.findItemOfType(player, itemId, deepSearch, subType);
-	if (item) {
-		tfs::lua::pushUserdata(L, item);
+	if (auto item = g_game.findItemOfType(player, itemId, deepSearch, subType)) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -9689,8 +9472,7 @@ int LuaScriptInterface::luaPlayerGetItemById(lua_State* L)
 int LuaScriptInterface::luaPlayerGetVocation(lua_State* L)
 {
 	// player:getVocation()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		tfs::lua::pushUserdata(L, player->getVocation());
 		tfs::lua::setMetatable(L, -1, "Vocation");
 	} else {
@@ -9702,21 +9484,19 @@ int LuaScriptInterface::luaPlayerGetVocation(lua_State* L)
 int LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 {
 	// player:setVocation(id or name or userdata)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Vocation* vocation;
+	Vocation* vocation = nullptr;
 	if (isNumber(L, 2)) {
 		vocation = g_vocations.getVocation(tfs::lua::getNumber<uint16_t>(L, 2));
 	} else if (lua_isstring(L, 2)) {
 		vocation = g_vocations.getVocation(g_vocations.getVocationId(tfs::lua::getString(L, 2)));
 	} else if (lua_isuserdata(L, 2)) {
 		vocation = tfs::lua::getUserdata<Vocation>(L, 2);
-	} else {
-		vocation = nullptr;
 	}
 
 	if (!vocation) {
@@ -9732,8 +9512,7 @@ int LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 int LuaScriptInterface::luaPlayerGetSex(lua_State* L)
 {
 	// player:getSex()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getSex());
 	} else {
 		lua_pushnil(L);
@@ -9744,8 +9523,7 @@ int LuaScriptInterface::luaPlayerGetSex(lua_State* L)
 int LuaScriptInterface::luaPlayerSetSex(lua_State* L)
 {
 	// player:setSex(newSex)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		PlayerSex_t newSex = tfs::lua::getNumber<PlayerSex_t>(L, 2);
 		player->setSex(newSex);
 		tfs::lua::pushBoolean(L, true);
@@ -9758,8 +9536,7 @@ int LuaScriptInterface::luaPlayerSetSex(lua_State* L)
 int LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 {
 	// player:getTown()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		pushTown(L, *player->getTown());
 	} else {
 		lua_pushnil(L);
@@ -9781,8 +9558,7 @@ int LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 		return 1;
 	}
 
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->setTown(town);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9794,14 +9570,14 @@ int LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 int LuaScriptInterface::luaPlayerGetGuild(lua_State* L)
 {
 	// player:getGuild()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	if (const auto& guild = player->getGuild()) {
-		pushSharedPtr(L, guild);
+		tfs::lua::pushSharedPtr(L, guild);
 		tfs::lua::setMetatable(L, -1, "Guild");
 	} else {
 		lua_pushnil(L);
@@ -9812,13 +9588,13 @@ int LuaScriptInterface::luaPlayerGetGuild(lua_State* L)
 int LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
 {
 	// player:setGuild(guild)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	player->setGuild(getSharedPtr<Guild>(L, 2));
+	player->setGuild(tfs::lua::getSharedPtr<Guild>(L, 2));
 	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
@@ -9826,7 +9602,7 @@ int LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
 int LuaScriptInterface::luaPlayerGetGuildLevel(lua_State* L)
 {
 	// player:getGuildLevel()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (player && player->getGuild()) {
 		lua_pushnumber(L, player->getGuildRank()->level);
 	} else {
@@ -9838,7 +9614,7 @@ int LuaScriptInterface::luaPlayerGetGuildLevel(lua_State* L)
 int LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 {
 	// player:setGuildLevel(level)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -9863,8 +9639,7 @@ int LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 int LuaScriptInterface::luaPlayerGetGuildNick(lua_State* L)
 {
 	// player:getGuildNick()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		tfs::lua::pushString(L, player->getGuildNick());
 	} else {
 		lua_pushnil(L);
@@ -9876,8 +9651,7 @@ int LuaScriptInterface::luaPlayerSetGuildNick(lua_State* L)
 {
 	// player:setGuildNick(nick)
 	const std::string& nick = tfs::lua::getString(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->setGuildNick(nick);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9889,8 +9663,7 @@ int LuaScriptInterface::luaPlayerSetGuildNick(lua_State* L)
 int LuaScriptInterface::luaPlayerGetGroup(lua_State* L)
 {
 	// player:getGroup()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		tfs::lua::pushUserdata(L, player->getGroup());
 		tfs::lua::setMetatable(L, -1, "Group");
 	} else {
@@ -9908,8 +9681,7 @@ int LuaScriptInterface::luaPlayerSetGroup(lua_State* L)
 		return 1;
 	}
 
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->setGroup(group);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9921,8 +9693,7 @@ int LuaScriptInterface::luaPlayerSetGroup(lua_State* L)
 int LuaScriptInterface::luaPlayerGetStamina(lua_State* L)
 {
 	// player:getStamina()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getStaminaMinutes());
 	} else {
 		lua_pushnil(L);
@@ -9934,9 +9705,8 @@ int LuaScriptInterface::luaPlayerSetStamina(lua_State* L)
 {
 	// player:setStamina(stamina)
 	uint16_t stamina = tfs::lua::getNumber<uint16_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		player->staminaMinutes = std::min<uint16_t>(2520, stamina);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		player->setStaminaMinutes(stamina);
 		player->sendStats();
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9948,8 +9718,7 @@ int LuaScriptInterface::luaPlayerSetStamina(lua_State* L)
 int LuaScriptInterface::luaPlayerGetSoul(lua_State* L)
 {
 	// player:getSoul()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getSoul());
 	} else {
 		lua_pushnil(L);
@@ -9961,8 +9730,7 @@ int LuaScriptInterface::luaPlayerAddSoul(lua_State* L)
 {
 	// player:addSoul(soulChange)
 	int32_t soulChange = tfs::lua::getNumber<int32_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->changeSoul(soulChange);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -9974,20 +9742,21 @@ int LuaScriptInterface::luaPlayerAddSoul(lua_State* L)
 int LuaScriptInterface::luaPlayerGetMaxSoul(lua_State* L)
 {
 	// player:getMaxSoul()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player && player->vocation) {
-		lua_pushnumber(L, player->vocation->getSoulMax());
-	} else {
-		lua_pushnil(L);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		if (const auto& vocation = player->getVocation()) {
+			lua_pushnumber(L, vocation->getSoulMax());
+			return 1;
+		}
 	}
+
+	lua_pushnil(L);
 	return 1;
 }
 
 int LuaScriptInterface::luaPlayerGetBankBalance(lua_State* L)
 {
 	// player:getBankBalance()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getBankBalance());
 	} else {
 		lua_pushnil(L);
@@ -9998,7 +9767,7 @@ int LuaScriptInterface::luaPlayerGetBankBalance(lua_State* L)
 int LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 {
 	// player:setBankBalance(bankBalance)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10019,7 +9788,7 @@ int LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 int LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 {
 	// player:addItem(itemId[, count = 1[, canDropOnMap = true[, subType = 1[, slot = CONST_SLOT_WHEREEVER]]]])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -10072,7 +9841,7 @@ int LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 			subType -= stackCount;
 		}
 
-		Item* item = Item::CreateItem(itemId, stackCount);
+		const auto& item = Item::CreateItem(itemId, stackCount);
 		if (!item) {
 			if (!hasTable) {
 				lua_pushnil(L);
@@ -10082,7 +9851,6 @@ int LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 
 		ReturnValue ret = g_game.internalPlayerAddItem(player, item, canDropOnMap, slot);
 		if (ret != RETURNVALUE_NOERROR) {
-			delete item;
 			if (!hasTable) {
 				lua_pushnil(L);
 			}
@@ -10091,11 +9859,11 @@ int LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 
 		if (hasTable) {
 			lua_pushnumber(L, i);
-			tfs::lua::pushUserdata(L, item);
+			tfs::lua::pushSharedPtr(L, item);
 			tfs::lua::setItemMetatable(L, -1, item);
 			lua_settable(L, -3);
 		} else {
-			tfs::lua::pushUserdata(L, item);
+			tfs::lua::pushSharedPtr(L, item);
 			tfs::lua::setItemMetatable(L, -1, item);
 		}
 	}
@@ -10106,47 +9874,41 @@ int LuaScriptInterface::luaPlayerAddItemEx(lua_State* L)
 {
 	// player:addItemEx(item[, canDropOnMap = false[, index = INDEX_WHEREEVER[, flags = 0]]])
 	// player:addItemEx(item[, canDropOnMap = true[, slot = CONST_SLOT_WHEREEVER]])
-	Item* item = tfs::lua::getUserdata<Item>(L, 2);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
 	if (!item) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (item->getParent() != VirtualCylinder::virtualCylinder) {
+	if (item->hasParent()) {
 		reportErrorFunc(L, "Item already has a parent");
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
 	bool canDropOnMap = tfs::lua::getBoolean(L, 3, false);
-	ReturnValue returnValue;
 	if (canDropOnMap) {
 		slots_t slot = tfs::lua::getNumber<slots_t>(L, 4, CONST_SLOT_WHEREEVER);
-		returnValue = g_game.internalPlayerAddItem(player, item, true, slot);
+		lua_pushnumber(L, g_game.internalPlayerAddItem(player, item, true, slot));
 	} else {
 		int32_t index = tfs::lua::getNumber<int32_t>(L, 4, INDEX_WHEREEVER);
 		uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 5, 0);
-		returnValue = g_game.internalAddItem(player, item, index, flags);
+		lua_pushnumber(L, g_game.internalAddItem(player, item, index, flags));
 	}
-
-	if (returnValue == RETURNVALUE_NOERROR) {
-		tfs::lua::removeTempItem(item);
-	}
-	lua_pushnumber(L, returnValue);
 	return 1;
 }
 
 int LuaScriptInterface::luaPlayerRemoveItem(lua_State* L)
 {
 	// player:removeItem(itemId, count[, subType = -1[, ignoreEquipped = false]])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10173,14 +9935,14 @@ int LuaScriptInterface::luaPlayerRemoveItem(lua_State* L)
 int LuaScriptInterface::luaPlayerSendSupplyUsed(lua_State* L)
 {
 	// player:sendSupplyUsed(item)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	Item* item = tfs::lua::getUserdata<Item>(L, 2);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
 	if (!item) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -10195,8 +9957,7 @@ int LuaScriptInterface::luaPlayerSendSupplyUsed(lua_State* L)
 int LuaScriptInterface::luaPlayerGetMoney(lua_State* L)
 {
 	// player:getMoney()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getMoney());
 	} else {
 		lua_pushnil(L);
@@ -10208,8 +9969,7 @@ int LuaScriptInterface::luaPlayerAddMoney(lua_State* L)
 {
 	// player:addMoney(money)
 	uint64_t money = tfs::lua::getNumber<uint64_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		g_game.addMoney(player, money);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -10221,8 +9981,7 @@ int LuaScriptInterface::luaPlayerAddMoney(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveMoney(lua_State* L)
 {
 	// player:removeMoney(money)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint64_t money = tfs::lua::getNumber<uint64_t>(L, 2);
 		tfs::lua::pushBoolean(L, g_game.removeMoney(player, money));
 	} else {
@@ -10234,7 +9993,7 @@ int LuaScriptInterface::luaPlayerRemoveMoney(lua_State* L)
 int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 {
 	// player:showTextDialog(id or name or userdata[, text[, canWrite[, length]]])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10249,7 +10008,7 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 		text = tfs::lua::getString(L, 3);
 	}
 
-	Item* item;
+	std::shared_ptr<Item> item = nullptr;
 	if (isNumber(L, 2)) {
 		item = Item::CreateItem(tfs::lua::getNumber<uint16_t>(L, 2));
 	} else if (lua_isstring(L, 2)) {
@@ -10260,9 +10019,7 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 			return 1;
 		}
 
-		item = tfs::lua::getUserdata<Item>(L, 2);
-	} else {
-		item = nullptr;
+		item = tfs::lua::getSharedPtr<Item>(L, 2);
 	}
 
 	if (!item) {
@@ -10281,11 +10038,8 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 	}
 
 	item->setParent(player);
-	player->windowTextId++;
-	player->writeItem = item;
-	player->maxWriteLen = length;
+	lua_pushinteger(L, player->setWriteItem(item, length));
 	player->sendTextWindow(item, length, canWrite);
-	lua_pushinteger(L, player->windowTextId);
 	return 1;
 }
 
@@ -10294,7 +10048,7 @@ int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 	// player:sendTextMessage(type, text[, position, primaryValue = 0, primaryColor = TEXTCOLOR_NONE[,
 	// secondaryValue = 0, secondaryColor = TEXTCOLOR_NONE]]) player:sendTextMessage(type, text, channelId)
 
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10305,8 +10059,8 @@ int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 	TextMessage message(tfs::lua::getNumber<MessageClasses>(L, 2), tfs::lua::getString(L, 3));
 	if (parameters == 4) {
 		uint16_t channelId = tfs::lua::getNumber<uint16_t>(L, 4);
-		ChatChannel* channel = g_chat->getChannel(*player, channelId);
-		if (!channel || !channel->hasUser(*player)) {
+		ChatChannel* channel = g_chat->getChannel(player, channelId);
+		if (!channel || !channel->hasUser(player)) {
 			tfs::lua::pushBoolean(L, false);
 			return 1;
 		}
@@ -10333,7 +10087,7 @@ int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 int LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 {
 	// player:sendChannelMessage(author, text, type, channelId)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10351,13 +10105,13 @@ int LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 int LuaScriptInterface::luaPlayerSendPrivateMessage(lua_State* L)
 {
 	// player:sendPrivateMessage(speaker, text[, type])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	const Player* speaker = tfs::lua::getUserdata<const Player>(L, 2);
+	const auto& speaker = tfs::lua::getSharedPtr<const Player>(L, 2);
 	const std::string& text = tfs::lua::getString(L, 3);
 	SpeakClasses type = tfs::lua::getNumber<SpeakClasses>(L, 4, TALKTYPE_PRIVATE_FROM);
 	player->sendPrivateMessage(speaker, type, text);
@@ -10368,13 +10122,13 @@ int LuaScriptInterface::luaPlayerSendPrivateMessage(lua_State* L)
 int LuaScriptInterface::luaPlayerChannelSay(lua_State* L)
 {
 	// player:channelSay(speaker, type, text, channelId)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* speaker = tfs::lua::getCreature(L, 2);
+	auto speaker = tfs::lua::getCreature(L, 2);
 	SpeakClasses type = tfs::lua::getNumber<SpeakClasses>(L, 3);
 	const std::string& text = tfs::lua::getString(L, 4);
 	uint16_t channelId = tfs::lua::getNumber<uint16_t>(L, 5);
@@ -10387,8 +10141,7 @@ int LuaScriptInterface::luaPlayerOpenChannel(lua_State* L)
 {
 	// player:openChannel(channelId)
 	uint16_t channelId = tfs::lua::getNumber<uint16_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		g_game.playerOpenChannel(player->getID(), channelId);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -10401,8 +10154,7 @@ int LuaScriptInterface::luaPlayerLeaveChannel(lua_State* L)
 {
 	// player:leaveChannel(channelId)
 	uint16_t channelId = tfs::lua::getNumber<uint16_t>(L, 2);
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		g_game.playerCloseChannel(player->getID(), channelId);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -10414,22 +10166,21 @@ int LuaScriptInterface::luaPlayerLeaveChannel(lua_State* L)
 int LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 {
 	// player:getSlotItem(slot)
-	const Player* player = tfs::lua::getUserdata<const Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<const Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	uint32_t slot = tfs::lua::getNumber<uint32_t>(L, 2);
-	Thing* thing = player->getThing(slot);
+	const auto& thing = player->getThing(slot);
 	if (!thing) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Item* item = thing->getItem();
-	if (item) {
-		tfs::lua::pushUserdata(L, item);
+	if (const auto& item = thing->getItem()) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -10440,7 +10191,7 @@ int LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 int LuaScriptInterface::luaPlayerGetParty(lua_State* L)
 {
 	// player:getParty()
-	const Player* player = tfs::lua::getUserdata<const Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<const Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10459,8 +10210,7 @@ int LuaScriptInterface::luaPlayerGetParty(lua_State* L)
 int LuaScriptInterface::luaPlayerAddOutfit(lua_State* L)
 {
 	// player:addOutfit(lookType)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->addOutfit(tfs::lua::getNumber<uint16_t>(L, 2), 0);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -10472,8 +10222,7 @@ int LuaScriptInterface::luaPlayerAddOutfit(lua_State* L)
 int LuaScriptInterface::luaPlayerAddOutfitAddon(lua_State* L)
 {
 	// player:addOutfitAddon(lookType, addon)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint16_t lookType = tfs::lua::getNumber<uint16_t>(L, 2);
 		uint8_t addon = tfs::lua::getNumber<uint8_t>(L, 3);
 		player->addOutfit(lookType, addon);
@@ -10487,8 +10236,7 @@ int LuaScriptInterface::luaPlayerAddOutfitAddon(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveOutfit(lua_State* L)
 {
 	// player:removeOutfit(lookType)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint16_t lookType = tfs::lua::getNumber<uint16_t>(L, 2);
 		tfs::lua::pushBoolean(L, player->removeOutfit(lookType));
 	} else {
@@ -10500,8 +10248,7 @@ int LuaScriptInterface::luaPlayerRemoveOutfit(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveOutfitAddon(lua_State* L)
 {
 	// player:removeOutfitAddon(lookType, addon)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint16_t lookType = tfs::lua::getNumber<uint16_t>(L, 2);
 		uint8_t addon = tfs::lua::getNumber<uint8_t>(L, 3);
 		tfs::lua::pushBoolean(L, player->removeOutfitAddon(lookType, addon));
@@ -10514,8 +10261,7 @@ int LuaScriptInterface::luaPlayerRemoveOutfitAddon(lua_State* L)
 int LuaScriptInterface::luaPlayerHasOutfit(lua_State* L)
 {
 	// player:hasOutfit(lookType[, addon = 0])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint16_t lookType = tfs::lua::getNumber<uint16_t>(L, 2);
 		uint8_t addon = tfs::lua::getNumber<uint8_t>(L, 3, 0);
 		tfs::lua::pushBoolean(L, player->hasOutfit(lookType, addon));
@@ -10528,8 +10274,7 @@ int LuaScriptInterface::luaPlayerHasOutfit(lua_State* L)
 int LuaScriptInterface::luaPlayerCanWearOutfit(lua_State* L)
 {
 	// player:canWearOutfit(lookType[, addon = 0])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint16_t lookType = tfs::lua::getNumber<uint16_t>(L, 2);
 		uint8_t addon = tfs::lua::getNumber<uint8_t>(L, 3, 0);
 		tfs::lua::pushBoolean(L, player->canWear(lookType, addon));
@@ -10542,8 +10287,7 @@ int LuaScriptInterface::luaPlayerCanWearOutfit(lua_State* L)
 int LuaScriptInterface::luaPlayerSendOutfitWindow(lua_State* L)
 {
 	// player:sendOutfitWindow()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->sendOutfitWindow();
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -10555,8 +10299,8 @@ int LuaScriptInterface::luaPlayerSendOutfitWindow(lua_State* L)
 int LuaScriptInterface::luaPlayerSendEditPodium(lua_State* L)
 {
 	// player:sendEditPodium(item)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	Item* item = tfs::lua::getUserdata<Item>(L, 2);
+	auto player = tfs::lua::getSharedPtr<Player>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
 	if (player && item) {
 		player->sendPodiumWindow(item);
 		tfs::lua::pushBoolean(L, true);
@@ -10569,7 +10313,7 @@ int LuaScriptInterface::luaPlayerSendEditPodium(lua_State* L)
 int LuaScriptInterface::luaPlayerAddMount(lua_State* L)
 {
 	// player:addMount(mountId or mountName)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10593,7 +10337,7 @@ int LuaScriptInterface::luaPlayerAddMount(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveMount(lua_State* L)
 {
 	// player:removeMount(mountId or mountName)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10617,7 +10361,7 @@ int LuaScriptInterface::luaPlayerRemoveMount(lua_State* L)
 int LuaScriptInterface::luaPlayerHasMount(lua_State* L)
 {
 	// player:hasMount(mountId or mountName)
-	const Player* player = tfs::lua::getUserdata<const Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<const Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10641,7 +10385,7 @@ int LuaScriptInterface::luaPlayerHasMount(lua_State* L)
 int LuaScriptInterface::luaPlayerToggleMount(lua_State* L)
 {
 	// player:toggleMount(mount)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10655,9 +10399,8 @@ int LuaScriptInterface::luaPlayerToggleMount(lua_State* L)
 int LuaScriptInterface::luaPlayerGetPremiumEndsAt(lua_State* L)
 {
 	// player:getPremiumEndsAt()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		lua_pushnumber(L, player->premiumEndsAt);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		lua_pushnumber(L, player->getPremiumEndsAt());
 	} else {
 		lua_pushnil(L);
 	}
@@ -10667,7 +10410,7 @@ int LuaScriptInterface::luaPlayerGetPremiumEndsAt(lua_State* L)
 int LuaScriptInterface::luaPlayerSetPremiumEndsAt(lua_State* L)
 {
 	// player:setPremiumEndsAt(timestamp)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10685,8 +10428,7 @@ int LuaScriptInterface::luaPlayerHasBlessing(lua_State* L)
 {
 	// player:hasBlessing(blessing)
 	uint8_t blessing = tfs::lua::getNumber<uint8_t>(L, 2) - 1;
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		tfs::lua::pushBoolean(L, player->hasBlessing(blessing));
 	} else {
 		lua_pushnil(L);
@@ -10697,7 +10439,7 @@ int LuaScriptInterface::luaPlayerHasBlessing(lua_State* L)
 int LuaScriptInterface::luaPlayerAddBlessing(lua_State* L)
 {
 	// player:addBlessing(blessing)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10717,7 +10459,7 @@ int LuaScriptInterface::luaPlayerAddBlessing(lua_State* L)
 int LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 {
 	// player:removeBlessing(blessing)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10737,7 +10479,7 @@ int LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 int LuaScriptInterface::luaPlayerCanLearnSpell(lua_State* L)
 {
 	// player:canLearnSpell(spellName)
-	const Player* player = tfs::lua::getUserdata<const Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<const Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10771,8 +10513,7 @@ int LuaScriptInterface::luaPlayerCanLearnSpell(lua_State* L)
 int LuaScriptInterface::luaPlayerLearnSpell(lua_State* L)
 {
 	// player:learnSpell(spellName)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		const std::string& spellName = tfs::lua::getString(L, 2);
 		player->learnInstantSpell(spellName);
 		tfs::lua::pushBoolean(L, true);
@@ -10785,8 +10526,7 @@ int LuaScriptInterface::luaPlayerLearnSpell(lua_State* L)
 int LuaScriptInterface::luaPlayerForgetSpell(lua_State* L)
 {
 	// player:forgetSpell(spellName)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		const std::string& spellName = tfs::lua::getString(L, 2);
 		player->forgetInstantSpell(spellName);
 		tfs::lua::pushBoolean(L, true);
@@ -10799,8 +10539,7 @@ int LuaScriptInterface::luaPlayerForgetSpell(lua_State* L)
 int LuaScriptInterface::luaPlayerHasLearnedSpell(lua_State* L)
 {
 	// player:hasLearnedSpell(spellName)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		const std::string& spellName = tfs::lua::getString(L, 2);
 		tfs::lua::pushBoolean(L, player->hasLearnedInstantSpell(spellName));
 	} else {
@@ -10812,8 +10551,7 @@ int LuaScriptInterface::luaPlayerHasLearnedSpell(lua_State* L)
 int LuaScriptInterface::luaPlayerSendTutorial(lua_State* L)
 {
 	// player:sendTutorial(tutorialId)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		uint8_t tutorialId = tfs::lua::getNumber<uint8_t>(L, 2);
 		player->sendTutorial(tutorialId);
 		tfs::lua::pushBoolean(L, true);
@@ -10826,8 +10564,7 @@ int LuaScriptInterface::luaPlayerSendTutorial(lua_State* L)
 int LuaScriptInterface::luaPlayerAddMapMark(lua_State* L)
 {
 	// player:addMapMark(position, type, description)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		const Position& position = tfs::lua::getPosition(L, 2);
 		uint8_t type = tfs::lua::getNumber<uint8_t>(L, 3);
 		const std::string& description = tfs::lua::getString(L, 4);
@@ -10842,9 +10579,8 @@ int LuaScriptInterface::luaPlayerAddMapMark(lua_State* L)
 int LuaScriptInterface::luaPlayerSave(lua_State* L)
 {
 	// player:save()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		player->loginPosition = player->getPosition();
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		player->setLoginPosition(player->getPosition());
 		tfs::lua::pushBoolean(L, IOLoginData::savePlayer(player));
 	} else {
 		lua_pushnil(L);
@@ -10855,8 +10591,7 @@ int LuaScriptInterface::luaPlayerSave(lua_State* L)
 int LuaScriptInterface::luaPlayerPopupFYI(lua_State* L)
 {
 	// player:popupFYI(message)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		const std::string& message = tfs::lua::getString(L, 2);
 		player->sendFYIBox(message);
 		tfs::lua::pushBoolean(L, true);
@@ -10869,8 +10604,7 @@ int LuaScriptInterface::luaPlayerPopupFYI(lua_State* L)
 int LuaScriptInterface::luaPlayerIsPzLocked(lua_State* L)
 {
 	// player:isPzLocked()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		tfs::lua::pushBoolean(L, player->isPzLocked());
 	} else {
 		lua_pushnil(L);
@@ -10881,8 +10615,7 @@ int LuaScriptInterface::luaPlayerIsPzLocked(lua_State* L)
 int LuaScriptInterface::luaPlayerGetClient(lua_State* L)
 {
 	// player:getClient()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_createtable(L, 0, 2);
 		setField(L, "version", player->getProtocolVersion());
 		setField(L, "os", player->getOperatingSystem());
@@ -10895,7 +10628,7 @@ int LuaScriptInterface::luaPlayerGetClient(lua_State* L)
 int LuaScriptInterface::luaPlayerGetHouse(lua_State* L)
 {
 	// player:getHouse()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10914,7 +10647,7 @@ int LuaScriptInterface::luaPlayerGetHouse(lua_State* L)
 int LuaScriptInterface::luaPlayerSendHouseWindow(lua_State* L)
 {
 	// player:sendHouseWindow(house, listId)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10935,7 +10668,7 @@ int LuaScriptInterface::luaPlayerSendHouseWindow(lua_State* L)
 int LuaScriptInterface::luaPlayerSetEditHouse(lua_State* L)
 {
 	// player:setEditHouse(house, listId)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10956,7 +10689,7 @@ int LuaScriptInterface::luaPlayerSetEditHouse(lua_State* L)
 int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 {
 	// player:setGhostMode(enabled[, magicEffect = CONST_ME_TELEPORT])
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -10972,16 +10705,16 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 
 	player->switchGhostMode();
 
-	Tile* tile = player->getTile();
+	const auto& tile = player->getTile();
 	const Position& position = player->getPosition();
 	const bool isInvisible = player->isInvisible();
 
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
-	for (Creature* spectator : spectators) {
-		assert(dynamic_cast<Player*>(spectator) != nullptr);
+	for (const auto& spectator : spectators) {
+		assert(spectator->getPlayer() != nullptr);
 
-		Player* spectatorPlayer = static_cast<Player*>(spectator);
+		const auto& spectatorPlayer = std::static_pointer_cast<Player>(spectator);
 		if (spectatorPlayer != player && !spectatorPlayer->isAccessPlayer()) {
 			if (enabled) {
 				spectatorPlayer->sendRemoveTileCreature(player, position,
@@ -10999,16 +10732,16 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	}
 
 	if (player->isInGhostMode()) {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
+		for (const auto& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+			if (!onlinePlayer->isAccessPlayer()) {
+				onlinePlayer->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), false);
 	} else {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
+		for (const auto& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+			if (!onlinePlayer->isAccessPlayer()) {
+				onlinePlayer->notifyStatusChange(player, VIPSTATUS_ONLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), true);
@@ -11020,14 +10753,13 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 int LuaScriptInterface::luaPlayerGetContainerId(lua_State* L)
 {
 	// player:getContainerId(container)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Container* container = tfs::lua::getUserdata<Container>(L, 2);
-	if (container) {
+	if (const auto& container = tfs::lua::getSharedPtr<Container>(L, 2)) {
 		lua_pushnumber(L, player->getContainerID(container));
 	} else {
 		lua_pushnil(L);
@@ -11038,15 +10770,14 @@ int LuaScriptInterface::luaPlayerGetContainerId(lua_State* L)
 int LuaScriptInterface::luaPlayerGetContainerById(lua_State* L)
 {
 	// player:getContainerById(id)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Container* container = player->getContainerByID(tfs::lua::getNumber<uint8_t>(L, 2));
-	if (container) {
-		tfs::lua::pushUserdata(L, container);
+	if (const auto& container = player->getContainerByID(tfs::lua::getNumber<uint8_t>(L, 2))) {
+		tfs::lua::pushSharedPtr(L, container);
 		tfs::lua::setMetatable(L, -1, "Container");
 	} else {
 		lua_pushnil(L);
@@ -11057,8 +10788,7 @@ int LuaScriptInterface::luaPlayerGetContainerById(lua_State* L)
 int LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 {
 	// player:getContainerIndex(id)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getContainerIndex(tfs::lua::getNumber<uint8_t>(L, 2)));
 	} else {
 		lua_pushnil(L);
@@ -11099,7 +10829,7 @@ int LuaScriptInterface::luaPlayerGetRuneSpells(lua_State* L)
 int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 {
 	// player:getInstantSpells()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -11135,7 +10865,7 @@ int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 int LuaScriptInterface::luaPlayerCanCast(lua_State* L)
 {
 	// player:canCast(spell)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	InstantSpell* spell = tfs::lua::getUserdata<InstantSpell>(L, 2);
 	if (player && spell) {
 		tfs::lua::pushBoolean(L, spell->canCast(player));
@@ -11148,9 +10878,8 @@ int LuaScriptInterface::luaPlayerCanCast(lua_State* L)
 int LuaScriptInterface::luaPlayerHasChaseMode(lua_State* L)
 {
 	// player:hasChaseMode()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		tfs::lua::pushBoolean(L, player->chaseMode);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		tfs::lua::pushBoolean(L, player->getChaseMode());
 	} else {
 		lua_pushnil(L);
 	}
@@ -11160,9 +10889,8 @@ int LuaScriptInterface::luaPlayerHasChaseMode(lua_State* L)
 int LuaScriptInterface::luaPlayerHasSecureMode(lua_State* L)
 {
 	// player:hasSecureMode()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		tfs::lua::pushBoolean(L, player->secureMode);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		tfs::lua::pushBoolean(L, player->getSecureMode());
 	} else {
 		lua_pushnil(L);
 	}
@@ -11172,9 +10900,8 @@ int LuaScriptInterface::luaPlayerHasSecureMode(lua_State* L)
 int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
 {
 	// player:getFightMode()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
-		lua_pushnumber(L, player->fightMode);
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
+		lua_pushnumber(L, player->getFightMode());
 	} else {
 		lua_pushnil(L);
 	}
@@ -11184,19 +10911,19 @@ int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
 int LuaScriptInterface::luaPlayerGetStoreInbox(lua_State* L)
 {
 	// player:getStoreInbox()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Container* storeInbox = player->getStoreInbox();
+	const auto& storeInbox = player->getStoreInbox();
 	if (!storeInbox) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushUserdata(L, storeInbox);
+	tfs::lua::pushSharedPtr(L, storeInbox);
 	tfs::lua::setMetatable(L, -1, "Container");
 	return 1;
 }
@@ -11204,7 +10931,7 @@ int LuaScriptInterface::luaPlayerGetStoreInbox(lua_State* L)
 int LuaScriptInterface::luaPlayerIsNearDepotBox(lua_State* L)
 {
 	// player:isNearDepotBox()
-	const Player* const player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -11217,7 +10944,7 @@ int LuaScriptInterface::luaPlayerIsNearDepotBox(lua_State* L)
 int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 {
 	// player:getIdleTime()
-	const Player* const player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -11230,7 +10957,7 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 int LuaScriptInterface::luaPlayerResetIdleTime(lua_State* L)
 {
 	// player:resetIdleTime()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -11244,13 +10971,13 @@ int LuaScriptInterface::luaPlayerResetIdleTime(lua_State* L)
 int LuaScriptInterface::luaPlayerSendCreatureSquare(lua_State* L)
 {
 	// player:sendCreatureSquare(creature, color)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	auto creature = tfs::lua::getCreature(L, 2);
+	const auto& creature = tfs::lua::getCreature(L, 2);
 	if (!creature) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -11265,8 +10992,7 @@ int LuaScriptInterface::luaPlayerSendCreatureSquare(lua_State* L)
 int LuaScriptInterface::luaPlayerGetClientExpDisplay(lua_State* L)
 {
 	// player:getClientExpDisplay()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getClientExpDisplay());
 	} else {
 		lua_pushnil(L);
@@ -11277,8 +11003,7 @@ int LuaScriptInterface::luaPlayerGetClientExpDisplay(lua_State* L)
 int LuaScriptInterface::luaPlayerSetClientExpDisplay(lua_State* L)
 {
 	// player:setClientExpDisplay(value)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->setClientExpDisplay(tfs::lua::getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		tfs::lua::pushBoolean(L, true);
@@ -11291,8 +11016,7 @@ int LuaScriptInterface::luaPlayerSetClientExpDisplay(lua_State* L)
 int LuaScriptInterface::luaPlayerGetClientStaminaBonusDisplay(lua_State* L)
 {
 	// player:getClientStaminaBonusDisplay()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getClientStaminaBonusDisplay());
 	} else {
 		lua_pushnil(L);
@@ -11303,8 +11027,7 @@ int LuaScriptInterface::luaPlayerGetClientStaminaBonusDisplay(lua_State* L)
 int LuaScriptInterface::luaPlayerSetClientStaminaBonusDisplay(lua_State* L)
 {
 	// player:setClientStaminaBonusDisplay(value)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->setClientStaminaBonusDisplay(tfs::lua::getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		tfs::lua::pushBoolean(L, true);
@@ -11317,8 +11040,7 @@ int LuaScriptInterface::luaPlayerSetClientStaminaBonusDisplay(lua_State* L)
 int LuaScriptInterface::luaPlayerGetClientLowLevelBonusDisplay(lua_State* L)
 {
 	// player:getClientLowLevelBonusDisplay()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		lua_pushnumber(L, player->getClientLowLevelBonusDisplay());
 	} else {
 		lua_pushnil(L);
@@ -11329,8 +11051,7 @@ int LuaScriptInterface::luaPlayerGetClientLowLevelBonusDisplay(lua_State* L)
 int LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay(lua_State* L)
 {
 	// player:setClientLowLevelBonusDisplay(value)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->setClientLowLevelBonusDisplay(tfs::lua::getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		tfs::lua::pushBoolean(L, true);
@@ -11343,8 +11064,7 @@ int LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay(lua_State* L)
 int LuaScriptInterface::luaPlayerSendResourceBalance(lua_State* L)
 {
 	// player:sendResourceBalance(resource, amount)
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		const ResourceTypes_t resourceType = tfs::lua::getNumber<ResourceTypes_t>(L, 2);
 		uint64_t amount = tfs::lua::getNumber<uint64_t>(L, 3);
 		player->sendResourceBalance(resourceType, amount);
@@ -11358,8 +11078,7 @@ int LuaScriptInterface::luaPlayerSendResourceBalance(lua_State* L)
 int LuaScriptInterface::luaPlayerSendEnterMarket(lua_State* L)
 {
 	// player:sendEnterMarket()
-	Player* player = tfs::lua::getUserdata<Player>(L, 1);
-	if (player) {
+	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
 		player->sendMarketEnter();
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -11372,7 +11091,7 @@ int LuaScriptInterface::luaPlayerSendEnterMarket(lua_State* L)
 int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 {
 	// Monster(id or userdata)
-	Monster* monster;
+	std::shared_ptr<Monster> monster = nullptr;
 	if (isNumber(L, 2)) {
 		monster = g_game.getMonsterByID(tfs::lua::getNumber<uint32_t>(L, 2));
 	} else if (lua_isuserdata(L, 2)) {
@@ -11380,13 +11099,11 @@ int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 			lua_pushnil(L);
 			return 1;
 		}
-		monster = tfs::lua::getUserdata<Monster>(L, 2);
-	} else {
-		monster = nullptr;
+		monster = tfs::lua::getSharedPtr<Monster>(L, 2);
 	}
 
 	if (monster) {
-		tfs::lua::pushUserdata(L, monster);
+		tfs::lua::pushSharedPtr(L, monster);
 		tfs::lua::setMetatable(L, -1, "Monster");
 	} else {
 		lua_pushnil(L);
@@ -11397,15 +11114,18 @@ int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 int LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
 {
 	// monster:isMonster()
-	tfs::lua::pushBoolean(L, tfs::lua::getUserdata<const Monster>(L, 1) != nullptr);
+	if (const auto& creature = tfs::lua::getCreature(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->getMonster() != nullptr);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaMonsterGetId(lua_State* L)
 {
 	// monster:getId()
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
 		// Set monster id if it's not set yet (only for onSpawn event)
 		if (tfs::lua::getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
 			monster->setID();
@@ -11421,8 +11141,7 @@ int LuaScriptInterface::luaMonsterGetId(lua_State* L)
 int LuaScriptInterface::luaMonsterGetType(lua_State* L)
 {
 	// monster:getType()
-	const Monster* monster = tfs::lua::getUserdata<const Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<const Monster>(L, 1)) {
 		tfs::lua::pushUserdata(L, monster->mType);
 		tfs::lua::setMetatable(L, -1, "MonsterType");
 	} else {
@@ -11434,7 +11153,7 @@ int LuaScriptInterface::luaMonsterGetType(lua_State* L)
 int LuaScriptInterface::luaMonsterRename(lua_State* L)
 {
 	// monster:rename(name[, nameDescription])
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
@@ -11452,8 +11171,7 @@ int LuaScriptInterface::luaMonsterRename(lua_State* L)
 int LuaScriptInterface::luaMonsterGetSpawnPosition(lua_State* L)
 {
 	// monster:getSpawnPosition()
-	const Monster* monster = tfs::lua::getUserdata<const Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<const Monster>(L, 1)) {
 		tfs::lua::pushPosition(L, monster->getMasterPos());
 	} else {
 		lua_pushnil(L);
@@ -11464,8 +11182,7 @@ int LuaScriptInterface::luaMonsterGetSpawnPosition(lua_State* L)
 int LuaScriptInterface::luaMonsterIsInSpawnRange(lua_State* L)
 {
 	// monster:isInSpawnRange([position])
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
 		tfs::lua::pushBoolean(
 		    L, monster->isInSpawnRange(lua_gettop(L) >= 2 ? tfs::lua::getPosition(L, 2) : monster->getPosition()));
 	} else {
@@ -11477,8 +11194,7 @@ int LuaScriptInterface::luaMonsterIsInSpawnRange(lua_State* L)
 int LuaScriptInterface::luaMonsterIsIdle(lua_State* L)
 {
 	// monster:isIdle()
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
 		tfs::lua::pushBoolean(L, monster->getIdleStatus());
 	} else {
 		lua_pushnil(L);
@@ -11489,7 +11205,7 @@ int LuaScriptInterface::luaMonsterIsIdle(lua_State* L)
 int LuaScriptInterface::luaMonsterSetIdle(lua_State* L)
 {
 	// monster:setIdle(idle)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
@@ -11503,9 +11219,8 @@ int LuaScriptInterface::luaMonsterSetIdle(lua_State* L)
 int LuaScriptInterface::luaMonsterIsTarget(lua_State* L)
 {
 	// monster:isTarget(creature)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
-		const Creature* creature = tfs::lua::getCreature(L, 2);
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
+		const auto& creature = tfs::lua::getCreature(L, 2);
 		if (!creature) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -11522,9 +11237,8 @@ int LuaScriptInterface::luaMonsterIsTarget(lua_State* L)
 int LuaScriptInterface::luaMonsterIsOpponent(lua_State* L)
 {
 	// monster:isOpponent(creature)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
-		const Creature* creature = tfs::lua::getCreature(L, 2);
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
+		const auto& creature = tfs::lua::getCreature(L, 2);
 		if (!creature) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -11541,9 +11255,8 @@ int LuaScriptInterface::luaMonsterIsOpponent(lua_State* L)
 int LuaScriptInterface::luaMonsterIsFriend(lua_State* L)
 {
 	// monster:isFriend(creature)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
-		const Creature* creature = tfs::lua::getCreature(L, 2);
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
+		const auto& creature = tfs::lua::getCreature(L, 2);
 		if (!creature) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -11560,9 +11273,8 @@ int LuaScriptInterface::luaMonsterIsFriend(lua_State* L)
 int LuaScriptInterface::luaMonsterAddFriend(lua_State* L)
 {
 	// monster:addFriend(creature)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
-		Creature* creature = tfs::lua::getCreature(L, 2);
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
+		const auto& creature = tfs::lua::getCreature(L, 2);
 		if (!creature) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -11580,9 +11292,8 @@ int LuaScriptInterface::luaMonsterAddFriend(lua_State* L)
 int LuaScriptInterface::luaMonsterRemoveFriend(lua_State* L)
 {
 	// monster:removeFriend(creature)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
-		Creature* creature = tfs::lua::getCreature(L, 2);
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
+		const auto& creature = tfs::lua::getCreature(L, 2);
 		if (!creature) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -11600,7 +11311,7 @@ int LuaScriptInterface::luaMonsterRemoveFriend(lua_State* L)
 int LuaScriptInterface::luaMonsterGetFriendList(lua_State* L)
 {
 	// monster:getFriendList()
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
@@ -11610,8 +11321,8 @@ int LuaScriptInterface::luaMonsterGetFriendList(lua_State* L)
 	lua_createtable(L, friendList.size(), 0);
 
 	int index = 0;
-	for (Creature* creature : friendList) {
-		tfs::lua::pushUserdata(L, creature);
+	for (const auto& creature : friendList | tfs::views::lock_weak_ptrs) {
+		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -11621,8 +11332,7 @@ int LuaScriptInterface::luaMonsterGetFriendList(lua_State* L)
 int LuaScriptInterface::luaMonsterGetFriendCount(lua_State* L)
 {
 	// monster:getFriendCount()
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
 		lua_pushnumber(L, monster->getFriendList().size());
 	} else {
 		lua_pushnil(L);
@@ -11633,13 +11343,13 @@ int LuaScriptInterface::luaMonsterGetFriendCount(lua_State* L)
 int LuaScriptInterface::luaMonsterAddTarget(lua_State* L)
 {
 	// monster:addTarget(creature[, pushFront = false])
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* creature = tfs::lua::getCreature(L, 2);
+	const auto& creature = tfs::lua::getCreature(L, 2);
 	if (!creature) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -11655,13 +11365,13 @@ int LuaScriptInterface::luaMonsterAddTarget(lua_State* L)
 int LuaScriptInterface::luaMonsterRemoveTarget(lua_State* L)
 {
 	// monster:removeTarget(creature)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* creature = tfs::lua::getCreature(L, 2);
+	const auto& creature = tfs::lua::getCreature(L, 2);
 	if (!creature) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -11676,7 +11386,7 @@ int LuaScriptInterface::luaMonsterRemoveTarget(lua_State* L)
 int LuaScriptInterface::luaMonsterGetTargetList(lua_State* L)
 {
 	// monster:getTargetList()
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
@@ -11686,9 +11396,8 @@ int LuaScriptInterface::luaMonsterGetTargetList(lua_State* L)
 	lua_createtable(L, targetList.size(), 0);
 
 	int index = 0;
-	for (Creature* creature : targetList) {
-		tfs::lua::pushUserdata(L, creature);
-		tfs::lua::setCreatureMetatable(L, -1, creature);
+	for (const auto& creature : targetList | tfs::views::lock_weak_ptrs) {
+		tfs::lua::pushSharedPtr(L, creature);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
@@ -11697,8 +11406,7 @@ int LuaScriptInterface::luaMonsterGetTargetList(lua_State* L)
 int LuaScriptInterface::luaMonsterGetTargetCount(lua_State* L)
 {
 	// monster:getTargetCount()
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
 		lua_pushnumber(L, monster->getTargetList().size());
 	} else {
 		lua_pushnil(L);
@@ -11709,9 +11417,8 @@ int LuaScriptInterface::luaMonsterGetTargetCount(lua_State* L)
 int LuaScriptInterface::luaMonsterSelectTarget(lua_State* L)
 {
 	// monster:selectTarget(creature)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
-		Creature* creature = tfs::lua::getCreature(L, 2);
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
+		const auto& creature = tfs::lua::getCreature(L, 2);
 		if (!creature) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 			tfs::lua::pushBoolean(L, false);
@@ -11728,8 +11435,7 @@ int LuaScriptInterface::luaMonsterSelectTarget(lua_State* L)
 int LuaScriptInterface::luaMonsterSearchTarget(lua_State* L)
 {
 	// monster:searchTarget([searchType = TARGETSEARCH_DEFAULT])
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
 		TargetSearchType_t searchType = tfs::lua::getNumber<TargetSearchType_t>(L, 2, TARGETSEARCH_DEFAULT);
 		tfs::lua::pushBoolean(L, monster->searchTarget(searchType));
 	} else {
@@ -11741,8 +11447,7 @@ int LuaScriptInterface::luaMonsterSearchTarget(lua_State* L)
 int LuaScriptInterface::luaMonsterIsWalkingToSpawn(lua_State* L)
 {
 	// monster:isWalkingToSpawn()
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
 		tfs::lua::pushBoolean(L, monster->isWalkingToSpawn());
 	} else {
 		lua_pushnil(L);
@@ -11753,8 +11458,7 @@ int LuaScriptInterface::luaMonsterIsWalkingToSpawn(lua_State* L)
 int LuaScriptInterface::luaMonsterWalkToSpawn(lua_State* L)
 {
 	// monster:walkToSpawn()
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1)) {
 		tfs::lua::pushBoolean(L, monster->walkToSpawn());
 	} else {
 		lua_pushnil(L);
@@ -11765,8 +11469,7 @@ int LuaScriptInterface::luaMonsterWalkToSpawn(lua_State* L)
 int LuaScriptInterface::luaMonsterHasIcon(lua_State* L)
 {
 	// monster:hasSpecialIcon(iconId)
-	const Monster* monster = tfs::lua::getUserdata<const Monster>(L, 1);
-	if (monster) {
+	if (const auto& monster = tfs::lua::getSharedPtr<const Monster>(L, 1)) {
 		auto iconId = tfs::lua::getNumber<MonsterIcon_t>(L, 2);
 		tfs::lua::pushBoolean(L, monster->getSpecialIcons().contains(iconId));
 	} else {
@@ -11778,7 +11481,7 @@ int LuaScriptInterface::luaMonsterHasIcon(lua_State* L)
 int LuaScriptInterface::luaMonsterSetIcon(lua_State* L)
 {
 	// monster:setSpecialIcon(iconId, value)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
@@ -11800,7 +11503,7 @@ int LuaScriptInterface::luaMonsterSetIcon(lua_State* L)
 int LuaScriptInterface::luaMonsterGetIcon(lua_State* L)
 {
 	// monster:getSpecialIcon(iconId)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
@@ -11820,7 +11523,7 @@ int LuaScriptInterface::luaMonsterGetIcon(lua_State* L)
 int LuaScriptInterface::luaMonsterRemoveIcon(lua_State* L)
 {
 	// monster:removeSpecialIcon(iconId)
-	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
+	const auto& monster = tfs::lua::getSharedPtr<Monster>(L, 1);
 	if (!monster) {
 		lua_pushnil(L);
 		return 1;
@@ -11843,7 +11546,7 @@ int LuaScriptInterface::luaMonsterRemoveIcon(lua_State* L)
 int LuaScriptInterface::luaNpcCreate(lua_State* L)
 {
 	// Npc([id or name or userdata])
-	Npc* npc;
+	std::shared_ptr<Npc> npc = nullptr;
 	if (lua_gettop(L) >= 2) {
 		if (isNumber(L, 2)) {
 			npc = g_game.getNpcByID(tfs::lua::getNumber<uint32_t>(L, 2));
@@ -11854,16 +11557,14 @@ int LuaScriptInterface::luaNpcCreate(lua_State* L)
 				lua_pushnil(L);
 				return 1;
 			}
-			npc = tfs::lua::getUserdata<Npc>(L, 2);
-		} else {
-			npc = nullptr;
+			npc = tfs::lua::getSharedPtr<Npc>(L, 2);
 		}
 	} else {
 		npc = tfs::lua::getScriptEnv()->getNpc();
 	}
 
 	if (npc) {
-		tfs::lua::pushUserdata(L, npc);
+		tfs::lua::pushSharedPtr(L, npc);
 		tfs::lua::setMetatable(L, -1, "Npc");
 	} else {
 		lua_pushnil(L);
@@ -11874,14 +11575,18 @@ int LuaScriptInterface::luaNpcCreate(lua_State* L)
 int LuaScriptInterface::luaNpcIsNpc(lua_State* L)
 {
 	// npc:isNpc()
-	tfs::lua::pushBoolean(L, tfs::lua::getUserdata<const Npc>(L, 1) != nullptr);
+	if (const auto& creature = tfs::lua::getCreature(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->getNpc() != nullptr);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaNpcSetMasterPos(lua_State* L)
 {
 	// npc:setMasterPos(pos[, radius])
-	Npc* npc = tfs::lua::getUserdata<Npc>(L, 1);
+	const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1);
 	if (!npc) {
 		lua_pushnil(L);
 		return 1;
@@ -11897,8 +11602,7 @@ int LuaScriptInterface::luaNpcSetMasterPos(lua_State* L)
 int LuaScriptInterface::luaNpcGetSpeechBubble(lua_State* L)
 {
 	// npc:getSpeechBubble()
-	Npc* npc = tfs::lua::getUserdata<Npc>(L, 1);
-	if (npc) {
+	if (const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1)) {
 		lua_pushnumber(L, npc->getSpeechBubble());
 	} else {
 		lua_pushnil(L);
@@ -11909,7 +11613,7 @@ int LuaScriptInterface::luaNpcGetSpeechBubble(lua_State* L)
 int LuaScriptInterface::luaNpcSetSpeechBubble(lua_State* L)
 {
 	// npc:setSpeechBubble(speechBubble)
-	Npc* npc = tfs::lua::getUserdata<Npc>(L, 1);
+	const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1);
 	if (!npc) {
 		lua_pushnil(L);
 		return 1;
@@ -11936,7 +11640,7 @@ int LuaScriptInterface::luaNpcSetSpeechBubble(lua_State* L)
 int LuaScriptInterface::luaNpcGetSpectators(lua_State* L)
 {
 	// npc:getSpectators()
-	Npc* npc = tfs::lua::getUserdata<Npc>(L, 1);
+	const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1);
 	if (!npc) {
 		lua_pushnil(L);
 		return 1;
@@ -11947,7 +11651,7 @@ int LuaScriptInterface::luaNpcGetSpectators(lua_State* L)
 
 	int index = 0;
 	for (const auto& spectatorPlayer : npc->getSpectators()) {
-		tfs::lua::pushUserdata(L, spectatorPlayer);
+		tfs::lua::pushSharedPtr(L, spectatorPlayer);
 		tfs::lua::setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -11961,7 +11665,7 @@ int LuaScriptInterface::luaGuildCreate(lua_State* L)
 	uint32_t id = tfs::lua::getNumber<uint32_t>(L, 2);
 
 	if (const auto& guild = g_game.getGuild(id)) {
-		pushSharedPtr(L, guild);
+		tfs::lua::pushSharedPtr(L, guild);
 		tfs::lua::setMetatable(L, -1, "Guild");
 	} else {
 		lua_pushnil(L);
@@ -11972,7 +11676,7 @@ int LuaScriptInterface::luaGuildCreate(lua_State* L)
 int LuaScriptInterface::luaGuildGetId(lua_State* L)
 {
 	// guild:getId()
-	if (const auto& guild = getSharedPtr<Guild>(L, 1)) {
+	if (const auto& guild = tfs::lua::getSharedPtr<Guild>(L, 1)) {
 		lua_pushnumber(L, guild->getId());
 	} else {
 		lua_pushnil(L);
@@ -11983,7 +11687,7 @@ int LuaScriptInterface::luaGuildGetId(lua_State* L)
 int LuaScriptInterface::luaGuildGetName(lua_State* L)
 {
 	// guild:getName()
-	if (const auto& guild = getSharedPtr<Guild>(L, 1)) {
+	if (const auto& guild = tfs::lua::getSharedPtr<Guild>(L, 1)) {
 		tfs::lua::pushString(L, guild->getName());
 	} else {
 		lua_pushnil(L);
@@ -11994,18 +11698,18 @@ int LuaScriptInterface::luaGuildGetName(lua_State* L)
 int LuaScriptInterface::luaGuildGetMembersOnline(lua_State* L)
 {
 	// guild:getMembersOnline()
-	const auto& guild = getSharedPtr<const Guild>(L, 1);
+	const auto& guild = tfs::lua::getSharedPtr<const Guild>(L, 1);
 	if (!guild) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	const auto& members = guild->getMembersOnline();
+	const auto& members = guild->getMembersOnline() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	lua_createtable(L, members.size(), 0);
 
 	int index = 0;
-	for (Player* player : members) {
-		tfs::lua::pushUserdata(L, player);
+	for (const auto& player : members) {
+		tfs::lua::pushSharedPtr(L, player);
 		tfs::lua::setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -12015,7 +11719,7 @@ int LuaScriptInterface::luaGuildGetMembersOnline(lua_State* L)
 int LuaScriptInterface::luaGuildAddRank(lua_State* L)
 {
 	// guild:addRank(id, name, level)
-	if (const auto& guild = getSharedPtr<Guild>(L, 1)) {
+	if (const auto& guild = tfs::lua::getSharedPtr<Guild>(L, 1)) {
 		uint32_t id = tfs::lua::getNumber<uint32_t>(L, 2);
 		const std::string& name = tfs::lua::getString(L, 3);
 		uint8_t level = tfs::lua::getNumber<uint8_t>(L, 4);
@@ -12030,7 +11734,7 @@ int LuaScriptInterface::luaGuildAddRank(lua_State* L)
 int LuaScriptInterface::luaGuildGetRankById(lua_State* L)
 {
 	// guild:getRankById(id)
-	const auto& guild = getSharedPtr<Guild>(L, 1);
+	const auto& guild = tfs::lua::getSharedPtr<Guild>(L, 1);
 	if (!guild) {
 		lua_pushnil(L);
 		return 1;
@@ -12051,7 +11755,7 @@ int LuaScriptInterface::luaGuildGetRankById(lua_State* L)
 int LuaScriptInterface::luaGuildGetRankByLevel(lua_State* L)
 {
 	// guild:getRankByLevel(level)
-	const auto& guild = getSharedPtr<const Guild>(L, 1);
+	const auto& guild = tfs::lua::getSharedPtr<const Guild>(L, 1);
 	if (!guild) {
 		lua_pushnil(L);
 		return 1;
@@ -12072,7 +11776,7 @@ int LuaScriptInterface::luaGuildGetRankByLevel(lua_State* L)
 int LuaScriptInterface::luaGuildGetMotd(lua_State* L)
 {
 	// guild:getMotd()
-	if (const auto& guild = getSharedPtr<Guild>(L, 1)) {
+	if (const auto& guild = tfs::lua::getSharedPtr<Guild>(L, 1)) {
 		tfs::lua::pushString(L, guild->getMotd());
 	} else {
 		lua_pushnil(L);
@@ -12083,7 +11787,7 @@ int LuaScriptInterface::luaGuildGetMotd(lua_State* L)
 int LuaScriptInterface::luaGuildSetMotd(lua_State* L)
 {
 	// guild:setMotd(motd)
-	if (const auto& guild = getSharedPtr<Guild>(L, 1)) {
+	if (const auto& guild = tfs::lua::getSharedPtr<Guild>(L, 1)) {
 		const std::string& motd = tfs::lua::getString(L, 2);
 		guild->setMotd(motd);
 		tfs::lua::pushBoolean(L, true);
@@ -12673,8 +12377,8 @@ int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
 {
 	// house:startTrade(player, tradePartner)
 	House* house = tfs::lua::getUserdata<House>(L, 1);
-	Player* player = tfs::lua::getUserdata<Player>(L, 2);
-	Player* tradePartner = tfs::lua::getUserdata<Player>(L, 3);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 2);
+	const auto& tradePartner = tfs::lua::getSharedPtr<Player>(L, 3);
 
 	if (!player || !tradePartner || !house) {
 		lua_pushnil(L);
@@ -12701,7 +12405,7 @@ int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
 		return 1;
 	}
 
-	Item* transferItem = house->getTransferItem();
+	const auto& transferItem = house->getTransferItem();
 	if (!transferItem) {
 		lua_pushnumber(L, RETURNVALUE_YOUCANNOTTRADETHISHOUSE);
 		return 1;
@@ -12725,12 +12429,12 @@ int LuaScriptInterface::luaHouseGetBeds(lua_State* L)
 		return 1;
 	}
 
-	const auto& beds = house->getBeds();
+	const auto& beds = house->getBeds() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	lua_createtable(L, beds.size(), 0);
 
 	int index = 0;
-	for (BedItem* bedItem : beds) {
-		tfs::lua::pushUserdata<Item>(L, bedItem);
+	for (const auto& bedItem : beds) {
+		tfs::lua::pushSharedPtr(L, bedItem);
 		tfs::lua::setItemMetatable(L, -1, bedItem);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -12758,12 +12462,12 @@ int LuaScriptInterface::luaHouseGetDoors(lua_State* L)
 		return 1;
 	}
 
-	const auto& doors = house->getDoors();
+	const auto& doors = house->getDoors() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	lua_createtable(L, doors.size(), 0);
 
 	int index = 0;
-	for (Door* door : doors) {
-		tfs::lua::pushUserdata<Item>(L, door);
+	for (const auto& door : doors) {
+		tfs::lua::pushSharedPtr(L, door);
 		tfs::lua::setItemMetatable(L, -1, door);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -12791,8 +12495,7 @@ int LuaScriptInterface::luaHouseGetDoorIdByPosition(lua_State* L)
 		return 1;
 	}
 
-	Door* door = house->getDoorByPosition(tfs::lua::getPosition(L, 2));
-	if (door) {
+	if (const auto& door = house->getDoorByPosition(tfs::lua::getPosition(L, 2))) {
 		lua_pushnumber(L, door->getDoorId());
 	} else {
 		lua_pushnil(L);
@@ -12809,12 +12512,12 @@ int LuaScriptInterface::luaHouseGetTiles(lua_State* L)
 		return 1;
 	}
 
-	const auto& tiles = house->getTiles();
+	const auto& tiles = house->getTiles() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	lua_createtable(L, tiles.size(), 0);
 
 	int index = 0;
-	for (Tile* tile : tiles) {
-		tfs::lua::pushUserdata(L, tile);
+	for (const auto& tile : tiles) {
+		tfs::lua::pushSharedPtr(L, tile);
 		tfs::lua::setMetatable(L, -1, "Tile");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -12834,11 +12537,10 @@ int LuaScriptInterface::luaHouseGetItems(lua_State* L)
 	lua_newtable(L);
 
 	int index = 0;
-	for (Tile* tile : tiles) {
-		TileItemVector* itemVector = tile->getItemList();
-		if (itemVector) {
-			for (Item* item : *itemVector) {
-				tfs::lua::pushUserdata(L, item);
+	for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
+		if (TileItemVector* itemVector = tile->getItemList()) {
+			for (const auto& item : *itemVector) {
+				tfs::lua::pushSharedPtr(L, item);
 				tfs::lua::setItemMetatable(L, -1, item);
 				lua_rawseti(L, -2, ++index);
 			}
@@ -12869,7 +12571,7 @@ int LuaScriptInterface::luaHouseCanEditAccessList(lua_State* L)
 	}
 
 	uint32_t listId = tfs::lua::getNumber<uint32_t>(L, 2);
-	Player* player = tfs::lua::getPlayer(L, 3);
+	const auto& player = tfs::lua::getPlayer(L, 3);
 
 	tfs::lua::pushBoolean(L, house->canEditAccessList(listId, player));
 	return 1;
@@ -13883,14 +13585,14 @@ int LuaScriptInterface::luaItemTypeIsStoreItem(lua_State* L)
 int LuaScriptInterface::luaCombatCreate(lua_State* L)
 {
 	// Combat()
-	pushSharedPtr(L, g_luaEnvironment.createCombatObject(tfs::lua::getScriptEnv()->getScriptInterface()));
+	tfs::lua::pushSharedPtr(L, g_luaEnvironment.createCombatObject(tfs::lua::getScriptEnv()->getScriptInterface()));
 	tfs::lua::setMetatable(L, -1, "Combat");
 	return 1;
 }
 
 int LuaScriptInterface::luaCombatDelete(lua_State* L)
 {
-	Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (combat) {
 		combat.reset();
 	}
@@ -13900,7 +13602,7 @@ int LuaScriptInterface::luaCombatDelete(lua_State* L)
 int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 {
 	// combat:setParameter(key, value)
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -13922,7 +13624,7 @@ int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 int LuaScriptInterface::luaCombatGetParameter(lua_State* L)
 {
 	// combat:getParameter(key)
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -13942,7 +13644,7 @@ int LuaScriptInterface::luaCombatGetParameter(lua_State* L)
 int LuaScriptInterface::luaCombatSetFormula(lua_State* L)
 {
 	// combat:setFormula(type, mina, minb, maxa, maxb)
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -13975,7 +13677,7 @@ int LuaScriptInterface::luaCombatSetArea(lua_State* L)
 		return 1;
 	}
 
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -13990,7 +13692,7 @@ int LuaScriptInterface::luaCombatSetArea(lua_State* L)
 int LuaScriptInterface::luaCombatAddCondition(lua_State* L)
 {
 	// combat:addCondition(condition)
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -14010,7 +13712,7 @@ int LuaScriptInterface::luaCombatAddCondition(lua_State* L)
 int LuaScriptInterface::luaCombatClearConditions(lua_State* L)
 {
 	// combat:clearConditions()
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -14025,7 +13727,7 @@ int LuaScriptInterface::luaCombatClearConditions(lua_State* L)
 int LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 {
 	// combat:setCallback(key, function)
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -14052,7 +13754,7 @@ int LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 int LuaScriptInterface::luaCombatSetOrigin(lua_State* L)
 {
 	// combat:setOrigin(origin)
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -14067,7 +13769,7 @@ int LuaScriptInterface::luaCombatSetOrigin(lua_State* L)
 int LuaScriptInterface::luaCombatExecute(lua_State* L)
 {
 	// combat:execute(creature, variant)
-	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	const Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
@@ -14082,12 +13784,12 @@ int LuaScriptInterface::luaCombatExecute(lua_State* L)
 		}
 	}
 
-	Creature* creature = tfs::lua::getCreature(L, 2);
+	const auto& creature = tfs::lua::getCreature(L, 2);
 
 	const LuaVariant& variant = getVariant(L, 3);
 	switch (variant.type()) {
 		case VARIANT_NUMBER: {
-			Creature* target = g_game.getCreatureByID(variant.getNumber());
+			const auto& target = g_game.getCreatureByID(variant.getNumber());
 			if (!target) {
 				tfs::lua::pushBoolean(L, false);
 				return 1;
@@ -14117,7 +13819,7 @@ int LuaScriptInterface::luaCombatExecute(lua_State* L)
 		}
 
 		case VARIANT_STRING: {
-			Player* target = g_game.getPlayerByName(variant.getString());
+			const auto& target = g_game.getPlayerByName(variant.getString());
 			if (!target) {
 				tfs::lua::pushBoolean(L, false);
 				return 1;
@@ -16013,7 +15715,7 @@ int LuaScriptInterface::luaMonsterSpellSetOutfit(lua_State* L)
 int32_t LuaScriptInterface::luaPartyCreate(lua_State* L)
 {
 	// Party(userdata)
-	Player* player = tfs::lua::getUserdata<Player>(L, 2);
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 2);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -16056,9 +15758,8 @@ int LuaScriptInterface::luaPartyGetLeader(lua_State* L)
 		return 1;
 	}
 
-	Player* leader = party->getLeader();
-	if (leader) {
-		tfs::lua::pushUserdata(L, leader);
+	if (const auto& leader = party->getLeader()) {
+		tfs::lua::pushSharedPtr(L, leader);
 		tfs::lua::setMetatable(L, -1, "Player");
 	} else {
 		lua_pushnil(L);
@@ -16069,7 +15770,7 @@ int LuaScriptInterface::luaPartyGetLeader(lua_State* L)
 int LuaScriptInterface::luaPartySetLeader(lua_State* L)
 {
 	// party:setLeader(player)
-	Player* player = tfs::lua::getPlayer(L, 2);
+	const auto& player = tfs::lua::getPlayer(L, 2);
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party && player) {
 		tfs::lua::pushBoolean(L, party->passPartyLeadership(player, true));
@@ -16088,10 +15789,12 @@ int LuaScriptInterface::luaPartyGetMembers(lua_State* L)
 		return 1;
 	}
 
+	const auto members = party->getMembers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, members.size(), 0);
+
 	int index = 0;
-	lua_createtable(L, party->getMemberCount(), 0);
-	for (Player* player : party->getMembers()) {
-		tfs::lua::pushUserdata(L, player);
+	for (const auto& player : members) {
+		tfs::lua::pushSharedPtr(L, player);
 		tfs::lua::setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -16103,7 +15806,8 @@ int LuaScriptInterface::luaPartyGetMemberCount(lua_State* L)
 	// party:getMemberCount()
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party) {
-		lua_pushnumber(L, party->getMemberCount());
+		lua_pushnumber(
+		    L, std::ranges::count_if(party->getMembers(), [](const auto& member) { return !member.expired(); }));
 	} else {
 		lua_pushnil(L);
 	}
@@ -16114,17 +15818,19 @@ int LuaScriptInterface::luaPartyGetInvitees(lua_State* L)
 {
 	// party:getInvitees()
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
-	if (party) {
-		lua_createtable(L, party->getInvitationCount(), 0);
-
-		int index = 0;
-		for (Player* player : party->getInvitees()) {
-			tfs::lua::pushUserdata(L, player);
-			tfs::lua::setMetatable(L, -1, "Player");
-			lua_rawseti(L, -2, ++index);
-		}
-	} else {
+	if (!party) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	const auto invitees = party->getInvitees() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, invitees.size(), 0);
+
+	int index = 0;
+	for (const auto& player : invitees) {
+		tfs::lua::pushSharedPtr(L, player);
+		tfs::lua::setMetatable(L, -1, "Player");
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
@@ -16134,7 +15840,8 @@ int LuaScriptInterface::luaPartyGetInviteeCount(lua_State* L)
 	// party:getInviteeCount()
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party) {
-		lua_pushnumber(L, party->getInvitationCount());
+		lua_pushnumber(
+		    L, std::ranges::count_if(party->getInvitees(), [](const auto& invitee) { return !invitee.expired(); }));
 	} else {
 		lua_pushnil(L);
 	}
@@ -16144,10 +15851,10 @@ int LuaScriptInterface::luaPartyGetInviteeCount(lua_State* L)
 int LuaScriptInterface::luaPartyAddInvite(lua_State* L)
 {
 	// party:addInvite(player)
-	Player* player = tfs::lua::getPlayer(L, 2);
+	const auto& player = tfs::lua::getPlayer(L, 2);
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party && player) {
-		tfs::lua::pushBoolean(L, party->invitePlayer(*player));
+		tfs::lua::pushBoolean(L, party->invitePlayer(player));
 	} else {
 		lua_pushnil(L);
 	}
@@ -16157,10 +15864,10 @@ int LuaScriptInterface::luaPartyAddInvite(lua_State* L)
 int LuaScriptInterface::luaPartyRemoveInvite(lua_State* L)
 {
 	// party:removeInvite(player)
-	Player* player = tfs::lua::getPlayer(L, 2);
+	const auto& player = tfs::lua::getPlayer(L, 2);
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party && player) {
-		tfs::lua::pushBoolean(L, party->removeInvite(*player));
+		tfs::lua::pushBoolean(L, party->removeInvite(player));
 	} else {
 		lua_pushnil(L);
 	}
@@ -16170,10 +15877,10 @@ int LuaScriptInterface::luaPartyRemoveInvite(lua_State* L)
 int LuaScriptInterface::luaPartyAddMember(lua_State* L)
 {
 	// party:addMember(player)
-	Player* player = tfs::lua::getPlayer(L, 2);
+	const auto& player = tfs::lua::getPlayer(L, 2);
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party && player) {
-		tfs::lua::pushBoolean(L, party->joinParty(*player));
+		tfs::lua::pushBoolean(L, party->joinParty(player));
 	} else {
 		lua_pushnil(L);
 	}
@@ -16183,7 +15890,7 @@ int LuaScriptInterface::luaPartyAddMember(lua_State* L)
 int LuaScriptInterface::luaPartyRemoveMember(lua_State* L)
 {
 	// party:removeMember(player)
-	Player* player = tfs::lua::getPlayer(L, 2);
+	const auto& player = tfs::lua::getPlayer(L, 2);
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party && player) {
 		tfs::lua::pushBoolean(L, party->leaveParty(player));
@@ -16220,7 +15927,7 @@ int LuaScriptInterface::luaPartyIsSharedExperienceEnabled(lua_State* L)
 int LuaScriptInterface::luaPartyIsMemberSharingExp(lua_State* L)
 {
 	// party:isMemberSharingExp(player)
-	const Player* player = tfs::lua::getUserdata<const Player>(L, 2);
+	const auto& player = tfs::lua::getSharedPtr<const Player>(L, 2);
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party && player) {
 		tfs::lua::pushBoolean(L, party->getMemberSharedExperienceStatus(player) == SHAREDEXP_OK);

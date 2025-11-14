@@ -54,9 +54,8 @@ Mount* Mounts::getMountByID(uint16_t id)
 
 Mount* Mounts::getMountByName(const std::string& name)
 {
-	auto mountName = name.c_str();
 	for (auto& it : mounts) {
-		if (caseInsensitiveEqual(mountName, it.name)) {
+		if (caseInsensitiveEqual(name, it.name)) {
 			return &it;
 		}
 	}

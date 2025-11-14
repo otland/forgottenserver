@@ -22,16 +22,20 @@ struct spawnBlock_t
 class Spawn
 {
 public:
-	Spawn(Position pos, int32_t radius) : centerPos(std::move(pos)), radius(radius) {}
+	Spawn(const Position& pos, int32_t radius) : centerPos{pos}, radius{radius} {}
 	~Spawn();
 
 	// non-copyable
 	Spawn(const Spawn&) = delete;
 	Spawn& operator=(const Spawn&) = delete;
 
+	// movable
+	Spawn(Spawn&&) = default;
+	Spawn& operator=(Spawn&&) = default;
+
 	bool addBlock(spawnBlock_t sb);
 	bool addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t interval);
-	void removeMonster(Monster* monster);
+	void removeMonster(const std::shared_ptr<Monster>& monster);
 
 	uint32_t getInterval() const { return interval; }
 	void startup();
@@ -39,13 +43,11 @@ public:
 	void startSpawnCheck();
 	void stopEvent();
 
-	bool isInSpawnZone(const Position& pos);
 	void cleanup();
 
 private:
 	// map of the spawned creatures
-	using SpawnedMap = std::multimap<uint32_t, Monster*>;
-	SpawnedMap spawnedMap;
+	std::multimap<uint32_t, std::weak_ptr<Monster>> spawnedMap;
 
 	// map of creatures in the spawn
 	std::map<uint32_t, spawnBlock_t> spawnMap;
@@ -74,8 +76,8 @@ public:
 	bool isStarted() const { return started; }
 
 private:
-	std::forward_list<Npc*> npcList;
-	std::forward_list<Spawn> spawnList;
+	std::vector<std::weak_ptr<Npc>> npcList;
+	std::vector<Spawn> spawnList;
 	std::string filename;
 	bool loaded = false;
 	bool started = false;

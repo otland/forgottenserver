@@ -9,20 +9,24 @@
 class StoreInbox final : public Container
 {
 public:
-	explicit StoreInbox(uint16_t type);
+	explicit StoreInbox(uint16_t type) : Container{type, 20, true, true} {}
 
-	// Container implementations
-	StoreInbox* getStoreInbox() override { return this; }
-	const StoreInbox* getStoreInbox() const override { return this; }
+	std::shared_ptr<StoreInbox> getStoreInbox() override
+	{
+		return std::static_pointer_cast<StoreInbox>(shared_from_this());
+	}
+	std::shared_ptr<const StoreInbox> getStoreInbox() const override
+	{
+		return std::static_pointer_cast<const StoreInbox>(shared_from_this());
+	}
 
-	// Cylinder implementations
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
+	ReturnValue queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
+	                     const std::shared_ptr<Creature>& actor = nullptr) const override;
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                            cylinderlink_t link = LINK_OWNER) override;
+	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
 	// Item implementations
 	bool canRemove() const override { return false; }

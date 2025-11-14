@@ -8,32 +8,37 @@
 
 class Inbox;
 
-using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
-
 class DepotLocker final : public Container
 {
 public:
-	explicit DepotLocker(uint16_t type);
+	explicit DepotLocker(uint16_t type) : Container{type}, depotId{0} {}
 
-	void removeInbox(Inbox* inbox);
+	void removeInbox(const std::shared_ptr<Inbox>& inbox);
 	uint16_t getDepotId() const { return depotId; }
 	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 
 	// Serialization
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 
-	// Container implementations
-	DepotLocker* getDepotLocker() override { return this; }
-	const DepotLocker* getDepotLocker() const override { return this; }
+	std::shared_ptr<DepotLocker> getDepotLocker() override
+	{
+		return std::static_pointer_cast<DepotLocker>(shared_from_this());
+	}
+	std::shared_ptr<const DepotLocker> getDepotLocker() const override
+	{
+		return std::static_pointer_cast<const DepotLocker>(shared_from_this());
+	}
 
-	// Cylinder implementations
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
+	ReturnValue queryAdd(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
+	                     const std::shared_ptr<Creature>& = nullptr) const override
+	{
+		return RETURNVALUE_NOTENOUGHROOM;
+	}
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                            cylinderlink_t link = LINK_OWNER) override;
+	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
 	// Item implementations
 	bool canRemove() const override { return false; }

@@ -13,7 +13,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/container.cpp
 	${CMAKE_CURRENT_LIST_DIR}/creature.cpp
 	${CMAKE_CURRENT_LIST_DIR}/creatureevent.cpp
-	${CMAKE_CURRENT_LIST_DIR}/cylinder.cpp
 	${CMAKE_CURRENT_LIST_DIR}/database.cpp
 	${CMAKE_CURRENT_LIST_DIR}/databasemanager.cpp
 	${CMAKE_CURRENT_LIST_DIR}/databasetasks.cpp
@@ -94,7 +93,6 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/container.h
 	${CMAKE_CURRENT_LIST_DIR}/creatureevent.h
 	${CMAKE_CURRENT_LIST_DIR}/creature.h
-	${CMAKE_CURRENT_LIST_DIR}/cylinder.h
 	${CMAKE_CURRENT_LIST_DIR}/database.h
 	${CMAKE_CURRENT_LIST_DIR}/databasemanager.h
 	${CMAKE_CURRENT_LIST_DIR}/databasetasks.h

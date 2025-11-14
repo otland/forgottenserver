@@ -91,8 +91,6 @@ struct OTBM_Tile_coords
 
 class IOMap
 {
-	static Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z);
-
 public:
 	bool loadMap(Map* map, const std::filesystem::path& fileName);
 
@@ -128,14 +126,9 @@ public:
 
 	const std::string& getLastErrorString() const { return errorString; }
 
-	void setLastErrorString(std::string error) { errorString = error; }
+	void setLastErrorString(std::string error) { errorString = std::move(error); }
 
 private:
-	bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map,
-	                            const std::filesystem::path& fileName);
-	bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
-	bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);
-	bool parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map);
 	std::string errorString;
 };
 

@@ -17,8 +17,6 @@ struct GuildRank
 	GuildRank(uint32_t id, std::string_view name, uint8_t level) : id{id}, name{name}, level{level} {}
 };
 
-using GuildRank_ptr = std::shared_ptr<GuildRank>;
-
 class Guild
 {
 public:
@@ -29,35 +27,35 @@ public:
 	uint32_t getId() const { return id; }
 	const std::string& getName() const { return name; }
 
-	void addMember(Player* player);
-	void removeMember(Player* player);
-	const std::list<Player*>& getMembersOnline() const { return membersOnline; }
+	void addMember(const std::shared_ptr<Player>& player) { membersOnline.emplace(player); }
+	void removeMember(const std::shared_ptr<Player>& player);
+	const auto& getMembersOnline() const { return membersOnline; }
 	uint32_t getMemberCount() const { return memberCount; }
 	void setMemberCount(uint32_t count) { memberCount = count; }
 
 	void addRank(uint32_t rankId, std::string_view rankName, uint8_t level);
-	const std::vector<GuildRank_ptr>& getRanks() const { return ranks; }
-	GuildRank_ptr getRankById(uint32_t rankId);
-	GuildRank_ptr getRankByName(const std::string& name) const;
-	GuildRank_ptr getRankByLevel(uint8_t level) const;
+	const auto& getRanks() const { return ranks; }
+	std::shared_ptr<GuildRank> getRankById(uint32_t rankId);
+	std::shared_ptr<GuildRank> getRankByName(const std::string& name) const;
+	std::shared_ptr<GuildRank> getRankByLevel(uint8_t level) const;
 
 	const std::string& getMotd() const { return motd; }
-	void setMotd(const std::string& motd) { this->motd = motd; }
+	void setMotd(std::string motd) { this->motd = std::move(motd); }
 
 private:
-	std::list<Player*> membersOnline;
-	std::vector<GuildRank_ptr> ranks;
+	boost::container::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<Player>>> membersOnline;
+	std::vector<std::shared_ptr<GuildRank>> ranks;
 	std::string name;
 	std::string motd;
 	uint32_t id;
 	uint32_t memberCount = 0;
 };
 
-using Guild_ptr = std::shared_ptr<Guild>;
-
 namespace IOGuild {
-Guild_ptr loadGuild(uint32_t guildId);
+
+std::shared_ptr<Guild> loadGuild(uint32_t guildId);
 uint32_t getGuildIdByName(const std::string& name);
+
 }; // namespace IOGuild
 
 #endif // FS_GUILD_H

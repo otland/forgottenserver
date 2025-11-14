@@ -1046,8 +1046,8 @@ Weapon = {}
 ---@field onLookInBattleList fun(player:Player, creature:Creature, distance:integer, description?:string):string
 ---@field onLookInTrade fun(player:Player, partner:Player, item:Item, distance:integer, description?:string):string
 ---@field onLookInShop fun(player:Player, itemType:ItemType, count:integer, description?:string):string
----@field onMoveItem fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromCylinder?:Thing, toCylinder?:Thing):integer
----@field onItemMoved fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromCylinder?:Thing, toCylinder?:Thing):nil
+---@field onMoveItem fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):integer
+---@field onItemMoved fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):nil
 ---@field onMoveCreature fun(player:Player, creature:Creature, fromPosition:Position, toPosition:Position):boolean
 ---@field onReportRuleViolation fun(player:Player, targetName:string, reportType:integer, reportReason:integer, comment:string, translation:string):nil
 ---@field onReportBug fun(player:Player, message:string, position:Position, category:any):boolean
