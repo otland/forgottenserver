@@ -235,7 +235,6 @@
     <ClCompile Include="..\src\protocol.cpp" />
     <ClCompile Include="..\src\protocolgame.cpp" />
     <ClCompile Include="..\src\protocollogin.cpp" />
-    <ClCompile Include="..\src\protocolold.cpp" />
     <ClCompile Include="..\src\rsa.cpp" />
     <ClCompile Include="..\src\scheduler.cpp" />
     <ClCompile Include="..\src\script.cpp" />
@@ -325,7 +324,6 @@
     <ClInclude Include="..\src\protocol.h" />
     <ClInclude Include="..\src\protocolgame.h" />
     <ClInclude Include="..\src\protocollogin.h" />
-    <ClInclude Include="..\src\protocolold.h" />
     <ClInclude Include="..\src\pugicast.h" />
     <ClInclude Include="..\src\rsa.h" />
     <ClInclude Include="..\src\scheduler.h" />

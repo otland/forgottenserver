@@ -14,7 +14,6 @@
 #include "monsters.h"
 #include "outfit.h"
 #include "protocollogin.h"
-#include "protocolold.h"
 #include "protocolstatus.h"
 #include "rsa.h"
 #include "scheduler.h"
@@ -220,9 +219,6 @@ void mainLoader(ServiceManager* services)
 
 	// OT protocols
 	services->add<ProtocolStatus>(static_cast<uint16_t>(getNumber(ConfigManager::STATUS_PORT)));
-
-	// Legacy login protocol
-	services->add<ProtocolOld>(static_cast<uint16_t>(getNumber(ConfigManager::LOGIN_PORT)));
 
 #ifdef HTTP
 	// HTTP server
