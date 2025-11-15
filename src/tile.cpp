@@ -890,7 +890,7 @@ void Tile::addThing(int32_t, Thing* thing)
 			if (items) {
 				for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 					// Note: this is different from internalAddThing
-					if (itemType.alwaysOnTopOrder <= Item::items[(*it)->getID()].alwaysOnTopOrder) {
+					if (itemType.alwaysOnTopOrder < Item::items[(*it)->getID()].alwaysOnTopOrder) {
 						items->insert(it, item);
 						isInserted = true;
 						break;
@@ -1449,7 +1449,7 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 		if (itemType.alwaysOnTop) {
 			bool isInserted = false;
 			for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
-				if (Item::items[(*it)->getID()].alwaysOnTopOrder > itemType.alwaysOnTopOrder) {
+				if (Item::items[(*it)->getID()].alwaysOnTopOrder >= itemType.alwaysOnTopOrder) {
 					items->insert(it, item);
 					isInserted = true;
 					break;
