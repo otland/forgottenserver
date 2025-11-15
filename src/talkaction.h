@@ -23,7 +23,7 @@ class TalkAction : public Event
 public:
 	explicit TalkAction(LuaScriptInterface* interface) : Event(interface) {}
 
-	bool configureEvent(const pugi::xml_node& node) override { return false; }
+	bool configureEvent(const pugi::xml_node&) override { return false; }
 
 	const std::string& getWords() const { return words; }
 	const std::vector<std::string>& getWordsMap() const { return wordsMap; }
