@@ -21,8 +21,16 @@ local function configureTalkActionEvent(node)
 	end
 
 	local scriptFile = "data/talkactions/scripts/" .. script
-	dofile(scriptFile)
-	if not onSay then
+
+	local env = {}
+	for k, v in pairs(_G) do
+		env[k] = v
+	end
+
+	local f = assert(loadfile(scriptFile, "bt", env))
+	f()
+
+	if not env.onSay then
 		io.write("[Error] Can not load talkaction script, check " .. scriptFile .. " for a missing onSay callback\n")
 		return nil
 	end
@@ -31,11 +39,7 @@ local function configureTalkActionEvent(node)
 	if separator then
 		talkaction:separator(separator)
 	end
-	talkaction.onSay = onSay
-
-	-- let it be garbage collected
-	onSay = nil
-
+	talkaction.onSay = env.onSay
 	return talkaction
 end
 
