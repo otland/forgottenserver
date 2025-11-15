@@ -5,6 +5,7 @@ set(http_SRC
 	${CMAKE_CURRENT_LIST_DIR}/listener.cpp
 	${CMAKE_CURRENT_LIST_DIR}/login.cpp
 	${CMAKE_CURRENT_LIST_DIR}/router.cpp
+	${CMAKE_CURRENT_LIST_DIR}/serverinfo.cpp
 	${CMAKE_CURRENT_LIST_DIR}/session.cpp
 	)
 
@@ -15,6 +16,7 @@ set(http_HDR
 	${CMAKE_CURRENT_LIST_DIR}/listener.h
 	${CMAKE_CURRENT_LIST_DIR}/login.h
 	${CMAKE_CURRENT_LIST_DIR}/router.h
+	${CMAKE_CURRENT_LIST_DIR}/serverinfo.h
 	${CMAKE_CURRENT_LIST_DIR}/session.h
 	)
 
