@@ -51,7 +51,7 @@ class Weapon : public Event
 public:
 	explicit Weapon(LuaScriptInterface* interface) : Event(interface) {}
 
-	bool configureEvent(const pugi::xml_node& node) override;
+	bool configureEvent(const pugi::xml_node&) override { return false; }
 	bool loadFunction(const pugi::xml_attribute&, bool) final { return true; }
 	virtual void configureWeapon(const ItemType& it);
 	virtual bool interruptSwing() const { return false; }
