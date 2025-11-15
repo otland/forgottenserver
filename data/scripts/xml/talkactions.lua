@@ -47,7 +47,7 @@ local function loadXMLTalkActions()
 	local doc = XMLDocument("data/talkactions/talkactions.xml")
 	if not doc then
 		io.write("[Warning - Scripts::XML::loadXMLTalkActions] Could not load talkactions.xml.\n")
-		return true
+		return
 	end
 
 	local talkactions = doc:child("talkactions")
