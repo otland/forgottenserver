@@ -1,6 +1,6 @@
 -- If you don't intend to use talkactions.xml, you can delete this file.
 
-local function parseTalkAction(node)
+local function configureTalkActionEvent(node)
 	local talkactionWords = node:attribute("words")
 	if not talkactionWords then
 		io.write("[Error] Missing attribute words for talkaction.\n")
@@ -16,7 +16,7 @@ local function parseTalkAction(node)
 
 	local script = node:attribute("script")
 	if not script then
-		io.write("[Error] Missing attribute script, check data/talkactions/" .. filename .. "\n")
+		io.write("[Error] Missing attribute script, check data/talkactions/scripts/" .. filename .. "\n")
 		return nil
 	end
 
@@ -47,12 +47,19 @@ local function loadXMLTalkActions()
 	end
 
 	local talkactions = doc:child("talkactions")
-	for talkactionNode in talkactions:children() do
-		local talkaction = parseTalkAction(talkactionNode)
+
+    io.write(">> Loading legacy XML talkactions from data/talkactions/talkactions.xml...\n")
+
+	local loaded, start = 0, os.mtime()
+	for node in talkactions:children() do
+		local talkaction = configureTalkActionEvent(node)
 		if talkaction then
 			talkaction:register()
+			loaded = loaded + 1
 		end
 	end
+
+    io.write(">> Loaded " .. loaded .. " talkactions in " .. os.mtime() - start .. "ms.\n")
 end
 
 loadXMLTalkActions()
