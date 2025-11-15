@@ -1,0 +1,5 @@
+local weapon = Weapon(WEAPON_CLUB)
+weapon:level(50)
+weapon:action("removecharge")
+weapon:vocation("knight")
+weapon:register()

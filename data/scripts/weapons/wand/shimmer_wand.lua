@@ -1,0 +1,7 @@
+local weapon = Weapon(WEAPON_WAND)
+weapon:level(40)
+weapon:mana(13)
+weapon:damage(55, 75)
+weapon:element("energy")
+weapon:vocation("sorcerer")
+weapon:register()

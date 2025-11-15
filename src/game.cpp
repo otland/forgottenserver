@@ -5867,9 +5867,8 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return g_talkActions->reload();
 
 		case RELOAD_TYPE_WEAPONS: {
-			bool results = g_weapons->reload();
 			g_weapons->loadDefaults();
-			return results;
+			return true;
 		}
 
 		case RELOAD_TYPE_SCRIPTS: {
@@ -5912,7 +5911,6 @@ bool Game::reload(ReloadTypes_t reloadType)
 			Npcs::reload();
 			g_talkActions->reload();
 			Item::items.reload();
-			g_weapons->reload();
 			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			mounts.reload();

@@ -56,11 +56,6 @@ bool ScriptingManager::loadScriptSystems()
 	g_chat = new Chat();
 
 	g_weapons = new Weapons();
-	if (!g_weapons->loadFromXml()) {
-		std::cout << "> ERROR: Unable to load weapons!" << std::endl;
-		return false;
-	}
-
 	g_weapons->loadDefaults();
 
 	g_spells = new Spells();
