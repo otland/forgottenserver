@@ -7,10 +7,10 @@ local function configureTalkActionEvent(node)
 		return nil
 	end
 
-	-- local words = {}
-	-- for word in talkactionWords:gmatch("([^;]+)") do
-	-- 	table.insert(words, word)
-	-- end
+	local words = {}
+	for word in talkactionWords:gmatch("([^;]+)") do
+		table.insert(words, word)
+	end
 
 	local separator = node:attribute("separator")
 
@@ -27,7 +27,7 @@ local function configureTalkActionEvent(node)
 		return nil
 	end
 
-	local talkaction = TalkAction(talkactionWords:gmatch("([^;]+)"))
+	local talkaction = TalkAction(table.unpack(words))
 	if separator then
 		talkaction:separator(separator)
 	end
