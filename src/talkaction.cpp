@@ -116,25 +116,6 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 	return TALKACTION_CONTINUE;
 }
 
-bool TalkAction::configureEvent(const pugi::xml_node& node)
-{
-	pugi::xml_attribute wordsAttribute = node.attribute("words");
-	if (!wordsAttribute) {
-		std::cout << "[Error - TalkAction::configureEvent] Missing words for talk action or spell" << std::endl;
-		return false;
-	}
-
-	pugi::xml_attribute separatorAttribute = node.attribute("separator");
-	if (separatorAttribute) {
-		separator = separatorAttribute.as_string();
-	}
-
-	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {
-		setWords(word);
-	}
-	return true;
-}
-
 bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {
 	// onSay(player, words, param, type)
