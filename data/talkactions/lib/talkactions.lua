@@ -1,0 +1,1 @@
+-- See data/scripts/lib/talkactions.lua
