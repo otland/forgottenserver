@@ -9,8 +9,6 @@
 #include "game.h"
 #include "outputmessage.h"
 
-#include <ranges>
-
 extern Game g_game;
 
 std::map<Connection::Address, int64_t> ProtocolStatus::ipConnectMap;
@@ -111,14 +109,14 @@ void ProtocolStatus::sendStatusString()
 	uint32_t maxPlayersPerIp = getNumber(ConfigManager::STATUS_COUNT_MAX_PLAYERS_PER_IP);
 	if (maxPlayersPerIp > 0) {
 		std::map<Connection::Address, uint32_t> playersPerIp;
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->getIP().is_unspecified()) {
-				++playersPerIp[it.second->getIP()];
+		for (auto&& player : g_game.getPlayers() | std::views::values | std::views::as_const) {
+			if (!player->getIP().is_unspecified()) {
+				++playersPerIp[player->getIP()];
 			}
 		}
 
-		for (auto& p : playersPerIp | std::views::values) {
-			reportableOnlinePlayerCount += std::min(p, maxPlayersPerIp);
+		for (auto&& player : playersPerIp | std::views::values | std::views::as_const) {
+			reportableOnlinePlayerCount += std::min(player, maxPlayersPerIp);
 		}
 	} else {
 		reportableOnlinePlayerCount = g_game.getPlayersOnline();
@@ -209,9 +207,9 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 
 		const auto& players = g_game.getPlayers();
 		output->add<uint32_t>(players.size());
-		for (const auto& it : players) {
-			output->addString(it.second->getName());
-			output->add<uint32_t>(it.second->getLevel());
+		for (auto&& player : players | std::views::values | std::views::as_const) {
+			output->addString(player->getName());
+			output->add<uint32_t>(player->getLevel());
 		}
 	}
 

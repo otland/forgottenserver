@@ -37,8 +37,6 @@
 #include "teleport.h"
 #include "weapons.h"
 
-#include <ranges>
-
 extern Chat* g_chat;
 extern Game g_game;
 extern GlobalEvents* g_globalEvents;
@@ -283,9 +281,8 @@ void ScriptEnvironment::resetEnv()
 	localMap.clear();
 	tempResults.clear();
 
-	auto pair = tempItems.equal_range(this);
-	auto it = pair.first;
-	while (it != pair.second) {
+	auto&& [it, end] = tempItems.equal_range(this);
+	while (it != end) {
 		Item* item = it->second;
 		if (item && item->getParent() == VirtualCylinder::virtualCylinder) {
 			g_game.ReleaseItem(item);
@@ -325,9 +322,9 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 		return item->getUniqueId();
 	}
 
-	for (const auto& it : localMap) {
-		if (it.second == item) {
-			return it.first;
+	for (auto&& [uid, localItem] : localMap | std::views::as_const) {
+		if (localItem == item) {
+			return uid;
 		}
 	}
 
@@ -3944,8 +3941,8 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 			}
 
 			if (ConfigManager::getBoolean(ConfigManager::CONVERT_UNSAFE_SCRIPTS)) {
-				for (const auto& entry : indexes) {
-					switch (entry.second) {
+				for (auto&& [index, type] : indexes | std::views::as_const) {
+					switch (type) {
 						case LuaData_Item:
 						case LuaData_Container:
 						case LuaData_Teleport:
@@ -3965,9 +3962,9 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 							break;
 					}
 					lua_replace(L, -2);
-					lua_pushvalue(L, entry.first);
+					lua_pushvalue(L, index);
 					lua_call(L, 1, 1);
-					lua_replace(L, entry.first);
+					lua_replace(L, index);
 				}
 			}
 		}
@@ -4573,8 +4570,8 @@ int LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 	lua_createtable(L, g_game.getPlayersOnline(), 0);
 
 	int index = 0;
-	for (const auto& playerEntry : g_game.getPlayers()) {
-		tfs::lua::pushUserdata(L, playerEntry.second);
+	for (auto&& player : g_game.getPlayers() | std::views::values | std::views::as_const) {
+		tfs::lua::pushUserdata(L, player);
 		tfs::lua::setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4587,8 +4584,8 @@ int LuaScriptInterface::luaGameGetNpcs(lua_State* L)
 	lua_createtable(L, g_game.getNpcsOnline(), 0);
 
 	int index = 0;
-	for (const auto& npcEntry : g_game.getNpcs()) {
-		tfs::lua::pushUserdata(L, npcEntry.second);
+	for (auto&& npc : g_game.getNpcs() | std::views::values | std::views::as_const) {
+		tfs::lua::pushUserdata(L, npc);
 		tfs::lua::setMetatable(L, -1, "Npc");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4601,8 +4598,8 @@ int LuaScriptInterface::luaGameGetMonsters(lua_State* L)
 	lua_createtable(L, g_game.getMonstersOnline(), 0);
 
 	int index = 0;
-	for (const auto& monsterEntry : g_game.getMonsters()) {
-		tfs::lua::pushUserdata(L, monsterEntry.second);
+	for (auto&& monster : g_game.getMonsters() | std::views::values | std::views::as_const) {
+		tfs::lua::pushUserdata(L, monster);
 		tfs::lua::setMetatable(L, -1, "Monster");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4710,8 +4707,8 @@ int LuaScriptInterface::luaGameGetCurrencyItems(lua_State* L)
 	size_t size = currencyItems.size();
 	lua_createtable(L, size, 0);
 
-	for (const auto& it : currencyItems) {
-		const ItemType& itemType = Item::items[it.second];
+	for (auto&& itemId : currencyItems | std::views::values | std::views::as_const) {
+		const ItemType& itemType = Item::items[itemId];
 		tfs::lua::pushUserdata(L, &itemType);
 		tfs::lua::setMetatable(L, -1, "ItemType");
 		lua_rawseti(L, -2, size--);
@@ -4771,8 +4768,8 @@ int LuaScriptInterface::luaGameGetHouses(lua_State* L)
 	lua_createtable(L, houses.size(), 0);
 
 	int index = 0;
-	for (auto houseEntry : houses) {
-		tfs::lua::pushUserdata(L, houseEntry.second);
+	for (auto&& house : houses | std::views::values | std::views::as_const) {
+		tfs::lua::pushUserdata(L, house);
 		tfs::lua::setMetatable(L, -1, "House");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -8705,11 +8702,11 @@ int LuaScriptInterface::luaCreatureGetDamageMap(lua_State* L)
 	}
 
 	lua_createtable(L, creature->damageMap.size(), 0);
-	for (const auto& damageEntry : creature->damageMap) {
+	for (auto&& [id, cb] : creature->damageMap | std::views::as_const) {
 		lua_createtable(L, 0, 2);
-		setField(L, "total", damageEntry.second.total);
-		setField(L, "ticks", damageEntry.second.ticks);
-		lua_rawseti(L, -2, damageEntry.first);
+		setField(L, "total", cb.total);
+		setField(L, "ticks", cb.ticks);
+		lua_rawseti(L, -2, id);
 	}
 	return 1;
 }
@@ -10999,16 +10996,16 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	}
 
 	if (player->isInGhostMode()) {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
+		for (auto&& onlinePlayer : g_game.getPlayers() | std::views::values | std::views::as_const) {
+			if (!onlinePlayer->isAccessPlayer()) {
+				onlinePlayer->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), false);
 	} else {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
+		for (auto&& onlinePlayer : g_game.getPlayers() | std::views::values | std::views::as_const) {
+			if (!onlinePlayer->isAccessPlayer()) {
+				onlinePlayer->notifyStatusChange(player, VIPSTATUS_ONLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), true);
@@ -11106,16 +11103,16 @@ int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 	}
 
 	std::vector<const InstantSpell*> spells;
-	for (auto& spell : g_spells->getInstantSpells()) {
-		if (spell.second.canCast(player)) {
-			spells.push_back(&spell.second);
+	for (auto&& spell : g_spells->getInstantSpells() | std::views::values | std::views::as_const) {
+		if (spell.canCast(player)) {
+			spells.push_back(&spell);
 		}
 	}
 
 	lua_createtable(L, spells.size(), 0);
 
 	int index = 0;
-	for (auto spell : spells) {
+	for (auto&& spell : spells | std::views::as_const) {
 		lua_createtable(L, 0, 7);
 
 		setField(L, "name", spell->getName());
@@ -15016,9 +15013,9 @@ int LuaScriptInterface::luaMonsterTypeGetElementList(lua_State* L)
 	}
 
 	lua_createtable(L, monsterType->info.elementMap.size(), 0);
-	for (const auto& elementEntry : monsterType->info.elementMap) {
-		lua_pushnumber(L, elementEntry.second);
-		lua_rawseti(L, -2, elementEntry.first);
+	for (auto&& [combatType, percent] : monsterType->info.elementMap | std::views::as_const) {
+		lua_pushnumber(L, percent);
+		lua_rawseti(L, -2, combatType);
 	}
 	return 1;
 }
@@ -15570,21 +15567,21 @@ int LuaScriptInterface::luaLootSetId(lua_State* L)
 			loot->lootBlock.id = tfs::lua::getNumber<uint16_t>(L, 2);
 		} else {
 			auto name = tfs::lua::getString(L, 2);
-			auto ids = Item::items.nameToItems.equal_range(boost::algorithm::to_lower_copy(name));
+			const auto&& [it, end] = Item::items.nameToItems.equal_range(boost::algorithm::to_lower_copy(name));
 
-			if (ids.first == Item::items.nameToItems.cend()) {
+			if (it == Item::items.nameToItems.cend()) {
 				std::cout << "[Warning - Loot:setId] Unknown loot item \"" << name << "\".\n";
 				tfs::lua::pushBoolean(L, false);
 				return 1;
 			}
 
-			if (std::next(ids.first) != ids.second) {
+			if (std::next(it) != end) {
 				std::cout << "[Warning - Loot:setId] Non-unique loot item \"" << name << "\".\n";
 				tfs::lua::pushBoolean(L, false);
 				return 1;
 			}
 
-			loot->lootBlock.id = ids.first->second;
+			loot->lootBlock.id = it->second;
 		}
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -16804,8 +16801,8 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 	if (lua_gettop(L) == 1) {
 		lua_createtable(L, 0, 0);
 		int i = 0;
-		for (auto& vocation : spell->getVocationSpellMap()) {
-			std::string name = g_vocations.getVocation(vocation.first)->getVocName();
+		for (auto&& vocation : spell->getVocationSpellMap() | std::views::keys | std::views::as_const) {
+			const std::string& name = g_vocations.getVocation(vocation)->getVocName();
 			tfs::lua::pushString(L, name);
 			lua_rawseti(L, -2, ++i);
 		}
@@ -18754,16 +18751,16 @@ bool LuaEnvironment::closeState()
 		return false;
 	}
 
-	for (const auto& combatEntry : combatIdMap) {
-		clearCombatObjects(combatEntry.first);
+	for (auto&& interface : combatIdMap | std::views::keys | std::views::as_const) {
+		clearCombatObjects(interface);
 	}
 
-	for (const auto& areaEntry : areaIdMap) {
-		clearAreaObjects(areaEntry.first);
+	for (auto&& interface : areaIdMap | std::views::keys | std::views::as_const) {
+		clearAreaObjects(interface);
 	}
 
-	for (auto& timerEntry : timerEvents) {
-		LuaTimerEventDesc timerEventDesc = std::move(timerEntry.second);
+	for (auto&& timerEvent : timerEvents | std::views::values) {
+		LuaTimerEventDesc timerEventDesc = std::move(timerEvent);
 		for (int32_t parameter : timerEventDesc.parameters) {
 			luaL_unref(L, LUA_REGISTRYINDEX, parameter);
 		}
