@@ -7,15 +7,17 @@
 #include "house.h"
 #include "position.h"
 #include "spawn.h"
-#include "spectators.h"
 #include "town.h"
 
 class Creature;
+class Tile;
 
 static constexpr int32_t MAP_MAX_LAYERS = 16;
 
 static constexpr uint16_t MAP_NORMALWALKCOST = 10;
 static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
+
+using SpectatorVec = boost::container::flat_set<Creature*>;
 
 struct FindPathParams;
 struct AStarNode
@@ -141,8 +143,8 @@ private:
 	QTreeLeafNode* leafS = nullptr;
 	QTreeLeafNode* leafE = nullptr;
 	Floor* array[MAP_MAX_LAYERS] = {};
-	CreatureVector creature_list;
-	CreatureVector player_list;
+	std::vector<Creature*> creature_list;
+	std::vector<Creature*> player_list;
 
 	friend class Map;
 	friend class QTreeNode;

@@ -6,13 +6,13 @@
 
 #include "cylinder.h"
 #include "item.h"
+#include "map.h"
 #include "tools.h"
 
 class BedItem;
 class Creature;
 class MagicField;
 class Mailbox;
-class SpectatorVec;
 class Teleport;
 class TrashHolder;
 

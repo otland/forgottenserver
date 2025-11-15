@@ -13,7 +13,6 @@
 #include "mailbox.h"
 #include "monster.h"
 #include "movement.h"
-#include "spectators.h"
 #include "teleport.h"
 #include "trashholder.h"
 

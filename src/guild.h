@@ -31,7 +31,7 @@ public:
 
 	void addMember(Player* player);
 	void removeMember(Player* player);
-	const std::list<Player*>& getMembersOnline() const { return membersOnline; }
+	const auto& getMembersOnline() const { return membersOnline; }
 	uint32_t getMemberCount() const { return memberCount; }
 	void setMemberCount(uint32_t count) { memberCount = count; }
 
@@ -45,7 +45,7 @@ public:
 	void setMotd(const std::string& motd) { this->motd = motd; }
 
 private:
-	std::list<Player*> membersOnline;
+	boost::container::flat_set<Player*> membersOnline;
 	std::vector<GuildRank_ptr> ranks;
 	std::string name;
 	std::string motd;

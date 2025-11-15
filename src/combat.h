@@ -7,13 +7,13 @@
 #include "baseevents.h"
 #include "condition.h"
 #include "item.h"
+#include "map.h"
 #include "tools.h"
 
 class Creature;
 class MatrixArea;
 class Player;
 struct Position;
-class SpectatorVec;
 class Tile;
 
 // for luascript callback

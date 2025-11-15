@@ -9,7 +9,6 @@
 #include "events.h"
 #include "game.h"
 #include "matrixarea.h"
-#include "spectators.h"
 #include "weapons.h"
 
 extern Game g_game;
