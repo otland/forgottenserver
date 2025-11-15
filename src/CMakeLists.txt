@@ -53,9 +53,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/position.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocol.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocolgame.cpp
-	${CMAKE_CURRENT_LIST_DIR}/protocollogin.cpp
-	${CMAKE_CURRENT_LIST_DIR}/protocolold.cpp
-	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.cpp
 	${CMAKE_CURRENT_LIST_DIR}/rsa.cpp
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/script.cpp
@@ -139,9 +136,6 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/position.h
 	${CMAKE_CURRENT_LIST_DIR}/protocolgame.h
 	${CMAKE_CURRENT_LIST_DIR}/protocol.h
-	${CMAKE_CURRENT_LIST_DIR}/protocollogin.h
-	${CMAKE_CURRENT_LIST_DIR}/protocolold.h
-	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.h
 	${CMAKE_CURRENT_LIST_DIR}/pugicast.h
 	${CMAKE_CURRENT_LIST_DIR}/rsa.h
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.h
