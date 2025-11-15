@@ -2328,7 +2328,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::FRAG_TIME);
 	registerEnumIn(L, "configKeys", ConfigManager::WHITE_SKULL_TIME);
 	registerEnumIn(L, "configKeys", ConfigManager::GAME_PORT);
-	registerEnumIn(L, "configKeys", ConfigManager::LOGIN_PORT);
 	registerEnumIn(L, "configKeys", ConfigManager::STATUS_PORT);
 	registerEnumIn(L, "configKeys", ConfigManager::STAIRHOP_DELAY);
 	registerEnumIn(L, "configKeys", ConfigManager::MARKET_OFFER_DURATION);
