@@ -42,6 +42,7 @@ Container::~Container()
 	if (getID() == ITEM_BROWSEFIELD) {
 		g_game.browseFields.erase(getTile());
 
+		const auto parent = getParent();
 		for (Item* item : itemlist) {
 			item->setParent(parent);
 		}

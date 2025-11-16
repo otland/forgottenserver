@@ -23,14 +23,10 @@ public:
 
 	virtual std::string getDescription(int32_t lookDistance) const = 0;
 
-	virtual bool hasParent() const { return false; }
-	virtual Cylinder* getParent() const { return nullptr; }
-	virtual Cylinder* getRealParent() const { return getParent(); }
-
-	virtual void setParent(Cylinder*)
-	{
-		//
-	}
+	bool hasParent() const { return getParent(); }
+	virtual Cylinder* getParent() const { return parent; }
+	Cylinder* getRealParent() const { return getParent(); }
+	virtual void setParent(Cylinder* cylinder) { parent = cylinder; }
 
 	virtual Tile* getTile();
 	virtual const Tile* getTile() const;
@@ -47,6 +43,9 @@ public:
 	virtual const Creature* getCreature() const { return nullptr; }
 
 	virtual bool isRemoved() const { return true; }
+
+private:
+	Cylinder* parent = nullptr;
 };
 
 #endif // FS_THING_H
