@@ -193,8 +193,6 @@ public:
 	 * position)
 	 */
 	virtual void internalAddThing(uint32_t index, Thing* thing);
-
-	virtual void startDecaying();
 };
 
 class VirtualCylinder final : public Cylinder
