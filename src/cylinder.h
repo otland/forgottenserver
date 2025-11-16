@@ -225,7 +225,6 @@ public:
 
 	bool isPushable() const override { return false; }
 	int32_t getThrowRange() const override { return 1; }
-	std::string getDescription(int32_t) const override { return {}; }
 	bool isRemoved() const override { return false; }
 };
 

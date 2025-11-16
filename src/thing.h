@@ -21,8 +21,6 @@ public:
 	Thing(const Thing&) = delete;
 	Thing& operator=(const Thing&) = delete;
 
-	virtual std::string getDescription(int32_t lookDistance) const = 0;
-
 	bool hasParent() const { return getParent(); }
 	virtual Cylinder* getParent() const { return parent; }
 	Cylinder* getRealParent() const { return getParent(); }
