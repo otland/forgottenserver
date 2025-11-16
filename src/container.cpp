@@ -70,11 +70,16 @@ Item* Container::clone() const
 
 Container* Container::getParentContainer()
 {
-	Thing* thing = getParent();
+	auto thing = getParent();
 	if (!thing) {
 		return nullptr;
 	}
-	return thing->getContainer();
+
+	auto item = thing->getItem();
+	if (!item) {
+		return nullptr;
+	}
+	return item->getContainer();
 }
 
 std::string Container::getName(bool addArticle /* = false*/) const

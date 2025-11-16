@@ -512,6 +512,8 @@ public:
 
 	Item* getItem() override final { return this; }
 	const Item* getItem() const override final { return this; }
+	virtual Container* getContainer() { return nullptr; }
+	virtual const Container* getContainer() const { return nullptr; }
 	virtual Teleport* getTeleport() { return nullptr; }
 	virtual const Teleport* getTeleport() const { return nullptr; }
 	virtual TrashHolder* getTrashHolder() { return nullptr; }
