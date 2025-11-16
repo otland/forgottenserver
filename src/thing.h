@@ -38,8 +38,6 @@ public:
 
 	virtual Tile* getTile() { return nullptr; }
 	virtual const Tile* getTile() const { return nullptr; }
-	virtual Container* getContainer() { return nullptr; }
-	virtual const Container* getContainer() const { return nullptr; }
 	virtual Item* getItem() { return nullptr; }
 	virtual const Item* getItem() const { return nullptr; }
 	virtual Creature* getCreature() { return nullptr; }
