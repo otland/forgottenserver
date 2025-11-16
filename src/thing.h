@@ -32,13 +32,12 @@ public:
 		//
 	}
 
-	virtual Tile* getTile();
-	virtual const Tile* getTile() const;
-
 	virtual const Position& getPosition() const;
 	virtual int32_t getThrowRange() const = 0;
 	virtual bool isPushable() const = 0;
 
+	virtual Tile* getTile() { return nullptr; }
+	virtual const Tile* getTile() const { return nullptr; }
 	virtual Container* getContainer() { return nullptr; }
 	virtual const Container* getContainer() const { return nullptr; }
 	virtual Item* getItem() { return nullptr; }
