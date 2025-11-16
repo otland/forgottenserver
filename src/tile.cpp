@@ -118,8 +118,6 @@ uint32_t Tile::getDownItemCount() const
 	return 0;
 }
 
-std::string Tile::getDescription(int32_t) const { return "You dont know why, but you cant see anything!"; }
-
 Teleport* Tile::getTeleportItem() const
 {
 	if (!hasFlag(TILESTATE_TELEPORT)) {

@@ -725,7 +725,6 @@ public:
 	                                      bool addArticle = true);
 	static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
-	std::string getDescription(int32_t lookDistance) const override final;
 	std::string getNameDescription() const;
 	std::string getWeightDescription() const;
 
