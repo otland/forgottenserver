@@ -23,7 +23,7 @@ public:
 
 	bool hasParent() const { return getParent(); }
 	virtual Cylinder* getParent() const { return parent; }
-	Cylinder* getRealParent() const { return getParent(); }
+	Cylinder* getRealParent() const { return parent; }
 	virtual void setParent(Cylinder* cylinder) { parent = cylinder; }
 
 	virtual Tile* getTile();
