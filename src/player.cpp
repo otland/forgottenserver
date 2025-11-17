@@ -498,7 +498,7 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 		skills[skill].percent = 0;
 
 		sendTextMessage(MESSAGE_EVENT_ADVANCE,
-		                fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level));
+		                std::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level));
 
 		g_creatureEvents->playerAdvance(this, skill, (skills[skill].level - 1), skills[skill].level);
 
@@ -556,7 +556,7 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify /* = f
 	if (notify) {
 		bool sendUpdateSkills = false;
 		if (oldLevel != skills[skill].level) {
-			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You were downgraded to {:s} level {:d}.",
+			sendTextMessage(MESSAGE_EVENT_ADVANCE, std::format("You were downgraded to {:s} level {:d}.",
 			                                                   getSkillName(skill), skills[skill].level));
 			sendUpdateSkills = true;
 		}
@@ -1555,7 +1555,7 @@ void Player::onThink(uint32_t interval)
 		} else if (client && idleTime == 60000 * kickAfterMinutes) {
 			client->sendTextMessage(TextMessage(
 			    MESSAGE_STATUS_WARNING,
-			    fmt::format(
+			    std::format(
 			        "There was no variation in your behaviour for {:d} minutes. You will be disconnected in one minute if there is no change in your actions until then.",
 			        kickAfterMinutes)));
 		}
@@ -1614,7 +1614,7 @@ void Player::removeMessageBuffer()
 			Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_MUTED, muteTime * 1000, 0);
 			addCondition(condition);
 
-			sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You are muted for {:d} seconds.", muteTime));
+			sendTextMessage(MESSAGE_STATUS_SMALL, std::format("You are muted for {:d} seconds.", muteTime));
 		}
 	}
 }
@@ -1662,7 +1662,7 @@ void Player::addManaSpent(uint64_t amount)
 		magLevel++;
 		manaSpent = 0;
 
-		sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You advanced to magic level {:d}.", magLevel));
+		sendTextMessage(MESSAGE_EVENT_ADVANCE, std::format("You advanced to magic level {:d}.", magLevel));
 
 		g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, magLevel - 1, magLevel);
 
@@ -1720,7 +1720,7 @@ void Player::removeManaSpent(uint64_t amount, bool notify /* = false*/)
 	if (notify) {
 		bool sendUpdateStats = false;
 		if (oldLevel != magLevel) {
-			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You were downgraded to magic level {:d}.", magLevel));
+			sendTextMessage(MESSAGE_EVENT_ADVANCE, std::format("You were downgraded to magic level {:d}.", magLevel));
 			sendUpdateStats = true;
 		}
 
@@ -1789,7 +1789,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 		g_creatureEvents->playerAdvance(this, SKILL_LEVEL, prevLevel, level);
 
 		sendTextMessage(MESSAGE_EVENT_ADVANCE,
-		                fmt::format("You advanced from Level {:d} to Level {:d}.", prevLevel, level));
+		                std::format("You advanced from Level {:d} to Level {:d}.", prevLevel, level));
 	}
 
 	if (nextLevelExp > currLevelExp) {
@@ -1871,7 +1871,7 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 		}
 
 		sendTextMessage(MESSAGE_EVENT_ADVANCE,
-		                fmt::format("You were downgraded from Level {:d} to Level {:d}.", oldLevel, level));
+		                std::format("You were downgraded from Level {:d} to Level {:d}.", oldLevel, level));
 	}
 
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
@@ -2116,7 +2116,7 @@ void Player::death(Creature* lastHitCreature)
 
 			if (oldLevel != level) {
 				sendTextMessage(MESSAGE_EVENT_ADVANCE,
-				                fmt::format("You were downgraded from Level {:d} to Level {:d}.", oldLevel, level));
+				                std::format("You were downgraded from Level {:d} to Level {:d}.", oldLevel, level));
 			}
 
 			uint64_t currLevelExp = Player::getExpForLevel(level);
@@ -2210,31 +2210,31 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 		if (lastHitCreature) {
 			if (!mostDamageCreature) {
 				corpse->setSpecialDescription(
-				    fmt::format("You recognize {:s}. {:s} was killed by {:s}{:s}", getNameDescription(),
+				    std::format("You recognize {:s}. {:s} was killed by {:s}{:s}", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", lastHitCreature->getNameDescription(),
 				                killersSize > 1 ? " and others." : "."));
 			} else if (lastHitCreature != mostDamageCreature) {
 				corpse->setSpecialDescription(
-				    fmt::format("You recognize {:s}. {:s} was killed by {:s}, {:s}{:s}", getNameDescription(),
+				    std::format("You recognize {:s}. {:s} was killed by {:s}, {:s}{:s}", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription(),
 				                lastHitCreature->getNameDescription(), killersSize > 2 ? " and others." : "."));
 			} else {
 				corpse->setSpecialDescription(
-				    fmt::format("You recognize {:s}. {:s} was killed by {:s} and others.", getNameDescription(),
+				    std::format("You recognize {:s}. {:s} was killed by {:s} and others.", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
 			}
 		} else if (mostDamageCreature) {
 			if (killersSize > 1) {
-				corpse->setSpecialDescription(fmt::format(
+				corpse->setSpecialDescription(std::format(
 				    "You recognize {:s}. {:s} was killed by something evil, {:s}, and others", getNameDescription(),
 				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
 			} else {
-				corpse->setSpecialDescription(fmt::format(
+				corpse->setSpecialDescription(std::format(
 				    "You recognize {:s}. {:s} was killed by something evil and others", getNameDescription(),
 				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
 			}
 		} else {
-			corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by something evil {:s}",
+			corpse->setSpecialDescription(std::format("You recognize {:s}. {:s} was killed by something evil {:s}",
 			                                          getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He",
 			                                          killersSize ? " and others." : "."));
 		}
@@ -4486,7 +4486,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 		manaSpent += tries;
 
 		if (magLevel != currMagLevel) {
-			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You advanced to magic level {:d}.", magLevel));
+			sendTextMessage(MESSAGE_EVENT_ADVANCE, std::format("You advanced to magic level {:d}.", magLevel));
 		}
 
 		uint8_t newPercent;
@@ -4540,7 +4540,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 		if (currSkillLevel != skills[skill].level) {
 			sendTextMessage(MESSAGE_EVENT_ADVANCE,
-			                fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level));
+			                std::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level));
 		}
 
 		uint8_t newPercent;
@@ -4566,7 +4566,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 	sendTextMessage(
 	    MESSAGE_EVENT_ADVANCE,
-	    fmt::format(
+	    std::format(
 	        "Your {:s} skill changed from level {:d} (with {:.2f}% progress towards level {:d}) to level {:d} (with {:.2f}% progress towards level {:d})",
 	        ucwords(getSkillName(skill)), oldSkillValue, oldPercentToNextLevel, (oldSkillValue + 1), newSkillValue,
 	        newPercentToNextLevel, (newSkillValue + 1)));

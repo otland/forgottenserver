@@ -74,7 +74,7 @@ bool IOMapSerialize::saveHouseItems()
 			saveTile(stream, tile);
 
 			if (auto attributes = stream.getStream(); !attributes.empty()) {
-				if (!stmt.addRow(fmt::format("{:d}, {:s}", house->getId(), db.escapeString(attributes)))) {
+				if (!stmt.addRow(std::format("{:d}, {:s}", house->getId(), db.escapeString(attributes)))) {
 					return false;
 				}
 				stream.clear();
@@ -295,15 +295,15 @@ bool IOMapSerialize::saveHouseInfo()
 
 	for (const auto& it : g_game.map.houses.getHouses()) {
 		House* house = it.second;
-		DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()));
+		DBResult_ptr result = db.storeQuery(std::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()));
 		if (result) {
-			db.executeQuery(fmt::format(
+			db.executeQuery(std::format(
 			    "UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}",
 			    house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
 			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
 			    house->getBedCount(), house->getId()));
 		} else {
-			db.executeQuery(fmt::format(
+			db.executeQuery(std::format(
 			    "INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES ({:d}, {:d}, {:d}, {:d}, {:s}, {:d}, {:d}, {:d}, {:d})",
 			    house->getId(), house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
 			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
@@ -318,7 +318,7 @@ bool IOMapSerialize::saveHouseInfo()
 
 		std::string listText;
 		if (house->getAccessList(GUEST_LIST, listText) && !listText.empty()) {
-			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), std::to_underlying(GUEST_LIST),
+			if (!stmt.addRow(std::format("{:d}, {:d}, {:s}", house->getId(), std::to_underlying(GUEST_LIST),
 			                             db.escapeString(listText)))) {
 				return false;
 			}
@@ -327,7 +327,7 @@ bool IOMapSerialize::saveHouseInfo()
 		}
 
 		if (house->getAccessList(SUBOWNER_LIST, listText) && !listText.empty()) {
-			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), std::to_underlying(SUBOWNER_LIST),
+			if (!stmt.addRow(std::format("{:d}, {:d}, {:s}", house->getId(), std::to_underlying(SUBOWNER_LIST),
 			                             db.escapeString(listText)))) {
 				return false;
 			}
@@ -337,7 +337,7 @@ bool IOMapSerialize::saveHouseInfo()
 
 		for (Door* door : house->getDoors()) {
 			if (door->getAccessList(listText) && !listText.empty()) {
-				if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(),
+				if (!stmt.addRow(std::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(),
 				                             db.escapeString(listText)))) {
 					return false;
 				}
@@ -367,7 +367,7 @@ bool IOMapSerialize::saveHouse(House* house)
 	uint32_t houseId = house->getId();
 
 	// clear old tile data
-	if (!db.executeQuery(fmt::format("DELETE FROM `tile_store` WHERE `house_id` = {:d}", houseId))) {
+	if (!db.executeQuery(std::format("DELETE FROM `tile_store` WHERE `house_id` = {:d}", houseId))) {
 		return false;
 	}
 
@@ -378,7 +378,7 @@ bool IOMapSerialize::saveHouse(House* house)
 		saveTile(stream, tile);
 
 		if (auto attributes = stream.getStream(); attributes.size() > 0) {
-			if (!stmt.addRow(fmt::format("{:d}, {:s}", houseId, db.escapeString(attributes)))) {
+			if (!stmt.addRow(std::format("{:d}, {:s}", houseId, db.escapeString(attributes)))) {
 				return false;
 			}
 			stream.clear();

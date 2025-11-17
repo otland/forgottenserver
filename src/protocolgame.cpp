@@ -192,11 +192,11 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			if (const auto& banInfo = IOBan::getAccountBanInfo(accountId)) {
 				if (banInfo->expiresAt > 0) {
 					disconnectClient(
-					    fmt::format("Your account has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+					    std::format("Your account has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
 					                formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 				} else {
 					disconnectClient(
-					    fmt::format("Your account has been permanently banned by {:s}.\n\nReason specified:\n{:s}",
+					    std::format("Your account has been permanently banned by {:s}.\n\nReason specified:\n{:s}",
 					                banInfo->bannedBy, banInfo->reason));
 				}
 				return;
@@ -208,7 +208,7 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			auto output = tfs::net::make_output_message();
 			output->addByte(0x16);
 			output->addString(
-			    fmt::format("Too many players online.\nYou are at place {:d} on the waiting list.", currentSlot));
+			    std::format("Too many players online.\nYou are at place {:d} on the waiting list.", currentSlot));
 			output->addByte(retryTime);
 			send(output);
 
@@ -389,7 +389,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	// Web login skips the character list request so we need to check the client version again
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
+		disconnectClient(std::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
 		return;
 	}
 
@@ -426,13 +426,13 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	auto ip = getIP();
 	if (const auto& banInfo = IOBan::getIpBanInfo(ip)) {
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+		disconnectClient(std::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
 		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 		return;
 	}
 
 	Database& db = Database::getInstance();
-	auto result = db.storeQuery(fmt::format(
+	auto result = db.storeQuery(std::format(
 	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`token` = {:s} AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
 	    db.escapeString(sessionToken), db.escapeString(characterName)));
 	if (!result) {

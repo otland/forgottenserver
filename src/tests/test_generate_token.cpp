@@ -45,8 +45,7 @@ BOOST_AUTO_TEST_CASE(test_hmac_sha1)
 
 	for (auto&& [key, message, expected] : testVectors) {
 		auto actual = hmac("SHA1", key, message);
-		BOOST_TEST(actual == expected,
-		           "expected " << fmt::format("{:?}", expected) << ", got: " << fmt::format("{:?}", actual) << "");
+		BOOST_TEST(actual == expected, "expected " << expected << ", got: " << actual << "");
 	}
 }
 

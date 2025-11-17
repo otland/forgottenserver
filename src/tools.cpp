@@ -98,7 +98,7 @@ std::string hmac(std::string_view algorithm, std::string_view key, std::string_v
 
 	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md{EVP_MD_fetch(nullptr, algorithm.data(), nullptr), EVP_MD_free};
 	if (!md) {
-		throw std::runtime_error(fmt::format("Failed to fetch {:s}", algorithm));
+		throw std::runtime_error(std::format("Failed to fetch {:s}", algorithm));
 	}
 
 	std::array<unsigned char, EVP_MAX_MD_SIZE> result;

@@ -1462,7 +1462,7 @@ typename std::enable_if_t<std::is_integral_v<T> && std::is_unsigned_v<T>, T> get
 	double num = lua_tonumber(L, arg);
 	if (num < static_cast<double>(std::numeric_limits<T>::lowest()) ||
 	    num > static_cast<double>(std::numeric_limits<T>::max())) {
-		reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+		reportErrorFunc(L, std::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
 	}
 
 	return static_cast<T>(num);
@@ -1475,7 +1475,7 @@ typename std::enable_if_t<(std::is_integral_v<T> && std::is_signed_v<T>) || std:
 	double num = lua_tonumber(L, arg);
 	if (num < static_cast<double>(std::numeric_limits<T>::lowest()) ||
 	    num > static_cast<double>(std::numeric_limits<T>::max())) {
-		reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+		reportErrorFunc(L, std::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
 	}
 
 	return static_cast<T>(num);

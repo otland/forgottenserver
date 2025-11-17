@@ -69,7 +69,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format(
+	DBResult_ptr result = db.storeQuery(std::format(
 	    "SELECT `id`, UNHEX(`password`) AS `password`, `secret`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
 	    db.escapeString(accountName), db.escapeString(accountName)));
 	if (!result) {
@@ -87,7 +87,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	auto premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
 
 	std::vector<std::string> characters = {};
-	result = db.storeQuery(fmt::format(
+	result = db.storeQuery(std::format(
 	    "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", id));
 	if (result) {
 		do {
@@ -119,7 +119,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	output->addString(tfs::base64::encode({sessionKey.data(), sessionKey.size()}));
 
 	if (!db.executeQuery(
-	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
+	        std::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
 	                    db.escapeBlob(sessionKey.data(), sessionKey.size()), id,
 	                    "'" + db.escapeString(connection->getIP().to_string()) + "'"))) {
 		disconnectClient("Failed to create session.\nPlease try again later.", version);
@@ -192,7 +192,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (version <= 760) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
+		disconnectClient(std::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
 		return;
 	}
 
@@ -222,7 +222,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	setXTEAKey(std::move(key));
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
+		disconnectClient(std::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
 		return;
 	}
 
@@ -242,7 +242,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (const auto& banInfo = IOBan::getIpBanInfo(connection->getIP())) {
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+		disconnectClient(std::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
 		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason),
 		                 version);
 		return;
