@@ -185,3 +185,18 @@ ownerName = ""
 ownerEmail = ""
 url = "https://otland.net/"
 location = "Sweden"
+
+-- Proxy settings
+-- NOTE:
+-- if you allow any proxy connections, you should configure your firewalls to not allow direct connections to OTS
+-- only your own HAProxy server IP addresses should be allowed to connect to OTS ports / OTCv8 proxy server ports,
+-- otherwise anyone can set up their own modified HAProxy server and spoof their in-game IP
+
+-- allow OTCv8 proxy connections
+allowOtcProxy = false
+-- allow HAProxy connections - for players or for server status protocol ex. otservlist
+allowHaProxy = false
+-- if you allow HAProxy connections and want to add the HAProxy VPS IP address as OTS IP address to otservlist etc.,
+-- here you can set IP address that will be returned in OTS status as the IP address of the server
+-- empty string = return actual IP address of the server
+statusIp = ""

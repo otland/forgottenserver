@@ -616,6 +616,8 @@ private:
 
 	static int luaPlayerGetGuid(lua_State* L);
 	static int luaPlayerGetIp(lua_State* L);
+	static int luaPlayerIsOtcProxy(lua_State* L);
+	static int luaPlayerIsHaProxy(lua_State* L);
 	static int luaPlayerGetAccountId(lua_State* L);
 	static int luaPlayerGetLastLoginSaved(lua_State* L);
 	static int luaPlayerGetLastLogout(lua_State* L);

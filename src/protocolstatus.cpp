@@ -92,7 +92,11 @@ void ProtocolStatus::sendStatusString()
 	pugi::xml_node serverinfo = tsqp.append_child("serverinfo");
 	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
 	serverinfo.append_attribute("uptime") = std::to_string(uptime).c_str();
-	serverinfo.append_attribute("ip") = getString(ConfigManager::IP).c_str();
+	if (!(getString(ConfigManager::STATUS_IP).empty())) {
+		serverinfo.append_attribute("ip") = getString(ConfigManager::STATUS_IP).c_str();
+	} else {
+		serverinfo.append_attribute("ip") = getString(ConfigManager::IP).c_str();
+	}
 	serverinfo.append_attribute("servername") = getString(ConfigManager::SERVER_NAME).c_str();
 	serverinfo.append_attribute("port") = std::to_string(getNumber(ConfigManager::LOGIN_PORT)).c_str();
 	serverinfo.append_attribute("location") = getString(ConfigManager::LOCATION).c_str();
@@ -169,7 +173,11 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 	if (requestedInfo & REQUEST_BASIC_SERVER_INFO) {
 		output->addByte(0x10);
 		output->addString(getString(ConfigManager::SERVER_NAME));
-		output->addString(getString(ConfigManager::IP));
+		if (!getString(ConfigManager::STATUS_IP).empty()) {
+			output->addString(getString(ConfigManager::STATUS_IP));
+		} else {
+			output->addString(getString(ConfigManager::IP));
+		}
 		output->addString(std::to_string(getNumber(ConfigManager::LOGIN_PORT)));
 	}
 
