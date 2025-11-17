@@ -294,6 +294,10 @@ const Thing* Item::getTopParent() const
 Tile* Item::getTile()
 {
 	auto parent = getTopParent();
+	if (!parent) {
+		return nullptr;
+	}
+
 	if (parent->hasParent()) {
 		parent = parent->getParent();
 	}
@@ -303,6 +307,10 @@ Tile* Item::getTile()
 const Tile* Item::getTile() const
 {
 	auto parent = getTopParent();
+	if (!parent) {
+		return nullptr;
+	}
+
 	if (parent->hasParent()) {
 		parent = parent->getParent();
 	}
