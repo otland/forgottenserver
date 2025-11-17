@@ -4,7 +4,6 @@
 #ifndef FS_ITEM_H
 #define FS_ITEM_H
 
-#include "cylinder.h"
 #include "items.h"
 #include "luascript.h"
 #include "thing.h"
@@ -925,16 +924,16 @@ public:
 	}
 
 	bool hasParent() const override { return getParent(); }
-	Cylinder* getParent() const override { return parent; }
-	void setParent(Cylinder* cylinder) override { parent = cylinder; }
-	Cylinder* getTopParent();
-	const Cylinder* getTopParent() const;
+	Thing* getParent() const override { return parent; }
+	void setParent(Thing* thing) override { parent = thing; }
+	Thing* getTopParent();
+	const Thing* getTopParent() const;
 	Tile* getTile() override;
 	const Tile* getTile() const override;
 	bool isRemoved() const override { return !parent || parent->isRemoved(); }
 
 protected:
-	Cylinder* parent = nullptr;
+	Thing* parent = nullptr;
 
 	uint16_t id; // the same id as in ItemType
 

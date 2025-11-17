@@ -344,11 +344,11 @@ public:
 	bool unregisterCreatureEvent(const std::string& name);
 
 	bool hasParent() const override { return getParent(); }
-	Cylinder* getParent() const override final { return tile; }
-	void setParent(Cylinder* cylinder) override final
+	Thing* getParent() const override final { return tile; }
+	void setParent(Thing* thing) override final
 	{
-		tile = static_cast<Tile*>(cylinder);
-		position = tile->getPosition();
+		tile = thing->getTile();
+		position = thing->getTile()->getPosition();
 	}
 
 	const Position& getPosition() const override final { return position; }

@@ -31,23 +31,21 @@ ReturnValue Inbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flag
 	return RETURNVALUE_NOERROR;
 }
 
-void Inbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
+void Inbox::postAddNotification(Thing* thing, const Thing* oldParent, int32_t index, ReceiverLink_t)
 {
-	Cylinder* parent = getParent();
-	if (parent) {
+	if (const auto parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
-void Inbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
+void Inbox::postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index, ReceiverLink_t)
 {
-	Cylinder* parent = getParent();
-	if (parent) {
+	if (const auto parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
 
-Cylinder* Inbox::getParent() const
+Thing* Inbox::getParent() const
 {
 	if (parent) {
 		return parent->getParent();

@@ -112,7 +112,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 	return true;
 }
 
-bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
+bool IOMapSerialize::loadItem(PropStream& propStream, Thing* parent)
 {
 	uint16_t id;
 	if (!propStream.read<uint16_t>(id)) {

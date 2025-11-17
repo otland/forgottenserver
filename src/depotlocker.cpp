@@ -20,19 +20,14 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-ReturnValue DepotLocker::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature*) const
-{
-	return RETURNVALUE_NOTENOUGHROOM;
-}
-
-void DepotLocker::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
+void DepotLocker::postAddNotification(Thing* thing, const Thing* oldParent, int32_t index, ReceiverLink_t)
 {
 	if (parent) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
-void DepotLocker::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
+void DepotLocker::postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index, ReceiverLink_t)
 {
 	if (parent) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
