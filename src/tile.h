@@ -135,11 +135,14 @@ public:
 	virtual const CreatureVector* getCreatures() const = 0;
 	virtual CreatureVector* makeCreatures() = 0;
 
-	virtual HouseTile* getHouseTile() { return nullptr; }
-	virtual const HouseTile* getHouseTile() const { return nullptr; }
+	Tile* getTile() override final { return this; }
+	const Tile* getTile() const override final { return this; }
 
 	int32_t getThrowRange() const override final { return 0; }
 	bool isPushable() const override final { return false; }
+
+	virtual HouseTile* getHouseTile() { return nullptr; }
+	virtual const HouseTile* getHouseTile() const { return nullptr; }
 
 	MagicField* getFieldItem() const;
 	Teleport* getTeleportItem() const;
