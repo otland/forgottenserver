@@ -7166,6 +7166,8 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 			case LuaData_Tile:
 				toThing = tfs::lua::getUserdata<Tile>(L, 2);
 				break;
+			default:
+				break;
 		}
 	} else {
 		toThing = g_game.map.getTile(tfs::lua::getPosition(L, 2));
