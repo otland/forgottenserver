@@ -79,8 +79,7 @@ public:
 	 * set blocking items/container limits is ignored \param actor the creature
 	 * trying to add the thing \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                             Creature* actor = nullptr) const
+	virtual ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -94,8 +93,7 @@ public:
 	 * that the thing can accept \param flags optional flags to modify the
 	 * default behaviour \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-	                                  uint32_t flags) const
+	virtual ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -107,7 +105,7 @@ public:
 	 * \param flags optional flags to modify the default behaviour
 	 * \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* = nullptr) const
+	virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t, Creature* = nullptr) const
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -121,23 +119,20 @@ public:
 	 * flags to modify the default behaviour this method can modify the flags
 	 * \returns Thing returns the destination thing
 	 */
-	virtual Thing* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
-	{
-		return nullptr;
-	}
+	virtual Thing* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) { return nullptr; }
 
 	/**
 	 * Add the object to the thing
 	 * \param thing is the object to add
 	 */
-	virtual void addThing(Thing* thing) {}
+	virtual void addThing(Thing*) {}
 
 	/**
 	 * Add the object to the thing
 	 * \param index points to the destination index (inventory slot/container
 	 * position) \param thing is the object to add
 	 */
-	virtual void addThing(int32_t index, Thing* thing) {}
+	virtual void addThing(int32_t, Thing*) {}
 
 	/**
 	 * Update the item count or type for an object
@@ -145,21 +140,21 @@ public:
 	 * \param itemId is the new item id
 	 * \param count is the new count value
 	 */
-	virtual void updateThing(Thing* thing, uint16_t itemId, uint32_t count) {}
+	virtual void updateThing(Thing*, uint16_t, uint32_t) {}
 
 	/**
 	 * Replace an object with a new
 	 * \param index is the position to change (inventory slot/container
 	 * position) \param thing is the object to update
 	 */
-	virtual void replaceThing(uint32_t index, Thing* thing) {}
+	virtual void replaceThing(uint32_t, Thing*) {}
 
 	/**
 	 * Remove an object
 	 * \param thing is the object to delete
 	 * \param count is the new count value
 	 */
-	virtual void removeThing(Thing* thing, uint32_t count) {}
+	virtual void removeThing(Thing*, uint32_t) {}
 
 	/**
 	 * Is sent after an operation (move/add) to update internal values
@@ -167,9 +162,7 @@ public:
 	 * \param index is the objects new index value
 	 * \param link holds the relation the object has to the thing
 	 */
-	virtual void postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
-	                                 ReceiverLink_t link = LINK_OWNER)
-	{}
+	virtual void postAddNotification(Thing*, const Thing*, int32_t, ReceiverLink_t = LINK_OWNER) {}
 
 	/**
 	 * Is sent after an operation (move/remove) to update internal values
@@ -177,16 +170,14 @@ public:
 	 * \param index is the previous index of the removed object
 	 * \param link holds the relation the object has to the thing
 	 */
-	virtual void postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
-	                                    ReceiverLink_t link = LINK_OWNER)
-	{}
+	virtual void postRemoveNotification(Thing*, const Thing*, int32_t, ReceiverLink_t = LINK_OWNER) {}
 
 	/**
 	 * Gets the index of an object
 	 * \param thing the object to get the index value from
 	 * \returns the index of the object, returns -1 if not found
 	 */
-	virtual int32_t getThingIndex(const Thing* thing) const { return -1; }
+	virtual int32_t getThingIndex(const Thing*) const { return -1; }
 
 	/**
 	 * Returns the first index
@@ -204,7 +195,7 @@ public:
 	 * Gets the object based on index
 	 * \returns the object, returns nullptr if not found
 	 */
-	virtual Thing* getThing(size_t index) const { return nullptr; }
+	virtual Thing* getThing(size_t) const { return nullptr; }
 
 	/**
 	 * Get the amount of items of a certain type
@@ -213,7 +204,7 @@ public:
 	 * charges/fluidtype, -1 means not used \returns the amount of items of the
 	 * asked item type
 	 */
-	virtual uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const { return 0; }
+	virtual uint32_t getItemTypeCount(uint16_t, int32_t = -1) const { return 0; }
 
 	/**
 	 * Get the amount of items of a all types
@@ -229,13 +220,13 @@ public:
 	 * Removes an object from the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 */
-	virtual void internalRemoveThing(Thing* thing) {}
+	virtual void internalRemoveThing(Thing*) {}
 
 	/**
 	 * Adds an object to the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 */
-	virtual void internalAddThing(Thing* thing) {}
+	virtual void internalAddThing(Thing*) {}
 
 	/**
 	 * Adds an object to the thing without sending to the client(s)
@@ -243,7 +234,7 @@ public:
 	 * \param index points to the destination index (inventory slot/container
 	 * position)
 	 */
-	virtual void internalAddThing(uint32_t index, Thing* thing) {}
+	virtual void internalAddThing(uint32_t, Thing*) {}
 
 	virtual void startDecaying() {}
 };
