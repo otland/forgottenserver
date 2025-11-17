@@ -24,8 +24,7 @@ public:
 	DepotLocker* getDepotLocker() override { return this; }
 	const DepotLocker* getDepotLocker() const override { return this; }
 
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override
+	ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override
 	{
 		return RETURNVALUE_NOTENOUGHROOM;
 	}

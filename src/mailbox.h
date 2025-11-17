@@ -21,10 +21,7 @@ public:
 	                     Creature* actor = nullptr) const override;
 	ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 	                          uint32_t flags) const override;
-	Thing* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override
-	{
-		return this;
-	}
+	Thing* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override { return this; }
 
 	void addThing(Thing* thing) override { return addThing(0, thing); }
 	void addThing(int32_t index, Thing* thing) override;

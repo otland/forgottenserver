@@ -23,15 +23,11 @@ public:
 	const Position& getDestPos() const { return destPos; }
 	void setDestPos(const Position& pos) { destPos = pos; }
 
-	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
-	                        Creature* actor = nullptr) const override
+	ReturnValue queryRemove(const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override
 	{
 		return RETURNVALUE_NOERROR;
 	}
-	Thing* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override
-	{
-		return this;
-	}
+	Thing* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override { return this; }
 
 	void addThing(Thing* thing) override { return addThing(0, thing); }
 	void addThing(int32_t index, Thing* thing) override;
