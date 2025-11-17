@@ -57,11 +57,19 @@ jobs:
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
 
+      - name: Cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg_cache
+          key: vcpkg-${{ matrix.os }}-${{ matrix.luajit }}-${{ hashFiles('vcpkg.json', 'CMakeLists.txt', '**/CMakeLists.txt', 'CMakePresets.json') }}
+
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
+        env:
+          VCPKG_BINARY_SOURCES: clear;files,${{ github.workspace }}/vcpkg_cache,readwrite
         with:
           buildPreset: vcpkg
           buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
