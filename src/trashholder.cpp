@@ -9,7 +9,6 @@
 
 extern Game g_game;
 
-
 ReturnValue TrashHolder::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
 	maxQueryCount = std::max<uint32_t>(1, count);
