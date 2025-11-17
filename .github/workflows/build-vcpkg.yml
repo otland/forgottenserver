@@ -57,8 +57,16 @@ jobs:
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
 
+      - name: Cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg_cache
+          key: vcpkg-${{ matrix.os }}-${{ matrix.luajit }}-${{ hashFiles('vcpkg.json', 'CMakeLists.txt', '**/CMakeLists.txt', 'CMakePresets.json') }}
+
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
+        with:
+          doNotCache: false
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
@@ -86,7 +94,7 @@ jobs:
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs
+          path: ${{ github.workspace }}/build/${{ matrix.buildtype }}/tfs
 
       - name: Upload artifact binary (exe)
         uses: actions/upload-artifact@v4
@@ -94,8 +102,8 @@ jobs:
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: |
-            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
-            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/*.dll
+            ${{ github.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
+            ${{ github.workspace }}/build/${{ matrix.buildtype }}/*.dll
 
       - name: Prepare datapack contents
         run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
