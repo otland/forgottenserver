@@ -134,6 +134,9 @@ public:
 	virtual const CreatureVector* getCreatures() const = 0;
 	virtual CreatureVector* makeCreatures() = 0;
 
+	Tile* getTile() override final { return this; }
+	const Tile* getTile() const override final { return this; }
+
 	int32_t getThrowRange() const override final { return 0; }
 	bool isPushable() const override final { return false; }
 
