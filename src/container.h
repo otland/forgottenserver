@@ -132,7 +132,6 @@ private:
 	void onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem);
 	void onRemoveContainerItem(uint32_t index, Item* item);
 
-	Container* getParentContainer();
 	void updateItemWeight(int32_t diff);
 
 	friend class ContainerIterator;
