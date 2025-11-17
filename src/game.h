@@ -213,8 +213,8 @@ public:
 	ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
 	ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
 
-	ReturnValue internalMoveItem(Thing* fromThing, Thing* toThing, int32_t index, Item* item,
-	                             uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr,
+	ReturnValue internalMoveItem(Thing* fromThing, Thing* toThing, int32_t index, Item* item, uint32_t count,
+	                             Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr,
 	                             Item* tradeItem = nullptr, const Position* fromPos = nullptr,
 	                             const Position* toPos = nullptr);
 
