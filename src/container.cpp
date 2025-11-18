@@ -462,17 +462,14 @@ Thing* Container::queryDestination(int32_t& index, const Thing& thing, Item** de
 	}
 
 	if (index != INDEX_WHEREEVER) {
-		Item* itemFromIndex = getItemByIndex(index);
-		if (itemFromIndex) {
-			*destItem = itemFromIndex;
-		}
-
-		if (*destItem) {
-			if (const auto receiver = (*destItem)->getReceiver()) {
+		if (const auto itemFromIndex = getItemByIndex(index)) {
+			if (const auto receiver = itemFromIndex->getReceiver()) {
 				index = INDEX_WHEREEVER;
 				*destItem = nullptr;
 				return receiver;
 			}
+
+			*destItem = itemFromIndex;
 		}
 	}
 
