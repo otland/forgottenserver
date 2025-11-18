@@ -348,7 +348,7 @@ public:
 	void setParent(Thing* thing) override final
 	{
 		tile = thing->getTile();
-		position = thing->getTile()->getPosition();
+		position = tile->getPosition();
 	}
 
 	const Position& getPosition() const override final { return position; }
