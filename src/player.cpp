@@ -2864,7 +2864,7 @@ Thing* Player::queryDestination(int32_t& index, const Thing& thing, Item** destI
 	}
 
 	const auto destThing = getThing(index);
-	if (!destItem) {
+	if (!destThing) {
 		return this;
 	}
 
