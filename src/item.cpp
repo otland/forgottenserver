@@ -293,28 +293,28 @@ const Thing* Item::getTopParent() const
 
 Tile* Item::getTile()
 {
-	auto parent = getTopParent();
-	if (!parent) {
+	auto topParent = getTopParent();
+	if (!topParent) {
 		return nullptr;
 	}
 
-	if (parent->hasParent()) {
-		parent = parent->getParent();
+	if (auto parent = topParent->getParent()) {
+		topParent = parent;
 	}
-	return parent->getTile();
+	return topParent->getTile();
 }
 
 const Tile* Item::getTile() const
 {
-	auto parent = getTopParent();
-	if (!parent) {
+	auto topParent = getTopParent();
+	if (!topParent) {
 		return nullptr;
 	}
 
-	if (parent->hasParent()) {
-		parent = parent->getParent();
+	if (auto parent = topParent->getParent()) {
+		topParent = parent;
 	}
-	return parent->getTile();
+	return topParent->getTile();
 }
 
 uint16_t Item::getSubType() const
