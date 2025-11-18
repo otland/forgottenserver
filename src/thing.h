@@ -235,8 +235,6 @@ public:
 	 * position)
 	 */
 	virtual void internalAddThing(uint32_t, Thing*) {}
-
-	virtual void startDecaying() {}
 };
 
 #endif // FS_THING_H
