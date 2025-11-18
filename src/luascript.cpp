@@ -7148,7 +7148,7 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	}
 
 	Item* item = *itemPtr;
-	if (!item || item->isRemoved()) {
+	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
