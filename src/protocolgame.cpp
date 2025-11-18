@@ -2019,8 +2019,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	} else {
 		// Large shop, it's better to get a cached map of all item counts and use it We need a temporary map since the
 		// finished map should only contain items available in the shop
-		std::map<uint32_t, uint32_t> tempSaleMap;
-		player->getAllItemTypeCount(tempSaleMap);
+		const auto typeCounts = player->getItemTypeCounts();
 
 		// We must still check manually for the special items that require subtype matches (That is, fluids such as
 		// potions etc., actually these items are very few since health potions now use their own ID)
@@ -2049,8 +2048,8 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 					saleMap[shopInfo.itemId] = count;
 				}
 			} else {
-				std::map<uint32_t, uint32_t>::const_iterator findIt = tempSaleMap.find(shopInfo.itemId);
-				if (findIt != tempSaleMap.end() && findIt->second > 0) {
+				std::map<uint32_t, uint32_t>::const_iterator findIt = typeCounts.find(shopInfo.itemId);
+				if (findIt != typeCounts.end() && findIt->second > 0) {
 					saleMap[shopInfo.itemId] = findIt->second;
 				}
 			}
@@ -2921,17 +2920,16 @@ void ProtocolGame::sendItems()
 	msg.addByte(0xF5);
 
 	// find all items carried by character (itemId, amount)
-	std::map<uint32_t, uint32_t> inventory;
-	player->getAllItemTypeCount(inventory);
+	const auto typeCounts = player->getItemTypeCounts();
 
-	msg.add<uint16_t>(inventory.size() + 11);
+	msg.add<uint16_t>(typeCounts.size() + 11);
 	for (uint16_t i = 1; i <= 11; i++) {
 		msg.add<uint16_t>(i); // slotId
 		msg.addByte(0);       // always 0
 		msg.add<uint16_t>(1); // always 1
 	}
 
-	for (const auto& item : inventory) {
+	for (const auto& item : typeCounts) {
 		msg.add<uint16_t>(Item::items[item.first].clientId); // item clientId
 		msg.addByte(0);                                      // always 0
 		msg.add<uint16_t>(item.second);                      // count
