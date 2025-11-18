@@ -298,7 +298,7 @@ Tile* Item::getTile()
 		return nullptr;
 	}
 
-	if (auto parent = topParent->getParent()) {
+	if (const auto parent = topParent->getParent()) {
 		topParent = parent;
 	}
 	return topParent->getTile();
@@ -311,7 +311,7 @@ const Tile* Item::getTile() const
 		return nullptr;
 	}
 
-	if (auto parent = topParent->getParent()) {
+	if (const auto parent = topParent->getParent()) {
 		topParent = parent;
 	}
 	return topParent->getTile();
