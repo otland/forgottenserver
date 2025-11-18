@@ -2753,9 +2753,9 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 
 Thing* Player::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
 {
-	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
-		*destItem = nullptr;
+	*destItem = nullptr;
 
+	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
 		const Item* item = thing.getItem();
 		if (!item) {
 			return this;
@@ -2863,20 +2863,24 @@ Thing* Player::queryDestination(int32_t& index, const Thing& thing, Item** destI
 		return this;
 	}
 
-	Thing* destThing = getThing(index);
-	if (destThing) {
-		*destItem = destThing->getItem();
+	const auto destThing = getThing(index);
+	if (!destItem) {
+		return this;
 	}
 
-	if (*destItem) {
-		if (const auto receiver = destThing->getReceiver()) {
-			index = INDEX_WHEREEVER;
-			*destItem = nullptr;
-			return receiver;
-		}
+	const auto item = destThing->getItem();
+	if (!item) {
+		return this;
 	}
 
-	return this;
+	const auto receiver = item->getReceiver();
+	if (!receiver) {
+		*destItem = item;
+		return this;
+	}
+
+	index = INDEX_WHEREEVER;
+	return receiver;
 }
 
 void Player::addThing(int32_t index, Thing* thing)
