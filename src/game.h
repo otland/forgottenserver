@@ -229,7 +229,7 @@ public:
 
 	/**
 	 * Find an item of a certain type
-	 * \param thing to search the item
+	 * \param fromThing to search the item
 	 * \param itemId is the item to remove
 	 * \param subType is the extra type an item can have such as charges/fluidtype, default is -1
 	 * meaning it's not used
@@ -240,7 +240,7 @@ public:
 
 	/**
 	 * Remove/Add item(s) with a monetary value
-	 * \param thing to remove the money from
+	 * \param fromThing to remove the money from
 	 * \param money is the amount to remove
 	 * \param flags optional flags to modify the default behavior
 	 * \returns true if the removal was successful
