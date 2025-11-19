@@ -313,21 +313,21 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		}
 	}
 
-	if (const auto topParent = getTopParent()) {
-		if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-			if (const auto tile = topParent->getTile()) {
-				if (const auto houseTile = tile->getHouseTile()) {
-					if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-						return RETURNVALUE_PLAYERISNOTINVITED;
-					}
+	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+		const auto topParent = getTopParent();
+		if (const auto tile = topParent->getTile()) {
+			if (const auto houseTile = tile->getHouseTile()) {
+				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+					return RETURNVALUE_PLAYERISNOTINVITED;
 				}
 			}
+		}
 
-			if (topParent != this) {
-				return topParent->queryAdd(INDEX_WHEREEVER, *item, count, flags | FLAG_CHILDISOWNER, actor);
-			}
+		if (topParent != this) {
+			return topParent->queryAdd(INDEX_WHEREEVER, *item, count, flags | FLAG_CHILDISOWNER, actor);
 		}
 	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -405,12 +405,11 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	}
 
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const auto topParent = getTopParent()) {
-			if (const auto tile = topParent->getTile()) {
-				if (const auto houseTile = tile->getHouseTile()) {
-					if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-						return RETURNVALUE_PLAYERISNOTINVITED;
-					}
+		const auto topParent = getTopParent();
+		if (const auto tile = topParent->getTile()) {
+			if (const auto houseTile = tile->getHouseTile()) {
+				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+					return RETURNVALUE_PLAYERISNOTINVITED;
 				}
 			}
 		}
