@@ -25,7 +25,7 @@ public:
 	                            ReceiverLink_t link = LINK_OWNER) override;
 
 	bool canRemove() const override { return false; }
-	Cylinder* getParent() const override;
+	Thing* getParent() const override;
 
 private:
 	uint32_t maxDepotItems = 0;
