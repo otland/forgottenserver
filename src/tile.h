@@ -10,6 +10,7 @@
 
 class BedItem;
 class Creature;
+class HouseTile;
 class MagicField;
 class Mailbox;
 class SpectatorVec;
@@ -139,6 +140,9 @@ public:
 
 	int32_t getThrowRange() const override final { return 0; }
 	bool isPushable() const override final { return false; }
+
+	virtual HouseTile* getHouseTile() { return nullptr; }
+	virtual const HouseTile* getHouseTile() const { return nullptr; }
 
 	MagicField* getFieldItem() const;
 	Teleport* getTeleportItem() const;

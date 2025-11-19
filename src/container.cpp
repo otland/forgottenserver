@@ -314,9 +314,11 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 
 	const Cylinder* const topParent = getTopParent();
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-				return RETURNVALUE_PLAYERISNOTINVITED;
+		if (const auto tile = topParent->getTile()) {
+			if (const auto houseTile = tile->getHouseTile()) {
+				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+					return RETURNVALUE_PLAYERISNOTINVITED;
+				}
 			}
 		}
 	}
@@ -402,9 +404,11 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		const Cylinder* const topParent = getTopParent();
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-				return RETURNVALUE_PLAYERISNOTINVITED;
+		if (const auto tile = topParent->getTile()) {
+			if (const auto houseTile = tile->getHouseTile()) {
+				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+					return RETURNVALUE_PLAYERISNOTINVITED;
+				}
 			}
 		}
 	}
