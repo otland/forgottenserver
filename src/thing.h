@@ -21,14 +21,10 @@ public:
 	Thing(const Thing&) = delete;
 	Thing& operator=(const Thing&) = delete;
 
-	virtual bool hasParent() const { return false; }
-	virtual Cylinder* getParent() const { return nullptr; }
-	virtual Cylinder* getRealParent() const { return getParent(); }
-
-	virtual void setParent(Cylinder*)
-	{
-		//
-	}
+	bool hasParent() const { return getParent(); }
+	virtual Cylinder* getParent() const { return parent; }
+	Cylinder* getRealParent() const { return parent; }
+	virtual void setParent(Cylinder* cylinder) { parent = cylinder; }
 
 	virtual const Position& getPosition() const;
 	virtual int32_t getThrowRange() const = 0;
@@ -42,6 +38,9 @@ public:
 	virtual const Creature* getCreature() const { return nullptr; }
 
 	virtual bool isRemoved() const { return true; }
+
+private:
+	Cylinder* parent = nullptr;
 };
 
 #endif // FS_THING_H

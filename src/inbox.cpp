@@ -49,8 +49,6 @@ void Inbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int3
 
 Cylinder* Inbox::getParent() const
 {
-	if (parent) {
-		return parent->getParent();
-	}
-	return nullptr;
+	const auto parent = Container::getParent();
+	return parent ? parent->getParent() : nullptr;
 }

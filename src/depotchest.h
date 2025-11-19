@@ -30,9 +30,7 @@ public:
 	bool canRemove() const override { return false; }
 
 	// Thing implementations
-	bool hasParent() const override { return getParent(); }
 	Cylinder* getParent() const override;
-	Cylinder* getRealParent() const override { return parent; }
 
 private:
 	uint32_t maxDepotItems = 0;

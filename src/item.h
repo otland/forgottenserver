@@ -924,18 +924,13 @@ public:
 		}
 	}
 
-	bool hasParent() const override { return getParent(); }
-	Cylinder* getParent() const override { return parent; }
-	void setParent(Cylinder* cylinder) override { parent = cylinder; }
 	Cylinder* getTopParent();
 	const Cylinder* getTopParent() const;
 	Tile* getTile() override;
 	const Tile* getTile() const override;
-	bool isRemoved() const override { return !parent || parent->isRemoved(); }
+	bool isRemoved() const override { return !getParent() || getParent()->isRemoved(); }
 
 protected:
-	Cylinder* parent = nullptr;
-
 	uint16_t id; // the same id as in ItemType
 
 private:

@@ -38,14 +38,14 @@ ReturnValue StoreInbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t
 
 void StoreInbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
-	if (parent) {
+	if (const auto parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 	}
 }
 
 void StoreInbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	if (parent) {
+	if (const auto parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 	}
 }
