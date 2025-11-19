@@ -103,6 +103,7 @@ public:
 
 	virtual const std::string& getName() const = 0;
 	virtual const std::string& getNameDescription() const = 0;
+	virtual std::string getDescription(int32_t lookDistance) const = 0;
 
 	virtual CreatureType_t getType() const = 0;
 
@@ -310,7 +311,6 @@ public:
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
-	virtual void onAddTileItem(const Tile*, const Position&) {}
 	virtual void onUpdateTileItem(const Tile*, const Position&, const Item*, const ItemType&, const Item*,
 	                              const ItemType&)
 	{}

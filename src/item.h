@@ -512,6 +512,8 @@ public:
 
 	Item* getItem() override final { return this; }
 	const Item* getItem() const override final { return this; }
+	virtual Container* getContainer() { return nullptr; }
+	virtual const Container* getContainer() const { return nullptr; }
 	virtual Teleport* getTeleport() { return nullptr; }
 	virtual const Teleport* getTeleport() const { return nullptr; }
 	virtual TrashHolder* getTrashHolder() { return nullptr; }
@@ -725,7 +727,6 @@ public:
 	                                      bool addArticle = true);
 	static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
-	std::string getDescription(int32_t lookDistance) const override final;
 	std::string getNameDescription() const;
 	std::string getWeightDescription() const;
 

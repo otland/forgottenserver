@@ -118,8 +118,6 @@ uint32_t Tile::getDownItemCount() const
 	return 0;
 }
 
-std::string Tile::getDescription(int32_t) const { return "You dont know why, but you cant see anything!"; }
-
 Teleport* Tile::getTeleportItem() const
 {
 	if (!hasFlag(TILESTATE_TELEPORT)) {
@@ -371,11 +369,6 @@ void Tile::onAddTileItem(Item* item)
 		}
 	}
 
-	// event methods
-	for (Creature* spectator : spectators) {
-		spectator->onAddTileItem(this, cylinderMapPos);
-	}
-
 	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) &&
 	    item->isCleanable()) {
 		if (!dynamic_cast<HouseTile*>(this)) {
@@ -467,17 +460,6 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 		if (!ret) {
 			g_game.removeTileToClean(this);
 		}
-	}
-}
-
-void Tile::onUpdateTile(const SpectatorVec& spectators)
-{
-	const Position& cylinderMapPos = getPosition();
-
-	// send to clients
-	for (Creature* spectator : spectators) {
-		assert(dynamic_cast<Player*>(spectator) != nullptr);
-		static_cast<Player*>(spectator)->sendUpdateTile(this, cylinderMapPos);
 	}
 }
 
@@ -906,7 +888,7 @@ void Tile::addThing(int32_t, Thing* thing)
 			if (items) {
 				for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 					// Note: this is different from internalAddThing
-					if (itemType.alwaysOnTopOrder <= Item::items[(*it)->getID()].alwaysOnTopOrder) {
+					if (itemType.alwaysOnTopOrder < Item::items[(*it)->getID()].alwaysOnTopOrder) {
 						items->insert(it, item);
 						isInserted = true;
 						break;
@@ -1398,15 +1380,20 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 
 void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, getPosition(), true, true);
+	const auto thingCount = getThingCount();
 
-	if (getThingCount() > 8) {
-		onUpdateTile(spectators);
-	}
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, tilePos, true, true);
 
 	for (Creature* spectator : spectators) {
 		assert(dynamic_cast<Player*>(spectator) != nullptr);
+
+		if (thingCount > TILE_UPDATE_THRESHOLD) {
+			// If the tile contains more than the defined threshold of things,
+			// send a full tile update to the player to keep the client’s view in sync
+			static_cast<Player*>(spectator)->sendUpdateTile(this, tilePos);
+		}
+
 		static_cast<Player*>(spectator)->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 	}
 
@@ -1460,7 +1447,7 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 		if (itemType.alwaysOnTop) {
 			bool isInserted = false;
 			for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
-				if (Item::items[(*it)->getID()].alwaysOnTopOrder > itemType.alwaysOnTopOrder) {
+				if (Item::items[(*it)->getID()].alwaysOnTopOrder >= itemType.alwaysOnTopOrder) {
 					items->insert(it, item);
 					isInserted = true;
 					break;

@@ -113,6 +113,8 @@ private:
 	uint16_t downItemCount = 0;
 };
 
+inline constexpr size_t TILE_UPDATE_THRESHOLD = 8;
+
 class Tile : public Cylinder
 {
 public:
@@ -131,6 +133,9 @@ public:
 	virtual CreatureVector* getCreatures() = 0;
 	virtual const CreatureVector* getCreatures() const = 0;
 	virtual CreatureVector* makeCreatures() = 0;
+
+	Tile* getTile() override final { return this; }
+	const Tile* getTile() const override final { return this; }
 
 	int32_t getThrowRange() const override final { return 0; }
 	bool isPushable() const override final { return false; }
@@ -188,8 +193,6 @@ public:
 
 	bool hasHeight(uint32_t n) const;
 
-	std::string getDescription(int32_t lookDistance) const override final;
-
 	int32_t getClientIndexOfCreature(const Player* player, const Creature* creature) const;
 	int32_t getStackposOfItem(const Player* player, const Item* item) const;
 
@@ -240,7 +243,6 @@ private:
 	void onAddTileItem(Item* item);
 	void onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType);
 	void onRemoveTileItem(const SpectatorVec& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item);
-	void onUpdateTile(const SpectatorVec& spectators);
 
 	void setTileFlags(const Item* item);
 	void resetTileFlags(const Item* item);
