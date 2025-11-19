@@ -3,6 +3,7 @@
 #include "cacheinfo.h"
 #include "error.h"
 #include "login.h"
+#include "serverinfo.h"
 
 #include <boost/json/monotonic_resource.hpp>
 #include <boost/json/parse.hpp>
@@ -22,6 +23,9 @@ auto router(std::string_view type, const json::object& body, std::string_view ip
 	}
 	if (type == "login") {
 		return handle_login(body, ip);
+	}
+	if (type == "serverinfo") {
+		return handle_serverinfo(body, ip);
 	}
 
 	return make_error_response();

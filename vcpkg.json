@@ -55,10 +55,5 @@
       ]
     }
   },
-  "default-features": [
-    "lua",
-    "http",
-    "libmariadb"
-  ],
   "builtin-baseline": "0cf34c184ce990471435b5b9c92edcf7424930b1"
 }
