@@ -59,8 +59,6 @@ void DepotChest::postRemoveNotification(Thing* thing, const Thing* newParent, in
 
 Thing* DepotChest::getParent() const
 {
-	if (parent) {
-		return parent->getParent();
-	}
-	return nullptr;
+	const auto parent = Container::getParent();
+	return parent ? parent->getParent() : nullptr;
 }

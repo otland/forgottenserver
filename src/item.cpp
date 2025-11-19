@@ -330,7 +330,18 @@ uint16_t Item::getSubType() const
 	return count;
 }
 
-const Player* Item::getHoldingPlayer() const { return dynamic_cast<const Player*>(getTopParent()); }
+const Player* Item::getHoldingPlayer() const
+{
+	const auto topParent = getTopParent();
+	if (!topParent) {
+		return nullptr;
+	}
+
+	if (const auto creature = topParent->getCreature()) {
+		return creature->getPlayer();
+	}
+	return nullptr;
+}
 
 void Item::setSubType(uint16_t n)
 {

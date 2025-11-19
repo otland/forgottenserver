@@ -22,14 +22,14 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 void DepotLocker::postAddNotification(Thing* thing, const Thing* oldParent, int32_t index, ReceiverLink_t)
 {
-	if (parent) {
+	if (const auto parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
 void DepotLocker::postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index, ReceiverLink_t)
 {
-	if (parent) {
+	if (const auto parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }

@@ -42,6 +42,7 @@ Container::~Container()
 	if (getID() == ITEM_BROWSEFIELD) {
 		g_game.browseFields.erase(getTile());
 
+		const auto parent = getParent();
 		for (Item* item : itemlist) {
 			item->setParent(parent);
 		}
@@ -65,20 +66,6 @@ Item* Container::clone() const
 	}
 	clone->totalWeight = totalWeight;
 	return clone;
-}
-
-Container* Container::getParentContainer()
-{
-	auto thing = getParent();
-	if (!thing) {
-		return nullptr;
-	}
-
-	auto item = thing->getItem();
-	if (!item) {
-		return nullptr;
-	}
-	return item->getContainer();
 }
 
 std::string Container::getName(bool addArticle /* = false*/) const
@@ -159,8 +146,13 @@ bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, 
 void Container::updateItemWeight(int32_t diff)
 {
 	totalWeight += diff;
-	if (Container* parentContainer = getParentContainer()) {
-		parentContainer->updateItemWeight(diff);
+
+	if (const auto parent = getParent()) {
+		if (const auto item = parent->getItem()) {
+			if (const auto parentContainer = item->getContainer()) {
+				parentContainer->updateItemWeight(diff);
+			}
+		}
 	}
 }
 
@@ -321,9 +313,10 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		}
 	}
 
-	if (const auto topParent = getTopParent()) {
-		if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-			if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
+	const Cylinder* const topParent = getTopParent();
+	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+		if (const auto tile = topParent->getTile()) {
+			if (const auto houseTile = tile->getHouseTile()) {
 				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
 					return RETURNVALUE_PLAYERISNOTINVITED;
 				}
@@ -411,8 +404,9 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	}
 
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const auto topParent = getTopParent()) {
-			if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
+		const Cylinder* const topParent = getTopParent();
+		if (const auto tile = topParent->getTile()) {
+			if (const auto houseTile = tile->getHouseTile()) {
 				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
 					return RETURNVALUE_PLAYERISNOTINVITED;
 				}

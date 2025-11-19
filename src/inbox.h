@@ -23,10 +23,7 @@ public:
 	                            ReceiverLink_t link = LINK_OWNER) override;
 
 	bool canRemove() const override { return false; }
-
-	bool hasParent() const override { return getParent(); }
 	Thing* getParent() const override;
-	Thing* getRealParent() const override { return parent; }
 };
 
 #endif // FS_INBOX_H

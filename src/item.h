@@ -923,18 +923,13 @@ public:
 		}
 	}
 
-	bool hasParent() const override { return getParent(); }
-	Thing* getParent() const override { return parent; }
-	void setParent(Thing* thing) override { parent = thing; }
 	Thing* getTopParent();
 	const Thing* getTopParent() const;
 	Tile* getTile() override;
 	const Tile* getTile() const override;
-	bool isRemoved() const override { return !parent || parent->isRemoved(); }
+	bool isRemoved() const override { return !getParent() || getParent()->isRemoved(); }
 
 protected:
-	Thing* parent = nullptr;
-
 	uint16_t id; // the same id as in ItemType
 
 private:

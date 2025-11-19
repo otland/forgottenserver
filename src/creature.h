@@ -343,7 +343,6 @@ public:
 	bool registerCreatureEvent(const std::string& name);
 	bool unregisterCreatureEvent(const std::string& name);
 
-	bool hasParent() const override { return getParent(); }
 	Thing* getParent() const override final { return tile; }
 	void setParent(Thing* thing) override final
 	{

@@ -47,8 +47,6 @@ void Inbox::postRemoveNotification(Thing* thing, const Thing* newParent, int32_t
 
 Thing* Inbox::getParent() const
 {
-	if (parent) {
-		return parent->getParent();
-	}
-	return nullptr;
+	const auto parent = Container::getParent();
+	return parent ? parent->getParent() : nullptr;
 }
