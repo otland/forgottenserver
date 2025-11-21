@@ -5839,7 +5839,7 @@ int LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 
 int LuaScriptInterface::luaTileAddItem(lua_State* L)
 {
-	// tile:addItem(itemId[, count/subType = 1[, flags = 0]])
+	// tile:addItem(itemId[, count / subType = 1 [, flags = 0]])
 	const auto& tile = tfs::lua::getSharedPtr<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
@@ -5857,22 +5857,64 @@ int LuaScriptInterface::luaTileAddItem(lua_State* L)
 		}
 	}
 
-	uint32_t subType = tfs::lua::getNumber<uint32_t>(L, 3, 1);
+	const ItemType& it = Item::items[itemId];
 
-	const auto& item = Item::CreateItem(itemId, std::min<uint32_t>(subType, ITEM_STACK_SIZE));
-	if (!item) {
+	int32_t itemCount = 1;
+	int32_t subType = 1;
+	uint32_t count = tfs::lua::getNumber<uint32_t>(L, 3, 1);
+
+	if (it.hasSubType()) {
+		if (it.stackable) {
+			itemCount = std::ceil(count / static_cast<float>(ITEM_STACK_SIZE));
+		}
+
+		subType = count;
+	} else {
+		itemCount = std::max<int32_t>(1, count);
+	}
+
+	bool hasTable = itemCount > 1;
+	if (hasTable) {
+		lua_newtable(L);
+	} else if (itemCount == 0) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 4, 0);
 
-	ReturnValue ret = g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags);
-	if (ret == RETURNVALUE_NOERROR) {
-		tfs::lua::pushSharedPtr(L, item);
-		tfs::lua::setItemMetatable(L, -1, item);
-	} else {
-		lua_pushnil(L);
+	for (int32_t i = 1; i <= itemCount; ++i) {
+		int32_t stackCount = std::min<int32_t>(subType, ITEM_STACK_SIZE);
+		const auto& item = Item::CreateItem(itemId, stackCount);
+		if (!item) {
+			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
+			if (!hasTable) {
+				lua_pushnil(L);
+			}
+			return 1;
+		}
+
+		if (it.stackable) {
+			subType -= stackCount;
+		}
+
+		ReturnValue ret = g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags);
+		if (ret != RETURNVALUE_NOERROR) {
+			if (!hasTable) {
+				lua_pushnil(L);
+			}
+			return 1;
+		}
+
+		if (hasTable) {
+			lua_pushnumber(L, i);
+			tfs::lua::pushSharedPtr(L, item);
+			tfs::lua::setItemMetatable(L, -1, item);
+			lua_settable(L, -3);
+		} else {
+			tfs::lua::pushSharedPtr(L, item);
+			tfs::lua::setItemMetatable(L, -1, item);
+		}
 	}
 	return 1;
 }
@@ -7359,7 +7401,7 @@ int LuaScriptInterface::luaContainerHasItem(lua_State* L)
 
 int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 {
-	// container:addItem(itemId[, count/subType = 1[, index = INDEX_WHEREEVER[, flags = 0]]])
+	// container:addItem(itemId[, count / subType = 1 [, index = INDEX_WHEREEVER[, flags = 0]]])
 	const auto& container = tfs::lua::getSharedPtr<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);

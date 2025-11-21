@@ -44,14 +44,10 @@ public:
 	Thing(const Thing&) = delete;
 	Thing& operator=(const Thing&) = delete;
 
-	bool hasParent() const { return getParent() != nullptr; }
+	bool hasParent() const { return !parent.expired(); }
 	virtual std::shared_ptr<Thing> getParent() const { return parent.lock(); }
 	std::shared_ptr<Thing> getRealParent() const { return parent.lock(); }
-
 	virtual void setParent(const std::shared_ptr<Thing>& thing) { parent = thing; }
-
-	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
-	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
 
 	virtual const Position& getPosition() const;
 	virtual int32_t getThrowRange() const { return 0; };
@@ -59,6 +55,8 @@ public:
 
 	virtual std::shared_ptr<Container> getContainer() { return nullptr; }
 	virtual std::shared_ptr<const Container> getContainer() const { return nullptr; }
+	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
+	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
 	virtual std::shared_ptr<Item> getItem() { return nullptr; }
 	virtual std::shared_ptr<const Item> getItem() const { return nullptr; }
 	virtual std::shared_ptr<Creature> getCreature() { return nullptr; }

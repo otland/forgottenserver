@@ -146,6 +146,9 @@ public:
 	virtual const CreatureVector* getCreatures() const = 0;
 	virtual CreatureVector* makeCreatures() = 0;
 
+	int32_t getThrowRange() const override final { return 0; }
+	bool isPushable() const override final { return false; }
+
 	std::shared_ptr<MagicField> getFieldItem() const;
 	std::shared_ptr<Teleport> getTeleportItem() const;
 	std::shared_ptr<TrashHolder> getTrashHolder() const;

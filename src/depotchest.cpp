@@ -57,6 +57,6 @@ void DepotChest::postRemoveNotification(const std::shared_ptr<Thing>& thing,
 
 std::shared_ptr<Thing> DepotChest::getParent() const
 {
-	auto parent = Container::getParent();
+	const auto& parent = Container::getParent();
 	return parent ? parent->getParent() : nullptr;
 }

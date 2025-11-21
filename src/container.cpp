@@ -26,18 +26,10 @@ Container::~Container()
 std::shared_ptr<Item> Container::clone() const
 {
 	const auto clone = std::static_pointer_cast<Container>(Item::clone());
-	if (!clone) {
-		return nullptr;
-	}
-
-	// Clone all items inside this container
 	for (const auto& item : itemList) {
 		clone->addItem(item->clone());
 	}
-
-	// Preserve the total weight of the container
 	clone->totalWeight = totalWeight;
-
 	return clone;
 }
 
