@@ -16,7 +16,6 @@
 #include <boost/asio.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/lockfree/stack.hpp>
-#include <boost/variant.hpp>
 #include <cassert>
 #include <concepts>
 #include <condition_variable>
@@ -35,9 +34,11 @@
 #include <mutex>
 #include <mysql/mysql.h>
 #include <optional>
+#include <print>
 #include <pugixml.hpp>
 #include <queue>
 #include <random>
+#include <ranges>
 #include <set>
 #include <sstream>
 #include <string>

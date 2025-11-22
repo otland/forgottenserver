@@ -9,15 +9,17 @@
 
 DepotLocker::DepotLocker(uint16_t type) : Container(type), depotId(0) {}
 
-Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
+void DepotLocker::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last)
 {
-	if (attr == ATTR_DEPOT_ID) {
-		if (!propStream.read<uint16_t>(depotId)) {
-			return ATTR_READ_ERROR;
-		}
-		return ATTR_READ_CONTINUE;
+	switch (attr) {
+		case ATTR_DEPOT_ID:
+			depotId = OTB::read<uint16_t>(first, last);
+			break;
+
+		default:
+			Item::readAttr(attr, first, last);
+			break;
 	}
-	return Item::readAttr(attr, propStream);
 }
 
 ReturnValue DepotLocker::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature*) const

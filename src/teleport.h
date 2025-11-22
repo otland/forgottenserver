@@ -15,7 +15,7 @@ public:
 	const Teleport* getTeleport() const override { return this; }
 
 	// serialization
-	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
 
 	const Position& getDestPos() const { return destPos; }

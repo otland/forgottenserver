@@ -4,50 +4,105 @@
 #ifndef FS_FILELOADER_H
 #define FS_FILELOADER_H
 
-class PropStream;
-
 namespace OTB {
+
 using MappedFile = boost::iostreams::mapped_file_source;
-using ContentIt = MappedFile::iterator;
-using Identifier = std::array<char, 4>;
+using iterator = MappedFile::iterator;
 
 struct Node
 {
-	using ChildrenVector = std::vector<Node>;
+	std::vector<Node> children = {};
+	iterator propsBegin, propsEnd;
+	char type;
 
-	ChildrenVector children;
-	ContentIt propsBegin;
-	ContentIt propsEnd;
-	uint8_t type;
-	enum NodeChar : uint8_t
-	{
-		ESCAPE = 0xFD,
-		START = 0xFE,
-		END = 0xFF,
-	};
-};
-
-struct LoadError : std::exception
-{
-	const char* what() const noexcept override = 0;
-};
-
-struct InvalidOTBFormat final : LoadError
-{
-	const char* what() const noexcept override { return "Invalid OTBM file format"; }
+	static constexpr char ESCAPE = '\xFD';
+	static constexpr char START = '\xFE';
+	static constexpr char END = '\xFF';
 };
 
 class Loader
 {
-	MappedFile fileContents;
-	Node root;
-	std::vector<char> propBuffer;
-
 public:
-	Loader(const std::string& fileName, const Identifier& acceptedIdentifier);
-	bool getProps(const Node& node, PropStream& props);
-	const Node& parseTree();
+	Loader(MappedFile file, Node root) : file{std::move(file)}, root{std::move(root)} {}
+
+	Loader(Loader&&) = default;
+	Loader& operator=(Loader&&) = default;
+
+	// Delete copy operations to prevent accidental expensive copies
+	Loader(const Loader&) = delete;
+	Loader& operator=(const Loader&) = delete;
+
+	const std::vector<Node>& children() const { return root.children; }
+	auto begin() const { return root.propsBegin; }
+	auto end() const { return root.propsEnd; }
+
+private:
+	MappedFile file;
+	Node root;
 };
+
+Loader load(std::string_view filename, std::string_view acceptedIdentifier);
+
+template <class T>
+[[nodiscard]] T read(auto& first, const auto last)
+{
+	std::array<char, sizeof(T)> buf;
+	auto it = buf.begin();
+
+	auto end = first + sizeof(T);
+	while (first < end) {
+		if (*first == Node::ESCAPE) [[unlikely]] {
+			++first, ++end;
+		}
+		*it++ = *first++;
+	}
+
+	if (first > last) [[unlikely]] {
+		throw std::invalid_argument("Not enough bytes to read.");
+	}
+
+	T out;
+	std::memcpy(reinterpret_cast<char*>(&out), buf.data(), buf.size());
+	return out;
+}
+
+[[nodiscard]] std::string readString(auto& first, const auto last)
+{
+	const auto len = read<uint16_t>(first, last);
+
+	std::string out;
+	out.reserve(len);
+
+	auto end = first + len;
+	while (first < end) {
+		if (*first == Node::ESCAPE) [[unlikely]] {
+			++first, ++end;
+		}
+		out.push_back(*first++);
+	}
+
+	if (first > last) [[unlikely]] {
+		throw std::invalid_argument("Not enough bytes to read as string.");
+	}
+
+	return out;
+}
+
+void skip(auto& first, const auto last, const std::size_t len)
+{
+	auto end = first + len;
+	while (first < end) {
+		if (*first == Node::ESCAPE) [[unlikely]] {
+			++first;
+			++end;
+		}
+		++first;
+	}
+
+	if (first > last) [[unlikely]] {
+		throw std::invalid_argument("Not enough bytes to skip.");
+	}
+}
 
 } // namespace OTB
 
@@ -125,7 +180,7 @@ public:
 		std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
 	}
 
-	void writeString(const std::string& str)
+	void writeString(std::string_view str)
 	{
 		size_t strLength = str.size();
 		if (strLength > std::numeric_limits<uint16_t>::max()) {
