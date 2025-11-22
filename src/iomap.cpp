@@ -396,7 +396,7 @@ MapAttributes loadMap(Map& map, std::filesystem::path fileName)
 
 	auto end = std::chrono::steady_clock::now();
 
-	std::cout << "> Map loading time: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms.\n";
+	std::println("> Map loading time: {:d}ms.", duration_cast<std::chrono::milliseconds>(end - start).count());
 
 	return {
 	    .spawns = fileName.parent_path() / spawns,
