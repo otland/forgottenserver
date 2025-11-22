@@ -12,8 +12,6 @@ class Item;
 class Spawn;
 class Tile;
 
-using CreatureHashSet = std::unordered_set<Creature*>;
-using CreatureList = std::list<Creature*>;
 using MonsterIconHashMap = std::unordered_map<MonsterIcon_t, uint16_t>;
 
 enum TargetSearchType_t
@@ -114,8 +112,8 @@ public:
 	bool searchTarget(TargetSearchType_t searchType = TARGETSEARCH_DEFAULT);
 	bool selectTarget(Creature* creature);
 
-	const CreatureList& getTargetList() const { return targetList; }
-	const CreatureHashSet& getFriendList() const { return friendList; }
+	const auto& getTargetList() const { return targetList; }
+	const auto& getFriendList() const { return friendList; }
 
 	bool isTarget(const Creature* creature) const;
 	bool isFleeing() const
@@ -137,8 +135,8 @@ public:
 	static uint32_t monsterAutoID;
 
 private:
-	CreatureHashSet friendList;
-	CreatureList targetList;
+	boost::container::flat_set<Creature*> friendList;
+	std::deque<Creature*> targetList;
 	MonsterIconHashMap monsterIcons;
 
 	std::string name;

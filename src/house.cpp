@@ -20,7 +20,7 @@ House::House(uint32_t houseId) : id(houseId) {}
 void House::addTile(HouseTile* tile)
 {
 	tile->setFlag(TILESTATE_PROTECTIONZONE);
-	houseTiles.push_back(tile);
+	houseTiles.insert(tile);
 }
 
 void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, Player* player /* = nullptr*/)
@@ -279,7 +279,7 @@ void House::removeDoor(Door* door)
 
 void House::addBed(BedItem* bed)
 {
-	bedsList.push_back(bed);
+	bedsList.insert(bed);
 	bed->setHouse(this);
 }
 
@@ -555,11 +555,30 @@ void Door::onRemoved()
 	}
 }
 
+House* Houses::addHouse(uint32_t id)
+{
+	if (auto it = houseMap.find(id); it != houseMap.end()) {
+		return it->second.get();
+	}
+
+	auto&& [it, _] = houseMap.emplace(id, std::make_unique<House>(id));
+	return it->second.get();
+}
+
+House* Houses::getHouse(uint32_t houseId)
+{
+	auto it = houseMap.find(houseId);
+	if (it == houseMap.end()) {
+		return nullptr;
+	}
+	return it->second.get();
+}
+
 House* Houses::getHouseByPlayerId(uint32_t playerId)
 {
-	for (const auto& it : houseMap) {
-		if (it.second->getOwner() == playerId) {
-			return it.second;
+	for (const auto& house : houseMap | std::views::values) {
+		if (house->getOwner() == playerId) {
+			return house.get();
 		}
 	}
 	return nullptr;
@@ -614,8 +633,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 	}
 
 	time_t currentTime = time(nullptr);
-	for (const auto& it : houseMap) {
-		House* house = it.second;
+	for (const auto& house : houseMap | std::views::values) {
 		if (house->getOwner() == 0) {
 			continue;
 		}

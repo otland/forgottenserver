@@ -146,7 +146,6 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/server.h
 	${CMAKE_CURRENT_LIST_DIR}/signals.h
 	${CMAKE_CURRENT_LIST_DIR}/spawn.h
-	${CMAKE_CURRENT_LIST_DIR}/spectators.h
 	${CMAKE_CURRENT_LIST_DIR}/spells.h
 	${CMAKE_CURRENT_LIST_DIR}/storeinbox.h
 	${CMAKE_CURRENT_LIST_DIR}/talkaction.h
