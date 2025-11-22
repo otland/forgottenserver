@@ -7,6 +7,8 @@
 
 #include "housetile.h"
 
+#include <generator>
+
 /*
         OTBM_ROOTV1
         |
@@ -80,7 +82,6 @@ auto parseMapAttributes(const OTB::Node& mapNode)
 			case OTBM_ATTR_DESCRIPTION: {
 				auto len = OTB::read<uint16_t>(first, mapNode.propsEnd);
 				OTB::skip(first, mapNode.propsEnd, len);
-				// out.description = OTB::readString(first, mapNode.propsEnd);
 				break;
 			}
 
@@ -95,7 +96,7 @@ auto parseMapAttributes(const OTB::Node& mapNode)
 			}
 
 			default:
-				throw std::invalid_argument(fmt::format("Unknown map attribute {:d}\n", attr));
+				throw std::invalid_argument(std::format("Unknown map attribute {:d}\n", attr));
 		}
 	}
 
@@ -129,14 +130,14 @@ Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z)
 	return tile;
 }
 
-void parseTileArea(const OTB::Node& node, Map& map)
+std::generator<Tile*> parseTileArea(const OTB::Node& node, Map& map)
 {
 	auto first = node.propsBegin;
 	auto [base_x, base_y, z] = read_coords(first, node.propsEnd);
 
 	for (const auto& tileNode : node.children) {
 		if (tileNode.type != OTBM_TILE && tileNode.type != OTBM_HOUSETILE) [[unlikely]] {
-			throw std::invalid_argument(fmt::format("Unknown tile node: {:d}.", static_cast<uint16_t>(node.type)));
+			throw std::invalid_argument(std::format("Unknown tile node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
 		auto first = tileNode.propsBegin;
@@ -212,13 +213,13 @@ void parseTileArea(const OTB::Node& node, Map& map)
 
 				default:
 					throw std::invalid_argument(
-					    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Unknown tile attribute.", x, y, z));
+					    std::format("[x:{:d}, y:{:d}, z:{:d}] Unknown tile attribute.", x, y, z));
 			}
 		}
 
 		for (const auto& itemNode : tileNode.children) {
 			if (itemNode.type != OTBM_ITEM) [[unlikely]] {
-				throw std::invalid_argument(fmt::format("Unknown item node: {:d}.", static_cast<uint16_t>(node.type)));
+				throw std::invalid_argument(std::format("Unknown item node: {:d}.", static_cast<uint16_t>(node.type)));
 			}
 
 			auto first = itemNode.propsBegin;
@@ -258,15 +259,15 @@ void parseTileArea(const OTB::Node& node, Map& map)
 
 		tile->setFlag(static_cast<tileflags_t>(tileflags));
 
-		map.setTile(x, y, z, tile);
+		co_yield tile;
 	}
 }
 
-void parseTowns(const OTB::Node& townsNode, Map& map)
+std::generator<Town*> parseTowns(const OTB::Node& townsNode)
 {
 	for (const auto& node : townsNode.children) {
 		if (node.type != OTBM_TOWN) [[unlikely]] {
-			throw std::invalid_argument(fmt::format("Unknown town node: {:d}.", static_cast<uint16_t>(node.type)));
+			throw std::invalid_argument(std::format("Unknown town node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
 		auto first = node.propsBegin;
@@ -274,15 +275,15 @@ void parseTowns(const OTB::Node& townsNode, Map& map)
 		auto townName = OTB::readString(first, node.propsEnd);
 		auto [x, y, z] = read_coords(first, node.propsEnd);
 
-		map.towns.setTown(townId, new Town{.id = townId, .name = std::move(townName), .templePosition = {x, y, z}});
+		co_yield new Town{.id = townId, .name = std::move(townName), .templePosition = {x, y, z}};
 	}
 }
 
-void parseWaypoints(const OTB::Node& waypointsNode, Map& map)
+std::generator<std::pair<std::string, Position>> parseWaypoints(const OTB::Node& waypointsNode)
 {
 	for (const auto& node : waypointsNode.children) {
 		if (node.type != OTBM_WAYPOINT) [[unlikely]] {
-			throw std::invalid_argument(fmt::format("Unknown waypoint node: {:d}.", static_cast<uint16_t>(node.type)));
+			throw std::invalid_argument(std::format("Unknown waypoint node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
 		auto first = node.propsBegin;
@@ -290,7 +291,7 @@ void parseWaypoints(const OTB::Node& waypointsNode, Map& map)
 		auto name = OTB::readString(first, node.propsEnd);
 		auto [x, y, z] = read_coords(first, node.propsEnd);
 
-		map.waypoints[name] = Position{x, y, z};
+		co_yield std::make_pair(std::move(name), Position{x, y, z});
 	}
 }
 
@@ -362,24 +363,31 @@ MapAttributes loadMap(Map& map, std::filesystem::path fileName)
 	for (const auto& node : mapNode.children) {
 		switch (node.type) {
 			case OTBM_TILE_AREA:
-				parseTileArea(node, map);
+				for (auto tile : parseTileArea(node, map)) {
+					auto&& [x, y, z] = tile->getPosition();
+					map.setTile(x, y, z, tile);
+				}
 				break;
 
 			case OTBM_TOWNS:
-				parseTowns(node, map);
+				for (auto town : parseTowns(node)) {
+					map.towns.setTown(town->id, town);
+				}
 				break;
 
 			case OTBM_WAYPOINTS:
 				if (version <= 1) [[unlikely]] {
-					throw std::invalid_argument(fmt::format(
+					throw std::invalid_argument(std::format(
 					    "Waypoints are not supported in OTBM version {:d}, please update your map.", version));
 				}
 
-				parseWaypoints(node, map);
+				for (auto&& [name, position] : parseWaypoints(node)) {
+					map.waypoints[std::move(name)] = position;
+				}
 				break;
 
 			default:
-				throw std::invalid_argument(fmt::format("Unknown map node: {:d}.", static_cast<uint16_t>(node.type)));
+				throw std::invalid_argument(std::format("Unknown map node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 	}
 
