@@ -141,9 +141,9 @@ std::generator<Tile*> parseTileArea(const OTB::Node& node, Map& map)
 			throw std::invalid_argument(std::format("Unknown tile node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
-		auto first = tileNode.propsBegin;
-		auto x = base_x + OTB::read<uint8_t>(first, tileNode.propsEnd);
-		auto y = base_y + OTB::read<uint8_t>(first, tileNode.propsEnd);
+		auto it = tileNode.propsBegin;
+		auto x = base_x + OTB::read<uint8_t>(it, tileNode.propsEnd);
+		auto y = base_y + OTB::read<uint8_t>(it, tileNode.propsEnd);
 
 		bool isHouseTile = false;
 		House* house = nullptr;
@@ -152,7 +152,7 @@ std::generator<Tile*> parseTileArea(const OTB::Node& node, Map& map)
 		uint32_t tileflags = TILESTATE_NONE;
 
 		if (tileNode.type == OTBM_HOUSETILE) {
-			auto house_id = OTB::read<uint32_t>(first, tileNode.propsEnd);
+			auto house_id = OTB::read<uint32_t>(it, tileNode.propsEnd);
 
 			house = map.houses.addHouse(house_id);
 
@@ -163,10 +163,10 @@ std::generator<Tile*> parseTileArea(const OTB::Node& node, Map& map)
 		}
 
 		// read tile attributes
-		while (first != tileNode.propsEnd) {
-			switch (OTB::read<char>(first, tileNode.propsEnd)) {
+		while (it != tileNode.propsEnd) {
+			switch (OTB::read<char>(it, tileNode.propsEnd)) {
 				case OTBM_ATTR_TILE_FLAGS: {
-					auto flags = OTB::read<uint32_t>(first, tileNode.propsEnd);
+					auto flags = OTB::read<uint32_t>(it, tileNode.propsEnd);
 
 					if ((flags & OTBM_TILEFLAG_PROTECTIONZONE) != 0) {
 						tileflags |= TILESTATE_PROTECTIONZONE;
@@ -183,12 +183,13 @@ std::generator<Tile*> parseTileArea(const OTB::Node& node, Map& map)
 				}
 
 				case OTBM_ATTR_ITEM: {
-					auto item = Item::CreateItem(Item::getPersistentId(OTB::read<uint16_t>(first, tileNode.propsEnd)));
+					auto item = Item::CreateItem(Item::getPersistentId(OTB::read<uint16_t>(it, tileNode.propsEnd)));
 
 					if (isHouseTile && item->isMoveable()) {
 						std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID()
 						          << ", in house: " << house->getId() << ", at position [x: " << x << ", y: " << y
 						          << ", z: " << z << "].\n";
+						delete item;
 					} else {
 						if (item->getItemCount() == 0) {
 							item->setItemCount(1);
@@ -223,15 +224,16 @@ std::generator<Tile*> parseTileArea(const OTB::Node& node, Map& map)
 				throw std::invalid_argument(std::format("Unknown item node: {:d}.", static_cast<uint16_t>(node.type)));
 			}
 
-			auto first = itemNode.propsBegin;
-			auto id = OTB::read<uint16_t>(first, itemNode.propsEnd);
+			auto it = itemNode.propsBegin;
+			auto id = OTB::read<uint16_t>(it, itemNode.propsEnd);
 			Item* item = Item::CreateItem(Item::getPersistentId(id));
-			item->unserializeItemNode(first, itemNode.propsEnd, itemNode);
+			item->unserializeItemNode(it, itemNode.propsEnd, itemNode);
 
 			if (isHouseTile && item->isMoveable()) {
 				std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID()
 				          << ", in house: " << house->getId() << ", at position [x: " << x << ", y: " << y
 				          << ", z: " << z << "]." << std::endl;
+				delete item;
 			} else {
 				if (item->getItemCount() == 0) {
 					item->setItemCount(1);

@@ -21,7 +21,7 @@ Node parseTree(iterator& first, const iterator last)
 {
 	Node node{.propsBegin = first + 1, .propsEnd = last, .type = *first};
 
-	for (; first != last; ++first) {
+	while (first != last) {
 		switch (*first) {
 			case Node::START: {
 				if (node.children.empty()) {
@@ -49,6 +49,7 @@ Node parseTree(iterator& first, const iterator last)
 				break;
 			}
 		}
+		++first;
 	}
 
 	throw std::invalid_argument("File underflow.");

@@ -523,7 +523,7 @@ bool Items::loadFromOtb(const std::string& file)
 					if (length != sizeof(uint8_t)) [[unlikely]] {
 						throw std::invalid_argument(
 						    fmt::format("Invalid classification attribute length: expected {:d}, got {:d}",
-						                sizeof(uint16_t), length));
+						                sizeof(uint8_t), length));
 					}
 
 					classification = OTB::read<uint8_t>(first, itemNode.propsEnd);
