@@ -95,7 +95,9 @@ public:
 	static uint32_t playerAutoID;
 	static uint32_t playerIDLimit;
 
-	explicit Player(ProtocolGame_ptr p);
+	explicit Player(ProtocolGame_ptr p) :
+	    Creature{}, lastPing{OTSYS_TIME()}, lastPong{lastPing}, client{std::move(p)} {};
+
 	~Player() = default;
 
 	// non-copyable

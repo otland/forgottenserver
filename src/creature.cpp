@@ -819,9 +819,7 @@ void Creature::onUnfollowCreature() { hasFollowPath = false; }
 // Pathfinding Events
 void Creature::removeFollowers()
 {
-	const Position& position = getPosition();
-
-	followers = followers | tfs::views::lock_weak_ptrs | std::views::filter([&position](const auto& creature) {
+	followers = followers | tfs::views::lock_weak_ptrs | std::views::filter([this](const auto& creature) {
 		            auto distance =
 		                position.getDistanceX(creature->position) + position.getDistanceY(creature->position);
 		            return distance < Map::maxViewportX + Map::maxViewportY && position.z == creature->position.z;
