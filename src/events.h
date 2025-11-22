@@ -64,9 +64,9 @@ void onLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDist
 bool onLookInShop(Player* player, const ItemType* itemType, uint8_t count);
 bool onLookInMarket(Player* player, const ItemType* itemType);
 ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition,
-                       const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
+                       const Position& toPosition, Thing* fromThing, Thing* toThing);
 void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
-                 Cylinder* fromCylinder, Cylinder* toCylinder);
+                 Thing* fromThing, Thing* toThing);
 bool onMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition);
 void onReportRuleViolation(Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason,
                            const std::string& comment, const std::string& translation);

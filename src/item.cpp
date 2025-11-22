@@ -253,62 +253,68 @@ void Item::setID(uint16_t newid)
 	}
 }
 
-Cylinder* Item::getTopParent()
+Thing* Item::getTopParent()
 {
-	Cylinder* aux = getParent();
-	Cylinder* prevaux = dynamic_cast<Cylinder*>(this);
-	if (!aux) {
-		return prevaux;
+	auto parent = getParent();
+	auto receiver = getReceiver();
+	if (!parent) {
+		return receiver;
 	}
 
-	while (aux->hasParent()) {
-		prevaux = aux;
-		aux = aux->getParent();
+	while (parent->hasParent()) {
+		receiver = parent;
+		parent = parent->getParent();
 	}
 
-	if (prevaux) {
-		return prevaux;
+	if (receiver) {
+		return receiver;
 	}
-	return aux;
+	return parent;
 }
 
-const Cylinder* Item::getTopParent() const
+const Thing* Item::getTopParent() const
 {
-	const Cylinder* aux = getParent();
-	const Cylinder* prevaux = dynamic_cast<const Cylinder*>(this);
-	if (!aux) {
-		return prevaux;
+	auto parent = getParent();
+	auto receiver = getReceiver();
+	if (!parent) {
+		return receiver;
 	}
 
-	while (aux->hasParent()) {
-		prevaux = aux;
-		aux = aux->getParent();
+	while (parent->hasParent()) {
+		receiver = parent;
+		parent = parent->getParent();
 	}
 
-	if (prevaux) {
-		return prevaux;
+	if (receiver) {
+		return receiver;
 	}
-	return aux;
+	return parent;
 }
 
 Tile* Item::getTile()
 {
-	Cylinder* cylinder = getTopParent();
-	// get root cylinder
-	if (cylinder && cylinder->hasParent()) {
-		cylinder = cylinder->getParent();
+	auto topParent = getTopParent();
+	if (!topParent) {
+		return nullptr;
 	}
-	return dynamic_cast<Tile*>(cylinder);
+
+	if (const auto parent = topParent->getParent()) {
+		topParent = parent;
+	}
+	return topParent->getTile();
 }
 
 const Tile* Item::getTile() const
 {
-	const Cylinder* cylinder = getTopParent();
-	// get root cylinder
-	if (cylinder && cylinder->hasParent()) {
-		cylinder = cylinder->getParent();
+	auto topParent = getTopParent();
+	if (!topParent) {
+		return nullptr;
 	}
-	return dynamic_cast<const Tile*>(cylinder);
+
+	if (const auto parent = topParent->getParent()) {
+		topParent = parent;
+	}
+	return topParent->getTile();
 }
 
 uint16_t Item::getSubType() const

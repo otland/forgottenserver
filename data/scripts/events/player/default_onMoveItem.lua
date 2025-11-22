@@ -1,6 +1,6 @@
 local event = Event()
 
-event.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+event.onMoveItem = function(self, item, count, fromPosition, toPosition, fromThing, toThing)
 	if item:getAttribute("wrapid") ~= 0 then
 		local tile = Tile(toPosition)
 		if (fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION) or tile and not tile:getHouse() then
