@@ -19,6 +19,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache vcpkg
+        uses: actions/cache@v4.3.0
+        with:
+          path: |
+            ./vcpkg/installed
+            ./vcpkg/packages
+          key: vcpkg-${{ runner.os }}-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            vcpkg-${{ runner.os }}-
+
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
