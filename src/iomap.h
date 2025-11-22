@@ -4,10 +4,7 @@
 #ifndef FS_IOMAP_H
 #define FS_IOMAP_H
 
-#include "configmanager.h"
-#include "house.h"
-#include "map.h"
-#include "spawn.h"
+class Map;
 
 namespace tfs::io::map {
 

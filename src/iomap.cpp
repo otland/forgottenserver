@@ -6,6 +6,7 @@
 #include "iomap.h"
 
 #include "housetile.h"
+#include "map.h"
 
 #include <generator>
 

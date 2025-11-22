@@ -5,6 +5,7 @@
 #define FS_ITEM_H
 
 #include "cylinder.h"
+#include "fileloader.h"
 #include "items.h"
 #include "luascript.h"
 #include "thing.h"

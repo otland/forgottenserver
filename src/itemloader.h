@@ -4,8 +4,6 @@
 #ifndef FS_ITEMLOADER_H
 #define FS_ITEMLOADER_H
 
-#include "fileloader.h"
-
 enum itemgroup_t
 {
 	ITEM_GROUP_NONE,
