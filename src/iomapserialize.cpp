@@ -71,7 +71,7 @@ bool IOMapSerialize::saveHouseItems()
 	for (const auto& it : g_game.map.houses.getHouses()) {
 		// save house items
 		House* house = it.second;
-		for (const auto& tile : house->getTiles() | tfs::views::lock_weak_ptrs) {
+		for (auto&& tile : house->getTiles() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			saveTile(stream, tile);
 
 			if (auto attributes = stream.getStream(); !attributes.empty()) {
@@ -332,7 +332,7 @@ bool IOMapSerialize::saveHouseInfo()
 			listText.clear();
 		}
 
-		for (const auto& door : house->getDoors() | tfs::views::lock_weak_ptrs) {
+		for (auto&& door : house->getDoors() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			if (door->getAccessList(listText) && !listText.empty()) {
 				if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(),
 				                             db.escapeString(listText)))) {
@@ -371,7 +371,7 @@ bool IOMapSerialize::saveHouse(House* house)
 	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	PropWriteStream stream;
-	for (const auto& tile : house->getTiles() | tfs::views::lock_weak_ptrs) {
+	for (auto&& tile : house->getTiles() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		saveTile(stream, tile);
 
 		if (auto attributes = stream.getStream(); attributes.size() > 0) {

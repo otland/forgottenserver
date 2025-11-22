@@ -47,7 +47,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 			transferToDepot();
 		}
 
-		for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
+		for (auto&& tile : tiles | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			if (const CreatureVector* creatures = tile->getCreatures()) {
 				for (int32_t i = creatures->size(); --i >= 0;) {
 					kickPlayer(nullptr, (*creatures)[i]->getPlayer());
@@ -56,7 +56,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 		}
 
 		// Remove players from beds
-		for (const auto& bed : beds | tfs::views::lock_weak_ptrs) {
+		for (auto&& bed : beds | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			if (bed->getSleeper() != 0) {
 				bed->wakeUp(nullptr);
 			}
@@ -69,7 +69,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 		setAccessList(SUBOWNER_LIST, "");
 		setAccessList(GUEST_LIST, "");
 
-		for (const auto& door : doors | tfs::views::lock_weak_ptrs) {
+		for (auto&& door : doors | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			door->setAccessList("");
 		}
 	} else {
@@ -177,7 +177,7 @@ void House::setAccessList(uint32_t listId, std::string_view textlist)
 	}
 
 	// kick uninvited players
-	for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
+	for (auto&& tile : tiles | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
 				const auto& player = (*creatures)[i]->getPlayer();
@@ -216,7 +216,7 @@ bool House::transferToDepot(const std::shared_ptr<Player>& player) const
 	}
 
 	ItemList moveItemList;
-	for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
+	for (auto&& tile : tiles | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (const TileItemVector* items = tile->getItemList()) {
 			for (const auto& item : *items) {
 				if (item->isPickupable()) {
@@ -276,7 +276,7 @@ void House::addBed(const std::shared_ptr<BedItem>& bed)
 
 std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 {
-	for (const auto& door : doors | tfs::views::lock_weak_ptrs) {
+	for (auto&& door : doors | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (door->getDoorId() == doorId) {
 			return door;
 		}
@@ -286,7 +286,7 @@ std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 
 std::shared_ptr<Door> House::getDoorByPosition(const Position& pos)
 {
-	for (const auto& door : doors | tfs::views::lock_weak_ptrs) {
+	for (auto&& door : doors | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (door->getPosition() == pos) {
 			return door;
 		}

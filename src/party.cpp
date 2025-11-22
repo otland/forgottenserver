@@ -28,22 +28,22 @@ void Party::disband()
 	currentLeader->sendCreatureSkull(currentLeader);
 	currentLeader->sendTextMessage(MESSAGE_INFO_DESCR, "Your party has been disbanded.");
 
-	for (const auto& invitee : inviteList | tfs::views::lock_weak_ptrs) {
+	for (auto&& invitee : inviteList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		invitee->removePartyInvitation(this);
 		currentLeader->sendCreatureShield(invitee);
 	}
 	inviteList.clear();
 
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		member->setParty(nullptr);
 		member->sendClosePrivate(CHANNEL_PARTY);
 		member->sendTextMessage(MESSAGE_INFO_DESCR, "Your party has been disbanded.");
 	}
 
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		g_game.updatePlayerShield(member);
 
-		for (const auto& otherMember : memberList | tfs::views::lock_weak_ptrs) {
+		for (auto&& otherMember : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			otherMember->sendCreatureSkull(member);
 		}
 
@@ -89,7 +89,7 @@ bool Party::leaveParty(const std::shared_ptr<Player>& player, bool forceRemove /
 	player->sendClosePrivate(CHANNEL_PARTY);
 	g_game.updatePlayerShield(player);
 
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		member->sendCreatureSkull(player);
 		player->sendPlayerPartyIcons(member);
 	}
@@ -99,7 +99,7 @@ bool Party::leaveParty(const std::shared_ptr<Player>& player, bool forceRemove /
 	player->sendPlayerPartyIcons(getLeader());
 
 	// remove pending invitation icons from the screen
-	for (const auto& invitee : inviteList | tfs::views::lock_weak_ptrs) {
+	for (auto&& invitee : inviteList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		player->sendCreatureShield(invitee);
 	}
 
@@ -141,12 +141,12 @@ bool Party::passPartyLeadership(const std::shared_ptr<Player>& player, bool forc
 
 	updateSharedExperience();
 
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		member->sendCreatureShield(oldLeader);
 		member->sendCreatureShield(player);
 	}
 
-	for (const auto& invitee : inviteList | tfs::views::lock_weak_ptrs) {
+	for (auto&& invitee : inviteList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		invitee->sendCreatureShield(oldLeader);
 		invitee->sendCreatureShield(player);
 	}
@@ -183,7 +183,7 @@ bool Party::joinParty(const std::shared_ptr<Player>& player)
 	g_game.updatePlayerShield(player);
 
 	// update player-member party icons
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		member->sendCreatureSkull(player);
 		player->sendPlayerPartyIcons(member);
 	}
@@ -195,7 +195,7 @@ bool Party::joinParty(const std::shared_ptr<Player>& player)
 	player->sendCreatureSkull(player);
 
 	// show the new member who else is invited
-	for (const auto& invitee : inviteList | tfs::views::lock_weak_ptrs) {
+	for (auto&& invitee : inviteList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		player->sendCreatureShield(invitee);
 	}
 
@@ -270,7 +270,7 @@ bool Party::invitePlayer(const std::shared_ptr<Player>& player)
 	player->sendCreatureShield(getLeader());
 
 	// update the invitation status for other members
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		member->sendCreatureShield(player);
 	}
 
@@ -289,8 +289,8 @@ bool Party::isPlayerInvited(const std::shared_ptr<const Player>& player) const
 
 void Party::updateAllPartyIcons()
 {
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
-		for (const auto& otherMember : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
+		for (auto&& otherMember : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			member->sendCreatureShield(otherMember);
 		}
 
@@ -302,14 +302,14 @@ void Party::updateAllPartyIcons()
 
 void Party::broadcastPartyMessage(MessageClasses msgClass, const std::string& msg, bool sendToInvitations /*= false*/)
 {
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		member->sendTextMessage(msgClass, msg);
 	}
 
 	getLeader()->sendTextMessage(msgClass, msg);
 
 	if (sendToInvitations) {
-		for (const auto& invitee : inviteList | tfs::views::lock_weak_ptrs) {
+		for (auto&& invitee : inviteList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			invitee->sendTextMessage(msgClass, msg);
 		}
 	}
@@ -377,7 +377,7 @@ void Party::shareExperience(uint64_t experience, const std::shared_ptr<Creature>
 	uint64_t shareExperience = experience;
 	tfs::events::party::onShareExperience(this, shareExperience);
 
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
 	getLeader()->onGainSharedExperience(shareExperience, source);
@@ -395,7 +395,7 @@ SharedExpStatus_t Party::getMemberSharedExperienceStatus(const std::shared_ptr<c
 	}
 
 	uint32_t highestLevel = getLeader()->getLevel();
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (member->getLevel() > highestLevel) {
 			highestLevel = member->getLevel();
 		}
@@ -433,7 +433,7 @@ SharedExpStatus_t Party::getSharedExperienceStatus()
 		return leaderStatus;
 	}
 
-	for (const auto& member : memberList | tfs::views::lock_weak_ptrs) {
+	for (auto&& member : memberList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		SharedExpStatus_t memberStatus = getMemberSharedExperienceStatus(member);
 		if (memberStatus != SHAREDEXP_OK) {
 			return memberStatus;

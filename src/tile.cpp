@@ -259,14 +259,14 @@ std::shared_ptr<const Creature> Tile::getBottomVisibleCreature(const std::shared
 {
 	if (const CreatureVector* creatures = getCreatures()) {
 		if (creature) {
-			for (const auto& tileCreature : *creatures | std::views::reverse) {
+			for (auto&& tileCreature : *creatures | std::views::reverse | std::views::as_const) {
 				if (creature->canSeeCreature(tileCreature)) {
 					return tileCreature;
 				}
 			}
 
 		} else {
-			for (const auto& tileCreature : *creatures | std::views::reverse) {
+			for (auto&& tileCreature : *creatures | std::views::reverse | std::views::as_const) {
 				if (!tileCreature->isInvisible()) {
 					const auto& player = tileCreature->getPlayer();
 					if (!player || !player->isInGhostMode()) {
@@ -1177,7 +1177,7 @@ int32_t Tile::getClientIndexOfCreature(const std::shared_ptr<const Player>& play
 	}
 
 	if (const CreatureVector* creatures = getCreatures()) {
-		for (const auto& tileCreature : *creatures | std::views::reverse) {
+		for (auto&& tileCreature : *creatures | std::views::reverse | std::views::as_const) {
 			if (tileCreature == creature) {
 				return n;
 			} else if (player->canSeeCreature(tileCreature)) {
@@ -1548,7 +1548,7 @@ std::shared_ptr<Item> Tile::getUseItem(int32_t index) const
 	}
 
 	// try getting door
-	for (const auto& item : *items | std::views::reverse) {
+	for (auto&& item : *items | std::views::reverse | std::views::as_const) {
 		if (item->getDoor()) {
 			return item;
 		}

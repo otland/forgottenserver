@@ -104,7 +104,8 @@ void Game::setGameState(GameState_t newState)
 			g_globalEvents->shutdown();
 
 			// kick all players that are still online
-			for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>()) {
+			const auto& onlinePlayers = getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+			for (const auto& player : onlinePlayers) {
 				player->kickPlayer(true);
 			}
 
@@ -125,7 +126,8 @@ void Game::setGameState(GameState_t newState)
 			g_globalEvents->save();
 
 			/* kick all players without the CanAlwaysLogin flag */
-			for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>()) {
+			const auto& onlinePlayers = getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+			for (const auto& player : onlinePlayers) {
 				if (!player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
 					player->kickPlayer(true);
 				}
@@ -148,7 +150,7 @@ void Game::saveGameState()
 
 	std::cout << "Saving server..." << std::endl;
 
-	for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs) {
+	for (auto&& player : getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		player->setLoginPosition(player->getPosition());
 		IOLoginData::savePlayer(player);
 	}
@@ -398,7 +400,7 @@ std::shared_ptr<Creature> Game::getCreatureByName(const std::string& name)
 		return npc;
 	}
 
-	for (const auto& monster : monsters | std::views::values | tfs::views::lock_weak_ptrs) {
+	for (auto&& monster : monsters | std::views::values | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (boost::iequals(name, monster->getName())) {
 			return monster;
 		}
@@ -413,7 +415,7 @@ std::shared_ptr<Npc> Game::getNpcByName(const std::string& name)
 		return nullptr;
 	}
 
-	for (const auto& npc : npcs | std::views::values | tfs::views::lock_weak_ptrs) {
+	for (auto&& npc : npcs | std::views::values | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (boost::iequals(name, npc->getName())) {
 			return npc;
 		}
@@ -476,7 +478,7 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, std::shared_ptr<
 
 std::shared_ptr<Player> Game::getPlayerByAccount(uint32_t acc)
 {
-	for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs) {
+	for (auto&& player : getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (player->getAccount() == acc) {
 			return player;
 		}
@@ -581,7 +583,7 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 
 	removeCreatureCheck(creature);
 
-	for (const auto& summon : creature->getSummons() | tfs::views::lock_weak_ptrs) {
+	for (auto&& summon : creature->getSummons() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		summon->setSkillLoss(false);
 		removeCreature(summon);
 	}
@@ -1878,7 +1880,7 @@ bool Game::playerBroadcastMessage(const std::shared_ptr<Player>& player, const s
 
 	std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 
-	for (const auto& onlinePlayer : getPlayers() | tfs::views::lock_weak_ptrs) {
+	for (auto&& onlinePlayer : getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		onlinePlayer->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
 	}
 
@@ -2683,7 +2685,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	}
 
 	if (const auto& tradeItemContainer = tradeItem->getContainer()) {
-		for (const auto& item : tradeItems | std::views::keys) {
+		for (auto&& item : tradeItems | std::views::keys | std::views::as_const) {
 			if (tradeItem == item) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
@@ -2701,7 +2703,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 			}
 		}
 	} else {
-		for (const auto& item : tradeItems | std::views::keys) {
+		for (auto&& item : tradeItems | std::views::keys | std::views::as_const) {
 			if (tradeItem == item) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
@@ -3832,7 +3834,7 @@ void Game::updateCreaturesPath(size_t index)
 	g_scheduler.addEvent(createSchedulerTask(getNumber(ConfigManager::PATHFINDING_INTERVAL),
 	                                         [=, this]() { updateCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
 
-	for (const auto& creature : checkCreatureLists[index] | tfs::views::lock_weak_ptrs) {
+	for (auto&& creature : checkCreatureLists[index] | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (!creature->isDead()) {
 			creature->forceUpdatePath();
 		}
@@ -4771,7 +4773,7 @@ void Game::cleanup()
 void Game::broadcastMessage(const std::string& text, MessageClasses type) const
 {
 	std::cout << "> Broadcasted message: \"" << text << "\"." << std::endl;
-	for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs) {
+	for (auto&& player : getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		player->sendTextMessage(type, text);
 	}
 }

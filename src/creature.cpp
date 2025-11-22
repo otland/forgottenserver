@@ -24,7 +24,7 @@ Creature::Creature() { onIdleStatus(); }
 
 Creature::~Creature()
 {
-	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
+	for (auto&& summon : summons | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		summon->removeAttackedCreature();
 		summon->removeMaster();
 	}
@@ -742,7 +742,7 @@ void Creature::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 	onAttackedCreature(creature);
 	creature->onAttacked();
 
-	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
+	for (auto&& summon : summons | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		summon->setAttackedCreature(creature);
 	}
 }
@@ -751,7 +751,7 @@ void Creature::removeAttackedCreature()
 {
 	attackedCreature.reset();
 
-	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
+	for (auto&& summon : summons | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		summon->removeAttackedCreature();
 	}
 }
@@ -833,7 +833,7 @@ void Creature::updateFollowersPaths()
 		return;
 	}
 
-	for (const auto& follower : followers | tfs::views::lock_weak_ptrs) {
+	for (auto&& follower : followers | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (follower->lastPathUpdate < OTSYS_TIME()) {
 			continue;
 		}

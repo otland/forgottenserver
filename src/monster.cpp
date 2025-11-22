@@ -477,7 +477,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 				}
 			} else {
 				int32_t minRange = std::numeric_limits<int32_t>::max();
-				for (const auto& creature : targetList | tfs::views::lock_weak_ptrs) {
+				for (auto&& creature : targetList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 					if (!isTarget(creature)) {
 						continue;
 					}
@@ -516,7 +516,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 
 	// lets just pick the first target in the list
 	const auto& followCreature = getFollowCreature();
-	for (const auto& target : targetList | tfs::views::lock_weak_ptrs) {
+	for (auto&& target : targetList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (followCreature != target && selectTarget(target)) {
 			return true;
 		}
@@ -1824,7 +1824,7 @@ void Monster::death(const std::shared_ptr<Creature>&)
 {
 	removeAttackedCreature();
 
-	for (const auto& summon : getSummons() | tfs::views::lock_weak_ptrs) {
+	for (auto&& summon : getSummons() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		summon->changeHealth(-summon->getHealth());
 		summon->removeMaster();
 	}

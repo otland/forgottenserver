@@ -195,7 +195,7 @@ void Spawns::startup()
 		return;
 	}
 
-	for (const auto& npc : npcList | tfs::views::lock_weak_ptrs) {
+	for (auto&& npc : npcList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (!g_game.placeCreature(npc, npc->getMasterPos(), false, true)) {
 			std::cout << "[Warning - Spawns::startup] Couldn't spawn npc \"" << npc->getName()
 			          << "\" on position: " << npc->getMasterPos() << '.' << std::endl;
@@ -241,7 +241,7 @@ void Spawn::startSpawnCheck()
 
 Spawn::~Spawn()
 {
-	for (const auto& monster : spawnedMap | std::views::values | tfs::views::lock_weak_ptrs) {
+	for (auto&& monster : spawnedMap | std::views::values | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		monster->setSpawn(nullptr);
 	}
 }

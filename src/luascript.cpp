@@ -4701,7 +4701,7 @@ int LuaScriptInterface::luaGameGetTowns(lua_State* L)
 	lua_createtable(L, towns.size(), 0);
 
 	int index = 0;
-	for (const auto& town : towns | std::views::values) {
+	for (auto&& town : towns | std::views::values | std::views::as_const) {
 		pushTown(L, *town);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4795,7 +4795,7 @@ int LuaScriptInterface::luaGameGetRuneSpells(lua_State* L)
 	lua_createtable(L, runeSpells.size(), 0);
 
 	int index = 0;
-	for (const auto& spell : runeSpells | std::views::values) {
+	for (auto&& spell : runeSpells | std::views::values | std::views::as_const) {
 		tfs::lua::pushUserdata<const Spell>(L, &spell);
 		tfs::lua::setMetatable(L, -1, "Spell");
 		lua_rawseti(L, -2, ++index);
@@ -4812,7 +4812,7 @@ int LuaScriptInterface::luaGameGetInstantSpells(lua_State* L)
 	lua_createtable(L, instantSpells.size(), 0);
 
 	int index = 0;
-	for (const auto& spell : instantSpells | std::views::values) {
+	for (auto&& spell : instantSpells | std::views::values | std::views::as_const) {
 		tfs::lua::pushUserdata<const Spell>(L, &spell);
 		tfs::lua::setMetatable(L, -1, "Spell");
 		lua_rawseti(L, -2, ++index);
@@ -10774,14 +10774,14 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	}
 
 	if (player->isInGhostMode()) {
-		for (const auto& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+		for (auto&& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			if (!onlinePlayer->isAccessPlayer()) {
 				onlinePlayer->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), false);
 	} else {
-		for (const auto& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+		for (auto&& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			if (!onlinePlayer->isAccessPlayer()) {
 				onlinePlayer->notifyStatusChange(player, VIPSTATUS_ONLINE);
 			}
@@ -11363,7 +11363,7 @@ int LuaScriptInterface::luaMonsterGetFriendList(lua_State* L)
 	lua_createtable(L, friendList.size(), 0);
 
 	int index = 0;
-	for (const auto& creature : friendList | tfs::views::lock_weak_ptrs) {
+	for (auto&& creature : friendList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 		lua_rawseti(L, -2, ++index);
@@ -11438,7 +11438,7 @@ int LuaScriptInterface::luaMonsterGetTargetList(lua_State* L)
 	lua_createtable(L, targetList.size(), 0);
 
 	int index = 0;
-	for (const auto& creature : targetList | tfs::views::lock_weak_ptrs) {
+	for (auto&& creature : targetList | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		tfs::lua::pushSharedPtr(L, creature);
 		lua_rawseti(L, -2, ++index);
 	}
@@ -12579,7 +12579,7 @@ int LuaScriptInterface::luaHouseGetItems(lua_State* L)
 	lua_newtable(L);
 
 	int index = 0;
-	for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
+	for (auto&& tile : tiles | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		if (TileItemVector* itemVector = tile->getItemList()) {
 			for (const auto& item : *itemVector) {
 				tfs::lua::pushSharedPtr(L, item);

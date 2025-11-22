@@ -2188,14 +2188,14 @@ void Player::removeList()
 {
 	g_game.removePlayer(getPlayer());
 
-	for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+	for (auto&& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		player->notifyStatusChange(getPlayer(), VIPSTATUS_OFFLINE);
 	}
 }
 
 void Player::addList()
 {
-	for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+	for (auto&& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		player->notifyStatusChange(getPlayer(), VIPSTATUS_ONLINE);
 	}
 
@@ -3069,7 +3069,7 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 			// check containers
 			std::vector<std::shared_ptr<Container>> containers;
 
-			for (const auto& openContainers : openContainers | std::views::values) {
+			for (auto&& openContainers : openContainers | std::views::values | std::views::as_const) {
 				const auto& container = openContainers.container;
 				if (!container->getPosition().isInRange(getPosition(), 1, 1, 0)) {
 					containers.push_back(container);
