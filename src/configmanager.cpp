@@ -208,10 +208,6 @@ bool ConfigManager::load()
 			integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
 		}
 
-		if (integer[LOGIN_PORT] == 0) {
-			integer[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
-		}
-
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
 		integer[HTTP_PORT] = getGlobalNumber(L, "httpPort", 8080);
 		integer[HTTP_WORKERS] = getGlobalNumber(L, "httpWorkers", 1);
