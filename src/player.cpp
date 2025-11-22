@@ -3076,23 +3076,26 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 	return false;
 }
 
-std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const
+std::map<uint32_t, uint32_t> Player::getItemTypeCounts() const
 {
+	std::map<uint32_t, uint32_t> typeCounts;
+
 	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;
 		}
 
-		countMap[item->getID()] += Item::countByType(item, -1);
+		typeCounts[item->getID()] += Item::countByType(item, -1);
 
 		if (Container* container = item->getContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-				countMap[(*it)->getID()] += Item::countByType(*it, -1);
+				typeCounts[(*it)->getID()] += Item::countByType(*it, -1);
 			}
 		}
 	}
-	return countMap;
+
+	return typeCounts;
 }
 
 Thing* Player::getThing(size_t index) const
