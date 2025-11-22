@@ -1436,6 +1436,17 @@ void pushCylinder(lua_State* L, Cylinder* cylinder);
 std::string popString(lua_State* L);
 int32_t popCallback(lua_State* L);
 
+template <typename T>
+std::enable_if_t<std::is_enum_v<T> || std::is_integral_v<T> || std::is_floating_point_v<T>, void> pushNumber(
+    lua_State* L, T value)
+{
+	if constexpr (std::is_enum_v<T> || std::is_integral_v<T>) {
+		lua_pushinteger(L, static_cast<lua_Integer>(value));
+	} else if constexpr (std::is_floating_point_v<T>) {
+		lua_pushnumber(L, static_cast<lua_Number>(value));
+	}
+}
+
 // Userdata
 template <class T>
 void pushUserdata(lua_State* L, T* value)
@@ -1451,43 +1462,17 @@ void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
 
 // Get
 template <typename T>
-typename std::enable_if_t<std::is_enum_v<T>, T> getNumber(lua_State* L, int32_t arg)
+std::enable_if_t<std::is_enum_v<T> || std::is_integral_v<T> || std::is_floating_point_v<T>, T> getNumber(
+    lua_State* L, int32_t arg, T defaultValue = {})
 {
-	return static_cast<T>(static_cast<int64_t>(lua_tonumber(L, arg)));
-}
-
-template <typename T>
-typename std::enable_if_t<std::is_integral_v<T> && std::is_unsigned_v<T>, T> getNumber(lua_State* L, int32_t arg)
-{
-	double num = lua_tonumber(L, arg);
-	if (num < static_cast<double>(std::numeric_limits<T>::lowest()) ||
-	    num > static_cast<double>(std::numeric_limits<T>::max())) {
-		reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+	int isnum;
+	if (auto num = lua_tointegerx(L, arg, &isnum); isnum != 0) {
+		return static_cast<T>(num);
 	}
-
-	return static_cast<T>(num);
-}
-
-template <typename T>
-typename std::enable_if_t<(std::is_integral_v<T> && std::is_signed_v<T>) || std::is_floating_point_v<T>, T> getNumber(
-    lua_State* L, int32_t arg)
-{
-	double num = lua_tonumber(L, arg);
-	if (num < static_cast<double>(std::numeric_limits<T>::lowest()) ||
-	    num > static_cast<double>(std::numeric_limits<T>::max())) {
-		reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+	if (auto num = lua_tonumberx(L, arg, &isnum); isnum != 0) {
+		return static_cast<T>(num);
 	}
-
-	return static_cast<T>(num);
-}
-
-template <typename T>
-T getNumber(lua_State* L, int32_t arg, T defaultValue)
-{
-	if (lua_isnumber(L, arg) == 0) {
-		return defaultValue;
-	}
-	return getNumber<T>(L, arg);
+	return defaultValue;
 }
 
 template <class T>
