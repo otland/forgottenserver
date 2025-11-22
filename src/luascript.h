@@ -1437,15 +1437,16 @@ std::string popString(lua_State* L);
 int32_t popCallback(lua_State* L);
 
 template <typename T>
-std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>, void> pushNumber(lua_State* L, T value)
+void pushNumber(lua_State* L, T value)
 {
-	lua_pushinteger(L, value);
-}
+	static_assert(std::is_enum_v<T> || std::is_integral_v<T> || std::is_floating_point_v<T>,
+	              "Unsupported type for pushNumber");
 
-template <typename T>
-std::enable_if_t<std::is_floating_point_v<T>, void> pushNumber(lua_State* L, auto value)
-{
-	lua_pushnumber(L, value);
+	if constexpr (std::is_enum_v<T> || std::is_integral_v<T>) {
+		lua_pushinteger(L, static_cast<lua_Integer>(value));
+	} else if constexpr (std::is_floating_point_v<T>) {
+		lua_pushnumber(L, static_cast<lua_Number>(value));
+	}
 }
 
 // Userdata
@@ -1463,14 +1464,11 @@ void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
 
 // Get
 template <typename T>
-typename std::enable_if_t<std::is_enum_v<T>, T> getNumber(lua_State* L, int32_t arg)
+T getNumber(lua_State* L, int32_t arg, T defaultValue = {})
 {
-	return static_cast<T>(getNumber<std::underlying_type_t<T>>(L, arg));
-}
+	static_assert(std::is_enum_v<T> || std::is_integral_v<T> || std::is_floating_point_v<T>,
+	              "Unsupported type for getNumber");
 
-template <typename T>
-typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, T> getNumber(lua_State* L, int32_t arg)
-{
 	int isnum;
 	if (auto num = lua_tointegerx(L, arg, &isnum); isnum != 0) {
 		if (num < static_cast<decltype(num)>(std::numeric_limits<T>::lowest()) ||
@@ -1491,7 +1489,7 @@ typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, 
 	}
 
 	reportErrorFunc(L, fmt::format("Argument {} is not a number for {}", arg, typeid(T).name()));
-	return {};
+	return defaultValue;
 }
 
 template <class T>
