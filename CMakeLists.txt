@@ -60,6 +60,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 # Find packages.
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
+find_package(spdlog CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
 
 find_package(fmt 8.1.1 CONFIG)

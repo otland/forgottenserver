@@ -7,6 +7,7 @@
 #include "configmanager.h"
 
 #include "game.h"
+#include "logger.h"
 #include "monster.h"
 #include "pugicast.h"
 
@@ -179,7 +180,7 @@ bool ConfigManager::load()
 	}
 
 	if (luaL_dofile(L, string[CONFIG_FILE].data())) {
-		std::cout << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;
+		getLogger().error("{}", lua_tostring(L, -1));
 		lua_close(L);
 		return false;
 	}
