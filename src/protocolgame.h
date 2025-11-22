@@ -7,7 +7,6 @@
 #include "chat.h"
 #include "creature.h"
 #include "protocol.h"
-#include "tasks.h"
 
 class Container;
 class Game;
@@ -80,7 +79,7 @@ private:
 	void checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown);
 
 	bool canSee(int32_t x, int32_t y, int32_t z) const;
-	bool canSee(const Creature*) const;
+	bool canSee(const std::shared_ptr<const Creature>& creature) const;
 	bool canSee(const Position& pos) const;
 
 	// we have all the parse methods
@@ -163,25 +162,26 @@ private:
 	void sendChannel(uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers,
 	                 const InvitedMap* invitedUsers);
 	void sendOpenPrivateChannel(const std::string& receiver);
-	void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId);
-	void sendPrivateMessage(const Player* speaker, SpeakClasses type, const std::string& text);
+	void sendToChannel(const std::shared_ptr<const Creature>& creature, SpeakClasses type, const std::string& text,
+	                   uint16_t channelId);
+	void sendPrivateMessage(const std::shared_ptr<const Player>& speaker, SpeakClasses type, const std::string& text);
 	void sendIcons(uint32_t icons);
 	void sendFYIBox(const std::string& message);
 
 	void sendDistanceShoot(const Position& from, const Position& to, uint8_t type);
 	void sendMagicEffect(const Position& pos, uint8_t type);
-	void sendCreatureHealth(const Creature* creature);
+	void sendCreatureHealth(const std::shared_ptr<const Creature>& creature);
 	void sendSkills();
 	void sendPing();
 	void sendPingBack();
-	void sendCreatureTurn(const Creature* creature, uint32_t stackpos);
-	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
+	void sendCreatureTurn(const std::shared_ptr<const Creature>& creature, uint32_t stackpos);
+	void sendCreatureSay(const std::shared_ptr<const Creature>& creature, SpeakClasses type, const std::string& text,
 	                     const Position* pos = nullptr);
 
 	void sendCancelWalk();
-	void sendChangeSpeed(const Creature* creature, uint32_t speed);
+	void sendChangeSpeed(const std::shared_ptr<const Creature>& creature, uint32_t speed);
 	void sendCancelTarget();
-	void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
+	void sendCreatureOutfit(const std::shared_ptr<const Creature>& creature, const Outfit_t& outfit);
 	void sendStats();
 	void sendExperienceTracker(int64_t rawExp, int64_t finalExp);
 	void sendClientFeatures();
@@ -192,11 +192,11 @@ private:
 	void sendTutorial(uint8_t tutorialId);
 	void sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc);
 
-	void sendCreatureWalkthrough(const Creature* creature, bool walkthrough);
-	void sendCreatureShield(const Creature* creature);
-	void sendCreatureSkull(const Creature* creature);
+	void sendCreatureWalkthrough(const std::shared_ptr<const Creature>& creature, bool walkthrough);
+	void sendCreatureShield(const std::shared_ptr<const Creature>& creature);
+	void sendCreatureSkull(const std::shared_ptr<const Creature>& creature);
 
-	void sendShop(Npc* npc, const ShopInfoList& itemList);
+	void sendShop(const std::shared_ptr<Npc>& npc, const ShopInfoList& itemList);
 	void sendCloseShop();
 	void sendSaleItemList(const std::list<ShopInfo>& shop);
 	void sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount);
@@ -208,17 +208,17 @@ private:
 	void sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, const MarketOfferList& sellOffers);
 	void sendMarketCancelOffer(const MarketOfferEx& offer);
 	void sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers);
-	void sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack);
+	void sendTradeItemRequest(const std::string& traderName, const std::shared_ptr<const Item>& item, bool ack);
 	void sendCloseTrade();
 
-	void sendTextWindow(uint32_t windowTextId, Item* item, uint16_t maxlen, bool canWrite);
+	void sendTextWindow(uint32_t windowTextId, const std::shared_ptr<const Item>& item, uint16_t maxlen, bool canWrite);
 	void sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text);
 	void sendHouseWindow(uint32_t windowTextId, const std::string& text);
 	void sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType,
 	                        const std::string& target);
 	void sendOutfitWindow();
 
-	void sendPodiumWindow(const Item* item);
+	void sendPodiumWindow(const std::shared_ptr<const Item>& item);
 
 	void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
 	void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify,
@@ -232,9 +232,9 @@ private:
 
 	void sendFightModes();
 
-	void sendCreatureLight(const Creature* creature);
+	void sendCreatureLight(const std::shared_ptr<const Creature>& creature);
 
-	void sendCreatureSquare(const Creature* creature, SquareColor_t color);
+	void sendCreatureSquare(const std::shared_ptr<const Creature>& creature, SquareColor_t color);
 
 	void sendSpellCooldown(uint8_t spellId, uint32_t time);
 	void sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time);
@@ -244,31 +244,33 @@ private:
 	// tiles
 	void sendMapDescription(const Position& pos);
 
-	void sendAddTileItem(const Position& pos, uint32_t stackpos, const Item* item);
-	void sendUpdateTileItem(const Position& pos, uint32_t stackpos, const Item* item);
+	void sendAddTileItem(const Position& pos, uint32_t stackpos, const std::shared_ptr<const Item>& item);
+	void sendUpdateTileItem(const Position& pos, uint32_t stackpos, const std::shared_ptr<const Item>& item);
 	void sendRemoveTileThing(const Position& pos, uint32_t stackpos);
-	void sendUpdateTileCreature(const Position& pos, uint32_t stackpos, const Creature* creature);
-	void sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos);
-	void sendUpdateTile(const Tile* tile, const Position& pos);
+	void sendUpdateTileCreature(const Position& pos, uint32_t stackpos,
+	                            const std::shared_ptr<const Creature>& creature);
+	void sendRemoveTileCreature(const std::shared_ptr<const Creature>& creature, const Position& pos,
+	                            uint32_t stackpos);
+	void sendUpdateTile(const std::shared_ptr<const Tile>& tile, const Position& pos);
 
-	void sendUpdateCreatureIcons(const Creature* creature);
+	void sendUpdateCreatureIcons(const std::shared_ptr<const Creature>& creature);
 
-	void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos,
+	void sendAddCreature(const std::shared_ptr<const Creature>& creature, const Position& pos, int32_t stackpos,
 	                     MagicEffectClasses magicEffect = CONST_ME_NONE);
-	void sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos,
-	                      int32_t oldStackPos, bool teleport);
+	void sendMoveCreature(const std::shared_ptr<const Creature>& creature, const Position& newPos, int32_t newStackPos,
+	                      const Position& oldPos, int32_t oldStackPos, bool teleport);
 
 	// containers
-	void sendAddContainerItem(uint8_t cid, uint16_t slot, const Item* item);
-	void sendUpdateContainerItem(uint8_t cid, uint16_t slot, const Item* item);
-	void sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Item* lastItem);
+	void sendAddContainerItem(uint8_t cid, uint16_t slot, const std::shared_ptr<const Item>& item);
+	void sendUpdateContainerItem(uint8_t cid, uint16_t slot, const std::shared_ptr<const Item>& item);
+	void sendRemoveContainerItem(uint8_t cid, uint16_t slot, const std::shared_ptr<const Item>& lastItem);
 
-	void sendContainer(uint8_t cid, const Container* container, uint16_t firstIndex);
+	void sendContainer(uint8_t cid, const std::shared_ptr<const Container>& container, uint16_t firstIndex);
 	void sendEmptyContainer(uint8_t cid);
 	void sendCloseContainer(uint8_t cid);
 
 	// inventory
-	void sendInventoryItem(slots_t slot, const Item* item);
+	void sendInventoryItem(slots_t slot, const std::shared_ptr<const Item>& item);
 	void sendItems();
 
 	// messages
@@ -280,7 +282,7 @@ private:
 	// Help functions
 
 	// translate a tile to client-readable format
-	void GetTileDescription(const Tile* tile, NetworkMessage& msg);
+	void GetTileDescription(const std::shared_ptr<const Tile>& tile, NetworkMessage& msg);
 
 	// translate a floor to client-readable format
 	void GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z, int32_t width, int32_t height,
@@ -289,19 +291,20 @@ private:
 	// translate a map area to client-readable format
 	void GetMapDescription(int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, NetworkMessage& msg);
 
-	void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
-	void AddCreatureIcons(NetworkMessage& msg, const Creature* creature);
+	void AddCreature(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature, bool known, uint32_t remove);
+	void AddCreatureIcons(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature);
 	void AddPlayerStats(NetworkMessage& msg);
 	void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 	void AddPlayerSkills(NetworkMessage& msg);
 
 	// tiles
 	static void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
-	static void RemoveTileCreature(NetworkMessage& msg, const Creature* creature, const Position& pos,
-	                               uint32_t stackpos);
+	static void RemoveTileCreature(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature,
+	                               const Position& pos, uint32_t stackpos);
 
-	void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
-	void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos,
+	void MoveUpCreature(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature, const Position& newPos,
+	                    const Position& oldPos);
+	void MoveDownCreature(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature, const Position& newPos,
 	                      const Position& oldPos);
 
 	// shop
@@ -313,7 +316,7 @@ private:
 	friend class Player;
 
 	std::unordered_set<uint32_t> knownCreatureSet;
-	Player* player = nullptr;
+	std::shared_ptr<Player> player = nullptr;
 
 	uint32_t eventConnect = 0;
 	uint32_t challengeTimestamp = 0;

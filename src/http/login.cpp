@@ -3,6 +3,7 @@
 #include "login.h"
 
 #include "../base64.h"
+#include "../database.h"
 #include "../game.h"
 #include "error.h"
 

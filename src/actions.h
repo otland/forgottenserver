@@ -10,7 +10,8 @@
 
 class Action;
 using Action_ptr = std::unique_ptr<Action>;
-using ActionFunction = std::function<bool(Player* player, Item* item, const Position& fromPosition, Thing* target,
+using ActionFunction = std::function<bool(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+                                          const Position& fromPosition, const std::shared_ptr<Thing>& target,
                                           const Position& toPosition, bool isHotkey)>;
 
 class Action : public Event
@@ -21,7 +22,8 @@ public:
 	bool configureEvent(const pugi::xml_node&) override { return false; }
 
 	// scripting
-	virtual bool executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target,
+	virtual bool executeUse(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+	                        const Position& fromPosition, const std::shared_ptr<Thing>& target,
 	                        const Position& toPosition, bool isHotkey);
 
 	bool getAllowFarUse() const { return allowFarUse; }
@@ -33,10 +35,11 @@ public:
 	bool getCheckFloor() const { return checkFloor; }
 	void setCheckFloor(bool v) { checkFloor = v; }
 
-	virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
+	virtual ReturnValue canExecuteAction(const std::shared_ptr<const Player>& player, const Position& toPos);
 	virtual bool hasOwnErrorHandler() { return false; }
-	virtual Thing* getTarget(Player* player, Creature* targetCreature, const Position& toPosition,
-	                         uint8_t toStackPos) const;
+	virtual std::shared_ptr<Thing> getTarget(const std::shared_ptr<Player>& player,
+	                                         const std::shared_ptr<Creature>& targetCreature,
+	                                         const Position& toPosition, uint8_t toStackPos) const;
 
 	ActionFunction function;
 
@@ -58,13 +61,17 @@ public:
 	Actions(const Actions&) = delete;
 	Actions& operator=(const Actions&) = delete;
 
-	bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-	bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item,
-	               bool isHotkey, Creature* creature = nullptr);
+	bool useItem(const std::shared_ptr<Player>& player, const Position& pos, uint8_t index,
+	             const std::shared_ptr<Item>& item, bool isHotkey);
+	bool useItemEx(const std::shared_ptr<Player>& player, const Position& fromPos, const Position& toPos,
+	               uint8_t toStackPos, const std::shared_ptr<Item>& item, bool isHotkey,
+	               const std::shared_ptr<Creature>& creature = nullptr);
 
-	ReturnValue canUse(const Player* player, const Position& pos);
-	ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
-	ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
+	ReturnValue canUse(const std::shared_ptr<const Player>& player, const Position& pos);
+	ReturnValue canUse(const std::shared_ptr<const Player>& player, const Position& pos,
+	                   const std::shared_ptr<const Item>& item);
+	ReturnValue canUseFar(const std::shared_ptr<const Creature>& creature, const Position& toPos, bool checkLineOfSight,
+	                      bool checkFloor);
 
 	bool registerLuaEvent(Action* event);
 	void clear(bool fromLua) override final;
@@ -83,7 +90,8 @@ public:
 	void addActionId(Action* action, uint16_t id) { aids[action].emplace_back(id); }
 
 private:
-	ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
+	ReturnValue internalUseItem(const std::shared_ptr<Player>& player, const Position& pos, uint8_t index,
+	                            const std::shared_ptr<Item>& item, bool isHotkey);
 
 	LuaScriptInterface& getScriptInterface() override;
 	std::string_view getScriptBaseName() const override { return "actions"; }
@@ -98,7 +106,7 @@ private:
 	std::map<Action*, std::vector<uint16_t>> uids;
 	std::map<Action*, std::vector<uint16_t>> aids;
 
-	Action* getAction(const Item* item);
+	Action* getAction(const std::shared_ptr<const Item>& item);
 	void clearMap(ActionUseMap& map, bool fromLua);
 
 	LuaScriptInterface scriptInterface;

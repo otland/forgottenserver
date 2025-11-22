@@ -34,10 +34,10 @@ void ConnectionManager::closeAll()
 
 	for (const auto& connection : connections) {
 		try {
-			boost::system::error_code error;
-			connection->socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			connection->socket.close(error);
-		} catch (boost::system::system_error&) {
+			connection->socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+			connection->socket.close();
+		} catch (boost::system::system_error& e) {
+			std::cout << std::format("[Network error - {:s}] {:s}", __FUNCTION__, e.what()) << std::endl;
 		}
 	}
 	connections.clear();
@@ -74,16 +74,17 @@ void Connection::close(bool force)
 
 void Connection::closeSocket()
 {
-	if (socket.is_open()) {
-		try {
-			readTimer.cancel();
-			writeTimer.cancel();
-			boost::system::error_code error;
-			socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			socket.close(error);
-		} catch (boost::system::system_error& e) {
-			std::cout << "[Network error - Connection::closeSocket] " << e.what() << std::endl;
-		}
+	if (!socket.is_open()) {
+		return;
+	}
+
+	try {
+		readTimer.cancel();
+		writeTimer.cancel();
+		socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+		socket.close();
+	} catch (boost::system::system_error& e) {
+		std::cout << std::format("[Network error - {:s}] {:s}", __FUNCTION__, e.what()) << std::endl;
 	}
 }
 

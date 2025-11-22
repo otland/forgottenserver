@@ -5,12 +5,12 @@
 #define FS_IOMAPSERIALIZE_H
 
 class Container;
-class Cylinder;
 class House;
 class Item;
 class Map;
 class PropStream;
 class PropWriteStream;
+class Thing;
 class Tile;
 
 class IOMapSerialize
@@ -24,11 +24,11 @@ public:
 	static bool saveHouse(House* house);
 
 private:
-	static void saveItem(PropWriteStream& stream, const Item* item);
-	static void saveTile(PropWriteStream& stream, const Tile* tile);
+	static void saveItem(PropWriteStream& stream, const std::shared_ptr<const Item>& item);
+	static void saveTile(PropWriteStream& stream, const std::shared_ptr<const Tile>& tile);
 
-	static bool loadContainer(PropStream& propStream, Container* container);
-	static bool loadItem(PropStream& propStream, Cylinder* parent);
+	static bool loadContainer(PropStream& propStream, const std::shared_ptr<Container>& container);
+	static bool loadItem(PropStream& propStream, const std::shared_ptr<Thing>& parent);
 };
 
 #endif // FS_IOMAPSERIALIZE_H

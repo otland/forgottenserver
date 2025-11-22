@@ -47,20 +47,25 @@ public:
 	void copyEvent(CreatureEvent* creatureEvent);
 
 	// scripting
-	bool executeOnLogin(Player* player) const;
-	bool executeOnLogout(Player* player) const;
-	void executeOnReconnect(Player* player) const;
-	bool executeOnThink(Creature* creature, uint32_t interval);
-	bool executeOnPrepareDeath(Creature* creature, Creature* killer);
-	bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller,
+	bool executeOnLogin(const std::shared_ptr<Player>& player) const;
+	bool executeOnLogout(const std::shared_ptr<Player>& player) const;
+	void executeOnReconnect(const std::shared_ptr<Player>& player) const;
+	bool executeOnThink(const std::shared_ptr<Creature>& creature, uint32_t interval);
+	bool executeOnPrepareDeath(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& killer);
+	bool executeOnDeath(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Item>& corpse,
+	                    const std::shared_ptr<Creature>& killer, const std::shared_ptr<Creature>& mostDamageKiller,
 	                    bool lastHitUnjustified, bool mostDamageUnjustified);
-	void executeOnKill(Creature* creature, Creature* target);
-	bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
-	void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
-	bool executeTextEdit(Player* player, Item* item, std::string_view text, const uint32_t windowTextId);
-	void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
-	void executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage);
-	void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
+	void executeOnKill(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target);
+	bool executeAdvance(const std::shared_ptr<Player>& player, skills_t, uint32_t, uint32_t);
+	void executeModalWindow(const std::shared_ptr<Player>& player, uint32_t modalWindowId, uint8_t buttonId,
+	                        uint8_t choiceId);
+	bool executeTextEdit(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+	                     std::string_view text, const uint32_t windowTextId);
+	void executeHealthChange(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& attacker,
+	                         CombatDamage& damage);
+	void executeManaChange(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& attacker,
+	                       CombatDamage& damage);
+	void executeExtendedOpcode(const std::shared_ptr<Player>& player, uint8_t opcode, const std::string& buffer);
 	//
 
 private:
@@ -81,10 +86,10 @@ public:
 	CreatureEvents& operator=(const CreatureEvents&) = delete;
 
 	// global events
-	bool playerLogin(Player* player) const;
-	bool playerLogout(Player* player) const;
-	void playerReconnect(Player* player) const;
-	bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
+	bool playerLogin(const std::shared_ptr<Player>& player) const;
+	bool playerLogout(const std::shared_ptr<Player>& player) const;
+	void playerReconnect(const std::shared_ptr<Player>& player) const;
+	bool playerAdvance(const std::shared_ptr<Player>& player, skills_t, uint32_t, uint32_t);
 
 	CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 

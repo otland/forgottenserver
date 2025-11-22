@@ -37,8 +37,6 @@ std::string randomBytes(size_t length);
 Position getNextPosition(Direction direction, Position pos);
 Direction getDirectionTo(const Position& from, const Position& to);
 
-std::string getFirstLine(const std::string& str);
-
 std::string formatDateShort(time_t time);
 
 uint16_t getDepotBoxId(uint16_t index);
@@ -72,6 +70,41 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
-const std::vector<Direction>& getShuffleDirections();
+std::array<Direction, 4> getShuffleDirections();
+
+namespace tfs {
+
+namespace views {
+
+constexpr auto lock_weak_ptrs = std::views::transform([](const auto& wp) { return wp.lock(); }) |
+                                std::views::filter([](const auto& sp) { return sp != nullptr; });
+
+} // namespace views
+
+template <class T, class U>
+bool owner_equal(const std::shared_ptr<T>& x, const std::shared_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+template <class T, class U>
+bool owner_equal(const std::shared_ptr<T>& x, const std::weak_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+template <class T, class U>
+bool owner_equal(const std::weak_ptr<T>& x, const std::shared_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+template <class T, class U>
+bool owner_equal(const std::weak_ptr<T>& x, const std::weak_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+} // namespace tfs
 
 #endif // FS_TOOLS_H

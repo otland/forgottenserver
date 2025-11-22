@@ -6,124 +6,107 @@
 #include "mailbox.h"
 
 #include "game.h"
-#include "inbox.h"
 #include "iologindata.h"
 
 extern Game g_game;
 
-ReturnValue Mailbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, Creature*) const
+namespace {
+
+bool canSend(const std::shared_ptr<const Item>& item)
 {
-	const Item* item = thing.getItem();
-	if (item && Mailbox::canSend(item)) {
-		return RETURNVALUE_NOERROR;
-	}
-	return RETURNVALUE_NOTPOSSIBLE;
+	return item->getID() == ITEM_PARCEL || item->getID() == ITEM_LETTER;
 }
 
-ReturnValue Mailbox::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
+std::string getReceiverName(const std::shared_ptr<Item>& item)
 {
-	maxQueryCount = std::max<uint32_t>(1, count);
-	return RETURNVALUE_NOERROR;
-}
-
-ReturnValue Mailbox::queryRemove(const Thing&, uint32_t, uint32_t, Creature* /*= nullptr */) const
-{
-	return RETURNVALUE_NOTPOSSIBLE;
-}
-
-Cylinder* Mailbox::queryDestination(int32_t&, const Thing&, Item**, uint32_t&) { return this; }
-
-void Mailbox::addThing(Thing* thing) { return addThing(0, thing); }
-
-void Mailbox::addThing(int32_t, Thing* thing)
-{
-	Item* item = thing->getItem();
-	if (item && Mailbox::canSend(item)) {
-		sendItem(item);
-	}
-}
-
-void Mailbox::updateThing(Thing*, uint16_t, uint32_t)
-{
-	//
-}
-
-void Mailbox::replaceThing(uint32_t, Thing*)
-{
-	//
-}
-
-void Mailbox::removeThing(Thing*, uint32_t)
-{
-	//
-}
-
-void Mailbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
-{
-	getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
-}
-
-void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
-{
-	getParent()->postRemoveNotification(thing, newParent, index, LINK_PARENT);
-}
-
-bool Mailbox::sendItem(Item* item) const
-{
-	std::string receiver;
-	if (!getReceiver(item, receiver)) {
-		return false;
+	if (const auto& container = item->getContainer()) {
+		for (const auto& containerItem : container->getItemList()) {
+			if (containerItem->getID() == ITEM_LABEL) {
+				return getReceiverName(containerItem);
+			}
+		}
+		return "";
 	}
 
+	const std::string& text = item->getText();
+	if (text.empty()) {
+		return "";
+	}
+
+	std::string name;
+	std::getline(std::istringstream{text}, name);
+	boost::algorithm::trim(name);
+	return name;
+}
+
+bool sendItem(const std::shared_ptr<Item>& item)
+{
+	const auto& receiver = getReceiverName(item);
 	/**No need to continue if its still empty**/
 	if (receiver.empty()) {
 		return false;
 	}
 
-	Player* player = g_game.getPlayerByName(receiver);
-	if (player) {
-		if (g_game.internalMoveItem(item->getParent(), player->getInbox().get(), INDEX_WHEREEVER, item,
-		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
+	if (const auto& player = g_game.getPlayerByName(receiver)) {
+		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
+		                            nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			player->onReceiveMail();
 			return true;
 		}
 	} else {
-		Player tmpPlayer(nullptr);
-		if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver)) {
+		auto tmpPlayer = std::make_shared<Player>(nullptr);
+		if (!IOLoginData::loadPlayerByName(tmpPlayer, receiver)) {
 			return false;
 		}
 
-		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox().get(), INDEX_WHEREEVER, item,
+		if (g_game.internalMoveItem(item->getParent(), tmpPlayer->getInbox(), INDEX_WHEREEVER, item,
 		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
-			IOLoginData::savePlayer(&tmpPlayer);
+			IOLoginData::savePlayer(tmpPlayer);
 			return true;
 		}
 	}
 	return false;
 }
 
-bool Mailbox::getReceiver(Item* item, std::string& name) const
+} // namespace
+
+ReturnValue Mailbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t,
+                              const std::shared_ptr<Creature>&) const
 {
-	const Container* container = item->getContainer();
-	if (container) {
-		for (Item* containerItem : container->getItemList()) {
-			if (containerItem->getID() == ITEM_LABEL && getReceiver(containerItem, name)) {
-				return true;
-			}
-		}
-		return false;
+	if (const auto& item = thing->getItem(); item && canSend(item)) {
+		return RETURNVALUE_NOERROR;
 	}
-
-	const std::string& text = item->getText();
-	if (text.empty()) {
-		return false;
-	}
-
-	name = getFirstLine(text);
-	boost::algorithm::trim(name);
-	return true;
+	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-bool Mailbox::canSend(const Item* item) { return item->getID() == ITEM_PARCEL || item->getID() == ITEM_LETTER; }
+ReturnValue Mailbox::queryMaxCount(int32_t, const std::shared_ptr<const Thing>&, uint32_t count,
+                                   uint32_t& maxQueryCount, uint32_t) const
+{
+	maxQueryCount = std::max<uint32_t>(1, count);
+	return RETURNVALUE_NOERROR;
+}
+
+void Mailbox::addThing(int32_t, const std::shared_ptr<Thing>& thing)
+{
+	if (const auto& item = thing->getItem(); item && canSend(item)) {
+		sendItem(item);
+	}
+}
+
+void Mailbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+                                  int32_t index, ReceiverLink_t)
+{
+	if (const auto& parent = getParent()) {
+		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	}
+}
+
+void Mailbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+                                     int32_t index, ReceiverLink_t)
+{
+	if (const auto& parent = getParent()) {
+		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
+	}
+}

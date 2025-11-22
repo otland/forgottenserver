@@ -66,7 +66,8 @@ bool TalkActions::registerLuaEvent(TalkAction* event)
 	return true;
 }
 
-TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
+TalkActionResult_t TalkActions::playerSaySpell(const std::shared_ptr<Player>& player, SpeakClasses type,
+                                               const std::string& words) const
 {
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end();) {
@@ -135,7 +136,8 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
+bool TalkAction::executeSay(const std::shared_ptr<Player>& player, const std::string& words, const std::string& param,
+                            SpeakClasses type) const
 {
 	// onSay(player, words, param, type)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -150,7 +152,7 @@ bool TalkAction::executeSay(Player* player, const std::string& words, const std:
 
 	scriptInterface->pushFunction(scriptId);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushString(L, words);
