@@ -121,15 +121,15 @@ void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator& l
 			throw std::invalid_argument("Invalid node type");
 		}
 
-		auto first = itemNode.propsBegin;
-		auto id = OTB::read<uint16_t>(first, itemNode.propsEnd);
+		auto it = itemNode.propsBegin;
+		auto id = OTB::read<uint16_t>(it, itemNode.propsEnd);
 
 		auto item = Item::CreateItem(Item::getPersistentId(id));
 		if (!item) [[unlikely]] {
 			throw std::invalid_argument("Invalid item id");
 		}
 
-		item->unserializeItemNode(first, itemNode.propsEnd, itemNode);
+		item->unserializeItemNode(it, itemNode.propsEnd, itemNode);
 
 		addItem(item);
 		updateItemWeight(item->getWeight());
