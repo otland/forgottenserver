@@ -337,10 +337,10 @@ MapAttributes loadMap(Map& map, std::filesystem::path fileName)
 	}
 
 	if (minorVersionItems > Item::items.minorVersion) {
-		fmt::print("[Warning - IOMap::loadMap] This map needs an updated items.otb.\n");
+		std::println("[Warning - IOMap::loadMap] This map needs an updated items.otb.");
 	}
 
-	fmt::print("> Map size: {:d}x{:d}\n.", width, height);
+	std::println("> Map size: {:d}x{:d}.", width, height);
 
 	const auto& rootNodes = loader.children();
 	if (rootNodes.size() != 1 || rootNodes.front().type != OTBM_MAP_DATA) {
