@@ -791,9 +791,9 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 			Position destPos = target->getPosition();
 
-			for (const auto& dir : destList) {
+			for (auto&& [dx, dy] : destList | std::views::as_const) {
 				// Blocking tiles or tiles without ground ain't valid targets for spears
-				Tile* tmpTile = g_game.map.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
+				Tile* tmpTile = g_game.map.getTile(destPos.x + dx, destPos.y + dy, destPos.z);
 				if (tmpTile && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround()) {
 					destTile = tmpTile;
 					break;

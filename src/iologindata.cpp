@@ -363,9 +363,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-			int32_t pid = pair.second;
+			auto&& [item, pid] = it->second;
 
 			Container* itemContainer = item->getContainer();
 			if (itemContainer) {
@@ -391,9 +389,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 	}
 
-	for (auto& it : openContainersList) {
-		player->addContainer(it.first - 1, it.second);
-		player->onSendContainer(it.second);
+	for (auto&& [cid, container] : openContainersList | std::views::as_const) {
+		player->addContainer(cid - 1, container);
+		player->onSendContainer(container);
 	}
 
 	// load depot items
@@ -405,11 +403,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
+			auto&& [item, pid] = it->second;
 
-			int32_t pid = pair.second;
-			if (pid >= 0 && pid < 100) {
+			if (pid < 100) {
 				if (const auto& depotChest = player->getDepotChest(pid, true)) {
 					depotChest->internalAddThing(item);
 				}
@@ -436,11 +432,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-			int32_t pid = pair.second;
+			auto&& [item, pid] = it->second;
 
-			if (pid >= 0 && pid < 100) {
+			if (pid < 100) {
 				player->getInbox()->internalAddThing(item);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
@@ -466,11 +460,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-			int32_t pid = pair.second;
+			auto&& [item, pid] = it->second;
 
-			if (pid >= 0 && pid < 100) {
+			if (pid < 100) {
 				player->getStoreInbox()->internalAddThing(item);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
@@ -536,9 +528,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	const auto& openContainers = player->getOpenContainers();
 
 	Database& db = Database::getInstance();
-	for (const auto& it : itemList) {
-		int32_t pid = it.first;
-		Item* item = it.second;
+	for (auto&& [pid, item] : itemList | std::views::as_const) {
 		++runningId;
 
 		if (Container* container = item->getContainer()) {
@@ -547,12 +537,11 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			}
 
 			if (!openContainers.empty()) {
-				for (const auto& its : openContainers) {
-					auto openContainer = its.second;
+				for (auto&& [cid, openContainer] : openContainers | std::views::as_const) {
 					auto opcontainer = openContainer.container;
 
 					if (opcontainer == container) {
-						container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, static_cast<int64_t>(its.first) + 1);
+						container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, static_cast<int64_t>(cid) + 1);
 						break;
 					}
 				}
@@ -572,9 +561,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	}
 
 	for (size_t i = 0; i < containers.size(); i++) {
-		const ContainerBlock& cb = containers[i];
-		Container* container = cb.first;
-		int32_t parentId = cb.second;
+		auto&& [container, parentId] = containers[i];
 
 		for (Item* item : container->getItemList()) {
 			++runningId;
@@ -588,12 +575,11 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 				}
 
 				if (!openContainers.empty()) {
-					for (const auto& it : openContainers) {
-						auto openContainer = it.second;
+					for (auto&& [cid, openContainer] : openContainers | std::views::as_const) {
 						auto opcontainer = openContainer.container;
 
 						if (opcontainer == subContainer) {
-							subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, it.first + 1);
+							subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, cid + 1);
 							break;
 						}
 					}
@@ -788,9 +774,9 @@ bool IOLoginData::savePlayer(Player* player)
 	    "INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
-	for (const auto& it : player->depotChests) {
-		for (Item* item : it.second->getItemList()) {
-			itemList.emplace_back(it.first, item);
+	for (auto&& [depotId, depotChest] : player->depotChests | std::views::as_const) {
+		for (Item* item : depotChest->getItemList()) {
+			itemList.emplace_back(depotId, item);
 		}
 	}
 
@@ -856,8 +842,8 @@ bool IOLoginData::savePlayer(Player* player)
 
 	DBInsert outfitQuery("INSERT INTO `player_outfits` (`player_id`, `outfit_id`, `addons`) VALUES ");
 
-	for (const auto& it : player->outfits) {
-		if (!outfitQuery.addRow(fmt::format("{:d}, {:d}, {:d}", player->getGUID(), it.first, it.second))) {
+	for (auto&& [outfitId, addons] : player->outfits | std::views::as_const) {
+		if (!outfitQuery.addRow(fmt::format("{:d}, {:d}, {:d}", player->getGUID(), outfitId, addons))) {
 			return false;
 		}
 	}

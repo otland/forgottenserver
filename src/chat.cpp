@@ -35,8 +35,8 @@ void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer
 
 	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited.", invitePlayer.getName()));
 
-	for (const auto& it : users) {
-		it.second->sendChannelEvent(id, invitePlayer.getName(), CHANNELEVENT_INVITE);
+	for (auto&& user : users | std::views::values | std::views::as_const) {
+		user->sendChannelEvent(id, invitePlayer.getName(), CHANNELEVENT_INVITE);
 	}
 }
 
@@ -52,15 +52,15 @@ void PrivateChatChannel::excludePlayer(const Player& player, Player& excludePlay
 
 	excludePlayer.sendClosePrivate(id);
 
-	for (const auto& it : users) {
-		it.second->sendChannelEvent(id, excludePlayer.getName(), CHANNELEVENT_EXCLUDE);
+	for (auto&& user : users | std::views::values | std::views::as_const) {
+		user->sendChannelEvent(id, excludePlayer.getName(), CHANNELEVENT_EXCLUDE);
 	}
 }
 
 void PrivateChatChannel::closeChannel() const
 {
-	for (const auto& it : users) {
-		it.second->sendClosePrivate(id);
+	for (auto&& user : users | std::views::values | std::views::as_const) {
+		user->sendClosePrivate(id);
 	}
 }
 
@@ -83,8 +83,8 @@ bool ChatChannel::addUser(Player& player)
 	}
 
 	if (!publicChannel) {
-		for (const auto& it : users) {
-			it.second->sendChannelEvent(id, player.getName(), CHANNELEVENT_JOIN);
+		for (auto&& user : users | std::views::values | std::views::as_const) {
+			user->sendChannelEvent(id, player.getName(), CHANNELEVENT_JOIN);
 		}
 	}
 
@@ -102,8 +102,8 @@ bool ChatChannel::removeUser(const Player& player)
 	users.erase(iter);
 
 	if (!publicChannel) {
-		for (const auto& it : users) {
-			it.second->sendChannelEvent(id, player.getName(), CHANNELEVENT_LEAVE);
+		for (auto&& user : users | std::views::values | std::views::as_const) {
+			user->sendChannelEvent(id, player.getName(), CHANNELEVENT_LEAVE);
 		}
 	}
 
@@ -115,8 +115,8 @@ bool ChatChannel::hasUser(const Player& player) { return users.find(player.getID
 
 void ChatChannel::sendToAll(const std::string& message, SpeakClasses type) const
 {
-	for (const auto& it : users) {
-		it.second->sendChannelMessage("", message, type, id);
+	for (auto&& user : users | std::views::values | std::views::as_const) {
+		user->sendChannelMessage("", message, type, id);
 	}
 }
 
@@ -126,8 +126,8 @@ bool ChatChannel::talk(const Player& fromPlayer, SpeakClasses type, const std::s
 		return false;
 	}
 
-	for (const auto& it : users) {
-		it.second->sendToChannel(&fromPlayer, type, text, id);
+	for (auto&& user : users | std::views::values | std::views::as_const) {
+		user->sendToChannel(&fromPlayer, type, text, id);
 	}
 	return true;
 }
@@ -294,8 +294,8 @@ bool Chat::load()
 			}
 
 			UsersMap tempUserMap = std::move(channel.users);
-			for (const auto& pair : tempUserMap) {
-				channel.addUser(*pair.second);
+			for (auto&& player : tempUserMap | std::views::values | std::views::as_const) {
+				channel.addUser(*player);
 			}
 			continue;
 		}
@@ -442,16 +442,16 @@ bool Chat::removeUserFromChannel(const Player& player, uint16_t channelId)
 
 void Chat::removeUserFromAllChannels(const Player& player)
 {
-	for (auto& it : normalChannels) {
-		it.second.removeUser(player);
+	for (auto&& channel : normalChannels | std::views::values) {
+		channel.removeUser(player);
 	}
 
-	for (auto& it : partyChannels) {
-		it.second.removeUser(player);
+	for (auto&& channel : partyChannels | std::views::values) {
+		channel.removeUser(player);
 	}
 
-	for (auto& it : guildChannels) {
-		it.second.removeUser(player);
+	for (auto&& channel : guildChannels | std::views::values) {
+		channel.removeUser(player);
 	}
 
 	auto it = privateChannels.begin();
@@ -520,24 +520,22 @@ ChannelList Chat::getChannelList(const Player& player)
 		}
 	}
 
-	for (const auto& it : normalChannels) {
-		ChatChannel* channel = getChannel(player, it.first);
+	for (const auto& channelId : normalChannels | std::views::keys | std::views::as_const) {
+		ChatChannel* channel = getChannel(player, channelId);
 		if (channel) {
 			list.push_back(channel);
 		}
 	}
 
 	bool hasPrivate = false;
-	for (auto& it : privateChannels) {
-		if (PrivateChatChannel* channel = &it.second) {
-			uint32_t guid = player.getGUID();
-			if (channel->isInvited(guid)) {
-				list.push_back(channel);
-			}
+	for (auto&& channel : privateChannels | std::views::values) {
+		uint32_t guid = player.getGUID();
+		if (channel.isInvited(guid)) {
+			list.push_back(&channel);
+		}
 
-			if (channel->getOwner() == guid) {
-				hasPrivate = true;
-			}
+		if (channel.getOwner() == guid) {
+			hasPrivate = true;
 		}
 	}
 
@@ -611,9 +609,9 @@ ChatChannel* Chat::getChannelById(uint16_t channelId)
 
 PrivateChatChannel* Chat::getPrivateChannel(const Player& player)
 {
-	for (auto& it : privateChannels) {
-		if (it.second.getOwner() == player.getGUID()) {
-			return &it.second;
+	for (auto&& channel : privateChannels | std::views::values) {
+		if (channel.getOwner() == player.getGUID()) {
+			return &channel;
 		}
 	}
 	return nullptr;

@@ -215,8 +215,8 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 			std::shuffle(relList.begin(), relList.end(), getRandomGenerator());
 		}
 
-		for (const auto& it : relList) {
-			Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
+		for (auto&& [dx, dy] : relList | std::views::as_const) {
+			Position tryPos(centerPos.x + dx, centerPos.y + dy, centerPos.z);
 
 			tile = getTile(tryPos.x, tryPos.y, tryPos.z);
 			if (!tile || (placeInPZ && !tile->hasFlag(TILESTATE_PROTECTIONZONE))) {
