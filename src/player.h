@@ -1122,6 +1122,8 @@ public:
 	uint16_t getClientLowLevelBonusDisplay() const { return clientLowLevelBonusDisplay; }
 	void setClientLowLevelBonusDisplay(uint16_t value) { clientLowLevelBonusDisplay = value; }
 
+	std::map<uint32_t, uint32_t> getItemCounts() const;
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1163,7 +1165,6 @@ private:
 	size_t getFirstIndex() const override;
 	size_t getLastIndex() const override;
 	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
-	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
 	Thing* getThing(size_t index) const override;
 
 	void internalAddThing(Thing* thing) override;
