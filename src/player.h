@@ -1122,7 +1122,7 @@ public:
 	uint16_t getClientLowLevelBonusDisplay() const { return clientLowLevelBonusDisplay; }
 	void setClientLowLevelBonusDisplay(uint16_t value) { clientLowLevelBonusDisplay = value; }
 
-	std::map<uint32_t, uint32_t> getItemTypeCounts() const;
+	std::map<uint32_t, uint32_t> getItemCounts() const;
 
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
