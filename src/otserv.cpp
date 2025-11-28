@@ -13,7 +13,6 @@
 #include "iomarket.h"
 #include "monsters.h"
 #include "outfit.h"
-#include "protocollogin.h"
 #include "protocolstatus.h"
 #include "rsa.h"
 #include "scheduler.h"
@@ -215,7 +214,6 @@ void mainLoader(ServiceManager* services)
 
 	// Game client protocols
 	services->add<ProtocolGame>(static_cast<uint16_t>(getNumber(ConfigManager::GAME_PORT)));
-	services->add<ProtocolLogin>(static_cast<uint16_t>(getNumber(ConfigManager::LOGIN_PORT)));
 
 	// OT protocols
 	services->add<ProtocolStatus>(static_cast<uint16_t>(getNumber(ConfigManager::STATUS_PORT)));

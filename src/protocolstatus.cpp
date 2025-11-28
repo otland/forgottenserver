@@ -94,7 +94,7 @@ void ProtocolStatus::sendStatusString()
 	serverinfo.append_attribute("uptime") = std::to_string(uptime).c_str();
 	serverinfo.append_attribute("ip") = getString(ConfigManager::IP).c_str();
 	serverinfo.append_attribute("servername") = getString(ConfigManager::SERVER_NAME).c_str();
-	serverinfo.append_attribute("port") = std::to_string(getNumber(ConfigManager::LOGIN_PORT)).c_str();
+	serverinfo.append_attribute("port") = std::to_string(getNumber(ConfigManager::HTTP_PORT)).c_str();
 	serverinfo.append_attribute("location") = getString(ConfigManager::LOCATION).c_str();
 	serverinfo.append_attribute("url") = getString(ConfigManager::URL).c_str();
 	serverinfo.append_attribute("server") = STATUS_SERVER_NAME;
@@ -170,7 +170,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->addByte(0x10);
 		output->addString(getString(ConfigManager::SERVER_NAME));
 		output->addString(getString(ConfigManager::IP));
-		output->addString(std::to_string(getNumber(ConfigManager::LOGIN_PORT)));
+		output->addString(std::to_string(getNumber(ConfigManager::HTTP_PORT)));
 	}
 
 	if (requestedInfo & REQUEST_OWNER_SERVER_INFO) {

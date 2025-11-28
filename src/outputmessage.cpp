@@ -20,25 +20,24 @@ const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY{10};
 // client connects/disconnects)
 std::vector<Protocol_ptr> bufferedProtocols;
 
-void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols);
+void sendAll(const std::vector<Protocol_ptr>& protocols);
 
-void scheduleSendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
+void scheduleSendAll(const std::vector<Protocol_ptr>& protocols)
 {
-	g_scheduler.addEvent(
-	    createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(bufferedProtocols); }));
+	g_scheduler.addEvent(createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(protocols); }));
 }
 
-void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
+void sendAll(const std::vector<Protocol_ptr>& protocols)
 {
 	// dispatcher thread
-	for (auto& protocol : bufferedProtocols) {
+	for (auto& protocol : protocols) {
 		if (auto& msg = protocol->getCurrentBuffer()) {
 			protocol->send(std::move(msg));
 		}
 	}
 
-	if (!bufferedProtocols.empty()) {
-		scheduleSendAll(bufferedProtocols);
+	if (!protocols.empty()) {
+		scheduleSendAll(protocols);
 	}
 }
 

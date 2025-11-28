@@ -636,22 +636,22 @@ const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 void tfs::lua::reportError(std::string_view function, std::string_view error_desc, lua_State* L /*= nullptr*/,
                            bool stack_trace /*= false*/)
 {
-	auto [scriptId, scriptInterface, callbackId, timerEvent] = getScriptEnv()->getEventInfo();
+	auto [scriptId, luaScriptInterface, callbackId, timerEvent] = getScriptEnv()->getEventInfo();
 
 	std::cout << "\nLua Script Error: ";
 
-	if (scriptInterface) {
-		std::cout << '[' << scriptInterface->getInterfaceName() << "]\n";
+	if (luaScriptInterface) {
+		std::cout << '[' << luaScriptInterface->getInterfaceName() << "]\n";
 
 		if (timerEvent) {
 			std::cout << "in a timer event called from:\n";
 		}
 
 		if (callbackId) {
-			std::cout << "in callback: " << scriptInterface->getFileById(callbackId) << '\n';
+			std::cout << "in callback: " << luaScriptInterface->getFileById(callbackId) << '\n';
 		}
 
-		std::cout << scriptInterface->getFileById(scriptId) << '\n';
+		std::cout << luaScriptInterface->getFileById(scriptId) << '\n';
 	}
 
 	if (!function.empty()) {
@@ -2328,7 +2328,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::FRAG_TIME);
 	registerEnumIn(L, "configKeys", ConfigManager::WHITE_SKULL_TIME);
 	registerEnumIn(L, "configKeys", ConfigManager::GAME_PORT);
-	registerEnumIn(L, "configKeys", ConfigManager::LOGIN_PORT);
 	registerEnumIn(L, "configKeys", ConfigManager::STATUS_PORT);
 	registerEnumIn(L, "configKeys", ConfigManager::STAIRHOP_DELAY);
 	registerEnumIn(L, "configKeys", ConfigManager::MARKET_OFFER_DURATION);
@@ -9817,7 +9816,8 @@ int LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 		return 1;
 	}
 
-	const Town* town = g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", -1));
+	const Town* town =
+	    g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", std::numeric_limits<uint32_t>::max()));
 	if (!town) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
