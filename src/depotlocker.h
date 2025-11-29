@@ -19,23 +19,21 @@ public:
 	uint16_t getDepotId() const { return depotId; }
 	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 
-	// Serialization
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 
-	// Container implementations
 	DepotLocker* getDepotLocker() override { return this; }
 	const DepotLocker* getDepotLocker() const override { return this; }
 
-	// Cylinder implementations
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
+	ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override
+	{
+		return RETURNVALUE_NOTENOUGHROOM;
+	}
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                            cylinderlink_t link = LINK_OWNER) override;
+	void postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
+	                         ReceiverLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
+	                            ReceiverLink_t link = LINK_OWNER) override;
 
-	// Item implementations
 	bool canRemove() const override { return false; }
 
 private:

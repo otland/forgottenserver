@@ -240,10 +240,10 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	uint32_t flags = 0;
 	Item* toItem = nullptr;
 
-	Cylinder* toCylinder = tile->queryDestination(index, *creature, &toItem, flags);
-	toCylinder->internalAddThing(creature);
+	const auto toThing = tile->queryDestination(index, *creature, &toItem, flags);
+	toThing->internalAddThing(creature);
 
-	const Position& dest = toCylinder->getPosition();
+	const Position& dest = toThing->getPosition();
 	getQTNode(dest.x, dest.y)->addCreature(creature);
 	return true;
 }

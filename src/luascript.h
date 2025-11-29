@@ -22,7 +22,6 @@ class AreaCombat;
 class Combat;
 class Container;
 class Creature;
-class Cylinder;
 class Spell;
 class Item;
 class LuaScriptInterface;
@@ -1431,7 +1430,6 @@ void pushThing(lua_State* L, Thing* thing);
 void pushVariant(lua_State* L, const LuaVariant& var);
 void pushString(lua_State* L, std::string_view value);
 void pushCallback(lua_State* L, int32_t callback);
-void pushCylinder(lua_State* L, Cylinder* cylinder);
 
 std::string popString(lua_State* L);
 int32_t popCallback(lua_State* L);

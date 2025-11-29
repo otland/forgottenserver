@@ -830,10 +830,10 @@ bool onLookInMarket(Player* player, const ItemType* itemType)
 }
 
 ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition,
-                       const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+                       const Position& toPosition, Thing* fromThing, Thing* toThing)
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
-	// toPosition, fromCylinder, toCylinder)
+	// toPosition, fromThing, toThing)
 	if (playerHandlers.onMoveItem == -1) {
 		return RETURNVALUE_NOERROR;
 	}
@@ -859,8 +859,8 @@ ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Positio
 	tfs::lua::pushPosition(L, fromPosition);
 	tfs::lua::pushPosition(L, toPosition);
 
-	tfs::lua::pushCylinder(L, fromCylinder);
-	tfs::lua::pushCylinder(L, toCylinder);
+	tfs::lua::pushThing(L, fromThing);
+	tfs::lua::pushThing(L, toThing);
 
 	ReturnValue returnValue;
 	if (tfs::lua::protectedCall(L, 7, 1) != 0) {
@@ -876,10 +876,10 @@ ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Positio
 }
 
 void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
-                 Cylinder* fromCylinder, Cylinder* toCylinder)
+                 Thing* fromThing, Thing* toThing)
 {
 	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
-	// toPosition, fromCylinder, toCylinder)
+	// toPosition, fromThing, toThing)
 	if (playerHandlers.onItemMoved == -1) {
 		return;
 	}
@@ -905,8 +905,8 @@ void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fro
 	tfs::lua::pushPosition(L, fromPosition);
 	tfs::lua::pushPosition(L, toPosition);
 
-	tfs::lua::pushCylinder(L, fromCylinder);
-	tfs::lua::pushCylinder(L, toCylinder);
+	tfs::lua::pushThing(L, fromThing);
+	tfs::lua::pushThing(L, toThing);
 
 	scriptInterface.callVoidFunction(7);
 }

@@ -287,7 +287,7 @@ void ScriptEnvironment::resetEnv()
 	auto it = pair.first;
 	while (it != pair.second) {
 		Item* item = it->second;
-		if (item && item->getParent() == VirtualCylinder::virtualCylinder) {
+		if (item && !item->hasParent()) {
 			g_game.ReleaseItem(item);
 		}
 		it = tempItems.erase(it);
@@ -775,30 +775,15 @@ void tfs::lua::pushThing(lua_State* L, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (const auto item = thing->getItem()) {
 		pushUserdata(L, item);
 		setItemMetatable(L, -1, item);
-	} else if (Creature* creature = thing->getCreature()) {
+	} else if (const auto creature = thing->getCreature()) {
 		pushUserdata(L, creature);
 		setCreatureMetatable(L, -1, creature);
-	} else {
-		lua_pushnil(L);
-	}
-}
-
-void tfs::lua::pushCylinder(lua_State* L, Cylinder* cylinder)
-{
-	if (Creature* creature = cylinder->getCreature()) {
-		pushUserdata(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else if (Item* parentItem = cylinder->getItem()) {
-		pushUserdata(L, parentItem);
-		setItemMetatable(L, -1, parentItem);
-	} else if (Tile* tile = cylinder->getTile()) {
+	} else if (const auto tile = thing->getTile()) {
 		pushUserdata(L, tile);
 		setMetatable(L, -1, "Tile");
-	} else if (cylinder == VirtualCylinder::virtualCylinder) {
-		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -4961,7 +4946,6 @@ int LuaScriptInterface::luaGameCreateItem(lua_State* L)
 		g_game.internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
 	} else {
 		addTempItem(item);
-		item->setParent(VirtualCylinder::virtualCylinder);
 	}
 
 	tfs::lua::pushUserdata(L, item);
@@ -5002,7 +4986,6 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 		g_game.internalAddItem(tile, container, INDEX_WHEREEVER, FLAG_NOLIMIT);
 	} else {
 		addTempItem(container);
-		container->setParent(VirtualCylinder::virtualCylinder);
 	}
 
 	tfs::lua::pushUserdata(L, container);
@@ -6017,7 +6000,7 @@ int LuaScriptInterface::luaTileAddItemEx(lua_State* L)
 		return 1;
 	}
 
-	if (item->getParent() != VirtualCylinder::virtualCylinder) {
+	if (item->hasParent()) {
 		reportErrorFunc(L, "Item already has a parent");
 		lua_pushnil(L);
 		return 1;
@@ -6649,13 +6632,13 @@ int LuaScriptInterface::luaItemGetParent(lua_State* L)
 		return 1;
 	}
 
-	Cylinder* parent = item->getParent();
+	const auto parent = item->getParent();
 	if (!parent) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, parent);
+	tfs::lua::pushThing(L, parent);
 	return 1;
 }
 
@@ -6668,13 +6651,13 @@ int LuaScriptInterface::luaItemGetTopParent(lua_State* L)
 		return 1;
 	}
 
-	Cylinder* topParent = item->getTopParent();
+	Thing* topParent = item->getTopParent();
 	if (!topParent) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, topParent);
+	tfs::lua::pushThing(L, topParent);
 	return 1;
 }
 
@@ -6706,7 +6689,6 @@ int LuaScriptInterface::luaItemClone(lua_State* L)
 	}
 
 	addTempItem(clone);
-	clone->setParent(VirtualCylinder::virtualCylinder);
 
 	tfs::lua::pushUserdata(L, clone);
 	tfs::lua::setItemMetatable(L, -1, clone);
@@ -6753,7 +6735,6 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 
 	*itemPtr = newItem;
 
-	splitItem->setParent(VirtualCylinder::virtualCylinder);
 	addTempItem(splitItem);
 
 	tfs::lua::pushUserdata(L, splitItem);
@@ -7158,7 +7139,7 @@ int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L)
 
 int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 {
-	// item:moveTo(position or cylinder[, flags])
+	// item:moveTo(position or thing[, flags])
 	Item** itemPtr = tfs::lua::getRawUserdata<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
@@ -7166,38 +7147,37 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	}
 
 	Item* item = *itemPtr;
-	if (!item || item->isRemoved()) {
+	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Cylinder* toCylinder;
+	Thing* toThing = nullptr;
 	if (lua_isuserdata(L, 2)) {
 		const LuaDataType type = getUserdataType(L, 2);
 		switch (type) {
 			case LuaData_Container:
-				toCylinder = tfs::lua::getUserdata<Container>(L, 2);
+				toThing = tfs::lua::getUserdata<Container>(L, 2);
 				break;
 			case LuaData_Player:
-				toCylinder = tfs::lua::getUserdata<Player>(L, 2);
+				toThing = tfs::lua::getUserdata<Player>(L, 2);
 				break;
 			case LuaData_Tile:
-				toCylinder = tfs::lua::getUserdata<Tile>(L, 2);
+				toThing = tfs::lua::getUserdata<Tile>(L, 2);
 				break;
 			default:
-				toCylinder = nullptr;
 				break;
 		}
 	} else {
-		toCylinder = g_game.map.getTile(tfs::lua::getPosition(L, 2));
+		toThing = g_game.map.getTile(tfs::lua::getPosition(L, 2));
 	}
 
-	if (!toCylinder) {
+	if (!toThing) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (item->getParent() == toCylinder) {
+	if (item->getParent() == toThing) {
 		tfs::lua::pushBoolean(L, true);
 		return 1;
 	}
@@ -7205,12 +7185,11 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(
 	    L, 3, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
 
-	if (item->getParent() == VirtualCylinder::virtualCylinder) {
-		tfs::lua::pushBoolean(L,
-		                      g_game.internalAddItem(toCylinder, item, INDEX_WHEREEVER, flags) == RETURNVALUE_NOERROR);
+	if (!item->hasParent()) {
+		tfs::lua::pushBoolean(L, g_game.internalAddItem(toThing, item, INDEX_WHEREEVER, flags) == RETURNVALUE_NOERROR);
 	} else {
 		Item* moveItem = nullptr;
-		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toCylinder, INDEX_WHEREEVER, item,
+		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toThing, INDEX_WHEREEVER, item,
 		                                          item->getItemCount(), &moveItem, flags);
 		if (moveItem) {
 			*itemPtr = moveItem;
@@ -7623,7 +7602,7 @@ int LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 		return 1;
 	}
 
-	if (item->getParent() != VirtualCylinder::virtualCylinder) {
+	if (item->hasParent()) {
 		reportErrorFunc(L, "Item already has a parent");
 		lua_pushnil(L);
 		return 1;
@@ -8054,13 +8033,13 @@ int LuaScriptInterface::luaCreatureGetParent(lua_State* L)
 		return 1;
 	}
 
-	Cylinder* parent = creature->getParent();
+	const auto parent = creature->getParent();
 	if (!parent) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, parent);
+	tfs::lua::pushThing(L, parent);
 	return 1;
 }
 
@@ -10161,7 +10140,7 @@ int LuaScriptInterface::luaPlayerAddItemEx(lua_State* L)
 		return 1;
 	}
 
-	if (item->getParent() != VirtualCylinder::virtualCylinder) {
+	if (item->hasParent()) {
 		reportErrorFunc(L, "Item already has a parent");
 		tfs::lua::pushBoolean(L, false);
 		return 1;

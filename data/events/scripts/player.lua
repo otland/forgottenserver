@@ -55,16 +55,16 @@ function Player:onLookInMarket(itemType)
 	end
 end
 
-function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+function Player:onMoveItem(item, count, fromPosition, toPosition, fromThing, toThing)
 	if hasEvent.onMoveItem then
-		return Event.onMoveItem(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+		return Event.onMoveItem(self, item, count, fromPosition, toPosition, fromThing, toThing)
 	end
 	return RETURNVALUE_NOERROR
 end
 
-function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+function Player:onItemMoved(item, count, fromPosition, toPosition, fromThing, toThing)
 	if hasEvent.onItemMoved then
-		Event.onItemMoved(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+		Event.onItemMoved(self, item, count, fromPosition, toPosition, fromThing, toThing)
 	end
 end
 
@@ -233,12 +233,12 @@ function Player:onGainSkillTries(skill, tries)
 end
 
 function Player:onWrapItem(item)
-	local topCylinder = item:getTopParent()
-	if not topCylinder then
+	local topParent = item:getTopParent()
+	if not topParent then
 		return
 	end
 
-	local tile = Tile(topCylinder:getPosition())
+	local tile = Tile(topParent:getPosition())
 	if not tile then
 		return
 	end
