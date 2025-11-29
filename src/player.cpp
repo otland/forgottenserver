@@ -1114,51 +1114,26 @@ void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemT
 	}
 }
 
-void Player::onCreatureAppear(Creature* creature, bool isLogin)
+void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClasses magicEffect)
 {
-	Creature::onCreatureAppear(creature, isLogin);
+	if (creature != this) {
+		sendAddCreature(creature, creature->getPosition(), magicEffect);
+		return;
+	}
 
-	if (isLogin && creature == this) {
-		sendItems();
-		onEquipInventory();
+	setLastPosition(getPosition());
 
+	if (isLogin) {
+		// Restore conditions stored during previous logout
 		for (Condition* condition : storedConditionList) {
 			addCondition(condition);
 		}
 		storedConditionList.clear();
 
-		updateRegeneration();
-
-		BedItem* bed = g_game.getBedBySleeper(guid);
-		if (bed) {
-			bed->wakeUp(this);
-		}
-
-		// load mount speed bonus
-		uint16_t currentMountId = currentOutfit.lookMount;
-		if (currentMountId != 0) {
-			Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId);
-			if (currentMount && hasMount(currentMount)) {
-				g_game.changeSpeed(this, currentMount->speed);
-			} else {
-				defaultOutfit.lookMount = 0;
-				g_game.internalCreatureChangeOutfit(this, defaultOutfit);
-			}
-		}
-
-		// mounted player moved to pz on login, update mount status
-		onChangeZone(getZone());
-
-		if (guild) {
-			guild->addMember(this);
-		}
-
-		int32_t offlineTime;
+		int32_t offlineTime = 0;
 		if (getLastLogout() != 0) {
-			// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
+			// Cap offline time to 21 days to avoid integer overflow when converting to milliseconds
 			offlineTime = std::min<int32_t>(time(nullptr) - getLastLogout(), 86400 * 21);
-		} else {
-			offlineTime = 0;
 		}
 
 		for (Condition* condition : getMuteConditions()) {
@@ -1168,8 +1143,64 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			}
 		}
 
+		updateRegeneration();
+		onEquipInventory();
+
+		onChangeZone(getZone());
+
+		uint16_t currentMountId = currentOutfit.lookMount;
+		if (currentMountId != 0) {
+			if (Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId)) {
+				if (hasMount(currentMount)) {
+					g_game.changeSpeed(this, currentMount->speed);
+				} else {
+					defaultOutfit.lookMount = 0;
+					g_game.internalCreatureChangeOutfit(this, defaultOutfit);
+				}
+			}
+		}
+
 		g_game.checkPlayersRecord();
+
 		IOLoginData::updateOnlineStatus(guid, true);
+
+		if (BedItem* bed = g_game.getBedBySleeper(guid)) {
+			bed->wakeUp(this);
+		}
+
+		if (guild) {
+			guild->addMember(this);
+		}
+
+		if (!g_creatureEvents->playerLogin(this)) {
+			kickPlayer(true);
+			return;
+		}
+	}
+
+	sendStats();
+	sendSkills();
+	sendIcons();
+	sendLight();
+	sendVIPEntries();
+	sendItemClasses();
+	sendClientFeatures();
+	sendBasicData();
+	sendItems();
+	sendPendingStateEntered();
+	sendEnterWorld();
+	sendMapDescription();
+
+	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+		auto slot = static_cast<slots_t>(i);
+		sendInventoryItem(slot, getInventoryItem(slot));
+	}
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, getStoreInbox()->getItem());
+
+	openSavedContainers();
+
+	if (magicEffect != CONST_ME_NONE) {
+		sendMagicEffect(magicEffect);
 	}
 }
 
@@ -3158,12 +3189,6 @@ void Player::postAddNotification(Thing* thing, const Thing* oldParent, int32_t i
 
 			for (const Container* container : containers) {
 				autoCloseContainers(container);
-			}
-
-			if (!oldParent && link == LINK_NEAR) {
-				if (!g_creatureEvents->playerLogin(this)) {
-					kickPlayer(true);
-				}
 			}
 		}
 	}
