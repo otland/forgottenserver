@@ -1144,7 +1144,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 		}
 
 		updateRegeneration();
-		onEquipInventory();
 
 		onChangeZone(getZone());
 
@@ -1170,6 +1169,14 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 
 		if (guild) {
 			guild->addMember(this);
+		}
+
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+			if (const auto item = inventory[slot]) {
+				item->startDecaying();
+				g_moveEvents->onPlayerEquip(this, item, static_cast<slots_t>(slot), false);
+				tfs::events::player::onInventoryUpdate(this, item, static_cast<slots_t>(slot), true);
+			}
 		}
 
 		if (!g_creatureEvents->playerLogin(this)) {
@@ -1276,8 +1283,6 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 	Creature::onRemoveCreature(creature, isLogout);
 
 	if (creature == this) {
-		onDeEquipInventory();
-
 		if (isLogout) {
 			loginPosition = getPosition();
 		}
@@ -1307,6 +1312,13 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		}
 
 		IOLoginData::updateOnlineStatus(guid, false);
+
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+			if (const auto item = inventory[slot]) {
+				g_moveEvents->onPlayerDeEquip(this, item, static_cast<slots_t>(slot));
+				tfs::events::player::onInventoryUpdate(this, item, static_cast<slots_t>(slot), false);
+			}
+		}
 
 		bool saved = false;
 		for (uint32_t tries = 0; tries < 3; ++tries) {
@@ -1410,29 +1422,6 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 			if (Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED, ticks, 0)) {
 				addCondition(condition);
 			}
-		}
-	}
-}
-
-void Player::onEquipInventory()
-{
-	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-		Item* item = inventory[slot];
-		if (item) {
-			item->startDecaying();
-			g_moveEvents->onPlayerEquip(this, item, static_cast<slots_t>(slot), false);
-			tfs::events::player::onInventoryUpdate(this, item, static_cast<slots_t>(slot), true);
-		}
-	}
-}
-
-void Player::onDeEquipInventory()
-{
-	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-		Item* item = inventory[slot];
-		if (item) {
-			g_moveEvents->onPlayerDeEquip(this, item, static_cast<slots_t>(slot));
-			tfs::events::player::onInventoryUpdate(this, item, static_cast<slots_t>(slot), false);
 		}
 	}
 }
