@@ -451,15 +451,6 @@ public:
 	const std::map<uint32_t, Npc*>& getNpcs() const { return npcs; }
 	const std::map<uint32_t, Monster*>& getMonsters() const { return monsters; }
 
-	void addPlayer(Player* player);
-	void removePlayer(Player* player);
-
-	void addNpc(Npc* npc);
-	void removeNpc(Npc* npc);
-
-	void addMonster(Monster* monster);
-	void removeMonster(Monster* monster);
-
 	Guild_ptr getGuild(uint32_t id) const;
 	void addGuild(Guild_ptr guild);
 	void removeGuild(uint32_t guildId);

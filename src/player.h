@@ -139,8 +139,6 @@ public:
 	uint32_t getGUID() const { return guid; }
 	bool canSeeInvisibility() const override { return hasFlag(PlayerFlag_CanSenseInvisibility) || group->access; }
 
-	void removeList() override;
-	void addList() override;
 	void kickPlayer(bool displayEffect);
 
 	static uint64_t getExpForLevel(const uint64_t lv)

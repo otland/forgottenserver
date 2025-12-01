@@ -108,9 +108,6 @@ public:
 		}
 	}
 
-	void removeList() override;
-	void addList() override;
-
 	static Npc* createNpc(const std::string& name);
 
 	bool canSee(const Position& pos) const override;
