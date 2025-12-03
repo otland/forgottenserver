@@ -1661,8 +1661,8 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		}
 		parent->addThing(item);
 
-		if (auto parent = item->getParent()) {
-			parent->postAddNotification(item, parent, parent->getThingIndex(item));
+		if (auto itemParent = item->getParent()) {
+			itemParent->postAddNotification(item, parent, itemParent->getThingIndex(item));
 			return item;
 		}
 
