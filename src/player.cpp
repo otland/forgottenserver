@@ -2220,26 +2220,31 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
-		size_t killersSize = getKillers().size();
+		auto killers = std::ranges::count_if(
+		    damageMap,
+		    [this, now = OTSYS_TIME(), inFightTicks = getNumber(ConfigManager::PZ_LOCKED)](const auto& pair) {
+			    const auto& attacker = g_game.getCreatureByID(pair.first);
+			    return attacker && attacker != this && (now - pair.second.ticks <= inFightTicks);
+		    });
 
 		if (lastHitCreature) {
 			if (!mostDamageCreature) {
 				corpse->setSpecialDescription(
 				    std::format("You recognize {:s}. {:s} was killed by {:s}{:s}", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", lastHitCreature->getNameDescription(),
-				                killersSize > 1 ? " and others." : "."));
+				                killers > 1 ? " and others." : "."));
 			} else if (lastHitCreature != mostDamageCreature) {
 				corpse->setSpecialDescription(
 				    std::format("You recognize {:s}. {:s} was killed by {:s}, {:s}{:s}", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription(),
-				                lastHitCreature->getNameDescription(), killersSize > 2 ? " and others." : "."));
+				                lastHitCreature->getNameDescription(), killers > 2 ? " and others." : "."));
 			} else {
 				corpse->setSpecialDescription(
 				    std::format("You recognize {:s}. {:s} was killed by {:s} and others.", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
 			}
 		} else if (mostDamageCreature) {
-			if (killersSize > 1) {
+			if (killers > 1) {
 				corpse->setSpecialDescription(std::format(
 				    "You recognize {:s}. {:s} was killed by something evil, {:s}, and others", getNameDescription(),
 				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
@@ -2251,7 +2256,7 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 		} else {
 			corpse->setSpecialDescription(std::format("You recognize {:s}. {:s} was killed by something evil {:s}",
 			                                          getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He",
-			                                          killersSize ? " and others." : "."));
+			                                          killers ? " and others." : "."));
 		}
 	}
 	return corpse;
