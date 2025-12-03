@@ -152,11 +152,11 @@ public:
 	class CustomAttribute
 	{
 	public:
-		CustomAttribute() = default;
+		constexpr CustomAttribute() = default;
 
-		bool operator==(const CustomAttribute& rhs) const { return value == rhs.value; }
-		bool operator!=(const CustomAttribute& rhs) const { return value != rhs.value; }
-		auto operator=(const auto& v) { value = v; }
+		constexpr bool operator==(const CustomAttribute& rhs) const { return value == rhs.value; }
+		constexpr bool operator!=(const CustomAttribute& rhs) const { return value != rhs.value; }
+		constexpr auto operator=(const auto& v) { value = v; }
 
 		void pushToLua(lua_State* L) const
 		{
