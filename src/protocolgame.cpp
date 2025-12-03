@@ -3462,7 +3462,12 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		msg.addByte(otherPlayer ? otherPlayer->getVocation()->getClientId() : 0x00);
 	}
 
-	msg.addByte(creature->getSpeechBubble());
+	if (const auto npc = creature->getNpc()) {
+		msg.addByte(npc->getSpeechBubble());
+	} else {
+		msg.addByte(SPEECHBUBBLE_NONE);
+	}
+
 	msg.addByte(0xFF); // MARK_UNMARKED
 	msg.addByte(0x00); // inspection type (bool?)
 
