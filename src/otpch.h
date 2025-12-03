@@ -17,7 +17,6 @@
 #include <boost/container/flat_set.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/lockfree/stack.hpp>
-#include <boost/variant.hpp>
 #include <cassert>
 #include <concepts>
 #include <condition_variable>

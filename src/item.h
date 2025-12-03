@@ -149,72 +149,40 @@ public:
 		return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 	}
 
-	struct CustomAttribute
+	class CustomAttribute
 	{
-		typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
-		VariantAttribute value;
+	public:
+		constexpr CustomAttribute() = default;
 
-		CustomAttribute() : value(boost::blank()) {}
-
-		bool operator==(const CustomAttribute& otherAttr) const { return value == otherAttr.value; }
-
-		bool operator!=(const CustomAttribute& otherAttr) const { return value != otherAttr.value; }
-
-		template <typename T>
-		explicit CustomAttribute(const T& v) : value(v)
-		{}
-
-		template <typename T>
-		void set(const T& v)
+		constexpr bool operator==(const CustomAttribute& rhs) const { return value == rhs.value; }
+		constexpr bool operator!=(const CustomAttribute& rhs) const { return value != rhs.value; }
+		constexpr CustomAttribute& operator=(const auto& v)
 		{
 			value = v;
+			return *this;
 		}
 
-		template <typename T>
-		const T& get();
-
-		struct PushLuaVisitor : public boost::static_visitor<>
+		void pushToLua(lua_State* L) const
 		{
-			lua_State* L;
-
-			explicit PushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
-
-			void operator()(const boost::blank&) const { lua_pushnil(L); }
-
-			void operator()(std::string_view v) const { tfs::lua::pushString(L, v); }
-
-			void operator()(bool v) const { tfs::lua::pushBoolean(L, v); }
-
-			void operator()(const int64_t& v) const { tfs::lua::pushNumber(L, v); }
-
-			void operator()(const double& v) const { tfs::lua::pushNumber(L, v); }
-		};
-
-		void pushToLua(lua_State* L) const { boost::apply_visitor(PushLuaVisitor(L), value); }
-
-		struct SerializeVisitor : public boost::static_visitor<>
-		{
-			PropWriteStream& propWriteStream;
-
-			explicit SerializeVisitor(PropWriteStream& propWriteStream) :
-			    boost::static_visitor<>(), propWriteStream(propWriteStream)
-			{}
-
-			void operator()(const boost::blank&) const {}
-
-			void operator()(const std::string& v) const { propWriteStream.writeString(v); }
-
-			template <typename T>
-			void operator()(const T& v) const
-			{
-				propWriteStream.write<T>(v);
-			}
-		};
+			std::visit(overloaded{
+			               [&](std::monostate) { lua_pushnil(L); },
+			               [&](const std::string& v) { tfs::lua::pushString(L, v); },
+			               [&](bool v) { tfs::lua::pushBoolean(L, v); },
+			               [&](int64_t v) { lua_pushinteger(L, v); },
+			               [&](double v) { lua_pushnumber(L, v); },
+			           },
+			           value);
+		}
 
 		void serialize(PropWriteStream& propWriteStream) const
 		{
-			propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
-			boost::apply_visitor(SerializeVisitor(propWriteStream), value);
+			propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.index()));
+			std::visit(overloaded{
+			               [&](std::monostate) {},
+			               [&](const std::string& v) { propWriteStream.writeString(v); },
+			               [&](auto v) { propWriteStream.write(v); },
+			           },
+			           value);
 		}
 
 		bool unserialize(PropStream& propStream)
@@ -263,12 +231,22 @@ public:
 				}
 
 				default: {
-					value = boost::blank();
+					value = {};
 					return false;
 				}
 			}
 			return true;
 		}
+
+	private:
+		using VariantAttribute = std::variant<std::monostate, std::string, int64_t, double, bool>;
+		VariantAttribute value = {};
+
+		template <class... Ts>
+		struct overloaded : Ts...
+		{
+			using Ts::operator()...;
+		};
 	};
 
 private:

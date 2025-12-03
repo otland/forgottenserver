@@ -6,7 +6,6 @@
     "boost-iostreams",
     "boost-lockfree",
     "boost-system",
-    "boost-variant",
     {
       "name": "libiconv",
       "platform": "osx"
