@@ -1,9 +1,12 @@
 name: Check code style
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
-      - master
+      - dev
       - v*
 
     paths:

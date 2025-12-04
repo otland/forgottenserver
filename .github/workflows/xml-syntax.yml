@@ -1,12 +1,15 @@
 name: XML syntax check
 
+permissions:
+  contents: read
+
 on:
   pull_request:
     paths:
       - data/**.xml
   push:
     branches:
-      - master
+      - dev
     paths:
       - data/**.xml
 

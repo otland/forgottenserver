@@ -1,10 +1,14 @@
 name: Docker
 
+permissions:
+  contents: read
+  packages: write
+
 on:
   push:
-    # Publish `master` as Docker `latest` image.
+    # Publish `dev` as Docker `latest` image.
     branches:
-      - master
+      - dev
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -12,7 +16,7 @@ on:
 
   pull_request:
     branches:
-      - master
+      - dev
 
 env:
   IMAGE_NAME: forgottenserver

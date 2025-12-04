@@ -1,9 +1,12 @@
 name: Lua syntax check, lint, and format
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
-      - master
+      - dev
       - v*
 
     paths:
