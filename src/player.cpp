@@ -1172,8 +1172,10 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 			guild->addMember(this);
 		}
 
-		for (const auto& it : g_game.getPlayers()) {
-			it.second->notifyStatusChange(this, VIPSTATUS_ONLINE);
+		for (const auto& [_, player] : g_game.getPlayers()) {
+			if (player != this) {
+				player->notifyStatusChange(this, VIPSTATUS_ONLINE);
+			}
 		}
 
 		if (!g_creatureEvents->playerLogin(this)) {
@@ -1312,8 +1314,10 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 
 		IOLoginData::updateOnlineStatus(guid, false);
 
-		for (const auto& it : g_game.getPlayers()) {
-			it.second->notifyStatusChange(this, VIPSTATUS_OFFLINE);
+		for (const auto& [_, player] : g_game.getPlayers()) {
+			if (player != this) {
+				player->notifyStatusChange(this, VIPSTATUS_OFFLINE);
+			}
 		}
 
 		bool saved = false;
