@@ -89,10 +89,7 @@ public:
 	Combat& operator=(const Combat&) = delete;
 
 	static bool isInPvpZone(const Creature* attacker, const Creature* target);
-	static bool isProtected(const Player* attacker, const Player* target);
 	static bool isPlayerCombat(const Creature* target);
-	static CombatType_t ConditionToDamageType(ConditionType_t type);
-	static ConditionType_t DamageToConditionType(CombatType_t type);
 	static ReturnValue canTargetCreature(Player* attacker, Creature* target);
 	static ReturnValue canDoCombat(Creature* caster, Tile* tile, bool aggressive);
 	static ReturnValue canDoCombat(Creature* attacker, Creature* target);
@@ -123,8 +120,6 @@ public:
 	void setOrigin(CombatOrigin origin) { params.origin = origin; }
 
 private:
-	static void combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile,
-	                              const CombatParams& params);
 	CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
 
 	// configurable
