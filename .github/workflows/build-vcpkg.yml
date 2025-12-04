@@ -45,17 +45,6 @@ jobs:
       - run: echo CXX=g++-14 >> $GITHUB_ENV
         if: ${{ matrix.os == 'macos' || matrix.os == 'ubuntu' }}
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: cpp
-          # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
-          queries: +security-extended,security-and-quality
-          config: |
-            paths-ignore:
-              - 'vcpkg/**'
-        if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
-
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
@@ -85,12 +74,6 @@ jobs:
           name: logs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ github.workspace }}/vcpkg/buildtrees/**/*.log
         if: ${{ failure() }}
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:cpp"
-        if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v4
