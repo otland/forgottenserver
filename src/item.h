@@ -171,7 +171,6 @@ public:
 			               [&](double v) { lua_pushnumber(L, v); },
 			           },
 			           value);
-
 		}
 
 		void serialize(PropWriteStream& propWriteStream) const
