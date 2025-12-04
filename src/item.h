@@ -156,7 +156,10 @@ public:
 
 		constexpr bool operator==(const CustomAttribute& rhs) const { return value == rhs.value; }
 		constexpr bool operator!=(const CustomAttribute& rhs) const { return value != rhs.value; }
-		constexpr auto operator=(const auto& v) { value = v; }
+		constexpr CustomAttribute& operator=(const auto& v) {
+			value = v;
+			return *this;
+		}
 
 		void pushToLua(lua_State* L) const
 		{
