@@ -1615,7 +1615,7 @@ function showpos(v)
 	return v > 0 and '+' or '-'
 end
 
--- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
+-- this is a fix for lua52 or higher which has the function renamed to table.unpack
 if not unpack then unpack = table.unpack end
 
 if not loadstring then loadstring = load end

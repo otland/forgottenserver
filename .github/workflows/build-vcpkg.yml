@@ -28,13 +28,12 @@ on:
 
 jobs:
   build-vcpkg:
-    name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    name: ${{ matrix.os }}-${{ matrix.buildtype }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
         os: [ubuntu, macos, windows]
         buildtype: [Debug, Release]
-        luajit: [on, off]
 
     env:
       VCPKG_BUILD_TYPE: release
@@ -53,7 +52,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/vcpkg_cache
-          key: vcpkg-${{ matrix.os }}-${{ matrix.luajit }}-${{ hashFiles('vcpkg.json', 'CMakeLists.txt', '**/CMakeLists.txt', 'CMakePresets.json') }}
+          key: vcpkg-${{ matrix.os }}-${{ hashFiles('vcpkg.json', 'CMakeLists.txt', '**/CMakeLists.txt', 'CMakePresets.json') }}
 
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
@@ -66,12 +65,11 @@ jobs:
           buildPreset: vcpkg
           buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
           configurePreset: vcpkg
-          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}']"
 
       - name: Upload build logs
         uses: actions/upload-artifact@v4
         with:
-          name: logs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: logs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
           path: ${{ github.workspace }}/vcpkg/buildtrees/**/*.log
         if: ${{ failure() }}
 
@@ -79,14 +77,14 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
           path: ${{ github.workspace }}/build/${{ matrix.buildtype }}/tfs
 
       - name: Upload artifact binary (exe)
         uses: actions/upload-artifact@v4
         if: ${{ startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
           path: |
             ${{ github.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
             ${{ github.workspace }}/build/${{ matrix.buildtype }}/*.dll

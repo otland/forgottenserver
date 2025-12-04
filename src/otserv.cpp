@@ -324,11 +324,7 @@ void printServerVersion()
 #else
 	std::cout << "unknown" << std::endl;
 #endif
-#if defined(LUAJIT_VERSION)
-	std::cout << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
-#else
 	std::cout << "Linked with " << LUA_RELEASE << " for Lua support" << std::endl;
-#endif
 	std::cout << std::endl;
 
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;

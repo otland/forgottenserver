@@ -10,6 +10,7 @@
       "name": "libiconv",
       "platform": "osx"
     },
+    "lua",
     "openssl",
     "pugixml",
     "simdutf",
@@ -21,18 +22,6 @@
       "dependencies": [
         "boost-beast",
         "boost-json"
-      ]
-    },
-    "lua": {
-      "description": "Use Lua instead of LuaJIT",
-      "dependencies": [
-        "lua"
-      ]
-    },
-    "luajit": {
-      "description": "Use LuaJIT instead of Lua",
-      "dependencies": [
-        "luajit"
       ]
     },
     "libmariadb": {
@@ -55,7 +44,6 @@
     }
   },
   "default-features": [
-    "lua",
     "http",
     "libmariadb"
   ],

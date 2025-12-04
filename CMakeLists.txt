@@ -33,13 +33,6 @@ else()
     list(APPEND VCPKG_MANIFEST_FEATURES "libmariadb")
 endif()
 
-option(USE_LUAJIT "Use LuaJIT" OFF)
-if (USE_LUAJIT)
-    list(APPEND VCPKG_MANIFEST_FEATURES "luajit")
-else()
-    list(APPEND VCPKG_MANIFEST_FEATURES "lua")
-endif()
-
 option(ASAN "Enable address sanitizer" OFF)
 if (ASAN)
     if (MSVC)
@@ -92,15 +85,9 @@ if (NOT MYSQL_CLIENT_LIBS)
     find_package(MySQL REQUIRED)
 endif ()
 
-find_package(Threads REQUIRED)
+find_package(Lua REQUIRED)
 find_package(PugiXML CONFIG REQUIRED)
-
-# Selects LuaJIT if user defines or auto-detected
-if (USE_LUAJIT)
-    find_package(LuaJIT REQUIRED)
-else ()
-    find_package(Lua REQUIRED)
-endif ()
+find_package(Threads REQUIRED)
 
 if (APPLE)
     find_package(Iconv REQUIRED)

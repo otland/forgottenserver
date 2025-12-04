@@ -1226,12 +1226,10 @@ void LuaScriptInterface::registerFunctions()
 	// isScriptsInterface()
 	lua_register(L, "isScriptsInterface", LuaScriptInterface::luaIsScriptsInterface);
 
-#ifndef LUAJIT_VERSION
 	// bit operations for Lua, based on bitlib project release 24
 	// bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
 	luaL_register(L, "bit", LuaScriptInterface::luaBitReg);
 	lua_pop(L, 1);
-#endif
 
 	// configManager table
 	luaL_register(L, "configManager", LuaScriptInterface::luaConfigManagerTable);
@@ -4094,7 +4092,6 @@ int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
 	return 1;
 }
 
-#ifndef LUAJIT_VERSION
 const luaL_Reg LuaScriptInterface::luaBitReg[] = {
     //{"tobit", LuaScriptInterface::luaBitToBit},
     {"bnot", LuaScriptInterface::luaBitNot},
@@ -4140,7 +4137,6 @@ MULTIOP(Xor, ^=)
 
 SHIFTOP(LeftShift, <<)
 SHIFTOP(RightShift, >>)
-#endif
 
 const luaL_Reg LuaScriptInterface::luaConfigManagerTable[] = {
     {"getString", LuaScriptInterface::luaConfigManagerGetString},

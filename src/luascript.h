@@ -146,9 +146,7 @@ public:
 	bool callFunction(int params);
 	void callVoidFunction(int params);
 
-#ifndef LUAJIT_VERSION
 	static const luaL_Reg luaBitReg[7];
-#endif
 	static const luaL_Reg luaConfigManagerTable[4];
 	static const luaL_Reg luaDatabaseTable[9];
 	static const luaL_Reg luaResultTable[6];
@@ -208,14 +206,12 @@ private:
 
 	static int luaIsScriptsInterface(lua_State* L);
 
-#ifndef LUAJIT_VERSION
 	static int luaBitNot(lua_State* L);
 	static int luaBitAnd(lua_State* L);
 	static int luaBitOr(lua_State* L);
 	static int luaBitXor(lua_State* L);
 	static int luaBitLeftShift(lua_State* L);
 	static int luaBitRightShift(lua_State* L);
-#endif
 
 	static int luaConfigManagerGetString(lua_State* L);
 	static int luaConfigManagerGetNumber(lua_State* L);

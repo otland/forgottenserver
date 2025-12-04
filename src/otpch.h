@@ -30,6 +30,7 @@
 #include <iostream>
 #include <limits>
 #include <list>
+#include <lua.hpp>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -51,11 +52,5 @@
 #include <valarray>
 #include <variant>
 #include <vector>
-
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
-#include <lua.hpp>
-#endif
 
 #endif // FS_OTPCH_H

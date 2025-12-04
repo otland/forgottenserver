@@ -10,12 +10,6 @@
 #include "monster.h"
 #include "pugicast.h"
 
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
-#include <lua.hpp>
-#endif
-
 #if LUA_VERSION_NUM >= 502
 #undef lua_strlen
 #define lua_strlen lua_rawlen

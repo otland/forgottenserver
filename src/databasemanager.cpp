@@ -77,11 +77,9 @@ void DatabaseManager::updateDatabase()
 
 	luaL_openlibs(L);
 
-#ifndef LUAJIT_VERSION
 	// bit operations for Lua, based on bitlib project release 24
 	// bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
 	luaL_register(L, "bit", LuaScriptInterface::luaBitReg);
-#endif
 
 	// db table
 	luaL_register(L, "db", LuaScriptInterface::luaDatabaseTable);
