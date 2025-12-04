@@ -51,9 +51,6 @@ public:
 		}
 	}
 
-	void addList() override;
-	void removeList() override;
-
 	const std::string& getName() const override;
 	void setName(const std::string& name);
 

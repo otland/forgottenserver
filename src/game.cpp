@@ -512,7 +512,19 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 
 	creature->incrementReferenceCounter();
 	creature->setID();
-	creature->addList();
+
+	if (const auto npc = creature->getNpc()) {
+		npcs[npc->getID()] = npc;
+	} else if (const auto monster = creature->getMonster()) {
+		monsters[monster->getID()] = monster;
+	} else if (const auto player = creature->getPlayer()) {
+		const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
+		mappedPlayerNames[lowercase_name] = player;
+		mappedPlayerGuids[player->getGUID()] = player;
+		wildcardTree.insert(lowercase_name);
+		players[player->getID()] = player;
+	}
+
 	return true;
 }
 
@@ -583,8 +595,20 @@ bool Game::removeCreature(Creature* creature, bool isLogout /* = true*/)
 
 	creature->getParent()->postRemoveNotification(creature, nullptr, 0);
 
-	creature->removeList();
 	creature->setRemoved();
+
+	if (const auto npc = creature->getNpc()) {
+		npcs.erase(npc->getID());
+	} else if (const auto monster = creature->getMonster()) {
+		monsters.erase(monster->getID());
+	} else if (const auto player = creature->getPlayer()) {
+		const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
+		mappedPlayerNames.erase(lowercase_name);
+		mappedPlayerGuids.erase(player->getGUID());
+		wildcardTree.remove(lowercase_name);
+		players.erase(player->getID());
+	}
+
 	ReleaseCreature(creature);
 
 	removeCreatureCheck(creature);
@@ -5692,32 +5716,6 @@ void Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 		}
 	}
 }
-
-void Game::addPlayer(Player* player)
-{
-	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
-	mappedPlayerNames[lowercase_name] = player;
-	mappedPlayerGuids[player->getGUID()] = player;
-	wildcardTree.insert(lowercase_name);
-	players[player->getID()] = player;
-}
-
-void Game::removePlayer(Player* player)
-{
-	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
-	mappedPlayerNames.erase(lowercase_name);
-	mappedPlayerGuids.erase(player->getGUID());
-	wildcardTree.remove(lowercase_name);
-	players.erase(player->getID());
-}
-
-void Game::addNpc(Npc* npc) { npcs[npc->getID()] = npc; }
-
-void Game::removeNpc(Npc* npc) { npcs.erase(npc->getID()); }
-
-void Game::addMonster(Monster* monster) { monsters[monster->getID()] = monster; }
-
-void Game::removeMonster(Monster* monster) { monsters.erase(monster->getID()); }
 
 Guild_ptr Game::getGuild(uint32_t id) const
 {

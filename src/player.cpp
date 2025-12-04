@@ -1172,6 +1172,12 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 			guild->addMember(this);
 		}
 
+		for (const auto& [_, player] : g_game.getPlayers()) {
+			if (player != this) {
+				player->notifyStatusChange(this, VIPSTATUS_ONLINE);
+			}
+		}
+
 		if (!g_creatureEvents->playerLogin(this)) {
 			kickPlayer(true);
 			return;
@@ -1307,6 +1313,12 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		}
 
 		IOLoginData::updateOnlineStatus(guid, false);
+
+		for (const auto& [_, player] : g_game.getPlayers()) {
+			if (player != this) {
+				player->notifyStatusChange(this, VIPSTATUS_OFFLINE);
+			}
+		}
 
 		bool saved = false;
 		for (uint32_t tries = 0; tries < 3; ++tries) {
@@ -2286,24 +2298,6 @@ void Player::addInFightTicks(bool pzlock /*= false*/)
 	Condition* condition =
 	    Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, getNumber(ConfigManager::PZ_LOCKED), 0);
 	addCondition(condition);
-}
-
-void Player::removeList()
-{
-	g_game.removePlayer(this);
-
-	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(this, VIPSTATUS_OFFLINE);
-	}
-}
-
-void Player::addList()
-{
-	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(this, VIPSTATUS_ONLINE);
-	}
-
-	g_game.addPlayer(this);
 }
 
 void Player::kickPlayer(bool displayEffect)

@@ -54,10 +54,6 @@ Monster::~Monster()
 	clearFriendList();
 }
 
-void Monster::addList() { g_game.addMonster(this); }
-
-void Monster::removeList() { g_game.removeMonster(this); }
-
 const std::string& Monster::getName() const
 {
 	if (name.empty()) {
