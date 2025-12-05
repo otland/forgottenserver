@@ -113,6 +113,7 @@ include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} ${LUA_INCLUDE_D
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 if (BUILD_TESTING)
     message(STATUS "Building unit tests")
@@ -122,17 +123,15 @@ endif()
 # Option to disable unity builds
 option(ENABLE_UNITY_BUILD "Enable unity build" ON)
 
-add_subdirectory(src)
-add_executable(tfs ${tfs_MAIN})
-target_link_libraries(tfs tfslib)
-
 ### INTERPROCEDURAL_OPTIMIZATION ###
 include(CheckIPOSupported)
-check_ipo_supported(RESULT result OUTPUT error)
-if (result)
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
-else ()
-    message(STATUS "IPO is not supported: ${error}")
+check_ipo_supported(
+    RESULT CMAKE_INTERPROCEDURAL_OPTIMIZATION
+    OUTPUT INTERPROCEDURAL_OPTIMIZATION_ERROR
+    LANGUAGES CXX
+)
+if (NOT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+    message(STATUS "IPO is not supported: ${INTERPROCEDURAL_OPTIMIZATION_ERROR}")
 endif ()
 ### END INTERPROCEDURAL_OPTIMIZATION ###
 
@@ -151,4 +150,5 @@ if(NOT SKIP_GIT)
 endif()
 ### END  Git Version ###
 
+add_subdirectory(src)
 target_precompile_headers(tfs PUBLIC src/otpch.h)

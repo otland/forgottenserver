@@ -126,7 +126,6 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/movement.h
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.h
 	${CMAKE_CURRENT_LIST_DIR}/npc.h
-	${CMAKE_CURRENT_LIST_DIR}/otserv.h
 	${CMAKE_CURRENT_LIST_DIR}/outfit.h
 	${CMAKE_CURRENT_LIST_DIR}/outputmessage.h
 	${CMAKE_CURRENT_LIST_DIR}/party.h
@@ -162,10 +161,8 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/xtea.h
 	)
 
-set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/main.cpp PARENT_SCOPE)
-
-add_library(tfslib ${tfs_SRC})
-target_link_libraries(tfslib PRIVATE
+add_executable(tfs ${tfs_SRC})
+target_link_libraries(tfs PRIVATE
 	Boost::iostreams
 	Boost::system
 	Boost::locale
@@ -177,15 +174,15 @@ target_link_libraries(tfslib PRIVATE
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
 	)
-set_target_properties(tfslib PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
+set_target_properties(tfs PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
 
 if (APPLE)
-	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
+	target_link_libraries(tfs PRIVATE Iconv::Iconv)
 endif()
 
 if (HTTP)
 	add_subdirectory(http)
-	target_link_libraries(tfslib PRIVATE http)
+	target_link_libraries(tfs PRIVATE http)
 endif ()
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})

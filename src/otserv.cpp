@@ -3,8 +3,6 @@
 
 #include "otpch.h"
 
-#include "otserv.h"
-
 #include "configmanager.h"
 #include "databasemanager.h"
 #include "databasetasks.h"
@@ -40,6 +38,42 @@ std::condition_variable g_loaderSignal;
 std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
 namespace {
+
+void printServerVersion()
+{
+#if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
+	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
+	std::cout << "Git SHA1 " << GIT_SHORT_SHA1 << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
+#if GIT_IS_DIRTY
+	std::cout << "*** DIRTY - NOT OFFICIAL RELEASE ***" << std::endl;
+#endif
+#else
+	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
+#endif
+	std::cout << std::endl;
+
+	std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
+	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
+#if defined(__amd64__) || defined(_M_X64)
+	std::cout << "x64" << std::endl;
+#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
+	std::cout << "x86" << std::endl;
+#elif defined(__arm__)
+	std::cout << "ARM" << std::endl;
+#else
+	std::cout << "unknown" << std::endl;
+#endif
+#if defined(LUAJIT_VERSION)
+	std::cout << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
+#else
+	std::cout << "Linked with " << LUA_RELEASE << " for Lua support" << std::endl;
+#endif
+	std::cout << std::endl;
+
+	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
+	std::cout << "Visit our forum for updates, support, and resources: https://otland.net/." << std::endl;
+	std::cout << std::endl;
+}
 
 void startupErrorMessage(const std::string& errorStr)
 {
@@ -266,10 +300,47 @@ void mainLoader(ServiceManager* services)
 	exit(-1);
 }
 
+bool argumentsHandler(const std::vector<std::string_view>& args)
+{
+	for (const auto& arg : args) {
+		if (arg == "--help") {
+			std::clog << "Usage:\n"
+			             "\n"
+			             "\t--config=$1\t\tAlternate configuration file path.\n"
+			             "\t--ip=$1\t\t\tIP address of the server.\n"
+			             "\t\t\t\tShould be equal to the global IP.\n"
+			             "\t--http-port=$1\tPort for http to listen on.\n"
+			             "\t--game-port=$1\tPort for game server to listen on.\n";
+			return false;
+		} else if (arg == "--version") {
+			printServerVersion();
+			return false;
+		}
+
+		auto tmp = explodeString(arg, "=");
+
+		if (tmp[0] == "--config")
+			ConfigManager::setString(ConfigManager::CONFIG_FILE, tmp[1]);
+		else if (tmp[0] == "--ip")
+			ConfigManager::setString(ConfigManager::IP, tmp[1]);
+		else if (tmp[0] == "--http-port")
+			ConfigManager::setNumber(ConfigManager::HTTP_PORT, std::stoi(tmp[1].data()));
+		else if (tmp[0] == "--game-port")
+			ConfigManager::setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1].data()));
+	}
+
+	return true;
+}
+
 } // namespace
 
-void startServer()
+int main(int argc, const char** argv)
 {
+	std::vector<std::string_view> args(argv, argv + argc);
+	if (!argumentsHandler(args)) {
+		return 1;
+	}
+
 	// Setup bad allocation handler
 	std::set_new_handler(badAllocationHandler);
 
@@ -295,40 +366,5 @@ void startServer()
 	g_scheduler.join();
 	g_databaseTasks.join();
 	g_dispatcher.join();
-}
-
-void printServerVersion()
-{
-#if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
-	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
-	std::cout << "Git SHA1 " << GIT_SHORT_SHA1 << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
-#if GIT_IS_DIRTY
-	std::cout << "*** DIRTY - NOT OFFICIAL RELEASE ***" << std::endl;
-#endif
-#else
-	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
-#endif
-	std::cout << std::endl;
-
-	std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
-	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
-#if defined(__amd64__) || defined(_M_X64)
-	std::cout << "x64" << std::endl;
-#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
-	std::cout << "x86" << std::endl;
-#elif defined(__arm__)
-	std::cout << "ARM" << std::endl;
-#else
-	std::cout << "unknown" << std::endl;
-#endif
-#if defined(LUAJIT_VERSION)
-	std::cout << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
-#else
-	std::cout << "Linked with " << LUA_RELEASE << " for Lua support" << std::endl;
-#endif
-	std::cout << std::endl;
-
-	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
-	std::cout << "Visit our forum for updates, support, and resources: https://otland.net/." << std::endl;
-	std::cout << std::endl;
+	return 0;
 }
