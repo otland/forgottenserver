@@ -1,0 +1,7 @@
+local weapon = Weapon(WEAPON_WAND)
+weapon:level(65)
+weapon:mana(17)
+weapon:damage(70, 100)
+weapon:element("earth")
+weapon:vocation("druid")
+weapon:register()
