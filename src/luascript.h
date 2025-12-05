@@ -4,7 +4,6 @@
 #ifndef FS_LUASCRIPT_H
 #define FS_LUASCRIPT_H
 
-#include "database.h"
 #include "enums.h"
 #include "position.h"
 

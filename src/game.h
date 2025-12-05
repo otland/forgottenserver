@@ -8,9 +8,9 @@
 #include "map.h"
 #include "mounts.h"
 #include "player.h"
-#include "position.h"
 #include "wildcardtree.h"
 
+class Condition;
 class Monster;
 class Npc;
 class ServiceManager;

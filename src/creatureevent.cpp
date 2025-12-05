@@ -6,7 +6,6 @@
 #include "creatureevent.h"
 
 #include "item.h"
-#include "tools.h"
 
 CreatureEvents::CreatureEvents() : scriptInterface("CreatureScript Interface") { scriptInterface.initState(); }
 

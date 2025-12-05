@@ -7,6 +7,7 @@
 
 #include "bed.h"
 #include "chat.h"
+#include "combat.h"
 #include "configmanager.h"
 #include "databasemanager.h"
 #include "databasetasks.h"

@@ -6,8 +6,6 @@
 
 #include "protocol.h"
 
-class NetworkMessage;
-
 class ProtocolStatus final : public Protocol
 {
 public:

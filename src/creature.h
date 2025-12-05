@@ -7,7 +7,6 @@
 #include "const.h"
 #include "creatureevent.h"
 #include "enums.h"
-#include "map.h"
 #include "position.h"
 #include "tile.h"
 

@@ -8,6 +8,7 @@
 #include "configmanager.h"
 #include "game.h"
 #include "outputmessage.h"
+#include "tasks.h"
 
 extern Game g_game;
 

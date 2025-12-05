@@ -5,8 +5,6 @@
 
 #include "tools.h"
 
-#include "configmanager.h"
-
 #include <chrono>
 #include <openssl/evp.h>
 #include <openssl/hmac.h>

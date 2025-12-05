@@ -10,6 +10,7 @@
 #include "events.h"
 #include "game.h"
 #include "spells.h"
+#include "tasks.h"
 
 extern Game g_game;
 extern Monsters g_monsters;

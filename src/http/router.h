@@ -1,8 +1,7 @@
 #pragma once
 
-#include "session.h"
-
 #include <boost/beast/http/message_generator.hpp>
+#include <boost/beast/http/string_body.hpp>
 
 namespace tfs::http {
 

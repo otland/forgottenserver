@@ -1,9 +1,12 @@
 #pragma once
 
-#include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core/error.hpp>
 #include <memory>
+
+namespace boost::asio {
+class io_context;
+}
 
 namespace tfs::http {
 

@@ -5,7 +5,6 @@
 
 #include "globalevent.h"
 
-#include "configmanager.h"
 #include "pugicast.h"
 #include "scheduler.h"
 #include "tools.h"

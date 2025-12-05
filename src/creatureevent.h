@@ -5,7 +5,6 @@
 #define FS_CREATUREEVENT_H
 
 #include "baseevents.h"
-#include "enums.h"
 #include "luascript.h"
 
 class CreatureEvent;

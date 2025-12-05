@@ -6,7 +6,6 @@
 
 #include "enums.h"
 
-class Container;
 class Creature;
 class Item;
 class Tile;

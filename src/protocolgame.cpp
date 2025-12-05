@@ -21,7 +21,6 @@
 #include "player.h"
 #include "podium.h"
 #include "scheduler.h"
-#include "storeinbox.h"
 
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;

@@ -6,6 +6,7 @@
 #include "databasemanager.h"
 
 #include "configmanager.h"
+#include "database.h"
 #include "luascript.h"
 
 bool DatabaseManager::optimizeTables()
