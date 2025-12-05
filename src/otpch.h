@@ -34,7 +34,6 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <mysql/mysql.h>
 #include <optional>
 #include <print>
 #include <pugixml.hpp>
@@ -52,5 +51,11 @@
 #include <valarray>
 #include <variant>
 #include <vector>
+
+#if __has_include(<mariadb/mysql.h>)
+#include <mariadb/mysql.h>
+#else
+#include <mysql/mysql.h>
+#endif
 
 #endif // FS_OTPCH_H

@@ -7,7 +7,11 @@
 
 #include "configmanager.h"
 
+#if __has_include(<mariadb/errmsg.h>)
+#include <mariadb/errmsg.h>
+#else
 #include <mysql/errmsg.h>
+#endif
 
 static tfs::detail::Mysql_ptr connectToDatabase(const bool retryIfError)
 {
