@@ -40,7 +40,7 @@ jobs:
       VCPKG_BUILD_TYPE: release
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - run: echo CXX=g++-14 >> $GITHUB_ENV
         if: ${{ matrix.os == 'macos' || matrix.os == 'ubuntu' }}
