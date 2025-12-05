@@ -185,7 +185,7 @@ if (HTTP)
 	target_link_libraries(tfs PRIVATE http)
 endif ()
 
-add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
+add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC})
 
 if (BUILD_TESTING)
     add_subdirectory(tests)

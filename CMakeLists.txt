@@ -135,6 +135,8 @@ if (NOT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
 endif ()
 ### END INTERPROCEDURAL_OPTIMIZATION ###
 
+add_subdirectory(src)
+
 ### Git Version ###
 # Define the two required variables before including
 # the source code for watching a git repository.
@@ -150,5 +152,4 @@ if(NOT SKIP_GIT)
 endif()
 ### END  Git Version ###
 
-add_subdirectory(src)
 target_precompile_headers(tfs PUBLIC src/otpch.h)
