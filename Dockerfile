@@ -1,4 +1,4 @@
-FROM alpine:3.22 AS build
+FROM alpine:3.23 AS build
 RUN apk add --no-cache \
   build-base \
   boost-dev \
@@ -16,7 +16,7 @@ COPY CMakeLists.txt CMakePresets.json /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver
 RUN cmake --preset default -DUSE_LUAJIT=ON && cmake --build --config RelWithDebInfo --preset default
 
-FROM alpine:3.22
+FROM alpine:3.23
 RUN apk add --no-cache \
   boost-iostreams \
   boost-locale \
