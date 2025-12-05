@@ -10,6 +10,7 @@ class Item;
 class Map;
 class PropStream;
 class PropWriteStream;
+class Thing;
 class Tile;
 
 class IOMapSerialize
