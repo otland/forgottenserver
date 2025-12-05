@@ -772,8 +772,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 	}
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
-		Item* bow = player->getWeapon(true);
-		if (bow && bow->getHitChance() != 0) {
+		if (Item* bow = player->getWeapon(true)) {
 			chance += bow->getHitChance();
 		}
 	}
