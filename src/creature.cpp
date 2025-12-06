@@ -152,20 +152,6 @@ void Creature::forceUpdatePath()
 	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
-void Creature::onAttacking(uint32_t interval)
-{
-	if (!attackedCreature) {
-		return;
-	}
-
-	onAttacked();
-	attackedCreature->onAttacked();
-
-	if (g_game.isSightClear(getPosition(), attackedCreature->getPosition(), true)) {
-		doAttacking(interval);
-	}
-}
-
 void Creature::onIdleStatus()
 {
 	if (!isDead()) {
@@ -986,11 +972,6 @@ void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 }
 
 void Creature::onCombatRemoveCondition(Condition* condition) { removeCondition(condition); }
-
-void Creature::onAttacked()
-{
-	//
-}
 
 void Creature::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 {

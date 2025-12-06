@@ -1591,6 +1591,63 @@ void Player::onThink(uint32_t interval)
 	}
 }
 
+void Player::onAttacking(uint32_t)
+{
+	if (!attackedCreature) {
+		return;
+	}
+
+	onAttacked();
+	attackedCreature->onAttacked();
+
+	if (hasCondition(CONDITION_PACIFIED)) {
+		return;
+	}
+
+	if (lastAttack == 0) {
+		lastAttack = OTSYS_TIME() - getAttackSpeed() - 1;
+	}
+
+	if ((OTSYS_TIME() - lastAttack) < getAttackSpeed()) {
+		return;
+	}
+
+	if (!g_game.isSightClear(getPosition(), attackedCreature->getPosition(), true)) {
+		return;
+	}
+
+	bool result = false;
+
+	Item* tool = getWeapon();
+	uint32_t delay = getAttackSpeed();
+	bool classicSpeed = getBoolean(ConfigManager::CLASSIC_ATTACK_SPEED);
+
+	if (const Weapon* weapon = g_weapons->getWeapon(tool)) {
+		if (!weapon->interruptSwing()) {
+			result = weapon->useWeapon(this, tool, attackedCreature);
+		} else if (!classicSpeed && !canDoAction()) {
+			delay = getNextActionTime();
+		} else {
+			result = weapon->useWeapon(this, tool, attackedCreature);
+		}
+	} else {
+		result = Weapon::useFist(this, attackedCreature);
+	}
+
+	SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
+	                                          [id = getID()]() { g_game.checkCreatureAttack(id); });
+	if (!classicSpeed) {
+		setNextActionTask(task, false);
+	} else {
+		g_scheduler.stopEvent(classicAttackEvent);
+		classicAttackEvent = g_scheduler.addEvent(task);
+	}
+
+	if (result) {
+		lastAttack = OTSYS_TIME();
+	}
+}
+
 uint32_t Player::isMuted() const
 {
 	if (hasFlag(PlayerFlag_CannotBeMuted)) {
@@ -3395,51 +3452,6 @@ void Player::getPathSearchParams(const Creature* creature, FindPathParams& fpp) 
 {
 	Creature::getPathSearchParams(creature, fpp);
 	fpp.fullPathSearch = true;
-}
-
-void Player::doAttacking(uint32_t)
-{
-	if (lastAttack == 0) {
-		lastAttack = OTSYS_TIME() - getAttackSpeed() - 1;
-	}
-
-	if (hasCondition(CONDITION_PACIFIED)) {
-		return;
-	}
-
-	if ((OTSYS_TIME() - lastAttack) >= getAttackSpeed()) {
-		bool result = false;
-
-		Item* tool = getWeapon();
-		const Weapon* weapon = g_weapons->getWeapon(tool);
-		uint32_t delay = getAttackSpeed();
-		bool classicSpeed = getBoolean(ConfigManager::CLASSIC_ATTACK_SPEED);
-
-		if (weapon) {
-			if (!weapon->interruptSwing()) {
-				result = weapon->useWeapon(this, tool, attackedCreature);
-			} else if (!classicSpeed && !canDoAction()) {
-				delay = getNextActionTime();
-			} else {
-				result = weapon->useWeapon(this, tool, attackedCreature);
-			}
-		} else {
-			result = Weapon::useFist(this, attackedCreature);
-		}
-
-		SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
-		                                          [id = getID()]() { g_game.checkCreatureAttack(id); });
-		if (!classicSpeed) {
-			setNextActionTask(task, false);
-		} else {
-			g_scheduler.stopEvent(classicAttackEvent);
-			classicAttackEvent = g_scheduler.addEvent(task);
-		}
-
-		if (result) {
-			lastAttack = OTSYS_TIME();
-		}
-	}
 }
 
 uint64_t Player::getGainedExperience(Creature* attacker) const
