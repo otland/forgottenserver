@@ -820,9 +820,22 @@ void Monster::onThink(uint32_t interval)
 	}
 }
 
-void Monster::doAttacking(uint32_t interval)
+void Monster::onAttacking(uint32_t interval)
 {
-	if (!attackedCreature || (isSummon() && attackedCreature == this)) {
+	if (!attackedCreature) {
+		return;
+	}
+
+	onAttacked();
+	attackedCreature->onAttacked();
+
+	if (isSummon() && attackedCreature == this) {
+		return;
+	}
+
+	const auto& position = getPosition();
+	const auto& targetPosition = attackedCreature->getPosition();
+	if (!g_game.isSightClear(position, targetPosition, true)) {
 		return;
 	}
 
@@ -830,17 +843,14 @@ void Monster::doAttacking(uint32_t interval)
 	bool resetTicks = interval != 0;
 	attackTicks += interval;
 
-	const Position& myPos = getPosition();
-	const Position& targetPos = attackedCreature->getPosition();
-
 	for (const spellBlock_t& spellBlock : mType->info.attackSpells) {
-		bool inRange = false;
-
 		if (!attackedCreature) {
 			break;
 		}
 
-		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
+		bool inRange = false;
+
+		if (canUseSpell(position, targetPosition, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
 				if (!lookUpdated) {
 					updateLookDirection();

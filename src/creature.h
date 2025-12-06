@@ -290,7 +290,7 @@ public:
 	void onTickCondition(ConditionType_t type, bool& bRemove);
 	virtual void onCombatRemoveCondition(Condition* condition);
 	virtual void onAttackedCreature(Creature*, bool = true) {}
-	virtual void onAttacked();
+	virtual void onAttacked() {}
 	virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 	virtual void onTargetCreatureGainHealth(Creature*, int32_t) {}
 	virtual bool onKilledCreature(Creature* target, bool lastHit = true);
@@ -306,8 +306,9 @@ public:
 	void setCreatureLight(LightInfo lightInfo);
 
 	virtual void onThink(uint32_t interval);
+	virtual void onAttacking(uint32_t interval) {}
+
 	virtual void forceUpdatePath();
-	void onAttacking(uint32_t interval);
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
@@ -450,7 +451,6 @@ protected:
 	CreatureEventList getCreatureEvents(CreatureEventType_t type);
 
 	void onCreatureDisappear(const Creature* creature, bool isLogout);
-	virtual void doAttacking(uint32_t) {}
 	virtual bool hasExtraSwing() { return false; }
 
 	virtual uint64_t getLostExperience() const { return 0; }
