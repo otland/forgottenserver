@@ -96,70 +96,22 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 	return damage;
 }
 
-CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
+static bool isProtected(const Player* attacker, const Player* target)
 {
-	switch (type) {
-		case CONDITION_FIRE:
-			return COMBAT_FIREDAMAGE;
-
-		case CONDITION_ENERGY:
-			return COMBAT_ENERGYDAMAGE;
-
-		case CONDITION_BLEEDING:
-			return COMBAT_PHYSICALDAMAGE;
-
-		case CONDITION_DROWN:
-			return COMBAT_DROWNDAMAGE;
-
-		case CONDITION_POISON:
-			return COMBAT_EARTHDAMAGE;
-
-		case CONDITION_FREEZING:
-			return COMBAT_ICEDAMAGE;
-
-		case CONDITION_DAZZLED:
-			return COMBAT_HOLYDAMAGE;
-
-		case CONDITION_CURSED:
-			return COMBAT_DEATHDAMAGE;
-
-		default:
-			break;
+	uint32_t protectionLevel = getNumber(ConfigManager::PROTECTION_LEVEL);
+	if (target->getLevel() < protectionLevel || attacker->getLevel() < protectionLevel) {
+		return true;
 	}
 
-	return COMBAT_NONE;
-}
-
-ConditionType_t Combat::DamageToConditionType(CombatType_t type)
-{
-	switch (type) {
-		case COMBAT_FIREDAMAGE:
-			return CONDITION_FIRE;
-
-		case COMBAT_ENERGYDAMAGE:
-			return CONDITION_ENERGY;
-
-		case COMBAT_DROWNDAMAGE:
-			return CONDITION_DROWN;
-
-		case COMBAT_EARTHDAMAGE:
-			return CONDITION_POISON;
-
-		case COMBAT_ICEDAMAGE:
-			return CONDITION_FREEZING;
-
-		case COMBAT_HOLYDAMAGE:
-			return CONDITION_DAZZLED;
-
-		case COMBAT_DEATHDAMAGE:
-			return CONDITION_CURSED;
-
-		case COMBAT_PHYSICALDAMAGE:
-			return CONDITION_BLEEDING;
-
-		default:
-			return CONDITION_NONE;
+	if (!attacker->getVocation()->allowsPvp() || !target->getVocation()->allowsPvp()) {
+		return true;
 	}
+
+	if (attacker->getSkull() == SKULL_BLACK && attacker->getSkullClient(target) == SKULL_NONE) {
+		return true;
+	}
+
+	return false;
 }
 
 bool Combat::isPlayerCombat(const Creature* target)
@@ -265,24 +217,6 @@ ReturnValue Combat::canDoCombat(Creature* caster, Tile* tile, bool aggressive)
 bool Combat::isInPvpZone(const Creature* attacker, const Creature* target)
 {
 	return attacker->getZone() == ZONE_PVP && target->getZone() == ZONE_PVP;
-}
-
-bool Combat::isProtected(const Player* attacker, const Player* target)
-{
-	uint32_t protectionLevel = getNumber(ConfigManager::PROTECTION_LEVEL);
-	if (target->getLevel() < protectionLevel || attacker->getLevel() < protectionLevel) {
-		return true;
-	}
-
-	if (!attacker->getVocation()->allowsPvp() || !target->getVocation()->allowsPvp()) {
-		return true;
-	}
-
-	if (attacker->getSkull() == SKULL_BLACK && attacker->getSkullClient(target) == SKULL_NONE) {
-		return true;
-	}
-
-	return false;
 }
 
 ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
@@ -520,7 +454,7 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 	return nullptr;
 }
 
-void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params)
+static void combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params)
 {
 	if (params.itemId != 0) {
 		uint16_t itemId = params.itemId;
@@ -1413,7 +1347,7 @@ void MagicField::onStepInField(Creature* creature)
 			if (!harmfulField && targetPlayer) {
 				Player* attackerPlayer = g_game.getPlayerByID(ownerId);
 				if (attackerPlayer) {
-					if (Combat::isProtected(attackerPlayer, targetPlayer)) {
+					if (isProtected(attackerPlayer, targetPlayer)) {
 						harmfulField = false;
 					}
 				}

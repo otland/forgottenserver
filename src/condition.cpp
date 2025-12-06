@@ -1367,6 +1367,40 @@ bool ConditionDamage::getNextDamage(int32_t& damage)
 	return false;
 }
 
+constexpr CombatType_t ConditionToDamageType(ConditionType_t type)
+{
+	switch (type) {
+		case CONDITION_FIRE:
+			return COMBAT_FIREDAMAGE;
+
+		case CONDITION_ENERGY:
+			return COMBAT_ENERGYDAMAGE;
+
+		case CONDITION_BLEEDING:
+			return COMBAT_PHYSICALDAMAGE;
+
+		case CONDITION_DROWN:
+			return COMBAT_DROWNDAMAGE;
+
+		case CONDITION_POISON:
+			return COMBAT_EARTHDAMAGE;
+
+		case CONDITION_FREEZING:
+			return COMBAT_ICEDAMAGE;
+
+		case CONDITION_DAZZLED:
+			return COMBAT_HOLYDAMAGE;
+
+		case CONDITION_CURSED:
+			return COMBAT_DEATHDAMAGE;
+
+		default:
+			break;
+	}
+
+	return COMBAT_NONE;
+}
+
 bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 {
 	if (!creature) {
@@ -1380,7 +1414,7 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 	CombatDamage damage;
 	damage.origin = ORIGIN_CONDITION;
 	damage.primary.value = healthChange;
-	damage.primary.type = Combat::ConditionToDamageType(conditionType);
+	damage.primary.type = ConditionToDamageType(conditionType);
 
 	Creature* attacker = g_game.getCreatureByID(owner);
 	if (field && creature->getPlayer() && attacker && attacker->getPlayer()) {

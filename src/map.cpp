@@ -913,6 +913,38 @@ uint16_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos
 	return MAP_NORMALWALKCOST;
 }
 
+constexpr ConditionType_t DamageToConditionType(CombatType_t type)
+{
+	switch (type) {
+		case COMBAT_FIREDAMAGE:
+			return CONDITION_FIRE;
+
+		case COMBAT_ENERGYDAMAGE:
+			return CONDITION_ENERGY;
+
+		case COMBAT_DROWNDAMAGE:
+			return CONDITION_DROWN;
+
+		case COMBAT_EARTHDAMAGE:
+			return CONDITION_POISON;
+
+		case COMBAT_ICEDAMAGE:
+			return CONDITION_FREEZING;
+
+		case COMBAT_HOLYDAMAGE:
+			return CONDITION_DAZZLED;
+
+		case COMBAT_DEATHDAMAGE:
+			return CONDITION_CURSED;
+
+		case COMBAT_PHYSICALDAMAGE:
+			return CONDITION_BLEEDING;
+
+		default:
+			return CONDITION_NONE;
+	}
+}
+
 uint16_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 {
 	uint16_t cost = 0;
@@ -924,7 +956,7 @@ uint16_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 	if (const MagicField* field = tile->getFieldItem()) {
 		CombatType_t combatType = field->getCombatType();
 		const Monster* monster = creature.getMonster();
-		if (!creature.isImmune(combatType) && !creature.hasCondition(Combat::DamageToConditionType(combatType)) &&
+		if (!creature.isImmune(combatType) && !creature.hasCondition(DamageToConditionType(combatType)) &&
 		    (monster && !monster->canWalkOnFieldType(combatType))) {
 			cost += MAP_NORMALWALKCOST * 18;
 		}
