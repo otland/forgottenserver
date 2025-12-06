@@ -306,7 +306,7 @@ public:
 	void setCreatureLight(LightInfo lightInfo);
 
 	virtual void onThink(uint32_t interval);
-	virtual void onAttacking(uint32_t interval) {}
+	virtual void onAttacking(uint32_t) {}
 
 	virtual void forceUpdatePath();
 	virtual void onWalk();
