@@ -1602,7 +1602,7 @@ void Player::onThink(uint32_t interval)
 	}
 }
 
-void Player::onAttacking(uint32_t interval)
+void Player::onAttacking(uint32_t)
 {
 	if (!attackedCreature) {
 		return;
