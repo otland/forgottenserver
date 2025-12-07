@@ -71,25 +71,25 @@ public:
 
 	auto getEventInfo() const { return std::make_tuple(scriptId, interface, callbackId, timerEvent); }
 
-	uint32_t addThing(Thing* thing);
-	void insertItem(uint32_t uid, Item* item);
+	uint32_t addThing(const std::shared_ptr<Thing>& thing);
+	void insertItem(uint32_t uid, const std::shared_ptr<Item>& item);
 
-	void setNpc(Npc* npc) { curNpc = npc; }
-	Npc* getNpc() const { return curNpc; }
+	void setNpc(std::shared_ptr<Npc> npc) { curNpc = std::move(npc); }
+	std::shared_ptr<Npc> getNpc() const { return curNpc; }
 
-	Thing* getThingByUID(uint32_t uid);
-	Item* getItemByUID(uint32_t uid);
-	Container* getContainerByUID(uint32_t uid);
+	std::shared_ptr<Thing> getThingByUID(uint32_t uid);
+	std::shared_ptr<Item> getItemByUID(uint32_t uid);
+	std::shared_ptr<Container> getContainerByUID(uint32_t uid);
 	void removeItemByUID(uint32_t uid);
 
 private:
 	LuaScriptInterface* interface;
 
 	// for npc scripts
-	Npc* curNpc = nullptr;
+	std::shared_ptr<Npc> curNpc = nullptr;
 
 	// local item map
-	std::unordered_map<uint32_t, Item*> localMap;
+	std::unordered_map<uint32_t, std::shared_ptr<Item>> localMap;
 	uint32_t lastUID = std::numeric_limits<uint16_t>::max();
 
 	// script file id
@@ -128,7 +128,7 @@ public:
 	virtual bool initState();
 	bool reInitState();
 
-	int32_t loadFile(const std::string& file, Npc* npc = nullptr);
+	int32_t loadFile(const std::string& file, const std::shared_ptr<Npc>& npc = nullptr);
 
 	const std::string& getFileById(int32_t scriptId);
 	int32_t getEvent(std::string_view eventName);
@@ -1408,8 +1408,6 @@ private:
 
 namespace tfs::lua {
 
-void removeTempItem(Item* item);
-
 ScriptEnvironment* getScriptEnv();
 bool reserveScriptEnv();
 void resetScriptEnv();
@@ -1419,7 +1417,7 @@ void reportError(std::string_view function, std::string_view error_desc, lua_Sta
 #define reportErrorFunc(L, a) tfs::lua::reportError(__FUNCTION__, a, L, true)
 
 // push/pop common structures
-void pushThing(lua_State* L, Thing* thing);
+void pushThing(lua_State* L, const std::shared_ptr<Thing>& thing);
 void pushVariant(lua_State* L, const LuaVariant& var);
 void pushString(lua_State* L, std::string_view value);
 void pushCallback(lua_State* L, int32_t callback);
@@ -1446,10 +1444,27 @@ void pushUserdata(lua_State* L, T* value)
 	*userdata = value;
 }
 
+template <class T>
+std::shared_ptr<T>& getSharedPtr(lua_State* L, int32_t arg)
+{
+	return *static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
+}
+
+template <class T>
+std::shared_ptr<T>* getRawSharedPtr(lua_State* L, int32_t arg)
+{
+	return static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
+}
+template <class T>
+void pushSharedPtr(lua_State* L, std::shared_ptr<T> value)
+{
+	new (lua_newuserdata(L, sizeof(std::shared_ptr<T>))) std::shared_ptr<T>(std::move(value));
+}
+
 // Metatables
 void setMetatable(lua_State* L, int32_t index, std::string_view name);
-void setItemMetatable(lua_State* L, int32_t index, const Item* item);
-void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature);
+void setItemMetatable(lua_State* L, int32_t index, const std::shared_ptr<const Item>& item);
+void setCreatureMetatable(lua_State* L, int32_t index, const std::shared_ptr<const Creature>& creature);
 
 // Get
 template <typename T>
@@ -1487,9 +1502,9 @@ bool getBoolean(lua_State* L, int32_t arg, bool defaultValue);
 std::string getString(lua_State* L, int32_t arg);
 Position getPosition(lua_State* L, int32_t arg);
 Position getPosition(lua_State* L, int32_t arg, int32_t& stackpos);
-Thing* getThing(lua_State* L, int32_t arg);
-Creature* getCreature(lua_State* L, int32_t arg);
-Player* getPlayer(lua_State* L, int32_t arg);
+std::shared_ptr<Thing> getThing(lua_State* L, int32_t arg);
+std::shared_ptr<Creature> getCreature(lua_State* L, int32_t arg);
+std::shared_ptr<Player> getPlayer(lua_State* L, int32_t arg);
 
 template <typename T>
 T getField(lua_State* L, int32_t arg, std::string_view key)

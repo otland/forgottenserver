@@ -7,8 +7,6 @@
 
 #include "inbox.h"
 
-DepotLocker::DepotLocker(uint16_t type) : Container(type), depotId(0) {}
-
 Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (attr == ATTR_DEPOT_ID) {
@@ -20,25 +18,27 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-void DepotLocker::postAddNotification(Thing* thing, const Thing* oldParent, int32_t index, ReceiverLink_t)
+void DepotLocker::postAddNotification(const std::shared_ptr<Thing>& thing,
+                                      const std::shared_ptr<const Thing>& oldParent, int32_t index, ReceiverLink_t)
 {
-	if (const auto parent = getParent()) {
+	if (const auto& parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
-void DepotLocker::postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index, ReceiverLink_t)
+void DepotLocker::postRemoveNotification(const std::shared_ptr<Thing>& thing,
+                                         const std::shared_ptr<const Thing>& newParent, int32_t index, ReceiverLink_t)
 {
-	if (const auto parent = getParent()) {
+	if (const auto& parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
 
-void DepotLocker::removeInbox(Inbox* inbox)
+void DepotLocker::removeInbox(const std::shared_ptr<Inbox>& inbox)
 {
-	auto cit = std::find(itemlist.begin(), itemlist.end(), inbox);
-	if (cit == itemlist.end()) {
+	auto cit = std::find(itemList.begin(), itemList.end(), inbox);
+	if (cit == itemList.end()) {
 		return;
 	}
-	itemlist.erase(cit);
+	itemList.erase(cit);
 }

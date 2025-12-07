@@ -33,7 +33,7 @@ enum ReceiverLink_t
 	LINK_NEAR,
 };
 
-class Thing
+class Thing : public std::enable_shared_from_this<Thing>
 {
 public:
 	constexpr Thing() = default;
@@ -43,26 +43,26 @@ public:
 	Thing(const Thing&) = delete;
 	Thing& operator=(const Thing&) = delete;
 
-	bool hasParent() const { return getParent(); }
-	virtual Thing* getParent() const { return parent; }
-	Thing* getRealParent() const { return parent; }
-	virtual void setParent(Thing* parent) { this->parent = parent; }
+	bool hasParent() const { return getParent() != nullptr; }
+	virtual std::shared_ptr<Thing> getParent() const { return parent.lock(); }
+	std::shared_ptr<Thing> getRealParent() const { return parent.lock(); }
+	virtual void setParent(const std::shared_ptr<Thing>& thing) { parent = thing; }
 
 	virtual const Position& getPosition() const;
-	virtual int32_t getThrowRange() const = 0;
-	virtual bool isPushable() const = 0;
+	virtual int32_t getThrowRange() const { return 0; };
+	virtual bool isPushable() const { return false; };
 
-	virtual Tile* getTile() { return nullptr; }
-	virtual const Tile* getTile() const { return nullptr; }
-	virtual Item* getItem() { return nullptr; }
-	virtual const Item* getItem() const { return nullptr; }
-	virtual Creature* getCreature() { return nullptr; }
-	virtual const Creature* getCreature() const { return nullptr; }
+	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
+	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
+	virtual std::shared_ptr<Item> getItem() { return nullptr; }
+	virtual std::shared_ptr<const Item> getItem() const { return nullptr; }
+	virtual std::shared_ptr<Creature> getCreature() { return nullptr; }
+	virtual std::shared_ptr<const Creature> getCreature() const { return nullptr; }
 
 	virtual bool isRemoved() const { return true; }
 
-	virtual Thing* getReceiver() { return nullptr; }
-	virtual const Thing* getReceiver() const { return nullptr; }
+	virtual std::shared_ptr<Thing> getReceiver() { return nullptr; }
+	virtual std::shared_ptr<const Thing> getReceiver() const { return nullptr; }
 
 	/**
 	 * Query if the thing can add an object
@@ -74,7 +74,8 @@ public:
 	 * set blocking items/container limits is ignored \param actor the creature
 	 * trying to add the thing \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const
+	virtual ReturnValue queryAdd(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
+	                             const std::shared_ptr<Creature>& = nullptr) const
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -88,7 +89,7 @@ public:
 	 * that the thing can accept \param flags optional flags to modify the
 	 * default behaviour \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const
+	virtual ReturnValue queryMaxCount(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t&, uint32_t) const
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -100,7 +101,8 @@ public:
 	 * \param flags optional flags to modify the default behaviour
 	 * \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t, Creature* = nullptr) const
+	virtual ReturnValue queryRemove(const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
+	                                const std::shared_ptr<Creature>& = nullptr) const
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -114,20 +116,24 @@ public:
 	 * flags to modify the default behaviour this method can modify the flags
 	 * \returns Thing returns the destination thing
 	 */
-	virtual Thing* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) { return nullptr; }
+	virtual std::shared_ptr<Thing> queryDestination(int32_t&, const std::shared_ptr<const Thing>&,
+	                                                std::shared_ptr<Item>&, uint32_t&)
+	{
+		return nullptr;
+	}
 
 	/**
 	 * Add the object to the thing
 	 * \param thing is the object to add
 	 */
-	virtual void addThing(Thing*) {}
+	virtual void addThing(const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Add the object to the thing
 	 * \param index points to the destination index (inventory slot/container
 	 * position) \param thing is the object to add
 	 */
-	virtual void addThing(int32_t, Thing*) {}
+	virtual void addThing(int32_t, const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Update the item count or type for an object
@@ -135,21 +141,21 @@ public:
 	 * \param itemId is the new item id
 	 * \param count is the new count value
 	 */
-	virtual void updateThing(Thing*, uint16_t, uint32_t) {}
+	virtual void updateThing(const std::shared_ptr<Thing>&, uint16_t, uint32_t) {}
 
 	/**
 	 * Replace an object with a new
 	 * \param index is the position to change (inventory slot/container
 	 * position) \param thing is the object to update
 	 */
-	virtual void replaceThing(uint32_t, Thing*) {}
+	virtual void replaceThing(uint32_t, const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Remove an object
 	 * \param thing is the object to delete
 	 * \param count is the new count value
 	 */
-	virtual void removeThing(Thing*, uint32_t) {}
+	virtual void removeThing(const std::shared_ptr<Thing>&, uint32_t) {}
 
 	/**
 	 * Is sent after an operation (move/add) to update internal values
@@ -157,7 +163,9 @@ public:
 	 * \param index is the objects new index value
 	 * \param link holds the relation the object has to the thing
 	 */
-	virtual void postAddNotification(Thing*, const Thing*, int32_t, ReceiverLink_t = LINK_OWNER) {}
+	virtual void postAddNotification(const std::shared_ptr<Thing>&, const std::shared_ptr<const Thing>&, int32_t,
+	                                 ReceiverLink_t = LINK_OWNER)
+	{}
 
 	/**
 	 * Is sent after an operation (move/remove) to update internal values
@@ -165,14 +173,16 @@ public:
 	 * \param index is the previous index of the removed object
 	 * \param link holds the relation the object has to the thing
 	 */
-	virtual void postRemoveNotification(Thing*, const Thing*, int32_t, ReceiverLink_t = LINK_OWNER) {}
+	virtual void postRemoveNotification(const std::shared_ptr<Thing>&, const std::shared_ptr<const Thing>&, int32_t,
+	                                    ReceiverLink_t = LINK_OWNER)
+	{}
 
 	/**
 	 * Gets the index of an object
 	 * \param thing the object to get the index value from
 	 * \returns the index of the object, returns -1 if not found
 	 */
-	virtual int32_t getThingIndex(const Thing*) const { return -1; }
+	virtual int32_t getThingIndex(const std::shared_ptr<const Thing>&) const { return -1; }
 
 	/**
 	 * Returns the first index
@@ -190,7 +200,7 @@ public:
 	 * Gets the object based on index
 	 * \returns the object, returns nullptr if not found
 	 */
-	virtual Thing* getThing(size_t) const { return nullptr; }
+	virtual std::shared_ptr<Thing> getThing(size_t) const { return nullptr; }
 
 	/**
 	 * Get the amount of items of a certain type
@@ -215,13 +225,13 @@ public:
 	 * Removes an object from the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 */
-	virtual void internalRemoveThing(Thing*) {}
+	virtual void internalRemoveThing(const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Adds an object to the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 */
-	virtual void internalAddThing(Thing*) {}
+	virtual void internalAddThing(const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Adds an object to the thing without sending to the client(s)
@@ -229,10 +239,10 @@ public:
 	 * \param index points to the destination index (inventory slot/container
 	 * position)
 	 */
-	virtual void internalAddThing(uint32_t, Thing*) {}
+	virtual void internalAddThing(uint32_t, const std::shared_ptr<Thing>&) {}
 
 private:
-	Thing* parent = nullptr;
+	std::weak_ptr<Thing> parent;
 };
 
 #endif // FS_THING_H

@@ -6,24 +6,21 @@
 
 #include "container.h"
 
-class Inbox;
-using Inbox_ptr = std::shared_ptr<Inbox>;
-
 class Inbox final : public Container
 {
 public:
-	explicit Inbox(uint16_t type);
+	explicit Inbox(uint16_t type) : Container{type, 30, false, true} {}
 
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
+	ReturnValue queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
+	                     const std::shared_ptr<Creature>& actor = nullptr) const override;
 
-	void postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
-	                         ReceiverLink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
-	                            ReceiverLink_t link = LINK_OWNER) override;
+	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
 	bool canRemove() const override { return false; }
-	Thing* getParent() const override;
+	std::shared_ptr<Thing> getParent() const override;
 };
 
 #endif // FS_INBOX_H

@@ -31,17 +31,16 @@ void Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 	propWriteStream.write<uint8_t>(destPos.z);
 }
 
-void Teleport::addThing(int32_t, Thing* thing)
+void Teleport::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 {
-	Tile* destTile = g_game.map.getTile(destPos);
+	const auto& destTile = g_game.map.getTile(destPos);
 	if (!destTile) {
 		return;
 	}
 
 	// Prevent infinite loop
-	Teleport* destTeleport = destTile->getTeleportItem();
-	if (destTeleport) {
-		std::vector<Position> lastPositions = {getPosition()};
+	if (auto destTeleport = destTile->getTeleportItem()) {
+		auto lastPositions = std::vector{getPosition()};
 
 		while (true) {
 			const Position& nextPos = destTeleport->getDestPos();
@@ -50,7 +49,7 @@ void Teleport::addThing(int32_t, Thing* thing)
 				return;
 			}
 
-			const Tile* tile = g_game.map.getTile(nextPos);
+			const auto& tile = g_game.map.getTile(nextPos);
 			if (!tile) {
 				break;
 			}
@@ -66,30 +65,37 @@ void Teleport::addThing(int32_t, Thing* thing)
 
 	const MagicEffectClasses effect = Item::items[id].magicEffect;
 
-	if (Creature* creature = thing->getCreature()) {
+	if (const auto& creature = thing->getCreature()) {
 		Position origPos = creature->getPosition();
 		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? DIRECTION_WEST : DIRECTION_EAST);
-		g_game.map.moveCreature(*creature, *destTile);
+		g_game.map.moveCreature(creature, destTile);
 		if (effect != CONST_ME_NONE) {
 			g_game.addMagicEffect(origPos, effect);
 			g_game.addMagicEffect(destTile->getPosition(), effect);
 		}
-	} else if (Item* item = thing->getItem()) {
+	} else if (const auto& item = thing->getItem()) {
 		if (effect != CONST_ME_NONE) {
 			g_game.addMagicEffect(destTile->getPosition(), effect);
 			g_game.addMagicEffect(item->getPosition(), effect);
 		}
-		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr,
+		std::shared_ptr<Item> moveItem = nullptr;
+		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), moveItem,
 		                        FLAG_NOLIMIT);
 	}
 }
 
-void Teleport::postAddNotification(Thing* thing, const Thing* oldParent, int32_t index, ReceiverLink_t)
+void Teleport::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+                                   int32_t index, ReceiverLink_t)
 {
-	getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	if (const auto& parent = getParent()) {
+		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	}
 }
 
-void Teleport::postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index, ReceiverLink_t)
+void Teleport::postRemoveNotification(const std::shared_ptr<Thing>& thing,
+                                      const std::shared_ptr<const Thing>& newParent, int32_t index, ReceiverLink_t)
 {
-	getParent()->postRemoveNotification(thing, newParent, index, LINK_PARENT);
+	if (const auto& parent = getParent()) {
+		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
+	}
 }

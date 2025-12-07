@@ -36,7 +36,8 @@ public:
 	void setSeparator(std::string sep) { separator = sep; }
 
 	// scripting
-	bool executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
+	bool executeSay(const std::shared_ptr<Player>& player, const std::string& words, const std::string& param,
+	                SpeakClasses type) const;
 
 	AccountType_t getRequiredAccountType() const { return requiredAccountType; }
 
@@ -66,7 +67,8 @@ public:
 	TalkActions(const TalkActions&) = delete;
 	TalkActions& operator=(const TalkActions&) = delete;
 
-	TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
+	TalkActionResult_t playerSaySpell(const std::shared_ptr<Player>& player, SpeakClasses type,
+	                                  const std::string& words) const;
 
 	bool registerLuaEvent(TalkAction* event);
 	void clear(bool fromLua) override final;

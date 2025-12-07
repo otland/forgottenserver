@@ -11,9 +11,7 @@
 
 extern Game g_game;
 
-HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* house) : DynamicTile(x, y, z), house(house) {}
-
-void HouseTile::addThing(int32_t index, Thing* thing)
+void HouseTile::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 {
 	Tile::addThing(index, thing);
 
@@ -21,12 +19,12 @@ void HouseTile::addThing(int32_t index, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (const auto& item = thing->getItem()) {
 		updateHouse(item);
 	}
 }
 
-void HouseTile::internalAddThing(uint32_t index, Thing* thing)
+void HouseTile::internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 {
 	Tile::internalAddThing(index, thing);
 
@@ -34,42 +32,40 @@ void HouseTile::internalAddThing(uint32_t index, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (const auto& item = thing->getItem()) {
 		updateHouse(item);
 	}
 }
 
-void HouseTile::updateHouse(Item* item)
+void HouseTile::updateHouse(const std::shared_ptr<Item>& item)
 {
-	if (item->getParent() != this) {
+	if (item->getParent().get() != this) {
 		return;
 	}
 
-	Door* door = item->getDoor();
-	if (door) {
+	if (const auto& door = item->getDoor()) {
 		if (door->getDoorId() != 0) {
 			house->addDoor(door);
 		}
-	} else {
-		BedItem* bed = item->getBed();
+	} else if (const auto& bed = item->getBed()) {
 		if (bed) {
 			house->addBed(bed);
 		}
 	}
 }
 
-ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-                                Creature* actor /* = nullptr*/) const
+ReturnValue HouseTile::queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
+                                uint32_t flags, const std::shared_ptr<Creature>& actor /* = nullptr*/) const
 {
-	if (const Creature* creature = thing.getCreature()) {
-		if (const Player* player = creature->getPlayer()) {
+	if (const auto& creature = thing->getCreature()) {
+		if (const auto& player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		} else {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-	} else if (const Item* item = thing.getItem()) {
+	} else if (const auto& item = thing->getItem()) {
 		if (item->isStoreItem() && !item->hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
 			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		}
@@ -83,27 +79,28 @@ ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	return Tile::queryAdd(index, thing, count, flags, actor);
 }
 
-Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
+std::shared_ptr<Thing> HouseTile::queryDestination(int32_t& index, const std::shared_ptr<const Thing>& thing,
+                                                   std::shared_ptr<Item>& destItem, uint32_t& flags)
 {
-	if (const Creature* creature = thing.getCreature()) {
-		if (const Player* player = creature->getPlayer()) {
+	if (const auto& creature = thing->getCreature()) {
+		if (const auto& player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
 				const Position& entryPos = house->getEntryPosition();
-				Tile* destTile = g_game.map.getTile(entryPos);
-				if (!destTile) {
-					std::cout << "Error: [HouseTile::queryDestination] House entry not correct"
-					          << " - Name: " << house->getName() << " - House id: " << house->getId()
-					          << " - Tile not found: " << entryPos << std::endl;
+				index = -1;
+				destItem = nullptr;
 
-					destTile = g_game.map.getTile(player->getTemplePosition());
-					if (!destTile) {
-						destTile = &(Tile::nullptr_tile);
-					}
+				if (const auto& destTile = g_game.map.getTile(entryPos)) {
+					return destTile;
 				}
 
-				index = -1;
-				*destItem = nullptr;
-				return destTile;
+				std::cout << "Error: [HouseTile::queryDestination] House entry not correct"
+				          << " - Name: " << house->getName() << " - House id: " << house->getId()
+				          << " - Tile not found: " << entryPos << std::endl;
+
+				if (const auto& destTile = g_game.map.getTile(player->getTemplePosition())) {
+					return destTile;
+				}
+				return Tile::nullptrTile;
 			}
 		}
 	}
@@ -111,10 +108,10 @@ Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** des
 	return Tile::queryDestination(index, thing, destItem, flags);
 }
 
-ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
-                                   Creature* actor /*= nullptr*/) const
+ReturnValue HouseTile::queryRemove(const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
+                                   const std::shared_ptr<Creature>& actor /*= nullptr*/) const
 {
-	const Item* item = thing.getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}

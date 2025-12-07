@@ -61,6 +61,8 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_compile_options(-Wimplicit-fallthrough -Wmove)
 endif ()
 
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/bigobj>")
+
 # Find packages.
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
 find_package(simdutf CONFIG REQUIRED)

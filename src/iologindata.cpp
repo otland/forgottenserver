@@ -7,10 +7,7 @@
 
 #include "condition.h"
 #include "configmanager.h"
-#include "depotchest.h"
 #include "game.h"
-#include "inbox.h"
-#include "storeinbox.h"
 
 extern Game g_game;
 
@@ -67,7 +64,7 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	}
 }
 
-bool IOLoginData::preloadPlayer(Player* player)
+bool IOLoginData::preloadPlayer(const std::shared_ptr<Player>& player)
 {
 	Database& db = Database::getInstance();
 
@@ -92,7 +89,7 @@ bool IOLoginData::preloadPlayer(Player* player)
 	return true;
 }
 
-bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
+bool IOLoginData::loadPlayerById(const std::shared_ptr<Player>& player, uint32_t id)
 {
 	Database& db = Database::getInstance();
 	return loadPlayer(
@@ -102,7 +99,7 @@ bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 	        id)));
 }
 
-bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
+bool IOLoginData::loadPlayerByName(const std::shared_ptr<Player>& player, const std::string& name)
 {
 	Database& db = Database::getInstance();
 	return loadPlayer(
@@ -133,7 +130,7 @@ static GuildWarVector getWarList(uint32_t guildId)
 	return guildWarVector;
 }
 
-bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
+bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr result)
 {
 	if (!result) {
 		return false;
@@ -257,9 +254,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 	}
 
-	player->loginPosition.x = result->getNumber<uint16_t>("posx");
-	player->loginPosition.y = result->getNumber<uint16_t>("posy");
-	player->loginPosition.z = result->getNumber<uint16_t>("posz");
+	player->setLoginPosition(
+	    {result->getNumber<uint16_t>("posx"), result->getNumber<uint16_t>("posy"), result->getNumber<uint8_t>("posz")});
 
 	player->lastLoginSaved = result->getNumber<time_t>("lastlogin");
 	player->lastLogout = result->getNumber<time_t>("lastlogout");
@@ -276,9 +272,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	player->town = town;
 
-	const Position& loginPos = player->loginPosition;
+	const Position& loginPos = player->getLoginPosition();
 	if (loginPos.x == 0 && loginPos.y == 0 && loginPos.z == 0) {
-		player->loginPosition = player->getTemplePosition();
+		player->setLoginPosition(player->getTemplePosition());
 	}
 
 	player->staminaMinutes = result->getNumber<uint16_t>("stamina");
@@ -332,7 +328,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 				rank = guild->getRankById(playerRankId);
 				if (!rank) {
-					player->guild = nullptr;
+					player->guild.reset();
 				}
 			}
 
@@ -355,18 +351,15 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	// load inventory items
 	ItemMap itemMap;
-	std::map<uint8_t, Container*> openContainersList;
+	std::map<uint8_t, std::shared_ptr<Container>> openContainersList;
 
 	if ((result = db.storeQuery(std::format(
 	         "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
 
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			auto&& [item, pid] = it->second;
-
-			Container* itemContainer = item->getContainer();
-			if (itemContainer) {
+		for (auto&& [item, pid] : itemMap | std::views::reverse | std::views::values) {
+			if (const auto& itemContainer = item->getContainer()) {
 				uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 				if (cid > 0) {
 					openContainersList.emplace(cid, itemContainer);
@@ -376,13 +369,12 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {
 				player->internalAddThing(pid, item);
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
+				auto it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
-				if (container) {
+				if (const auto& container = it2->second.first->getContainer()) {
 					container->internalAddThing(item);
 				}
 			}
@@ -402,21 +394,18 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
 
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			auto&& [item, pid] = it->second;
-
+		for (auto&& [item, pid] : itemMap | std::views::reverse | std::views::values | std::views::as_const) {
 			if (pid < 100) {
 				if (const auto& depotChest = player->getDepotChest(pid, true)) {
 					depotChest->internalAddThing(item);
 				}
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
+				auto it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
-				if (container) {
+				if (const auto& container = it2->second.first->getContainer()) {
 					container->internalAddThing(item);
 				}
 			}
@@ -431,20 +420,16 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
 
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			auto&& [item, pid] = it->second;
-
+		for (auto&& [item, pid] : itemMap | std::views::reverse | std::views::values | std::views::as_const) {
 			if (pid < 100) {
 				player->getInbox()->internalAddThing(item);
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
-
+				auto it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
-				if (container) {
+				if (const auto& container = it2->second.first->getContainer()) {
 					container->internalAddThing(item);
 				}
 			}
@@ -459,20 +444,16 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
 
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			auto&& [item, pid] = it->second;
-
+		for (auto&& [item, pid] : itemMap | std::views::reverse | std::views::values | std::views::as_const) {
 			if (pid < 100) {
 				player->getStoreInbox()->internalAddThing(item);
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
-
+				auto it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
-				if (container) {
+				if (const auto& container = it2->second.first->getContainer()) {
 					container->internalAddThing(item);
 				}
 			}
@@ -517,10 +498,10 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	return true;
 }
 
-bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert,
-                            PropWriteStream& propWriteStream)
+bool IOLoginData::saveItems(const std::shared_ptr<const Player>& player, const ItemBlockList& itemList,
+                            DBInsert& query_insert, PropWriteStream& propWriteStream)
 {
-	using ContainerBlock = std::pair<Container*, int32_t>;
+	using ContainerBlock = std::pair<std::shared_ptr<const Container>, int32_t>;
 	std::vector<ContainerBlock> containers;
 	containers.reserve(32);
 
@@ -531,14 +512,14 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	for (auto&& [pid, item] : itemList | std::views::as_const) {
 		++runningId;
 
-		if (Container* container = item->getContainer()) {
+		if (const auto& container = item->getContainer()) {
 			if (container->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 				container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, 0);
 			}
 
 			if (!openContainers.empty()) {
 				for (auto&& [cid, openContainer] : openContainers | std::views::as_const) {
-					auto opcontainer = openContainer.container;
+					const auto& opcontainer = openContainer.container;
 
 					if (opcontainer == container) {
 						container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, static_cast<int64_t>(cid) + 1);
@@ -560,14 +541,13 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		}
 	}
 
-	for (size_t i = 0; i < containers.size(); i++) {
-		auto&& [container, parentId] = containers[i];
+	for (size_t i = 0; i < containers.size(); ++i) {
+		const auto& [container, parentId] = containers[i];
 
-		for (Item* item : container->getItemList()) {
+		for (const auto& item : container->getItemList()) {
 			++runningId;
 
-			Container* subContainer = item->getContainer();
-			if (subContainer) {
+			if (const auto& subContainer = item->getContainer()) {
 				containers.emplace_back(subContainer, runningId);
 
 				if (subContainer->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
@@ -576,7 +556,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 				if (!openContainers.empty()) {
 					for (auto&& [cid, openContainer] : openContainers | std::views::as_const) {
-						auto opcontainer = openContainer.container;
+						const auto& opcontainer = openContainer.container;
 
 						if (opcontainer == subContainer) {
 							subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, cid + 1);
@@ -599,7 +579,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	return query_insert.execute();
 }
 
-bool IOLoginData::savePlayer(Player* player)
+bool IOLoginData::savePlayer(const std::shared_ptr<Player>& player)
 {
 	if (player->isDead()) {
 		player->changeHealth(1);
@@ -755,8 +735,7 @@ bool IOLoginData::savePlayer(Player* player)
 
 	ItemBlockList itemList;
 	for (int32_t slotId = CONST_SLOT_FIRST; slotId <= CONST_SLOT_LAST; ++slotId) {
-		Item* item = player->inventory[slotId];
-		if (item) {
+		if (const auto& item = player->inventory[slotId]) {
 			itemList.emplace_back(slotId, item);
 		}
 	}
@@ -774,8 +753,8 @@ bool IOLoginData::savePlayer(Player* player)
 	    "INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
-	for (auto&& [depotId, depotChest] : player->depotChests | std::views::as_const) {
-		for (Item* item : depotChest->getItemList()) {
+	for (auto&& [depotId, depotChest] : player->getDepotChests()) {
+		for (const auto& item : depotChest->getItemList()) {
 			itemList.emplace_back(depotId, item);
 		}
 	}
@@ -793,7 +772,7 @@ bool IOLoginData::savePlayer(Player* player)
 	    "INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
-	for (Item* item : player->getInbox()->getItemList()) {
+	for (const auto& item : player->getInbox()->getItemList()) {
 		itemList.emplace_back(0, item);
 	}
 
@@ -811,7 +790,7 @@ bool IOLoginData::savePlayer(Player* player)
 	    "INSERT INTO `player_storeinboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
-	for (Item* item : player->getStoreInbox()->getItemList()) {
+	for (const auto& item : player->getStoreInbox()->getItemList()) {
 		itemList.emplace_back(0, item);
 	}
 
@@ -948,14 +927,12 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 		PropStream propStream;
 		propStream.init(attr.data(), attr.size());
 
-		Item* item = Item::CreateItem(type, count);
-		if (item) {
+		if (const auto& item = Item::CreateItem(type, count)) {
 			if (!item->unserializeAttr(propStream)) {
 				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
 			}
 
-			std::pair<Item*, uint32_t> pair(item, pid);
-			itemMap[sid] = pair;
+			itemMap[sid] = std::make_pair(std::move(item), pid);
 		}
 	} while (result->next());
 }

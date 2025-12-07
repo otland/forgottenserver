@@ -16,8 +16,8 @@ class Mailbox;
 class Teleport;
 class TrashHolder;
 
-using CreatureVector = std::vector<Creature*>;
-using ItemVector = std::vector<Item*>;
+using CreatureVector = std::vector<std::shared_ptr<Creature>>;
+using ItemVector = std::vector<std::shared_ptr<Item>>;
 
 enum tileflags_t : uint32_t
 {
@@ -93,14 +93,14 @@ public:
 
 	uint32_t getTopItemCount() const { return size() - downItemCount; }
 	uint32_t getDownItemCount() const { return downItemCount; }
-	inline Item* getTopTopItem() const
+	inline std::shared_ptr<Item> getTopTopItem() const
 	{
 		if (getTopItemCount() == 0) {
 			return nullptr;
 		}
 		return *(getEndTopItem() - 1);
 	}
-	inline Item* getTopDownItem() const
+	inline std::shared_ptr<Item> getTopDownItem() const
 	{
 		if (downItemCount == 0) {
 			return nullptr;
@@ -115,16 +115,28 @@ private:
 
 inline constexpr size_t TILE_UPDATE_THRESHOLD = 8;
 
-class Tile : virtual public Thing
+class Tile : public Thing
 {
 public:
-	static Tile& nullptr_tile;
-	Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos(x, y, z) {}
-	virtual ~Tile() { delete ground; };
+	static const std::shared_ptr<Tile> nullptrTile;
+	Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos{x, y, z} {}
+	virtual ~Tile() = default;
 
 	// non-copyable
 	Tile(const Tile&) = delete;
 	Tile& operator=(const Tile&) = delete;
+
+	std::shared_ptr<Thing> getReceiver() override final { return shared_from_this(); }
+	std::shared_ptr<const Thing> getReceiver() const override final { return shared_from_this(); }
+
+	std::shared_ptr<Tile> getTile() override final { return std::static_pointer_cast<Tile>(shared_from_this()); }
+	std::shared_ptr<const Tile> getTile() const override final
+	{
+		return std::static_pointer_cast<const Tile>(shared_from_this());
+	}
+
+	virtual std::shared_ptr<HouseTile> getHouseTile() { return nullptr; }
+	virtual std::shared_ptr<const HouseTile> getHouseTile() const { return nullptr; }
 
 	virtual TileItemVector* getItemList() = 0;
 	virtual const TileItemVector* getItemList() const = 0;
@@ -134,33 +146,21 @@ public:
 	virtual const CreatureVector* getCreatures() const = 0;
 	virtual CreatureVector* makeCreatures() = 0;
 
-	Tile* getTile() override final { return this; }
-	const Tile* getTile() const override final { return this; }
+	std::shared_ptr<MagicField> getFieldItem() const;
+	std::shared_ptr<Teleport> getTeleportItem() const;
+	std::shared_ptr<TrashHolder> getTrashHolder() const;
+	std::shared_ptr<Mailbox> getMailbox() const;
+	std::shared_ptr<BedItem> getBedItem() const;
 
-	Thing* getReceiver() override final { return this; }
-	const Thing* getReceiver() const override final { return this; }
-
-	int32_t getThrowRange() const override final { return 0; }
-	bool isPushable() const override final { return false; }
-
-	virtual HouseTile* getHouseTile() { return nullptr; }
-	virtual const HouseTile* getHouseTile() const { return nullptr; }
-
-	MagicField* getFieldItem() const;
-	Teleport* getTeleportItem() const;
-	TrashHolder* getTrashHolder() const;
-	Mailbox* getMailbox() const;
-	BedItem* getBedItem() const;
-
-	Creature* getTopCreature() const;
-	const Creature* getBottomCreature() const;
-	Creature* getTopVisibleCreature(const Creature* creature) const;
-	const Creature* getBottomVisibleCreature(const Creature* creature) const;
-	Item* getTopTopItem() const;
-	Item* getTopDownItem() const;
+	std::shared_ptr<Creature> getTopCreature() const;
+	std::shared_ptr<const Creature> getBottomCreature() const;
+	std::shared_ptr<Creature> getTopVisibleCreature(const std::shared_ptr<const Creature>& creature) const;
+	std::shared_ptr<const Creature> getBottomVisibleCreature(const std::shared_ptr<const Creature>& creature) const;
+	std::shared_ptr<Item> getTopTopItem() const;
+	std::shared_ptr<Item> getTopDownItem() const;
 	bool isMoveableBlocking() const;
-	Thing* getTopVisibleThing(const Creature* creature);
-	Item* getItemByTopOrder(int32_t topOrder);
+	std::shared_ptr<Thing> getTopVisibleThing(const std::shared_ptr<const Creature>& creature);
+	std::shared_ptr<Item> getItemByTopOrder(int32_t topOrder);
 
 	size_t getThingCount() const
 	{
@@ -177,7 +177,7 @@ public:
 	uint32_t getDownItemCount() const;
 
 	bool hasProperty(ITEMPROPERTY prop) const;
-	bool hasProperty(const Item* exclude, ITEMPROPERTY prop) const;
+	bool hasProperty(const std::shared_ptr<const Item>& exclude, ITEMPROPERTY prop) const;
 
 	bool hasFlag(uint32_t flag) const { return hasBitSet(flag, this->flags); }
 	void setFlag(uint32_t flag) { this->flags |= flag; }
@@ -199,59 +199,65 @@ public:
 
 	bool hasHeight(uint32_t n) const;
 
-	int32_t getClientIndexOfCreature(const Player* player, const Creature* creature) const;
-	int32_t getStackposOfItem(const Player* player, const Item* item) const;
+	int32_t getClientIndexOfCreature(const std::shared_ptr<const Player>& player,
+	                                 const std::shared_ptr<const Creature>& creature) const;
+	int32_t getStackposOfItem(const std::shared_ptr<const Player>& player,
+	                          const std::shared_ptr<const Item>& item) const;
 
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
-	ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-	                          uint32_t flags) const override;
-	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
-	                        Creature* actor = nullptr) const override;
-	Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
+	ReturnValue queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
+	                     const std::shared_ptr<Creature>& actor = nullptr) const override;
+	ReturnValue queryMaxCount(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
+	                          uint32_t& maxQueryCount, uint32_t flags) const override final;
+	ReturnValue queryRemove(const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
+	                        const std::shared_ptr<Creature>& actor = nullptr) const override;
+	std::shared_ptr<Thing> queryDestination(int32_t& index, const std::shared_ptr<const Thing>& thing,
+	                                        std::shared_ptr<Item>& destItem, uint32_t& flags) override;
 
-	void addThing(Thing* thing) override { addThing(0, thing); }
-	void addThing(int32_t index, Thing* thing) override;
+	void addThing(const std::shared_ptr<Thing>& thing) override final { addThing(0, thing); }
+	void addThing(int32_t index, const std::shared_ptr<Thing>& thing) override;
 
-	void updateThing(Thing* thing, uint16_t itemId, uint32_t count) override;
-	void replaceThing(uint32_t index, Thing* thing) override;
+	void updateThing(const std::shared_ptr<Thing>& thing, uint16_t itemId, uint32_t count) override final;
+	void replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing) override final;
 
-	void removeThing(Thing* thing, uint32_t count) override;
+	void removeThing(const std::shared_ptr<Thing>& thing, uint32_t count) override final;
 
-	bool hasCreature(Creature* creature) const;
-	void removeCreature(Creature* creature);
+	bool hasCreature(const std::shared_ptr<Creature>& creature) const;
+	void removeCreature(const std::shared_ptr<Creature>& creature);
 
-	int32_t getThingIndex(const Thing* thing) const override;
-	size_t getLastIndex() const override { return getThingCount(); }
-	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
-	Thing* getThing(size_t index) const override;
+	int32_t getThingIndex(const std::shared_ptr<const Thing>& thing) const override final;
+	size_t getFirstIndex() const override final { return 0; }
+	size_t getLastIndex() const override final { return getThingCount(); }
+	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override final;
+	std::shared_ptr<Thing> getThing(size_t index) const override final;
 
-	void postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
-	                         ReceiverLink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
-	                            ReceiverLink_t link = LINK_OWNER) override;
+	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override final;
+	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override final;
 
-	void internalAddThing(Thing* thing) override final { internalAddThing(0, thing); }
-	void internalAddThing(uint32_t index, Thing* thing) override;
+	void internalAddThing(const std::shared_ptr<Thing>& thing) override final { internalAddThing(0, thing); };
+	void internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing) override;
 
 	const Position& getPosition() const override final { return tilePos; }
 
 	bool isRemoved() const override final { return false; }
 
-	Item* getUseItem(int32_t index) const;
+	std::shared_ptr<Item> getUseItem(int32_t index) const;
 
-	Item* getGround() const { return ground; }
-	void setGround(Item* item) { ground = item; }
+	std::shared_ptr<Item> getGround() const { return ground; }
+	void setGround(std::shared_ptr<Item> item) { ground = std::move(item); }
 
 private:
-	void onAddTileItem(Item* item);
-	void onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType);
-	void onRemoveTileItem(const SpectatorVec& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item);
+	void onAddTileItem(const std::shared_ptr<Item>& item);
+	void onUpdateTileItem(const std::shared_ptr<Item>& oldItem, const ItemType& oldType,
+	                      const std::shared_ptr<Item>& newItem, const ItemType& newType);
+	void onRemoveTileItem(const SpectatorVec& spectators, const std::vector<int32_t>& oldStackPosVector,
+	                      const std::shared_ptr<Item>& item);
 
-	void setTileFlags(const Item* item);
-	void resetTileFlags(const Item* item);
+	void setTileFlags(const std::shared_ptr<const Item>& item);
+	void resetTileFlags(const std::shared_ptr<const Item>& item);
 
-	Item* ground = nullptr;
+	std::shared_ptr<Item> ground = nullptr;
 	Position tilePos;
 	uint32_t flags = 0;
 };
@@ -265,13 +271,8 @@ class DynamicTile : public Tile
 	CreatureVector creatures;
 
 public:
-	DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
-	~DynamicTile()
-	{
-		for (Item* item : items) {
-			item->decrementReferenceCounter();
-		}
-	}
+	DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile{x, y, z} {}
+	~DynamicTile() = default;
 
 	// non-copyable
 	DynamicTile(const DynamicTile&) = delete;
@@ -294,15 +295,8 @@ class StaticTile final : public Tile
 	std::unique_ptr<CreatureVector> creatures;
 
 public:
-	StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
-	~StaticTile()
-	{
-		if (items) {
-			for (Item* item : *items) {
-				item->decrementReferenceCounter();
-			}
-		}
-	}
+	StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile{x, y, z} {}
+	~StaticTile() = default;
 
 	// non-copyable
 	StaticTile(const StaticTile&) = delete;

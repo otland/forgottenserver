@@ -8,8 +8,6 @@
 #include "configmanager.h"
 #include "events.h"
 #include "game.h"
-#include "monster.h"
-#include "npc.h"
 #include "pugicast.h"
 #include "scheduler.h"
 
@@ -36,12 +34,9 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 		                   pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
 		                   pugi::cast<uint16_t>(spawnNode.attribute("centerz").value()));
 
-		int32_t radius;
-		pugi::xml_attribute radiusAttribute = spawnNode.attribute("radius");
-		if (radiusAttribute) {
+		int32_t radius = -1;
+		if (const auto radiusAttribute = spawnNode.attribute("radius")) {
 			radius = pugi::cast<int32_t>(radiusAttribute.value());
-		} else {
-			radius = -1;
 		}
 
 		if (radius > 30) {
@@ -55,8 +50,7 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 			continue;
 		}
 
-		spawnList.emplace_front(centerPos, radius);
-		Spawn& spawn = spawnList.front();
+		auto& spawn = spawnList.emplace_back(centerPos, radius);
 
 		for (auto childNode : spawnNode.children()) {
 			if (boost::iequals(childNode.name(), "monsters")) {
@@ -169,7 +163,7 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 					continue;
 				}
 
-				Npc* npc = Npc::createNpc(nameAttribute.as_string());
+				const auto& npc = Npc::createNpc(nameAttribute.as_string());
 				if (!npc) {
 					continue;
 				}
@@ -183,7 +177,7 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 				    Position(centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
 				             centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z),
 				    radius);
-				npcList.push_front(npc);
+				npcList.push_back(npc);
 			}
 		}
 
@@ -200,11 +194,10 @@ void Spawns::startup()
 		return;
 	}
 
-	for (Npc* npc : npcList) {
+	for (const auto& npc : npcList | tfs::views::lock_weak_ptrs) {
 		if (!g_game.placeCreature(npc, npc->getMasterPos(), false, true)) {
 			std::cout << "[Warning - Spawns::startup] Couldn't spawn npc \"" << npc->getName()
 			          << "\" on position: " << npc->getMasterPos() << '.' << std::endl;
-			delete npc;
 		}
 	}
 	npcList.clear();
@@ -247,9 +240,8 @@ void Spawn::startSpawnCheck()
 
 Spawn::~Spawn()
 {
-	for (auto&& monster : spawnedMap | std::views::values | std::views::as_const) {
+	for (auto&& monster : spawnedMap | std::views::values | tfs::views::lock_weak_ptrs | std::views::as_const) {
 		monster->setSpawn(nullptr);
-		monster->decrementReferenceCounter();
 	}
 }
 
@@ -257,11 +249,9 @@ bool Spawn::findPlayer(const Position& pos)
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, pos, false, true);
-	for (Creature* spectator : spectators) {
-		assert(dynamic_cast<Player*>(spectator) != nullptr);
-
-		Player* spectatorPlayer = static_cast<Player*>(spectator);
-		if (!spectatorPlayer->hasFlag(PlayerFlag_IgnoredByMonsters)) {
+	for (const auto& spectator : spectators) {
+		assert(spectator->getPlayer() != nullptr);
+		if (!std::static_pointer_cast<Player>(spectator)->hasFlag(PlayerFlag_IgnoredByMonsters)) {
 			return true;
 		}
 	}
@@ -310,29 +300,27 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup /* = fa
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir,
                          bool startup /*= false*/)
 {
-	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
-	if (!tfs::events::monster::onSpawn(monster_ptr.get(), pos, startup, false)) {
+	const auto monster = std::make_shared<Monster>(mType);
+	if (!tfs::events::monster::onSpawn(monster, pos, startup, false)) {
 		return false;
 	}
 
 	if (startup) {
 		// No need to send out events to the surrounding since there is no one out there to listen!
-		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
-			std::cout << "[Warning - Spawns::startup] Couldn't spawn monster \"" << monster_ptr->getName()
+		if (!g_game.internalPlaceCreature(monster, pos, true)) {
+			std::cout << "[Warning - Spawns::startup] Couldn't spawn monster \"" << monster->getName()
 			          << "\" on position: " << pos << '.' << std::endl;
 			return false;
 		}
 	} else {
-		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
+		if (!g_game.placeCreature(monster, pos, false, true)) {
 			return false;
 		}
 	}
 
-	Monster* monster = monster_ptr.release();
 	monster->setDirection(dir);
 	monster->setSpawn(this);
 	monster->setMasterPos(pos);
-	monster->incrementReferenceCounter();
 
 	spawnedMap.insert({spawnId, monster});
 	spawnMap[spawnId].lastSpawn = OTSYS_TIME();
@@ -380,9 +368,7 @@ void Spawn::cleanup()
 {
 	auto it = spawnedMap.begin();
 	while (it != spawnedMap.end()) {
-		Monster* monster = it->second;
-		if (monster->isRemoved()) {
-			monster->decrementReferenceCounter();
+		if (const auto monster = it->second.lock(); !monster || monster->isRemoved()) {
 			it = spawnedMap.erase(it);
 		} else {
 			++it;
@@ -416,11 +402,10 @@ bool Spawn::addMonster(const std::string& name, const Position& pos, Direction d
 	return addBlock(sb);
 }
 
-void Spawn::removeMonster(Monster* monster)
+void Spawn::removeMonster(const std::shared_ptr<Monster>& monster)
 {
 	for (auto it = spawnedMap.begin(), end = spawnedMap.end(); it != end; ++it) {
-		if (it->second == monster) {
-			monster->decrementReferenceCounter();
+		if (it->second.lock() == monster) {
 			spawnedMap.erase(it);
 			break;
 		}

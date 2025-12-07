@@ -7,7 +7,6 @@
 
 #include "bed.h"
 #include "configmanager.h"
-#include "container.h"
 #include "game.h"
 #include "housetile.h"
 #include "spells.h"
@@ -89,7 +88,7 @@ bool Actions::registerLuaEvent(Action* event)
 	return false;
 }
 
-ReturnValue Actions::canUse(const Player* player, const Position& pos)
+ReturnValue Actions::canUse(const std::shared_ptr<const Player>& player, const Position& pos)
 {
 	if (pos.x != 0xFFFF) {
 		const Position& playerPos = player->getPosition();
@@ -104,7 +103,8 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos)
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Actions::canUse(const Player* player, const Position& pos, const Item* item)
+ReturnValue Actions::canUse(const std::shared_ptr<const Player>& player, const Position& pos,
+                            const std::shared_ptr<const Item>& item)
 {
 	Action* action = getAction(item);
 	if (action) {
@@ -113,7 +113,8 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos, const Ite
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor)
+ReturnValue Actions::canUseFar(const std::shared_ptr<const Creature>& creature, const Position& toPos,
+                               bool checkLineOfSight, bool checkFloor)
 {
 	if (toPos.x == 0xFFFF) {
 		return RETURNVALUE_NOERROR;
@@ -135,7 +136,7 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 	return RETURNVALUE_NOERROR;
 }
 
-Action* Actions::getAction(const Item* item)
+Action* Actions::getAction(const std::shared_ptr<const Item>& item)
 {
 	if (item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		auto it = uniqueItemMap.find(item->getUniqueId());
@@ -160,9 +161,10 @@ Action* Actions::getAction(const Item* item)
 	return g_spells->getRuneSpell(item->getID());
 }
 
-ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey)
+ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, const Position& pos, uint8_t index,
+                                     const std::shared_ptr<Item>& item, bool isHotkey)
 {
-	if (Door* door = item->getDoor()) {
+	if (const auto& door = item->getDoor()) {
 		if (!door->canUse(player)) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
@@ -183,7 +185,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		}
 	}
 
-	if (BedItem* bed = item->getBed()) {
+	if (const auto& bed = item->getBed()) {
 		if (!bed->canUse(player)) {
 			if (!bed->getHouse()) {
 				return RETURNVALUE_YOUCANNOTUSETHISBED;
@@ -203,17 +205,16 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		return RETURNVALUE_NOERROR;
 	}
 
-	if (Container* container = item->getContainer()) {
+	if (auto container = item->getContainer()) {
 		uint32_t corpseOwner = container->getCorpseOwner();
 		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
 			return RETURNVALUE_YOUARENOTTHEOWNER;
 		}
 
 		// depot container
-		if (DepotLocker* depot = container->getDepotLocker()) {
-			DepotLocker& myDepotLocker = player->getDepotLocker();
-			myDepotLocker.setParent(depot->getParent()->getTile());
-			container = &myDepotLocker;
+		if (const auto& depot = container->getDepotLocker()) {
+			container = player->getDepotLocker();
+			container->setParent(depot->getParent()->getTile());
 		}
 
 		// open/close container
@@ -245,7 +246,8 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 	return RETURNVALUE_CANNOTUSETHISOBJECT;
 }
 
-static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count)
+static void showUseHotkeyMessage(const std::shared_ptr<Player>& player, const std::shared_ptr<const Item>& item,
+                                 uint32_t count)
 {
 	const ItemType& it = Item::items[item->getID()];
 	if (!it.showCount) {
@@ -258,7 +260,8 @@ static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t coun
 	}
 }
 
-bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey)
+bool Actions::useItem(const std::shared_ptr<Player>& player, const Position& pos, uint8_t index,
+                      const std::shared_ptr<Item>& item, bool isHotkey)
 {
 	int32_t cooldown = getNumber(ConfigManager::ACTIONS_DELAY_INTERVAL);
 	player->setNextAction(OTSYS_TIME() + cooldown);
@@ -274,8 +277,8 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	}
 
 	if (getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const auto tile = item->getTile()) {
-			if (const auto houseTile = tile->getHouseTile()) {
+		if (const auto& tile = item->getTile()) {
+			if (const auto& houseTile = tile->getHouseTile()) {
 				if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
 					player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 					return false;
@@ -298,8 +301,9 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	return true;
 }
 
-bool Actions::useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item,
-                        bool isHotkey, Creature* creature /* = nullptr*/)
+bool Actions::useItemEx(const std::shared_ptr<Player>& player, const Position& fromPos, const Position& toPos,
+                        uint8_t toStackPos, const std::shared_ptr<Item>& item, bool isHotkey,
+                        const std::shared_ptr<Creature>& creature /* = nullptr*/)
 {
 	int32_t cooldown = getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 	player->setNextAction(OTSYS_TIME() + cooldown);
@@ -324,8 +328,8 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	}
 
 	if (getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const auto tile = item->getTile()) {
-			if (const auto houseTile = tile->getHouseTile()) {
+		if (const auto& tile = item->getTile()) {
+			if (const auto& houseTile = tile->getHouseTile()) {
 				if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
 					player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 					return false;
@@ -350,7 +354,7 @@ Action::Action(LuaScriptInterface* interface) :
     Event(interface), function(nullptr), allowFarUse(false), checkFloor(true), checkLineOfSight(true)
 {}
 
-ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos)
+ReturnValue Action::canExecuteAction(const std::shared_ptr<const Player>& player, const Position& toPos)
 {
 	if (allowFarUse) {
 		return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
@@ -358,7 +362,9 @@ ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos
 	return g_actions->canUse(player, toPos);
 }
 
-Thing* Action::getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const
+std::shared_ptr<Thing> Action::getTarget(const std::shared_ptr<Player>& player,
+                                         const std::shared_ptr<Creature>& targetCreature, const Position& toPosition,
+                                         uint8_t toStackPos) const
 {
 	if (targetCreature) {
 		return targetCreature;
@@ -366,8 +372,9 @@ Thing* Action::getTarget(Player* player, Creature* targetCreature, const Positio
 	return g_game.internalGetThing(player, toPosition, toStackPos, 0, STACKPOS_USETARGET);
 }
 
-bool Action::executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target,
-                        const Position& toPosition, bool isHotkey)
+bool Action::executeUse(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+                        const Position& fromPosition, const std::shared_ptr<Thing>& target, const Position& toPosition,
+                        bool isHotkey)
 {
 	// onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -382,7 +389,7 @@ bool Action::executeUse(Player* player, Item* item, const Position& fromPosition
 
 	scriptInterface->pushFunction(scriptId);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushThing(L, item);

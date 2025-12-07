@@ -21,7 +21,7 @@ class ValueCallback final : public CallBack
 {
 public:
 	explicit ValueCallback(formulaType_t type) : type(type) {}
-	void getMinMaxValues(Player* player, CombatDamage& damage) const;
+	void getMinMaxValues(const std::shared_ptr<Player>& player, CombatDamage& damage) const;
 
 private:
 	formulaType_t type;
@@ -30,18 +30,18 @@ private:
 class TileCallback final : public CallBack
 {
 public:
-	void onTileCombat(Creature* creature, Tile* tile) const;
+	void onTileCombat(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& tile) const;
 };
 
 class TargetCallback final : public CallBack
 {
 public:
-	void onTargetCombat(Creature* creature, Creature* target) const;
+	void onTargetCombat(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target) const;
 };
 
 struct CombatParams
 {
-	std::forward_list<std::unique_ptr<const Condition>> conditionList = {};
+	std::vector<std::unique_ptr<const Condition>> conditionList = {};
 
 	std::unique_ptr<ValueCallback> valueCallback = nullptr;
 	std::unique_ptr<TileCallback> tileCallback = nullptr;
@@ -88,21 +88,27 @@ public:
 	Combat(const Combat&) = delete;
 	Combat& operator=(const Combat&) = delete;
 
-	static bool isInPvpZone(const Creature* attacker, const Creature* target);
-	static bool isPlayerCombat(const Creature* target);
-	static ReturnValue canTargetCreature(Player* attacker, Creature* target);
-	static ReturnValue canDoCombat(Creature* caster, Tile* tile, bool aggressive);
-	static ReturnValue canDoCombat(Creature* attacker, Creature* target);
-	static void postCombatEffects(Creature* caster, const Position& pos, const CombatParams& params);
+	static bool isInPvpZone(const std::shared_ptr<const Creature>& attacker,
+	                        const std::shared_ptr<const Creature>& target);
+	static bool isPlayerCombat(const std::shared_ptr<const Creature>& target);
+	static ReturnValue canTargetCreature(const std::shared_ptr<Player>& attacker,
+	                                     const std::shared_ptr<Creature>& target);
+	static ReturnValue canDoCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Tile>& tile,
+	                               bool aggressive);
+	static ReturnValue canDoCombat(const std::shared_ptr<Creature>& attacker, const std::shared_ptr<Creature>& target);
+	static void postCombatEffects(const std::shared_ptr<Creature>& caster, const Position& pos,
+	                              const CombatParams& params);
 
-	static void addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos, uint8_t effect);
+	static void addDistanceEffect(const std::shared_ptr<Creature>& caster, const Position& fromPos,
+	                              const Position& toPos, uint8_t effect);
 
-	void doCombat(Creature* caster, Creature* target) const;
-	void doCombat(Creature* caster, const Position& position) const;
+	void doCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Creature>& target) const;
+	void doCombat(const std::shared_ptr<Creature>& caster, const Position& position) const;
 
-	static void doTargetCombat(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params);
-	static void doAreaCombat(Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage,
-	                         const CombatParams& params);
+	static void doTargetCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Creature>& target,
+	                           CombatDamage& damage, const CombatParams& params);
+	static void doAreaCombat(const std::shared_ptr<Creature>& caster, const Position& position, const AreaCombat* area,
+	                         CombatDamage& damage, const CombatParams& params);
 
 	bool setCallback(CallBackParam_t key);
 	CallBack* getCallback(CallBackParam_t key);
@@ -112,15 +118,19 @@ public:
 
 	void setArea(AreaCombat* area);
 	bool hasArea() const { return area != nullptr; }
-	void addCondition(const Condition* condition) { params.conditionList.emplace_front(condition); }
+	void addCondition(const Condition* condition) { params.conditionList.emplace_back(condition); }
 	void clearConditions() { params.conditionList.clear(); }
 	void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);
-	void postCombatEffects(Creature* caster, const Position& pos) const { postCombatEffects(caster, pos, params); }
+	void postCombatEffects(const std::shared_ptr<Creature>& caster, const Position& pos) const
+	{
+		postCombatEffects(caster, pos, params);
+	}
 
 	void setOrigin(CombatOrigin origin) { params.origin = origin; }
 
 private:
-	CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
+	CombatDamage getCombatDamage(const std::shared_ptr<Creature>& creature,
+	                             const std::shared_ptr<Creature>& target) const;
 
 	// configurable
 	CombatParams params;
@@ -138,10 +148,16 @@ private:
 class MagicField final : public Item
 {
 public:
-	explicit MagicField(uint16_t type) : Item(type), createTime(OTSYS_TIME()) {}
+	explicit MagicField(uint16_t type) : Item{type}, createTime(OTSYS_TIME()) {}
 
-	MagicField* getMagicField() override { return this; }
-	const MagicField* getMagicField() const override { return this; }
+	std::shared_ptr<MagicField> getMagicField() override
+	{
+		return std::static_pointer_cast<MagicField>(shared_from_this());
+	}
+	std::shared_ptr<const MagicField> getMagicField() const override
+	{
+		return std::static_pointer_cast<const MagicField>(shared_from_this());
+	}
 
 	bool isReplaceable() const { return Item::items[getID()].replaceable; }
 	CombatType_t getCombatType() const
@@ -157,7 +173,7 @@ public:
 		}
 		return 0;
 	}
-	void onStepInField(Creature* creature);
+	void onStepInField(const std::shared_ptr<Creature>& creature);
 
 private:
 	int64_t createTime;

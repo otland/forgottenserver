@@ -17,7 +17,7 @@ static constexpr int32_t MAP_MAX_LAYERS = 16;
 static constexpr uint16_t MAP_NORMALWALKCOST = 10;
 static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
 
-using SpectatorVec = boost::container::flat_set<Creature*>;
+using SpectatorVec = boost::container::flat_set<std::shared_ptr<Creature>, std::owner_less<std::shared_ptr<Creature>>>;
 
 struct FindPathParams;
 struct AStarNode
@@ -39,12 +39,13 @@ public:
 	AStarNode* getNodeByPosition(uint16_t x, uint16_t y);
 
 	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
-	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
+	static uint16_t getTileWalkCost(const std::shared_ptr<const Creature>& creature,
+	                                const std::shared_ptr<const Tile>& tile);
 
 private:
-	std::vector<AStarNode> nodes;
-	std::unordered_map<uint32_t, AStarNode*> nodeMap;
-	std::unordered_set<uint32_t> visited;
+	std::vector<AStarNode> nodes = {};
+	std::unordered_map<uint32_t, AStarNode*> nodeMap = {};
+	std::unordered_set<uint32_t> visited = {};
 
 	struct NodeCompare
 	{
@@ -66,13 +67,12 @@ static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
 struct Floor
 {
 	constexpr Floor() = default;
-	~Floor();
 
 	// non-copyable
 	Floor(const Floor&) = delete;
 	Floor& operator=(const Floor&) = delete;
 
-	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
+	std::shared_ptr<Tile> tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
 };
 
 class FrozenPathingConditionCall;
@@ -135,16 +135,15 @@ public:
 	Floor* createFloor(uint32_t z);
 	Floor* getFloor(uint8_t z) const { return array[z]; }
 
-	void addCreature(Creature* c);
-	void removeCreature(Creature* c);
+	void addCreature(std::shared_ptr<Creature> c) { creatures.emplace(std::move(c)); }
+	void removeCreature(const std::shared_ptr<Creature>& c) { creatures.erase(c); }
 
 private:
 	static bool newLeaf;
 	QTreeLeafNode* leafS = nullptr;
 	QTreeLeafNode* leafE = nullptr;
 	Floor* array[MAP_MAX_LAYERS] = {};
-	std::vector<Creature*> creature_list;
-	std::vector<Creature*> player_list;
+	boost::container::flat_set<std::shared_ptr<Creature>> creatures;
 
 	friend class Map;
 	friend class QTreeNode;
@@ -182,14 +181,14 @@ public:
 	 * Get a single tile.
 	 * \returns A pointer to that tile.
 	 */
-	Tile* getTile(uint16_t x, uint16_t y, uint8_t z) const;
-	Tile* getTile(const Position& pos) const { return getTile(pos.x, pos.y, pos.z); }
+	std::shared_ptr<Tile> getTile(uint16_t x, uint16_t y, uint8_t z) const;
+	std::shared_ptr<Tile> getTile(const Position& pos) const { return getTile(pos.x, pos.y, pos.z); }
 
 	/**
 	 * Set a single tile.
 	 */
-	void setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile);
-	void setTile(const Position& pos, Tile* newTile) { setTile(pos.x, pos.y, pos.z, newTile); }
+	void setTile(uint16_t x, uint16_t y, uint8_t z, const std::shared_ptr<Tile>& newTile);
+	void setTile(const Position& pos, const std::shared_ptr<Tile>& newTile) { setTile(pos.x, pos.y, pos.z, newTile); }
 
 	/**
 	 * Removes a single tile.
@@ -205,10 +204,11 @@ public:
 	 * tiles away \param forceLogin If true, placing the creature will not fail
 	 * because of obstacles (creatures/chests)
 	 */
-	bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false,
+	bool placeCreature(const Position& centerPos, const std::shared_ptr<Creature>& creature, bool extendedPos = false,
 	                   bool forceLogin = false);
 
-	void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
+	void moveCreature(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& newTile,
+	                  bool forceTeleport = false);
 
 	void getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor = false,
 	                   bool onlyPlayers = false, int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0,
@@ -249,10 +249,11 @@ public:
 	                  bool pathfinding = false) const;
 	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathfinding = false) const;
 
-	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
+	const std::shared_ptr<Tile> canWalkTo(const std::shared_ptr<const Creature>& creature, const Position& pos) const;
 
-	bool getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
-	                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
+	bool getPathMatching(const std::shared_ptr<const Creature>& creature, const Position& targetPos,
+	                     std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition,
+	                     const FindPathParams& fpp) const;
 
 	std::map<std::string, Position> waypoints;
 
@@ -271,19 +272,20 @@ private:
 
 	QTreeNode root;
 
+public:
 	std::filesystem::path spawnfile;
 	std::filesystem::path housefile;
 
 	uint32_t width = 0;
 	uint32_t height = 0;
 
+private:
 	// Actually scans the map for spectators
 	void getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX,
 	                           int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ,
 	                           int32_t maxRangeZ, bool onlyPlayers) const;
 
 	friend class Game;
-	friend class IOMap;
 };
 
 #endif // FS_MAP_H

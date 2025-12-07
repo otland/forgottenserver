@@ -9,13 +9,16 @@
 class Teleport final : public Item
 {
 public:
-	explicit Teleport(uint16_t type) : Item(type) {};
+	explicit Teleport(uint16_t type) : Item{type} {};
 
-	Thing* getReceiver() override final { return this; }
-	const Thing* getReceiver() const override final { return this; }
+	std::shared_ptr<Thing> getReceiver() override final { return shared_from_this(); }
+	std::shared_ptr<const Thing> getReceiver() const override final { return shared_from_this(); }
 
-	Teleport* getTeleport() override { return this; }
-	const Teleport* getTeleport() const override { return this; }
+	std::shared_ptr<Teleport> getTeleport() override { return std::static_pointer_cast<Teleport>(shared_from_this()); }
+	std::shared_ptr<const Teleport> getTeleport() const override
+	{
+		return std::static_pointer_cast<const Teleport>(shared_from_this());
+	}
 
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
@@ -23,19 +26,25 @@ public:
 	const Position& getDestPos() const { return destPos; }
 	void setDestPos(const Position& pos) { destPos = pos; }
 
-	ReturnValue queryRemove(const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override
+	ReturnValue queryRemove(const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
+	                        const std::shared_ptr<Creature>& = nullptr) const override
 	{
 		return RETURNVALUE_NOERROR;
 	}
-	Thing* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override { return this; }
 
-	void addThing(Thing* thing) override { return addThing(0, thing); }
-	void addThing(int32_t index, Thing* thing) override;
+	std::shared_ptr<Thing> queryDestination(int32_t&, const std::shared_ptr<const Thing>&, std::shared_ptr<Item>&,
+	                                        uint32_t&) override
+	{
+		return shared_from_this();
+	}
 
-	void postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
-	                         ReceiverLink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
-	                            ReceiverLink_t link = LINK_OWNER) override;
+	void addThing(const std::shared_ptr<Thing>& thing) override { addThing(0, thing); }
+	void addThing(int32_t index, const std::shared_ptr<Thing>& thing) override;
+
+	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
 private:
 	Position destPos;

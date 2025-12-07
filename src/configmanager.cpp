@@ -7,7 +7,6 @@
 #include "configmanager.h"
 
 #include "game.h"
-#include "monster.h"
 #include "pugicast.h"
 
 #if LUA_VERSION_NUM >= 502

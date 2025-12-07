@@ -7,20 +7,19 @@
 
 #include "tools.h"
 
-Inbox::Inbox(uint16_t type) : Container(type, 30, false, true) {}
-
-ReturnValue Inbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
+ReturnValue Inbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t flags,
+                            const std::shared_ptr<Creature>&) const
 {
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 	}
 
-	const Item* item = thing.getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (item == this) {
+	if (item.get() == this) {
 		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
@@ -31,22 +30,24 @@ ReturnValue Inbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flag
 	return RETURNVALUE_NOERROR;
 }
 
-void Inbox::postAddNotification(Thing* thing, const Thing* oldParent, int32_t index, ReceiverLink_t)
+void Inbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+                                int32_t index, ReceiverLink_t)
 {
-	if (const auto parent = getParent()) {
+	if (const auto& parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
-void Inbox::postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index, ReceiverLink_t)
+void Inbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+                                   int32_t index, ReceiverLink_t)
 {
-	if (const auto parent = getParent()) {
+	if (const auto& parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
 
-Thing* Inbox::getParent() const
+std::shared_ptr<Thing> Inbox::getParent() const
 {
-	const auto parent = Container::getParent();
+	const auto& parent = Container::getParent();
 	return parent ? parent->getParent() : nullptr;
 }

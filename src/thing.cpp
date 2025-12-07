@@ -9,9 +9,6 @@
 
 const Position& Thing::getPosition() const
 {
-	const Tile* tile = getTile();
-	if (!tile) {
-		return Tile::nullptr_tile.getPosition();
-	}
-	return tile->getPosition();
+	const auto& tile = getTile();
+	return tile ? tile->getPosition() : Tile::nullptrTile->getPosition();
 }
