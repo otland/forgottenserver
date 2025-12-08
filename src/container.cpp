@@ -66,49 +66,39 @@ void Container::addItem(std::shared_ptr<Item> item)
 	itemList.push_back(std::move(item));
 }
 
-Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
+void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last)
 {
 	if (attr == ATTR_CONTAINER_ITEMS) {
-		if (!propStream.read<uint32_t>(serializationCount)) {
-			return ATTR_READ_ERROR;
-		}
-		return ATTR_READ_END;
+		serializationCount = OTB::read<uint32_t>(first, last);
+		return;
 	}
-	return Item::readAttr(attr, propStream);
+
+	Item::readAttr(attr, first, last);
 }
 
-bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream)
+void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator& last, const OTB::Node& node)
 {
-	bool ret = Item::unserializeItemNode(loader, node, propStream);
-	if (!ret) {
-		return false;
-	}
+	Item::unserializeItemNode(first, last, node);
 
-	for (auto& itemNode : node.children) {
+	for (const auto& itemNode : node.children) {
 		// load container items
-		if (itemNode.type != OTBM_ITEM) {
-			// unknown type
-			return false;
+		if (itemNode.type != tfs::io::map::OTBM_ITEM) [[unlikely]] {
+			throw std::invalid_argument("Invalid node type");
 		}
 
-		PropStream itemPropStream;
-		if (!loader.getProps(itemNode, itemPropStream)) {
-			return false;
+		auto it = itemNode.propsBegin;
+		auto id = OTB::read<uint16_t>(it, itemNode.propsEnd);
+
+		auto item = Item::CreateItem(Item::getPersistentId(id));
+		if (!item) [[unlikely]] {
+			throw std::runtime_error(std::format("[{:s}] Invalid item type: {:d}", __FUNCTION__, id));
 		}
 
-		const auto item = Item::CreateItem(itemPropStream);
-		if (!item) {
-			return false;
-		}
-
-		if (!item->unserializeItemNode(loader, itemNode, itemPropStream)) {
-			return false;
-		}
+		item->unserializeItemNode(it, itemNode.propsEnd, itemNode);
 
 		addItem(item);
 		updateItemWeight(item->getWeight());
 	}
-	return true;
 }
 
 void Container::updateItemWeight(int32_t diff)

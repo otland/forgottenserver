@@ -167,9 +167,8 @@ public:
 
 	/**
 	 * Load a map.
-	 * \returns true if the map was loaded successfully
 	 */
-	bool loadMap(const std::string& identifier, bool loadHouses, bool isCalledByLua = true);
+	void loadMap(const std::string& identifier, bool loadHouses, bool isCalledByLua = true);
 
 	/**
 	 * Save a map.
@@ -271,10 +270,6 @@ private:
 	SpectatorCache playersSpectatorCache;
 
 	QTreeNode root;
-
-public:
-	std::filesystem::path spawnfile;
-	std::filesystem::path housefile;
 
 	uint32_t width = 0;
 	uint32_t height = 0;

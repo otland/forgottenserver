@@ -49,6 +49,8 @@ enum ItemDecayState_t : uint8_t
 
 enum AttrTypes_t
 {
+	ATTR_END = 0,
+
 	// ATTR_DESCRIPTION = 1,
 	// ATTR_EXT_FILE = 2,
 	ATTR_TILE_FLAGS = 3,
@@ -92,13 +94,6 @@ enum AttrTypes_t
 	// ATTR_TIER = 41, // mapeditor
 	ATTR_REFLECT = 42,
 	ATTR_BOOST = 43,
-};
-
-enum Attr_ReadValue
-{
-	ATTR_READ_CONTINUE,
-	ATTR_READ_ERROR,
-	ATTR_READ_END,
 };
 
 class ItemAttributes
@@ -168,8 +163,8 @@ public:
 			               [&](std::monostate) { lua_pushnil(L); },
 			               [&](const std::string& v) { tfs::lua::pushString(L, v); },
 			               [&](bool v) { tfs::lua::pushBoolean(L, v); },
-			               [&](int64_t v) { lua_pushinteger(L, v); },
-			               [&](double v) { lua_pushnumber(L, v); },
+			               [&](int64_t v) { tfs::lua::pushNumber(L, v); },
+			               [&](double v) { tfs::lua::pushNumber(L, v); },
 			           },
 			           value);
 		}
@@ -185,57 +180,34 @@ public:
 			           value);
 		}
 
-		bool unserialize(PropStream& propStream)
+		void unserialize(OTB::iterator& first, const OTB::iterator& last)
 		{
 			// This is hard-coded so it's not general, depends on the position of the variants.
-			uint8_t pos;
-			if (!propStream.read<uint8_t>(pos)) {
-				return false;
-			}
-
-			switch (pos) {
+			switch (OTB::read<uint8_t>(first, last)) {
 				case 1: { // std::string
-					auto [str, ok] = propStream.readString();
-					if (!ok) {
-						return false;
-					}
-					value = std::string{str};
+					value = OTB::readString(first, last);
 					break;
 				}
 
 				case 2: { // int64_t
-					int64_t tmp;
-					if (!propStream.read<int64_t>(tmp)) {
-						return false;
-					}
-					value = tmp;
+					value = OTB::read<int64_t>(first, last);
 					break;
 				}
 
 				case 3: { // double
-					double tmp;
-					if (!propStream.read<double>(tmp)) {
-						return false;
-					}
-					value = tmp;
+					value = OTB::read<double>(first, last);
 					break;
 				}
 
 				case 4: { // bool
-					bool tmp;
-					if (!propStream.read<bool>(tmp)) {
-						return false;
-					}
-					value = tmp;
+					value = OTB::read<bool>(first, last);
 					break;
 				}
 
 				default: {
-					value = {};
-					return false;
+					throw std::invalid_argument("Invalid custom attribute type");
 				}
 			}
-			return true;
 		}
 
 	private:
@@ -473,6 +445,7 @@ public:
 	static std::shared_ptr<Item> CreateItem(const uint16_t type, uint16_t count = 0);
 	static std::shared_ptr<Container> CreateItemAsContainer(const uint16_t type, uint16_t size);
 	static std::shared_ptr<Item> CreateItem(PropStream& propStream);
+	static uint16_t getPersistentId(uint16_t type);
 	static Items items;
 
 	// Constructor for items
@@ -711,9 +684,9 @@ public:
 	std::string getWeightDescription() const;
 
 	// serialization
-	virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
-	bool unserializeAttr(PropStream& propStream);
-	virtual bool unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream);
+	virtual void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last);
+	void unserializeAttr(OTB::iterator& first, const OTB::iterator& last);
+	virtual void unserializeItemNode(OTB::iterator& first, const OTB::iterator& last, const OTB::Node& node);
 
 	virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 

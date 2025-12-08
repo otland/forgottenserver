@@ -13,6 +13,88 @@
 
 extern Game g_game;
 
+namespace {
+
+void loadContainer(OTB::iterator& first, const OTB::iterator& last, const std::shared_ptr<Container>& container);
+
+void loadItem(OTB::iterator& first, const OTB::iterator& last, const std::shared_ptr<Thing>& parent)
+{
+	auto id = OTB::read<uint16_t>(first, last);
+
+	std::shared_ptr<Tile> tile = nullptr;
+	if (!parent->hasParent()) {
+		tile = parent->getTile();
+	}
+
+	const ItemType& iType = Item::items[id];
+	if (iType.moveable || iType.forceSerialize || !tile) {
+		// create a new item
+		if (const auto& item = Item::CreateItem(id)) {
+			item->unserializeAttr(first, last);
+			if (const auto& container = item->getContainer()) {
+				loadContainer(first, last, container);
+			}
+
+			parent->internalAddThing(item);
+			item->startDecaying();
+		}
+	} else {
+		// Stationary items like doors/beds/blackboards/bookcases
+		std::shared_ptr<Item> item = nullptr;
+		if (const TileItemVector* items = tile->getItemList()) {
+			for (const auto& findItem : *items) {
+				if (findItem->getID() == id) {
+					item = findItem;
+					break;
+				} else if (iType.isDoor() && findItem->getDoor()) {
+					item = findItem;
+					break;
+				} else if (iType.isBed() && findItem->getBed()) {
+					item = findItem;
+					break;
+				}
+			}
+		}
+
+		if (item) {
+			item->unserializeAttr(first, last);
+
+			if (const auto& container = item->getContainer()) {
+				loadContainer(first, last, container);
+			}
+
+			g_game.transformItem(item, id);
+		} else {
+			// The map changed since the last save, just read the attributes
+			if (const auto& dummy = Item::CreateItem(id)) {
+				dummy->unserializeAttr(first, last);
+				if (const auto& container = dummy->getContainer()) {
+					loadContainer(first, last, container);
+				} else if (const auto& bedItem = dummy->getBed()) {
+					if (uint32_t sleeperGUID = bedItem->getSleeper(); sleeperGUID != 0) {
+						g_game.removeBedSleeper(sleeperGUID);
+					}
+				}
+			}
+		}
+	}
+}
+
+void loadContainer(OTB::iterator& first, const OTB::iterator& last, const std::shared_ptr<Container>& container)
+{
+	while (container->serializationCount > 0) {
+		loadItem(first, last, container);
+		container->serializationCount--;
+	}
+
+	const auto endAttr = OTB::read<uint8_t>(first, last);
+	if (endAttr != 0) {
+		throw std::invalid_argument("Unserialization error for container item");
+	}
+}
+
+} // namespace
+
 void IOMapSerialize::loadHouseItems(Map* map)
 {
 	int64_t start = OTSYS_TIME();
@@ -24,27 +106,26 @@ void IOMapSerialize::loadHouseItems(Map* map)
 
 	do {
 		auto attr = result->getString("data");
-		PropStream propStream;
-		propStream.init(attr.data(), attr.size());
+		auto first = attr.data();
+		auto last = first + attr.size();
 
-		uint16_t x, y;
-		uint8_t z;
-		if (!propStream.read<uint16_t>(x) || !propStream.read<uint16_t>(y) || !propStream.read<uint8_t>(z)) {
+		try {
+			auto x = OTB::read<uint16_t>(first, last);
+			auto y = OTB::read<uint16_t>(first, last);
+			auto z = OTB::read<uint8_t>(first, last);
+
+			const auto& tile = map->getTile(x, y, z);
+			if (!tile) {
+				continue;
+			}
+
+			auto item_count = OTB::read<uint32_t>(first, last);
+
+			while (item_count--) {
+				loadItem(first, last, tile);
+			}
+		} catch (const std::exception&) {
 			continue;
-		}
-
-		const auto& tile = map->getTile(x, y, z);
-		if (!tile) {
-			continue;
-		}
-
-		uint32_t item_count;
-		if (!propStream.read<uint32_t>(item_count)) {
-			continue;
-		}
-
-		while (item_count--) {
-			loadItem(propStream, tile);
 		}
 	} while (result->next());
 	std::cout << "> Loaded house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
@@ -93,105 +174,6 @@ bool IOMapSerialize::saveHouseItems()
 	return success;
 }
 
-bool IOMapSerialize::loadContainer(PropStream& propStream, const std::shared_ptr<Container>& container)
-{
-	while (container->serializationCount > 0) {
-		if (!loadItem(propStream, container)) {
-			std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
-			          << container->getID() << std::endl;
-			return false;
-		}
-		container->serializationCount--;
-	}
-
-	uint8_t endAttr;
-	if (!propStream.read<uint8_t>(endAttr) || endAttr != 0) {
-		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
-		          << container->getID() << std::endl;
-		return false;
-	}
-	return true;
-}
-
-bool IOMapSerialize::loadItem(PropStream& propStream, const std::shared_ptr<Thing>& parent)
-{
-	uint16_t id;
-	if (!propStream.read<uint16_t>(id)) {
-		return false;
-	}
-
-	std::shared_ptr<Tile> tile = nullptr;
-	if (!parent->hasParent()) {
-		tile = parent->getTile();
-	}
-
-	const ItemType& iType = Item::items[id];
-	if (iType.moveable || iType.forceSerialize || !tile) {
-		// create a new item
-		if (const auto item = Item::CreateItem(id)) {
-			if (item->unserializeAttr(propStream)) {
-				const auto& container = item->getContainer();
-				if (container && !loadContainer(propStream, container)) {
-					return false;
-				}
-
-				parent->internalAddThing(item);
-				item->startDecaying();
-			} else {
-				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
-				return false;
-			}
-		}
-	} else {
-		// Stationary items like doors/beds/blackboards/bookcases
-		std::shared_ptr<Item> item = nullptr;
-		if (const TileItemVector* items = tile->getItemList()) {
-			for (const auto& findItem : *items) {
-				if (findItem->getID() == id) {
-					item = findItem;
-					break;
-				} else if (iType.isDoor() && findItem->getDoor()) {
-					item = findItem;
-					break;
-				} else if (iType.isBed() && findItem->getBed()) {
-					item = findItem;
-					break;
-				}
-			}
-		}
-
-		if (item) {
-			if (item->unserializeAttr(propStream)) {
-				const auto& container = item->getContainer();
-				if (container && !loadContainer(propStream, container)) {
-					return false;
-				}
-
-				g_game.transformItem(item, id);
-			} else {
-				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
-			}
-		} else {
-			// The map changed since the last save, just read the attributes
-			if (const auto dummy = Item::CreateItem(id)) {
-				dummy->unserializeAttr(propStream);
-
-				if (const auto& container = dummy->getContainer()) {
-					if (!loadContainer(propStream, container)) {
-						return false;
-					}
-				} else if (const auto& bedItem = dummy->getBed()) {
-					uint32_t sleeperGUID = bedItem->getSleeper();
-					if (sleeperGUID != 0) {
-						g_game.removeBedSleeper(sleeperGUID);
-					}
-				}
-			}
-		}
-	}
-	return true;
-}
-
 void IOMapSerialize::saveItem(PropWriteStream& stream, const std::shared_ptr<const Item>& item)
 {
 	const auto& container = item->getContainer();
@@ -204,12 +186,12 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const std::shared_ptr<con
 		// Hack our way into the attributes
 		stream.write<uint8_t>(ATTR_CONTAINER_ITEMS);
 		stream.write<uint32_t>(container->size());
-		for (auto it = container->getReversedItems(), end = container->getReversedEnd(); it != end; ++it) {
-			saveItem(stream, *it);
+		for (auto&& containerItem : container->getItemList() | std::views::reverse) {
+			saveItem(stream, containerItem);
 		}
 	}
 
-	stream.write<uint8_t>(0x00); // attr end
+	stream.write<uint8_t>(ATTR_END); // attr end
 }
 
 void IOMapSerialize::saveTile(PropWriteStream& stream, const std::shared_ptr<const Tile>& tile)

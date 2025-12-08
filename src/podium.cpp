@@ -9,44 +9,36 @@
 
 extern Game g_game;
 
-Attr_ReadValue Podium::readAttr(AttrTypes_t attr, PropStream& propStream)
+void Podium::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last)
 {
-	switch (attr) {
-		case ATTR_PODIUMOUTFIT: {
-			if (propStream.size() < 15) {
-				return ATTR_READ_ERROR;
-			}
-
-			uint8_t flags = 0;
-			propStream.read<uint8_t>(flags);
-			setFlags(flags);
-
-			uint8_t newDirection = DIRECTION_NONE;
-			propStream.read<uint8_t>(newDirection);
-			setDirection(static_cast<Direction>(newDirection));
-
-			Outfit_t newOutfit;
-			propStream.read<uint16_t>(newOutfit.lookType);
-			propStream.read<uint8_t>(newOutfit.lookHead);
-			propStream.read<uint8_t>(newOutfit.lookBody);
-			propStream.read<uint8_t>(newOutfit.lookLegs);
-			propStream.read<uint8_t>(newOutfit.lookFeet);
-			propStream.read<uint8_t>(newOutfit.lookAddons);
-			propStream.read<uint16_t>(newOutfit.lookMount);
-			propStream.read<uint8_t>(newOutfit.lookMountHead);
-			propStream.read<uint8_t>(newOutfit.lookMountBody);
-			propStream.read<uint8_t>(newOutfit.lookMountLegs);
-			propStream.read<uint8_t>(newOutfit.lookMountFeet);
-			setOutfit(newOutfit);
-
-			g_game.updatePodium(getPodium());
-			return ATTR_READ_CONTINUE;
+	if (attr == ATTR_PODIUMOUTFIT) {
+		if (last - first < 15) [[unlikely]] {
+			throw std::invalid_argument("Invalid podium outfit");
 		}
 
-		default:
-			break;
+		auto flags = OTB::read<uint8_t>(first, last);
+		setFlags(flags);
+
+		auto newDirection = OTB::read<uint8_t>(first, last);
+		setDirection(static_cast<Direction>(newDirection));
+
+		setOutfit({.lookType = OTB::read<uint16_t>(first, last),
+		           .lookHead = OTB::read<uint8_t>(first, last),
+		           .lookBody = OTB::read<uint8_t>(first, last),
+		           .lookLegs = OTB::read<uint8_t>(first, last),
+		           .lookFeet = OTB::read<uint8_t>(first, last),
+		           .lookAddons = OTB::read<uint8_t>(first, last),
+		           .lookMount = OTB::read<uint16_t>(first, last),
+		           .lookMountHead = OTB::read<uint8_t>(first, last),
+		           .lookMountBody = OTB::read<uint8_t>(first, last),
+		           .lookMountLegs = OTB::read<uint8_t>(first, last),
+		           .lookMountFeet = OTB::read<uint8_t>(first, last)});
+
+		g_game.updatePodium(getPodium());
+		return;
 	}
-	return Item::readAttr(attr, propStream);
+
+	Item::readAttr(attr, first, last);
 }
 
 void Podium::serializeAttr(PropWriteStream& propWriteStream) const

@@ -31,7 +31,83 @@
         |--- OTBM_ITEM_DEF (not implemented)
 */
 
+namespace tfs::io::map {
+
 namespace {
+
+enum OTBM_AttrTypes_t
+{
+	OTBM_ATTR_DESCRIPTION = 1,
+	OTBM_ATTR_EXT_FILE = 2,
+	OTBM_ATTR_TILE_FLAGS = 3,
+	OTBM_ATTR_ACTION_ID = 4,
+	OTBM_ATTR_UNIQUE_ID = 5,
+	OTBM_ATTR_TEXT = 6,
+	OTBM_ATTR_DESC = 7,
+	OTBM_ATTR_TELE_DEST = 8,
+	OTBM_ATTR_ITEM = 9,
+	OTBM_ATTR_DEPOT_ID = 10,
+	OTBM_ATTR_EXT_SPAWN_FILE = 11,
+	OTBM_ATTR_RUNE_CHARGES = 12,
+	OTBM_ATTR_EXT_HOUSE_FILE = 13,
+	OTBM_ATTR_HOUSEDOORID = 14,
+	OTBM_ATTR_COUNT = 15,
+	OTBM_ATTR_DURATION = 16,
+	OTBM_ATTR_DECAYING_STATE = 17,
+	OTBM_ATTR_WRITTENDATE = 18,
+	OTBM_ATTR_WRITTENBY = 19,
+	OTBM_ATTR_SLEEPERGUID = 20,
+	OTBM_ATTR_SLEEPSTART = 21,
+	OTBM_ATTR_CHARGES = 22,
+};
+
+enum OTBM_TileFlag_t : uint32_t
+{
+	OTBM_TILEFLAG_PROTECTIONZONE = 1 << 0,
+	OTBM_TILEFLAG_NOPVPZONE = 1 << 2,
+	OTBM_TILEFLAG_NOLOGOUT = 1 << 3,
+	OTBM_TILEFLAG_PVPZONE = 1 << 4
+};
+
+auto parseMapAttributes(const OTB::Node& mapNode)
+{
+	std::string spawns = {}, houses = {};
+
+	auto first = mapNode.propsBegin;
+
+	while (first != mapNode.propsEnd) {
+		switch (auto attr = OTB::read<uint8_t>(first, mapNode.propsEnd)) {
+			case OTBM_ATTR_DESCRIPTION: {
+				auto len = OTB::read<uint16_t>(first, mapNode.propsEnd);
+				OTB::skip(first, mapNode.propsEnd, len);
+				break;
+			}
+
+			case OTBM_ATTR_EXT_SPAWN_FILE: {
+				spawns = OTB::readString(first, mapNode.propsEnd);
+				break;
+			}
+
+			case OTBM_ATTR_EXT_HOUSE_FILE: {
+				houses = OTB::readString(first, mapNode.propsEnd);
+				break;
+			}
+
+			default:
+				throw std::invalid_argument(std::format("Unknown map attribute {:d}", attr));
+		}
+	}
+
+	return std::make_pair(spawns, houses);
+}
+
+auto read_coords(auto& first, const auto last)
+{
+	auto x = OTB::read<uint16_t>(first, last);
+	auto y = OTB::read<uint16_t>(first, last);
+	auto z = OTB::read<uint8_t>(first, last);
+	return std::make_tuple(x, y, z);
+}
 
 std::shared_ptr<Tile> createTile(const std::shared_ptr<Item>& ground, const std::shared_ptr<Item>& item, uint16_t x,
                                  uint16_t y, uint8_t z)
@@ -52,84 +128,19 @@ std::shared_ptr<Tile> createTile(const std::shared_ptr<Item>& ground, const std:
 	return tile;
 }
 
-std::optional<std::string> parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map,
-                                                  const std::filesystem::path& fileName)
+void parseTileArea(const OTB::Node& node, Map& map)
 {
-	PropStream propStream;
-	if (!loader.getProps(mapNode, propStream)) {
-		return std::make_optional("Could not read map data attributes.");
-	}
+	auto first = node.propsBegin;
+	auto [base_x, base_y, z] = read_coords(first, node.propsEnd);
 
-	uint8_t attribute;
-	while (propStream.read<uint8_t>(attribute)) {
-		switch (attribute) {
-			case OTBM_ATTR_DESCRIPTION: {
-				auto [mapDescription, ok] = propStream.readString();
-				if (!ok) {
-					return std::make_optional("Invalid description tag.");
-				}
-				break;
-			}
-
-			case OTBM_ATTR_EXT_SPAWN_FILE: {
-				auto [spawnFile, ok] = propStream.readString();
-				if (!ok) {
-					return std::make_optional("Invalid spawn tag.");
-				}
-
-				map.spawnfile = fileName.parent_path() / spawnFile;
-				break;
-			}
-
-			case OTBM_ATTR_EXT_HOUSE_FILE: {
-				auto [houseFile, ok] = propStream.readString();
-				if (!ok) {
-					return std::make_optional("Invalid house tag.");
-				}
-
-				map.housefile = fileName.parent_path() / houseFile;
-				break;
-			}
-
-			default:
-				return std::make_optional("Unknown header node.");
-		}
-	}
-	return std::nullopt;
-}
-
-std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map)
-{
-	PropStream propStream;
-	if (!loader.getProps(tileAreaNode, propStream)) {
-		return std::make_optional("Invalid map node.");
-	}
-
-	OTBM_Destination_coords area_coord;
-	if (!propStream.read(area_coord)) {
-		return std::make_optional("Invalid map node.");
-	}
-
-	uint16_t base_x = area_coord.x;
-	uint16_t base_y = area_coord.y;
-	uint16_t z = area_coord.z;
-
-	for (const auto& tileNode : tileAreaNode.children) {
-		if (tileNode.type != OTBM_TILE && tileNode.type != OTBM_HOUSETILE) {
-			return std::make_optional("Unknown tile node.");
+	for (const auto& tileNode : node.children) {
+		if (tileNode.type != OTBM_TILE && tileNode.type != OTBM_HOUSETILE) [[unlikely]] {
+			throw std::invalid_argument(std::format("Unknown tile node: {:d}.", static_cast<uint16_t>(tileNode.type)));
 		}
 
-		if (!loader.getProps(tileNode, propStream)) {
-			return std::make_optional("Could not read node data.");
-		}
-
-		OTBM_Tile_coords tile_coord;
-		if (!propStream.read(tile_coord)) {
-			return std::make_optional("Could not read tile position.");
-		}
-
-		uint16_t x = base_x + tile_coord.x;
-		uint16_t y = base_y + tile_coord.y;
+		auto it = tileNode.propsBegin;
+		auto x = base_x + OTB::read<uint8_t>(it, tileNode.propsEnd);
+		auto y = base_y + OTB::read<uint8_t>(it, tileNode.propsEnd);
 
 		bool isHouseTile = false;
 		House* house = nullptr;
@@ -138,32 +149,21 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 		uint32_t tileflags = TILESTATE_NONE;
 
 		if (tileNode.type == OTBM_HOUSETILE) {
-			uint32_t houseId;
-			if (!propStream.read<uint32_t>(houseId)) {
-				return std::make_optional(std::format("[x:{:d}, y:{:d}, z:{:d}] Could not read house id.", x, y, z));
-			}
+			auto house_id = OTB::read<uint32_t>(it, tileNode.propsEnd);
 
-			house = map.houses.addHouse(houseId);
-			if (!house) {
-				return std::make_optional(
-				    std::format("[x:{:d}, y:{:d}, z:{:d}] Could not create house id: {:d}", x, y, z, houseId));
-			}
+			house = map.houses.addHouse(house_id);
 
-			tile = std::make_shared<HouseTile>(x, y, z, house);
-			house->addTile(std::static_pointer_cast<HouseTile>(tile));
+			auto houseTile = std::make_shared<HouseTile>(x, y, z, house);
+			house->addTile(houseTile);
+			tile = houseTile;
 			isHouseTile = true;
 		}
 
-		uint8_t attribute;
 		// read tile attributes
-		while (propStream.read<uint8_t>(attribute)) {
-			switch (attribute) {
+		while (it != tileNode.propsEnd) {
+			switch (OTB::read<char>(it, tileNode.propsEnd)) {
 				case OTBM_ATTR_TILE_FLAGS: {
-					uint32_t flags;
-					if (!propStream.read<uint32_t>(flags)) {
-						return std::make_optional(
-						    std::format("[x:{:d}, y:{:d}, z:{:d}] Failed to read tile flags.", x, y, z));
-					}
+					auto flags = OTB::read<uint32_t>(it, tileNode.propsEnd);
 
 					if ((flags & OTBM_TILEFLAG_PROTECTIONZONE) != 0) {
 						tileflags |= TILESTATE_PROTECTIONZONE;
@@ -180,16 +180,18 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 				}
 
 				case OTBM_ATTR_ITEM: {
-					const auto item = Item::CreateItem(propStream);
-					if (!item) {
-						return std::make_optional(
-						    std::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
+					auto id = OTB::read<uint16_t>(it, tileNode.propsEnd);
+					auto item = Item::CreateItem(Item::getPersistentId(id));
+					if (!item) [[unlikely]] {
+						throw std::runtime_error(std::format("[{:s}:{:d} - {:s}] Invalid item id: {:d}", __FILE__,
+						                                     __LINE__, __FUNCTION__, id));
 					}
 
 					if (isHouseTile && item->isMoveable()) {
-						std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID()
-						          << ", in house: " << house->getId() << ", at position [x: " << x << ", y: " << y
-						          << ", z: " << z << "]." << std::endl;
+						std::println(
+						    "[Warning - IOMap::loadMap] Moveable item with ID: {}"
+						    ", in house: {}, at position [x: {}, y: {}, z: {}].",
+						    item->getID(), house->getId(), x, y, z);
 					} else {
 						if (item->getItemCount() == 0) {
 							item->setItemCount(1);
@@ -201,8 +203,10 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 							item->setLoadedFromMap(true);
 						} else if (item->isGroundTile()) {
 							ground_item = std::move(item);
+							item = nullptr;
 						} else {
 							tile = createTile(std::move(ground_item), item, x, y, z);
+							ground_item = nullptr;
 							tile->internalAddThing(item);
 							item->startDecaying();
 							item->setLoadedFromMap(true);
@@ -212,29 +216,26 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 				}
 
 				default:
-					return std::make_optional(std::format("[x:{:d}, y:{:d}, z:{:d}] Unknown tile attribute.", x, y, z));
+					throw std::invalid_argument(
+					    std::format("[x:{:d}, y:{:d}, z:{:d}] Unknown tile attribute.", x, y, z));
 			}
 		}
 
 		for (const auto& itemNode : tileNode.children) {
-			if (itemNode.type != OTBM_ITEM) {
-				return std::make_optional(std::format("[x:{:d}, y:{:d}, z:{:d}] Unknown node type.", x, y, z));
+			if (itemNode.type != OTBM_ITEM) [[unlikely]] {
+				throw std::invalid_argument(
+				    std::format("Unknown item node: {:d}.", static_cast<uint16_t>(itemNode.type)));
 			}
 
-			PropStream stream;
-			if (!loader.getProps(itemNode, stream)) {
-				return std::make_optional("Invalid item node.");
+			auto it = itemNode.propsBegin;
+			auto id = OTB::read<uint16_t>(it, itemNode.propsEnd);
+			auto item = Item::CreateItem(Item::getPersistentId(id));
+			if (!item) [[unlikely]] {
+				throw std::runtime_error(
+				    std::format("[{:s}:{:d} - {:s}] Invalid item id: {:d}", __FILE__, __LINE__, __FUNCTION__, id));
 			}
 
-			const auto item = Item::CreateItem(stream);
-			if (!item) {
-				return std::make_optional(std::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
-			}
-
-			if (!item->unserializeItemNode(loader, itemNode, stream)) {
-				return std::make_optional(
-				    std::format("[x:{:d}, y:{:d}, z:{:d}] Failed to load item {:d}.", x, y, z, item->getID()));
-			}
+			item->unserializeItemNode(it, itemNode.propsEnd, itemNode);
 
 			if (isHouseTile && item->isMoveable()) {
 				std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID()
@@ -253,6 +254,7 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 					ground_item = std::move(item);
 				} else {
 					tile = createTile(std::move(ground_item), item, x, y, z);
+					ground_item = nullptr;
 					tile->internalAddThing(item);
 					item->startDecaying();
 					item->setLoadedFromMap(true);
@@ -262,174 +264,146 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 
 		if (!tile) {
 			tile = createTile(std::move(ground_item), nullptr, x, y, z);
+			ground_item = nullptr;
 		}
 
-		tile->setFlag(tileflags);
+		tile->setFlag(static_cast<tileflags_t>(tileflags));
 
 		map.setTile(x, y, z, tile);
 	}
-	return std::nullopt;
 }
 
-std::optional<std::string> parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map)
+void parseTowns(const OTB::Node& townsNode, Map& map)
 {
-	for (const auto& townNode : townsNode.children) {
-		PropStream propStream;
-		if (townNode.type != OTBM_TOWN) {
-			return std::make_optional("Unknown town node.");
+	for (const auto& node : townsNode.children) {
+		if (node.type != OTBM_TOWN) [[unlikely]] {
+			throw std::invalid_argument(std::format("Unknown town node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
-		if (!loader.getProps(townNode, propStream)) {
-			return std::make_optional("Could not read town data.");
-		}
+		auto first = node.propsBegin;
+		auto townId = OTB::read<uint32_t>(first, node.propsEnd);
+		auto townName = OTB::readString(first, node.propsEnd);
+		auto [x, y, z] = read_coords(first, node.propsEnd);
 
-		uint32_t townId;
-		if (!propStream.read<uint32_t>(townId)) {
-			return std::make_optional("Could not read town id.");
-		}
-
-		auto [townName, ok] = propStream.readString();
-		if (!ok) {
-			return std::make_optional("Could not read town name.");
-		}
-
-		OTBM_Destination_coords town_coords;
-		if (!propStream.read(town_coords)) {
-			return std::make_optional("Could not read town coordinates.");
-		}
-
-		map.towns.setTown(townId, new Town{.id = townId,
-		                                   .name = std::string{townName},
-		                                   .templePosition = {town_coords.x, town_coords.y, town_coords.z}});
+		map.towns.setTown(townId, new Town{.id = townId, .name = std::move(townName), .templePosition = {x, y, z}});
 	}
-	return std::nullopt;
 }
 
-std::optional<std::string> parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map)
+void parseWaypoints(const OTB::Node& waypointsNode, Map& map)
 {
-	PropStream propStream;
 	for (const auto& node : waypointsNode.children) {
-		if (node.type != OTBM_WAYPOINT) {
-			return std::make_optional("Unknown waypoint node.");
+		if (node.type != OTBM_WAYPOINT) [[unlikely]] {
+			throw std::invalid_argument(std::format("Unknown waypoint node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
-		if (!loader.getProps(node, propStream)) {
-			return std::make_optional("Could not read waypoint data.");
-		}
+		auto first = node.propsBegin;
 
-		auto [name, ok] = propStream.readString();
-		if (!ok) {
-			return std::make_optional("Could not read waypoint name.");
-		}
+		auto name = OTB::readString(first, node.propsEnd);
+		auto [x, y, z] = read_coords(first, node.propsEnd);
 
-		OTBM_Destination_coords waypoint_coords;
-		if (!propStream.read(waypoint_coords)) {
-			return std::make_optional("Could not read waypoint coordinates.");
-		}
-
-		map.waypoints[std::string{name}] = Position(waypoint_coords.x, waypoint_coords.y, waypoint_coords.z);
+		map.waypoints[name] = Position{x, y, z};
 	}
-	return std::nullopt;
 }
 
 } // namespace
 
-bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
+MapAttributes loadMap(Map& map, std::filesystem::path fileName)
 {
-	int64_t start = OTSYS_TIME();
-	try {
-		OTB::Loader loader{fileName.string(), OTB::Identifier{{'O', 'T', 'B', 'M'}}};
-		const auto& root = loader.parseTree();
+	auto start = std::chrono::steady_clock::now();
 
-		PropStream propStream;
-		if (!loader.getProps(root, propStream)) {
-			setLastErrorString("Could not read root property.");
-			return false;
-		}
+	auto loader = OTB::load(fileName.string(), "OTBM");
+	auto first = loader.begin(), last = loader.end();
 
-		OTBM_root_header root_header;
-		if (!propStream.read(root_header)) {
-			setLastErrorString("Could not read header.");
-			return false;
-		}
-
-		uint32_t headerVersion = root_header.version;
-		if (headerVersion == 0) {
-			// In otbm version 1 the count variable after splashes/fluidcontainers and stackables are saved as
-			// attributes instead, this solves a lot of problems with items that are changed
-			// (stackable/charges/fluidcontainer/splash) during an update.
-			setLastErrorString(
-			    "This map need to be upgraded by using the latest map editor version to be able to load correctly.");
-			return false;
-		}
-
-		if (headerVersion > 2) {
-			setLastErrorString("Unknown OTBM version detected.");
-			return false;
-		}
-
-		if (root_header.majorVersionItems < 3) {
-			setLastErrorString(
-			    "This map need to be upgraded by using the latest map editor version to be able to load correctly.");
-			return false;
-		}
-
-		if (root_header.majorVersionItems > Item::items.majorVersion) {
-			setLastErrorString(
-			    "The map was saved with a different items.otb version, an upgraded items.otb is required.");
-			return false;
-		}
-
-		if (root_header.minorVersionItems < CLIENT_VERSION_810) {
-			setLastErrorString("This map needs to be updated.");
-			return false;
-		}
-
-		if (root_header.minorVersionItems > Item::items.minorVersion) {
-			std::cout << "[Warning - IOMap::loadMap] This map needs an updated items.otb." << std::endl;
-		}
-
-		std::cout << "> Map size: " << root_header.width << "x" << root_header.height << '.' << std::endl;
-		map->width = root_header.width;
-		map->height = root_header.height;
-
-		if (root.children.size() != 1 || root.children[0].type != OTBM_MAP_DATA) {
-			setLastErrorString("Could not read data node.");
-			return false;
-		}
-
-		const auto& mapNode = root.children[0];
-		if (const auto& errorString = parseMapDataAttributes(loader, mapNode, *map, fileName)) {
-			setLastErrorString(*errorString);
-			return false;
-		}
-
-		for (const auto& mapDataNode : mapNode.children) {
-			if (mapDataNode.type == OTBM_TILE_AREA) {
-				if (const auto& errorString = parseTileArea(loader, mapDataNode, *map)) {
-					setLastErrorString(*errorString);
-					return false;
-				}
-			} else if (mapDataNode.type == OTBM_TOWNS) {
-				if (const auto& errorString = parseTowns(loader, mapDataNode, *map)) {
-					setLastErrorString(*errorString);
-					return false;
-				}
-			} else if (mapDataNode.type == OTBM_WAYPOINTS && headerVersion > 1) {
-				if (const auto& errorString = parseWaypoints(loader, mapDataNode, *map)) {
-					setLastErrorString(*errorString);
-					return false;
-				}
-			} else {
-				setLastErrorString("Unknown map node.");
-				return false;
-			}
-		}
-	} catch (const OTB::InvalidOTBFormat& err) {
-		setLastErrorString(err.what());
-		return false;
+	auto version = OTB::read<uint32_t>(first, last);
+	if (version == 0) {
+		// In otbm version 1 the count variable after splashes/fluidcontainers and stackables are saved as
+		// attributes instead, this solves a lot of problems with items that are changed
+		// (stackable/charges/fluidcontainer/splash) during an update.
+		throw std::invalid_argument(
+		    "This map need to be upgraded by using the latest map editor version to be able to load correctly.");
 	}
 
-	std::cout << "> Map loading time: " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
-	return true;
+	if (version > 2) {
+		throw std::invalid_argument("Unknown OTBM version detected.");
+	}
+
+	auto width = OTB::read<uint16_t>(first, last);
+	auto height = OTB::read<uint16_t>(first, last);
+	auto majorVersionItems = OTB::read<uint32_t>(first, last);
+	auto minorVersionItems = OTB::read<uint32_t>(first, last);
+
+	if (majorVersionItems < 3) {
+		throw std::invalid_argument(
+		    "This map need to be upgraded by using the latest map editor version to be able to load correctly.");
+	}
+
+	if (majorVersionItems > Item::items.majorVersion) {
+		throw std::invalid_argument(
+		    "The map was saved with a different items.otb version, an upgraded items.otb is required.");
+	}
+
+	if (minorVersionItems < CLIENT_VERSION_810) {
+		throw std::invalid_argument("This map needs to be updated.");
+	}
+
+	if (minorVersionItems > Item::items.minorVersion) {
+		std::println("[Warning - IOMap::loadMap] This map needs an updated items.otb.");
+	}
+
+	std::println("> Map size: {:d}x{:d}.", width, height);
+
+	const auto& rootNodes = loader.children();
+	if (rootNodes.size() != 1 || rootNodes.front().type != OTBM_MAP_DATA) {
+		throw std::invalid_argument("Could not read data node.");
+	}
+
+	const auto& mapNode = rootNodes.front();
+	auto [spawns, houses] = parseMapAttributes(mapNode);
+
+	if (spawns.empty()) {
+		// OTBM file doesn't tell us about the spawnfile, lets guess it is mapname-spawn.xml.
+		spawns = fileName.stem().concat("-spawn.xml").string();
+	}
+
+	if (houses.empty()) {
+		// OTBM file doesn't tell us about the housefile, lets guess it is mapname-house.xml.
+		houses = fileName.stem().concat("-house.xml").string();
+	}
+
+	for (const auto& node : mapNode.children) {
+		switch (node.type) {
+			case OTBM_TILE_AREA:
+				parseTileArea(node, map);
+				break;
+
+			case OTBM_TOWNS:
+				parseTowns(node, map);
+				break;
+
+			case OTBM_WAYPOINTS:
+				if (version <= 1) [[unlikely]] {
+					throw std::invalid_argument(std::format(
+					    "Waypoints are not supported in OTBM version {:d}, please update your map.", version));
+				}
+
+				parseWaypoints(node, map);
+				break;
+
+			default:
+				throw std::invalid_argument(std::format("Unknown map node: {:d}.", static_cast<uint16_t>(node.type)));
+		}
+	}
+
+	auto end = std::chrono::steady_clock::now();
+
+	std::println("> Map loading time: {}ms.", duration_cast<std::chrono::milliseconds>(end - start).count());
+
+	return {
+	    .spawns = fileName.parent_path() / spawns,
+	    .houses = fileName.parent_path() / houses,
+	    .width = width,
+	    .height = height,
+	};
 }
+
+} // namespace tfs::io::map

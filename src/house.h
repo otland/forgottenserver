@@ -51,7 +51,7 @@ public:
 	House* getHouse() { return house; }
 
 	// serialization
-	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
 	void serializeAttr(PropWriteStream&) const override {}
 
 	void setDoorId(uint32_t doorId) { setIntAttr(ITEM_ATTRIBUTE_DOORID, doorId); }
@@ -210,7 +210,7 @@ public:
 	House* getHouse(uint32_t houseId);
 	House* getHouseByPlayerId(uint32_t playerId);
 
-	bool loadHousesXML(const std::string& filename);
+	bool loadHousesXML(const std::filesystem::path& filename);
 
 	void payHouses(RentPeriod_t rentPeriod) const;
 

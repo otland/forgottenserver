@@ -207,8 +207,10 @@ void mainLoader(ServiceManager* services)
 	std::cout << boost::algorithm::to_upper_copy(worldType) << std::endl;
 
 	std::cout << ">> Loading map" << std::endl;
-	if (!g_game.loadMainMap(getString(ConfigManager::MAP_NAME))) {
-		startupErrorMessage("Failed to load map");
+	try {
+		g_game.loadMainMap(getString(ConfigManager::MAP_NAME));
+	} catch (const std::exception& e) {
+		startupErrorMessage(std::format("Failed to load map: {:s}", e.what()));
 		return;
 	}
 

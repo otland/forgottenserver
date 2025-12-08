@@ -4,50 +4,57 @@
 #ifndef FS_FILELOADER_H
 #define FS_FILELOADER_H
 
-class PropStream;
-
 namespace OTB {
+
 using MappedFile = boost::iostreams::mapped_file_source;
-using ContentIt = MappedFile::iterator;
-using Identifier = std::array<char, 4>;
+using iterator = MappedFile::iterator;
 
 struct Node
 {
-	using ChildrenVector = std::vector<Node>;
+	std::vector<Node> children = {};
+	iterator propsBegin, propsEnd;
+	char type;
 
-	ChildrenVector children;
-	ContentIt propsBegin;
-	ContentIt propsEnd;
-	uint8_t type;
-	enum NodeChar : uint8_t
-	{
-		ESCAPE = 0xFD,
-		START = 0xFE,
-		END = 0xFF,
-	};
-};
-
-struct LoadError : std::exception
-{
-	const char* what() const noexcept override = 0;
-};
-
-struct InvalidOTBFormat final : LoadError
-{
-	const char* what() const noexcept override { return "Invalid OTBM file format"; }
+	static constexpr char ESCAPE = '\xFD';
+	static constexpr char START = '\xFE';
+	static constexpr char END = '\xFF';
 };
 
 class Loader
 {
-	MappedFile fileContents;
-	Node root;
-	std::vector<char> propBuffer;
-
 public:
-	Loader(const std::string& fileName, const Identifier& acceptedIdentifier);
-	bool getProps(const Node& node, PropStream& props);
-	const Node& parseTree();
+	Loader(MappedFile file, Node root) : file{std::move(file)}, root{std::move(root)} {}
+
+	Loader(Loader&&) = default;
+	Loader& operator=(Loader&&) = default;
+
+	// Delete copy operations to prevent accidental expensive copies
+	Loader(const Loader&) = delete;
+	Loader& operator=(const Loader&) = delete;
+
+	const std::vector<Node>& children() const { return root.children; }
+	auto begin() const { return root.propsBegin; }
+	auto end() const { return root.propsEnd; }
+
+private:
+	MappedFile file;
+	Node root;
 };
+
+Loader load(std::string_view filename, std::string_view acceptedIdentifier);
+
+[[nodiscard]] std::string readBytes(OTB::iterator& first, const OTB::iterator last, const size_t len);
+[[nodiscard]] std::string readString(OTB::iterator& first, const OTB::iterator last);
+void skip(OTB::iterator& first, const OTB::iterator last, const size_t len);
+
+template <class T>
+[[nodiscard]] T read(OTB::iterator& first, const OTB::iterator last)
+{
+	T out;
+	auto buf = readBytes(first, last, sizeof(T));
+	std::memcpy(reinterpret_cast<char*>(&out), buf.data(), buf.size());
+	return out;
+}
 
 } // namespace OTB
 
@@ -125,7 +132,7 @@ public:
 		std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
 	}
 
-	void writeString(const std::string& str)
+	void writeString(std::string_view str)
 	{
 		size_t strLength = str.size();
 		if (strLength > std::numeric_limits<uint16_t>::max()) {

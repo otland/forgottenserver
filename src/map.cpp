@@ -13,27 +13,24 @@
 
 extern Game g_game;
 
-bool Map::loadMap(const std::string& identifier, bool loadHouses, bool isCalledByLua)
+void Map::loadMap(const std::string& identifier, bool loadHouses, bool isCalledByLua)
 {
-	IOMap loader;
-	if (!loader.loadMap(this, identifier)) {
-		std::cout << "[Fatal - Map::loadMap] " << loader.getLastErrorString() << std::endl;
-		return false;
-	}
+	auto attributes = tfs::io::map::loadMap(*this, identifier);
+	width = attributes.width;
+	height = attributes.height;
 
-	if (!IOMap::loadSpawns(this, isCalledByLua)) {
+	if (!spawns.loadFromXml(attributes.spawns, isCalledByLua)) {
 		std::cout << "[Warning - Map::loadMap] Failed to load spawn data." << std::endl;
 	}
 
 	if (loadHouses && !isCalledByLua) {
-		if (!IOMap::loadHouses(this)) {
+		if (!houses.loadHousesXML(attributes.houses)) {
 			std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
 		}
 
 		IOMapSerialize::loadHouseInfo();
 		IOMapSerialize::loadHouseItems(this);
 	}
-	return true;
 }
 
 bool Map::save()

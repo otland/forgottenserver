@@ -9,16 +9,16 @@
 
 extern Game g_game;
 
-Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
+void Teleport::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last)
 {
 	if (attr == ATTR_TELE_DEST) {
-		if (!propStream.read<uint16_t>(destPos.x) || !propStream.read<uint16_t>(destPos.y) ||
-		    !propStream.read<uint8_t>(destPos.z)) {
-			return ATTR_READ_ERROR;
-		}
-		return ATTR_READ_CONTINUE;
+		destPos.x = OTB::read<uint16_t>(first, last);
+		destPos.y = OTB::read<uint16_t>(first, last);
+		destPos.z = OTB::read<uint8_t>(first, last);
+		return;
 	}
-	return Item::readAttr(attr, propStream);
+
+	Item::readAttr(attr, first, last);
 }
 
 void Teleport::serializeAttr(PropWriteStream& propWriteStream) const

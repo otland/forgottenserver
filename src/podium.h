@@ -17,7 +17,7 @@ public:
 		return std::static_pointer_cast<const Podium>(shared_from_this());
 	}
 
-	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
 
 	void setOutfit(const Outfit_t& newOutfit) { outfit = newOutfit; }

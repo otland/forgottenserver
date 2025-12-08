@@ -62,8 +62,8 @@ public:
 
 	bool hasContainerParent() const;
 
-	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
-	bool unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream) override;
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
+	void unserializeItemNode(OTB::iterator& first, const OTB::iterator& last, const OTB::Node& node) override;
 
 	size_t size() const { return itemList.size(); }
 	bool empty() const { return itemList.empty(); }
@@ -73,9 +73,6 @@ public:
 	ContainerIterator iterator() const;
 
 	const ItemDeque& getItemList() const { return itemList; }
-
-	ItemDeque::const_reverse_iterator getReversedItems() const { return itemList.rbegin(); }
-	ItemDeque::const_reverse_iterator getReversedEnd() const { return itemList.rend(); }
 
 	std::string getName(bool addArticle = false) const;
 
@@ -125,13 +122,14 @@ public:
 	void internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing) override final;
 	void startDecaying() override final;
 
+	uint32_t serializationCount = 0;
+
 protected:
 	ItemDeque itemList;
 
 private:
 	uint32_t maxSize;
 	uint32_t totalWeight = 0;
-	uint32_t serializationCount = 0;
 	uint32_t ammoCount = 0;
 
 	bool unlocked;
@@ -145,7 +143,6 @@ private:
 	void updateItemWeight(int32_t diff);
 
 	friend class ContainerIterator;
-	friend class IOMapSerialize;
 };
 
 #endif // FS_CONTAINER_H

@@ -17,16 +17,15 @@ extern Game g_game;
 static constexpr int32_t MINSPAWN_INTERVAL = 10 * 1000;           // 10 seconds to match RME
 static constexpr int32_t MAXSPAWN_INTERVAL = 24 * 60 * 60 * 1000; // 1 day
 
-bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
+bool Spawns::loadFromXml(const std::filesystem::path& filename, bool isCalledByLua)
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
-		printXMLError("Error - Spawns::loadFromXml", filename, result);
+		printXMLError("Error - Spawns::loadFromXml", filename.string(), result);
 		return false;
 	}
 
-	this->filename = filename;
 	loaded = true;
 
 	for (auto spawnNode : doc.child("spawns").children()) {
@@ -218,7 +217,6 @@ void Spawns::clear()
 
 	loaded = false;
 	started = false;
-	filename.clear();
 }
 
 bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position& pos)

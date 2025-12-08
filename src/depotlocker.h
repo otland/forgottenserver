@@ -17,7 +17,8 @@ public:
 	uint16_t getDepotId() const { return depotId; }
 	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 
-	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+	// Serialization
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
 
 	std::shared_ptr<DepotLocker> getDepotLocker() override
 	{

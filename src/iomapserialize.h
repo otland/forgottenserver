@@ -8,7 +8,6 @@ class Container;
 class House;
 class Item;
 class Map;
-class PropStream;
 class PropWriteStream;
 class Thing;
 class Tile;
@@ -26,9 +25,6 @@ public:
 private:
 	static void saveItem(PropWriteStream& stream, const std::shared_ptr<const Item>& item);
 	static void saveTile(PropWriteStream& stream, const std::shared_ptr<const Tile>& tile);
-
-	static bool loadContainer(PropStream& propStream, const std::shared_ptr<Container>& container);
-	static bool loadItem(PropStream& propStream, const std::shared_ptr<Thing>& parent);
 };
 
 #endif // FS_IOMAPSERIALIZE_H
