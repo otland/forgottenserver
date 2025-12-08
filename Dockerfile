@@ -22,7 +22,6 @@ FROM debian:forky-slim
 RUN apt-get update -q && apt-get install -yq \
   libboost-iostreams1.88.0 \
   libboost-json1.88.0 \
-  libboost-system1.88.0 \
   liblua5.4-0 \
   libmariadb3 \
   libpugixml1v5 \
