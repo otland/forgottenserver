@@ -67,21 +67,21 @@ jobs:
           configurePreset: vcpkg
 
       - name: Upload build logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: logs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
           path: ${{ github.workspace }}/vcpkg/buildtrees/**/*.log
         if: ${{ failure() }}
 
       - name: Upload artifact binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
           path: ${{ github.workspace }}/build/${{ matrix.buildtype }}/tfs
 
       - name: Upload artifact binary (exe)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: ${{ startsWith(matrix.os, 'windows') }}
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
