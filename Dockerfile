@@ -27,7 +27,8 @@ RUN apt-get update -q && apt-get install -yq \
   libmariadb3 \
   libpugixml1v5 \
   libsimdutf27 \
-  libssl3t64
+  libssl3t64 \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /usr/src/forgottenserver/build/RelWithDebInfo/tfs /bin/tfs
 COPY LICENSE key.pem /srv/
