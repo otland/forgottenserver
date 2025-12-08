@@ -30,8 +30,7 @@ RUN apt-get update -q && apt-get install -yq \
   libssl3t64
 
 COPY --from=build /usr/src/forgottenserver/build/RelWithDebInfo/tfs /bin/tfs
-COPY data /srv/data/
-COPY LICENSE README.md *.dist *.sql key.pem /srv/
+COPY LICENSE key.pem /srv/
 
 EXPOSE 7171 7172
 WORKDIR /srv

@@ -1,2 +1,5 @@
 build/**
-
+data/**
+README.md
+*.dist
+*.sql
