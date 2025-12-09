@@ -145,22 +145,6 @@ void Creature::forceUpdatePath()
 	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
-void Creature::onAttacking(uint32_t interval)
-{
-	const auto& attackedCreature = getAttackedCreature();
-	if (!attackedCreature) {
-		return;
-	}
-
-	onAttacked();
-
-	attackedCreature->onAttacked();
-
-	if (g_game.isSightClear(getPosition(), attackedCreature->getPosition(), true)) {
-		doAttacking(interval);
-	}
-}
-
 void Creature::onIdleStatus()
 {
 	if (!isDead()) {
@@ -696,7 +680,9 @@ BlockType_t Creature::blockHit(const std::shared_ptr<Creature>& attacker, Combat
 	}
 
 	if (combatType != COMBAT_HEALING) {
-		onAttacked();
+		if (const auto& player = getPlayer()) {
+			player->addInFightTicks();
+		}
 	}
 	return blockType;
 }
@@ -715,7 +701,11 @@ void Creature::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 	attackedCreature = creature;
 	creature->addFollower(getCreature());
 	onAttackedCreature(creature);
-	creature->onAttacked();
+
+	if (const auto& player = creature->getPlayer()) {
+		player->addInFightTicks();
+	}
+
 	forceUpdatePath();
 
 	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
@@ -932,11 +922,6 @@ void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 }
 
 void Creature::onCombatRemoveCondition(Condition* condition) { removeCondition(condition); }
-
-void Creature::onAttacked()
-{
-	//
-}
 
 void Creature::onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& target, int32_t points)
 {

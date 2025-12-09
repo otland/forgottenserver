@@ -496,7 +496,6 @@ public:
 	BlockType_t blockHit(const std::shared_ptr<Creature>& attacker, CombatType_t combatType, int32_t& damage,
 	                     bool checkDefense = false, bool checkArmor = false, bool field = false,
 	                     bool ignoreResistances = false) override;
-	void doAttacking(uint32_t interval) override;
 	bool hasExtraSwing() override { return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed()); }
 
 	uint16_t getSpecialSkill(uint8_t skill) const { return std::max<uint16_t>(0, varSpecialSkills[skill]); }
@@ -543,7 +542,6 @@ public:
 	void onEndCondition(ConditionType_t type) override;
 	void onCombatRemoveCondition(Condition* condition) override;
 	void onAttackedCreature(const std::shared_ptr<Creature>& target, bool addFightTicks = true) override;
-	void onAttacked() override;
 	void onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& target, int32_t points) override;
 	void onTargetCreatureGainHealth(const std::shared_ptr<Creature>& target, int32_t points) override;
 	bool onKilledCreature(const std::shared_ptr<Creature>& target, bool lastHit = true) override;
@@ -1182,6 +1180,7 @@ public:
 	void receivePing() { lastPong = OTSYS_TIME(); }
 
 	void onThink(uint32_t interval) override;
+	void onAttacking(uint32_t) override;
 
 	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
 	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override;

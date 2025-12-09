@@ -306,7 +306,6 @@ public:
 	void onTickCondition(ConditionType_t type, bool& bRemove);
 	virtual void onCombatRemoveCondition(Condition* condition);
 	virtual void onAttackedCreature(const std::shared_ptr<Creature>&, bool = true) {}
-	virtual void onAttacked();
 	virtual void onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& target, int32_t points);
 	virtual void onTargetCreatureGainHealth(const std::shared_ptr<Creature>&, int32_t) {}
 	virtual bool onKilledCreature(const std::shared_ptr<Creature>& target, bool lastHit = true);
@@ -322,8 +321,9 @@ public:
 	void setCreatureLight(LightInfo lightInfo);
 
 	virtual void onThink(uint32_t interval);
+	virtual void onAttacking(uint32_t) {}
+
 	virtual void forceUpdatePath();
-	void onAttacking(uint32_t interval);
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 

@@ -101,13 +101,13 @@ public:
 	void onFollowCreatureComplete();
 
 	void onThink(uint32_t interval) override;
+	void onAttacking(uint32_t interval) override;
 
 	bool challengeCreature(const std::shared_ptr<Creature>& creature, bool force = false) override;
 
 	void setNormalCreatureLight() override;
 	bool getCombatValues(int32_t& min, int32_t& max) override;
 
-	void doAttacking(uint32_t interval) override;
 	bool hasExtraSwing() override { return lastMeleeAttack == 0; }
 
 	bool searchTarget(TargetSearchType_t searchType = TARGETSEARCH_DEFAULT);
