@@ -183,12 +183,6 @@
     <ClCompile Include="..\src\protocolgame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\protocollogin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\protocolold.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\rsa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -271,6 +265,9 @@
       <Filter>Source Files\http</Filter>
     </ClCompile>
     <ClCompile Include="..\src\http\session.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\serverinfo.cpp">
       <Filter>Source Files\http</Filter>
     </ClCompile>
   </ItemGroup>
@@ -446,12 +443,6 @@
     <ClInclude Include="..\src\protocolgame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\protocollogin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\protocolold.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\pugicast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -546,6 +537,9 @@
       <Filter>Header Files\http</Filter>
     </ClInclude>
     <ClInclude Include="..\src\http\error.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\serverinfo.h">
       <Filter>Header Files\http</Filter>
     </ClInclude>
   </ItemGroup>
