@@ -236,7 +236,7 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 	player->defaultOutfit.lookMountFeet = result->getNumber<uint16_t>("lookmountfeet");
 	player->currentOutfit = player->defaultOutfit;
 	player->currentMount = result->getNumber<uint16_t>("currentmount");
-	player->direction = static_cast<Direction>(result->getNumber<uint16_t>("direction"));
+	player->setDirection(static_cast<Direction>(result->getNumber<uint16_t>("direction")));
 	player->randomizeMount = result->getNumber<uint8_t>("randomizemount") != 0;
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {

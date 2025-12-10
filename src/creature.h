@@ -426,8 +426,6 @@ protected:
 	Position lastPosition;
 	LightInfo internalLight;
 
-	Direction direction = DIRECTION_SOUTH;
-
 	bool isInternalRemoved = false;
 	bool creatureCheck = false;
 	bool inCheckCreaturesVector = false;
@@ -476,6 +474,7 @@ private:
 	std::map<uint32_t, int32_t> storageMap;
 
 	Skulls_t skull = SKULL_NONE;
+	Direction direction = DIRECTION_SOUTH;
 };
 
 #endif // FS_CREATURE_H
