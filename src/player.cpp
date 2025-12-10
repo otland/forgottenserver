@@ -1096,7 +1096,7 @@ void Player::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool is
 			}
 		}
 
-		for (auto&& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
+		for (auto&& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
 			if (onlinePlayer != getPlayer()) {
 				onlinePlayer->notifyStatusChange(getPlayer(), VIPSTATUS_ONLINE);
 			}
@@ -1243,7 +1243,7 @@ void Player::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool is
 			}
 		}
 
-		for (auto&& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
+		for (auto&& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
 			if (onlinePlayer != getPlayer()) {
 				onlinePlayer->notifyStatusChange(getPlayer(), VIPSTATUS_OFFLINE);
 			}
