@@ -881,7 +881,7 @@ public:
 	void sendMapDescription() const
 	{
 		if (client) {
-			client->sendMapDescription(position);
+			client->sendMapDescription(getPosition());
 		}
 	}
 	void sendPendingStateEntered() const
@@ -944,7 +944,7 @@ public:
 	void sendMagicEffect(uint8_t type) const
 	{
 		if (client) {
-			client->sendMagicEffect(position, type);
+			client->sendMagicEffect(getPosition(), type);
 		}
 	}
 	void sendMagicEffect(const Position& pos, uint8_t type) const

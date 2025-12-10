@@ -290,7 +290,7 @@ void Npc::onCreatureMove(const std::shared_ptr<Creature>& creature, const std::s
 			const auto& player = creature->getPlayer();
 
 			// if player is now in range, add to spectators list, otherwise erase
-			if (player->canSee(position)) {
+			if (player->canSee(getPosition())) {
 				spectators.insert(player);
 			} else {
 				spectators.erase(player);

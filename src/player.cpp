@@ -1839,6 +1839,7 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 
 		std::string expString = std::to_string(lostExp) + (lostExp != 1 ? " experience points." : " experience point.");
 
+		const auto& position = getPosition();
 		TextMessage message(MESSAGE_EXPERIENCE, "You lost " + expString);
 		message.position = position;
 		message.primary.value = lostExp;
