@@ -1514,19 +1514,22 @@ void ProtocolGame::parseMarketCreateOffer(NetworkMessage& msg)
 	uint16_t amount = msg.get<uint16_t>();
 	uint64_t price = msg.get<uint64_t>();
 	bool anonymous = (msg.getByte() != 0);
-	g_dispatcher.addTask([=, playerID = player->getID()]() {
+
+	g_dispatcher.addTask([=, playerID = player->getID(), thisPtr = getThis()]() {
+		thisPtr->sendStoreBalance();
 		g_game.playerCreateMarketOffer(playerID, type, spriteId, amount, price, anonymous);
 	});
-	sendStoreBalance();
 }
 
 void ProtocolGame::parseMarketCancelOffer(NetworkMessage& msg)
 {
 	uint32_t timestamp = msg.get<uint32_t>();
 	uint16_t counter = msg.get<uint16_t>();
-	g_dispatcher.addTask(
-	    [=, playerID = player->getID()]() { g_game.playerCancelMarketOffer(playerID, timestamp, counter); });
-	sendStoreBalance();
+
+	g_dispatcher.addTask([=, playerID = player->getID(), thisPtr = getThis()]() {
+		thisPtr->sendStoreBalance();
+		g_game.playerCancelMarketOffer(playerID, timestamp, counter);
+	});
 }
 
 void ProtocolGame::parseMarketAcceptOffer(NetworkMessage& msg)
