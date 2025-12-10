@@ -10,10 +10,6 @@
 extern Game g_game;
 extern Vocations g_vocations;
 
-namespace beast = boost::beast;
-namespace json = boost::json;
-using boost::beast::http::status;
-
 namespace {
 
 int getPvpType()
@@ -32,7 +28,7 @@ int getPvpType()
 
 } // namespace
 
-std::pair<status, json::value> tfs::http::handle_login(const json::object& body, std::string_view ip)
+std::pair<beast::http::status, json::value> tfs::http::handle_login(const json::object& body, std::string_view ip)
 {
 	using namespace std::chrono;
 
@@ -140,7 +136,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	};
 
 	return {
-	    status::ok,
+	    beast::http::status::ok,
 	    {
 	        {"session",
 	         {

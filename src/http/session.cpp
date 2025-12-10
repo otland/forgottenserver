@@ -7,9 +7,6 @@
 #include <boost/beast/http/write.hpp>
 #include <print>
 
-namespace asio = boost::asio;
-namespace beast = boost::beast;
-
 namespace tfs::http {
 
 Session::Session(asio::ip::tcp::socket&& socket) : stream{std::move(socket)} {}
@@ -70,7 +67,7 @@ void Session::on_read(beast::error_code ec, size_t /*bytes_transferred*/)
 	if (ec) {
 		std::println(stderr, "{}: {}", __FUNCTION__, ec.message());
 		return;
-	};
+	}
 
 	auto ip = stream.socket().remote_endpoint().address().to_string();
 	write(handle_request(std::move(req), ip));
@@ -81,7 +78,7 @@ void Session::on_write(beast::error_code ec, size_t /*bytes_transferred*/, bool 
 	if (ec) {
 		std::println(stderr, "{}: {}", __FUNCTION__, ec.message());
 		return;
-	};
+	}
 
 	if (!keep_alive) {
 		// This means we should close the connection, usually because

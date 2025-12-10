@@ -5,9 +5,6 @@
 #include <boost/asio/strand.hpp>
 #include <print>
 
-namespace asio = boost::asio;
-namespace beast = boost::beast;
-
 namespace tfs::http {
 
 Listener::Listener(asio::io_context& ioc, asio::ip::tcp::acceptor&& acceptor) : ioc{ioc}, acceptor{std::move(acceptor)}

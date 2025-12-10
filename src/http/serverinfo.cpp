@@ -6,17 +6,13 @@
 #include "../game.h"
 #include "http.h"
 
-namespace beast = boost::beast;
-namespace json = boost::json;
-using boost::beast::http::status;
-
-std::pair<status, json::value> tfs::http::handle_serverinfo(const json::object&, std::string_view)
+std::pair<beast::http::status, json::value> tfs::http::handle_serverinfo(const json::object&, std::string_view)
 {
 	uint32_t mapWidth, mapHeight;
 	g_game.getMapDimensions(mapWidth, mapHeight);
 
 	return {
-	    status::ok,
+	    beast::http::status::ok,
 	    {{
 	         "serverinfo",
 	         {{"uptime", duration_cast<std::chrono::seconds>(uptime()).count()},

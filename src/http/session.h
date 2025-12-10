@@ -6,6 +6,9 @@
 #include <boost/beast/http/string_body.hpp>
 #include <memory>
 
+namespace asio = boost::asio;
+namespace beast = boost::beast;
+
 namespace boost::beast::http {
 class message_generator;
 }
@@ -15,22 +18,22 @@ namespace tfs::http {
 class Session final : public std::enable_shared_from_this<Session>
 {
 public:
-	Session(boost::asio::ip::tcp::socket&& socket);
+	Session(asio::ip::tcp::socket&& socket);
 
 	void read();
-	void write(boost::beast::http::message_generator&& msg);
+	void write(beast::http::message_generator&& msg);
 	void close();
 	void run();
 
 private:
-	void on_read(boost::beast::error_code ec, size_t bytes_transferred);
-	void on_write(boost::beast::error_code ec, size_t bytes_transferred, bool keep_alive);
+	void on_read(beast::error_code ec, size_t bytes_transferred);
+	void on_write(beast::error_code ec, size_t bytes_transferred, bool keep_alive);
 
-	boost::beast::tcp_stream stream;
-	boost::beast::flat_buffer buffer;
-	boost::beast::http::request<boost::beast::http::string_body> req;
+	beast::tcp_stream stream;
+	beast::flat_buffer buffer;
+	beast::http::request<beast::http::string_body> req;
 };
 
-std::shared_ptr<Session> make_session(boost::asio::ip::tcp::socket&& socket);
+std::shared_ptr<Session> make_session(asio::ip::tcp::socket&& socket);
 
 } // namespace tfs::http

@@ -21,16 +21,14 @@ auto startTimepoint = std::chrono::system_clock::now();
 
 std::chrono::system_clock::duration tfs::http::uptime() { return std::chrono::system_clock::now() - startTimepoint; }
 
-void tfs::http::start(bool bindOnlyOtsIP, std::string_view otsIP, unsigned short port /*= 8080*/, int threads /*= 1*/)
+void tfs::http::start(bool bind_to_specific_ip, std::string_view ip, unsigned short port /*= 8080*/,
+                      int threads /*= 1*/)
 {
 	if (port == 0 || threads < 1) {
 		return;
 	}
 
-	asio::ip::address address = asio::ip::address_v6::any();
-	if (bindOnlyOtsIP) {
-		address = asio::ip::make_address(otsIP);
-	}
+	const auto address = bind_to_specific_ip ? asio::ip::make_address(ip) : asio::ip::address_v6::any();
 	std::println(">> Starting HTTP server on {:s}:{:d} with {:d} threads.", address.to_string(), port, threads);
 
 	auto listener = make_listener(ioc, {address, port});

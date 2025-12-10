@@ -9,9 +9,6 @@
 #include <boost/json/parse.hpp>
 #include <boost/json/serialize.hpp>
 
-namespace beast = boost::beast;
-namespace json = boost::json;
-
 namespace {
 
 auto router(std::string_view type, const json::object& body, std::string_view ip)

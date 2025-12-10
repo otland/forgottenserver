@@ -3,9 +3,11 @@
 #include <boost/beast/http/status.hpp>
 #include <boost/json/value.hpp>
 
+namespace beast = boost::beast;
+namespace json = boost::json;
+
 namespace tfs::http {
 
-std::pair<boost::beast::http::status, boost::json::value> handle_login(const boost::json::object& body,
-                                                                       std::string_view ip);
+std::pair<beast::http::status, json::value> handle_login(const json::object& body, std::string_view ip);
 
 }
