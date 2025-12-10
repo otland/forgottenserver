@@ -496,7 +496,19 @@ bool Game::internalPlaceCreature(const std::shared_ptr<Creature>& creature, cons
 	}
 
 	creature->setID();
-	creature->addList();
+
+	if (const auto& player = creature->getPlayer()) {
+		const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
+		mappedPlayerNames[lowercase_name] = player;
+		mappedPlayerGuids[player->getGUID()] = player;
+		wildcardTree.insert(lowercase_name);
+		players[player->getID()] = player;
+	} else if (const auto& npc = creature->getNpc()) {
+		npcs[npc->getID()] = npc;
+	} else if (const auto& monster = creature->getMonster()) {
+		monsters[monster->getID()] = monster;
+	}
+
 	return true;
 }
 
@@ -568,9 +580,19 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 	}
 
 	creature->getParent()->postRemoveNotification(creature, nullptr, 0);
-
-	creature->removeList();
 	creature->setRemoved();
+
+	if (const auto& player = creature->getPlayer()) {
+		const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
+		mappedPlayerNames.erase(lowercase_name);
+		mappedPlayerGuids.erase(player->getGUID());
+		wildcardTree.remove(lowercase_name);
+		players.erase(player->getID());
+	} else if (const auto& npc = creature->getNpc()) {
+		npcs.erase(npc->getID());
+	} else if (const auto& monster = creature->getMonster()) {
+		monsters.erase(monster->getID());
+	}
 
 	removeCreatureCheck(creature);
 
@@ -5530,24 +5552,6 @@ void Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 			creatureEvent->executeModalWindow(player, modalWindowId, button, choice);
 		}
 	}
-}
-
-void Game::addPlayer(const std::shared_ptr<Player>& player)
-{
-	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
-	mappedPlayerNames[lowercase_name] = player;
-	mappedPlayerGuids[player->getGUID()] = player;
-	wildcardTree.insert(lowercase_name);
-	players[player->getID()] = player;
-}
-
-void Game::removePlayer(const std::shared_ptr<Player>& player)
-{
-	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
-	mappedPlayerNames.erase(lowercase_name);
-	mappedPlayerGuids.erase(player->getGUID());
-	wildcardTree.remove(lowercase_name);
-	players.erase(player->getID());
 }
 
 std::shared_ptr<Guild> Game::getGuild(uint32_t id) const

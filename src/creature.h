@@ -116,8 +116,6 @@ public:
 	void setRemoved() { isInternalRemoved = true; }
 
 	uint32_t getID() const { return id; }
-	virtual void removeList() = 0;
-	virtual void addList() = 0;
 
 	virtual bool canSee(const Position& pos) const;
 	virtual bool canSeeCreature(const std::shared_ptr<const Creature>& creature) const;

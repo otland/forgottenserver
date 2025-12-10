@@ -150,8 +150,6 @@ public:
 	uint32_t getGUID() const { return guid; }
 	bool canSeeInvisibility() const override { return hasFlag(PlayerFlag_CanSenseInvisibility) || group->access; }
 
-	void removeList() override;
-	void addList() override;
 	void kickPlayer(bool displayEffect);
 
 	static uint64_t getExpForLevel(const uint64_t lv)
@@ -448,7 +446,7 @@ public:
 	}
 
 	// V.I.P. functions
-	void notifyStatusChange(const std::shared_ptr<Player>& loginPlayer, VipStatus_t status);
+	void notifyStatusChange(const std::shared_ptr<Player>& loginPlayer, VipStatus_t status) const;
 	bool removeVIP(uint32_t vipGuid);
 	bool addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status);
 	bool addVIPInternal(uint32_t vipGuid);

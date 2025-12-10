@@ -463,15 +463,6 @@ public:
 	auto getNpcs() const { return npcs | std::views::values; }
 	auto getMonsters() const { return monsters | std::views::values; }
 
-	void addPlayer(const std::shared_ptr<Player>& player);
-	void removePlayer(const std::shared_ptr<Player>& player);
-
-	void addNpc(const std::shared_ptr<Npc>& npc) { npcs[npc->getID()] = npc; }
-	void removeNpc(const std::shared_ptr<Npc>& npc) { npcs.erase(npc->getID()); }
-
-	void addMonster(const std::shared_ptr<Monster>& monster) { monsters[monster->getID()] = monster; }
-	void removeMonster(const std::shared_ptr<Monster>& monster) { monsters.erase(monster->getID()); }
-
 	std::shared_ptr<Guild> getGuild(uint32_t id) const;
 	void addGuild(std::shared_ptr<Guild> guild) { guilds[guild->getId()] = std::move(guild); }
 	void removeGuild(uint32_t guildId) { guilds.erase(guildId); }

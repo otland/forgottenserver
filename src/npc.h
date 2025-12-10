@@ -110,9 +110,6 @@ public:
 		}
 	}
 
-	void removeList() override;
-	void addList() override;
-
 	static std::shared_ptr<Npc> createNpc(const std::string& name);
 
 	bool canSee(const Position& pos) const override;

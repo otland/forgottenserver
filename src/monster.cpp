@@ -48,10 +48,6 @@ Monster::Monster(MonsterType* mType) : Creature(), nameDescription(mType->nameDe
 	}
 }
 
-void Monster::addList() { g_game.addMonster(getMonster()); }
-
-void Monster::removeList() { g_game.removeMonster(getMonster()); }
-
 const std::string& Monster::getName() const
 {
 	if (name.empty()) {

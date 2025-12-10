@@ -1096,6 +1096,12 @@ void Player::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool is
 			}
 		}
 
+		for (auto&& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
+			if (onlinePlayer != getPlayer()) {
+				onlinePlayer->notifyStatusChange(getPlayer(), VIPSTATUS_ONLINE);
+			}
+		}
+
 		if (!g_creatureEvents->playerLogin(getPlayer())) {
 			kickPlayer(true);
 			return;
@@ -1234,6 +1240,12 @@ void Player::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool is
 			if (const auto item = inventory[slot]) {
 				g_moveEvents->onPlayerDeEquip(getPlayer(), item, static_cast<slots_t>(slot));
 				tfs::events::player::onInventoryUpdate(getPlayer(), item, static_cast<slots_t>(slot), false);
+			}
+		}
+
+		for (auto&& onlinePlayer : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
+			if (onlinePlayer != getPlayer()) {
+				onlinePlayer->notifyStatusChange(getPlayer(), VIPSTATUS_OFFLINE);
 			}
 		}
 
@@ -2271,24 +2283,6 @@ void Player::addInFightTicks(bool pzlock /*= false*/)
 	addCondition(condition);
 }
 
-void Player::removeList()
-{
-	g_game.removePlayer(getPlayer());
-
-	for (auto&& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
-		player->notifyStatusChange(getPlayer(), VIPSTATUS_OFFLINE);
-	}
-}
-
-void Player::addList()
-{
-	for (auto&& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
-		player->notifyStatusChange(getPlayer(), VIPSTATUS_ONLINE);
-	}
-
-	g_game.addPlayer(getPlayer());
-}
-
 void Player::kickPlayer(bool displayEffect)
 {
 	g_creatureEvents->playerLogout(getPlayer());
@@ -2299,7 +2293,7 @@ void Player::kickPlayer(bool displayEffect)
 	}
 }
 
-void Player::notifyStatusChange(const std::shared_ptr<Player>& loginPlayer, VipStatus_t status)
+void Player::notifyStatusChange(const std::shared_ptr<Player>& loginPlayer, VipStatus_t status) const
 {
 	if (!client) {
 		return;
