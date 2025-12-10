@@ -142,6 +142,7 @@ bool Npc::loadFromXml()
 
 	if ((attr = npcNode.attribute("skull"))) {
 		setSkull(getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string())));
+		g_game.updateCreatureSkull(getNpc());
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");

@@ -123,7 +123,7 @@ public:
 	virtual RaceType_t getRace() const { return RACE_NONE; }
 
 	virtual Skulls_t getSkull() const { return skull; }
-	void setSkull(Skulls_t skull);
+	void setSkull(Skulls_t skull) { this->skull = skull; }
 
 	Direction getDirection() const { return direction; }
 	void setDirection(Direction dir) { direction = dir; }

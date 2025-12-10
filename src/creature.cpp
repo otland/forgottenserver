@@ -73,12 +73,6 @@ bool Creature::canSeeCreature(const std::shared_ptr<const Creature>& creature) c
 	return true;
 }
 
-void Creature::setSkull(Skulls_t skull)
-{
-	this->skull = skull;
-	g_game.updateCreatureSkull(getCreature());
-}
-
 int64_t Creature::getTimeSinceLastMove() const
 {
 	if (lastStep) {

@@ -8281,6 +8281,7 @@ int LuaScriptInterface::luaCreatureSetSkull(lua_State* L)
 	// creature:setSkull(skull)
 	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
 		creature->setSkull(tfs::lua::getNumber<Skulls_t>(L, 2));
+		g_game.updateCreatureSkull(creature);
 		tfs::lua::pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
