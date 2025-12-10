@@ -108,7 +108,7 @@ static bool isProtected(const std::shared_ptr<const Player>& attacker, const std
 		return true;
 	}
 
-	if (attacker->getSkull() == SKULL_BLACK && attacker->getSkullClient(target) == SKULL_NONE) {
+	if (attacker->getSkull() == SKULL_BLACK && attacker->getCombatSkull(target) == SKULL_NONE) {
 		return true;
 	}
 
@@ -169,7 +169,7 @@ ReturnValue Combat::canTargetCreature(const std::shared_ptr<Player>& attacker, c
 		}
 
 		if (attacker->hasSecureMode() && !Combat::isInPvpZone(attacker, target) &&
-		    attacker->getSkullClient(target->getPlayer()) == SKULL_NONE) {
+		    attacker->getCombatSkull(target->getPlayer()) == SKULL_NONE) {
 			return RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
 		}
 	}

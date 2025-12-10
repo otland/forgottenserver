@@ -247,9 +247,9 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 
 			uint16_t skull = result->getNumber<uint16_t>("skull");
 			if (skull == SKULL_RED) {
-				player->skull = SKULL_RED;
+				player->setSkull(SKULL_RED);
 			} else if (skull == SKULL_BLACK) {
-				player->skull = SKULL_BLACK;
+				player->setSkull(SKULL_BLACK);
 			}
 		}
 	}
@@ -664,9 +664,9 @@ bool IOLoginData::savePlayer(const std::shared_ptr<Player>& player)
 		query << "`skulltime` = " << skullTime << ',';
 
 		Skulls_t skull = SKULL_NONE;
-		if (player->skull == SKULL_RED) {
+		if (player->getSkull() == SKULL_RED) {
 			skull = SKULL_RED;
-		} else if (player->skull == SKULL_BLACK) {
+		} else if (player->getSkull() == SKULL_BLACK) {
 			skull = SKULL_BLACK;
 		}
 		query << "`skull` = " << static_cast<int64_t>(skull) << ',';

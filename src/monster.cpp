@@ -33,7 +33,7 @@ Monster::Monster(MonsterType* mType) : Creature(), nameDescription(mType->nameDe
 {
 	defaultOutfit = mType->info.outfit;
 	currentOutfit = mType->info.outfit;
-	skull = mType->info.skull;
+	setSkull(mType->info.skull);
 	health = mType->info.health;
 	healthMax = mType->info.healthMax;
 	baseSpeed = mType->info.baseSpeed;

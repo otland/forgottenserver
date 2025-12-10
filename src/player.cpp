@@ -3597,7 +3597,7 @@ void Player::onAttackedCreature(const std::shared_ptr<Creature>& target, bool ad
 
 		targetPlayer->addInFightTicks();
 
-		if (getSkull() == SKULL_NONE && getSkullClient(targetPlayer) == SKULL_YELLOW) {
+		if (getSkull() == SKULL_NONE && getCombatSkull(targetPlayer) == SKULL_YELLOW) {
 			addAttacked(targetPlayer);
 			targetPlayer->sendCreatureSkull(getPlayer());
 		} else if (!targetPlayer->hasAttacked(getPlayer())) {
@@ -3918,18 +3918,23 @@ Skulls_t Player::getSkull() const
 	if (hasFlag(PlayerFlag_NotGainInFight)) {
 		return SKULL_NONE;
 	}
-	return skull;
+	return Creature::getSkull();
 }
 
-Skulls_t Player::getSkullClient(const std::shared_ptr<const Creature>& creature) const
+Skulls_t Player::getCombatSkull(const std::shared_ptr<const Creature>& creature) const
 {
-	if (!creature || g_game.getWorldType() != WORLD_TYPE_PVP) {
+	// No skulls in non-pvp worlds
+	if (g_game.getWorldType() != WORLD_TYPE_PVP) {
+		return SKULL_NONE;
+	}
+
+	if (!creature) {
 		return SKULL_NONE;
 	}
 
 	const auto& player = creature->getPlayer();
 	if (!player || player->getSkull() != SKULL_NONE) {
-		return Creature::getSkullClient(creature);
+		return creature->getSkull();
 	}
 
 	if (player->hasAttacked(getPlayer())) {
@@ -3939,7 +3944,7 @@ Skulls_t Player::getSkullClient(const std::shared_ptr<const Creature>& creature)
 	if (party && party == player->party) {
 		return SKULL_GREEN;
 	}
-	return Creature::getSkullClient(creature);
+	return creature->getSkull();
 }
 
 bool Player::hasAttacked(const std::shared_ptr<const Player>& attacked) const
@@ -4007,6 +4012,7 @@ void Player::checkSkullTicks(int64_t ticks)
 		skullTicks = newTicks;
 	}
 
+	const auto skull = getSkull();
 	if ((skull == SKULL_RED || skull == SKULL_BLACK) && skullTicks < 1 && !hasCondition(CONDITION_INFIGHT)) {
 		setSkull(SKULL_NONE);
 	}

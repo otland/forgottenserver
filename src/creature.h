@@ -121,12 +121,10 @@ public:
 	virtual bool canSeeCreature(const std::shared_ptr<const Creature>& creature) const;
 
 	virtual RaceType_t getRace() const { return RACE_NONE; }
+
 	virtual Skulls_t getSkull() const { return skull; }
-	virtual Skulls_t getSkullClient(const std::shared_ptr<const Creature>& creature) const
-	{
-		return creature->getSkull();
-	}
-	void setSkull(Skulls_t newSkull);
+	void setSkull(Skulls_t skull);
+
 	Direction getDirection() const { return direction; }
 	void setDirection(Direction dir) { direction = dir; }
 
@@ -429,7 +427,6 @@ protected:
 	LightInfo internalLight;
 
 	Direction direction = DIRECTION_SOUTH;
-	Skulls_t skull = SKULL_NONE;
 
 	bool isInternalRemoved = false;
 	bool creatureCheck = false;
@@ -477,6 +474,8 @@ private:
 
 	std::map<uint32_t, CountBlock_t> damageMap;
 	std::map<uint32_t, int32_t> storageMap;
+
+	Skulls_t skull = SKULL_NONE;
 };
 
 #endif // FS_CREATURE_H

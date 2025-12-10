@@ -4098,7 +4098,7 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const s
 		const auto& attackerPlayer = attacker ? attacker->getPlayer() : nullptr;
 		const auto& targetPlayer = target->getPlayer();
 		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK &&
-		    attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
+		    attackerPlayer->getCombatSkull(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
 
@@ -4198,7 +4198,7 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const s
 		const auto& attackerPlayer = attacker ? attacker->getPlayer() : nullptr;
 		const auto& targetPlayer = target->getPlayer();
 		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK &&
-		    attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
+		    attackerPlayer->getCombatSkull(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
 
@@ -4480,7 +4480,7 @@ bool Game::combatChangeMana(const std::shared_ptr<Creature>& attacker, const std
 		if (attacker) {
 			const auto& attackerPlayer = attacker->getPlayer();
 			if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK &&
-			    attackerPlayer->getSkullClient(target) == SKULL_NONE) {
+			    attackerPlayer->getCombatSkull(target) == SKULL_NONE) {
 				return false;
 			}
 		}
@@ -4518,7 +4518,7 @@ bool Game::combatChangeMana(const std::shared_ptr<Creature>& attacker, const std
 
 		const auto& attackerPlayer = attacker ? attacker->getPlayer() : nullptr;
 		if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK &&
-		    attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
+		    attackerPlayer->getCombatSkull(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
 

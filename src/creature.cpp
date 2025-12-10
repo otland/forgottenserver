@@ -73,9 +73,9 @@ bool Creature::canSeeCreature(const std::shared_ptr<const Creature>& creature) c
 	return true;
 }
 
-void Creature::setSkull(Skulls_t newSkull)
+void Creature::setSkull(Skulls_t skull)
 {
-	skull = newSkull;
+	this->skull = skull;
 	g_game.updateCreatureSkull(getCreature());
 }
 
