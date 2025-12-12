@@ -13,7 +13,7 @@ bool DatabaseManager::optimizeTables()
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(std::format(
+	const auto& result = db.storeQuery(std::format(
 	    "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = {:s} AND `DATA_FREE` > 0",
 	    db.escapeString(getString(ConfigManager::MYSQL_DB))));
 	if (!result) {
@@ -126,7 +126,7 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(
+	const auto& result = db.storeQuery(
 	    std::format("SELECT `value` FROM `server_config` WHERE `config` = {:s}", db.escapeString(config)));
 	if (!result) {
 		return false;

@@ -9,12 +9,12 @@
 
 struct DatabaseTask
 {
-	DatabaseTask(std::string&& query, std::function<void(DBResult_ptr, bool)>&& callback, bool store) :
+	DatabaseTask(std::string&& query, std::function<void(std::shared_ptr<DBResult>, bool)>&& callback, bool store) :
 	    query(std::move(query)), callback(std::move(callback)), store(store)
 	{}
 
 	std::string query;
-	std::function<void(DBResult_ptr, bool)> callback;
+	std::function<void(std::shared_ptr<DBResult>, bool)> callback;
 	bool store;
 };
 
@@ -26,7 +26,7 @@ public:
 	void flush();
 	void shutdown();
 
-	void addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback = nullptr, bool store = false);
+	void addTask(std::string query, std::function<void(std::shared_ptr<DBResult>, bool)> callback = nullptr, bool store = false);
 
 	void threadMain();
 

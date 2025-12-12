@@ -90,8 +90,7 @@ bool Database::connect()
 	}
 
 	handle = std::move(newHandle);
-	DBResult_ptr result = storeQuery("SHOW VARIABLES LIKE 'max_allowed_packet'");
-	if (result) {
+	if (const auto& result = storeQuery("SHOW VARIABLES LIKE 'max_allowed_packet'")) {
 		maxPacketSize = result->getNumber<uint64_t>("Value");
 	}
 	return true;
@@ -137,7 +136,7 @@ bool Database::executeQuery(const std::string& query)
 	return success;
 }
 
-DBResult_ptr Database::storeQuery(std::string_view query)
+std::shared_ptr<DBResult> Database::storeQuery(std::string_view query)
 {
 	std::lock_guard<std::recursive_mutex> lockGuard(databaseLock);
 
@@ -160,11 +159,11 @@ retry:
 	}
 
 	// retrieving results of query
-	DBResult_ptr result = std::make_shared<DBResult>(std::move(res));
-	if (!result->hasNext()) {
-		return nullptr;
+	const auto result = std::make_shared<DBResult>(std::move(res));
+	if (result->hasNext()) {
+		return result;
 	}
-	return result;
+	return nullptr;
 }
 
 std::string Database::escapeBlob(const char* s, uint32_t length) const

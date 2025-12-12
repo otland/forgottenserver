@@ -15,7 +15,7 @@ const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId)
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(std::format(
+	const auto& result = db.storeQuery(std::format(
 	    "SELECT `reason`, `expires_at`, `banned_at`, `banned_by`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `account_bans` WHERE `account_id` = {:d}",
 	    accountId));
 	if (!result) {
@@ -53,7 +53,7 @@ const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP)
 
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(std::format(
+	const auto& result = db.storeQuery(std::format(
 	    "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = INET6_ATON('{:s}')",
 	    clientIP.to_string()));
 	if (!result) {

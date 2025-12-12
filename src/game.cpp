@@ -4838,8 +4838,7 @@ void Game::loadPlayersRecord()
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'players_record'");
-	if (result) {
+	if (const auto& result = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'players_record'")) {
 		playersRecord = result->getNumber<uint32_t>("value");
 	} else {
 		db.executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')");

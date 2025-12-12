@@ -27,7 +27,7 @@ public:
 
 	static bool loadPlayerById(const std::shared_ptr<Player>& player, uint32_t id);
 	static bool loadPlayerByName(const std::shared_ptr<Player>& player, const std::string& name);
-	static bool loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr result);
+	static bool loadPlayer(const std::shared_ptr<Player>& player, std::shared_ptr<DBResult> result);
 	static bool savePlayer(const std::shared_ptr<Player>& player);
 	static uint32_t getGuidByName(const std::string& name);
 	static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
@@ -48,7 +48,7 @@ public:
 private:
 	using ItemMap = std::map<uint32_t, std::pair<std::shared_ptr<Item>, uint32_t>>;
 
-	static void loadItems(ItemMap& itemMap, DBResult_ptr result);
+	static void loadItems(ItemMap& itemMap, std::shared_ptr<DBResult> result);
 	static bool saveItems(const std::shared_ptr<const Player>& player, const ItemBlockList& itemList,
 	                      DBInsert& query_insert, PropWriteStream& propWriteStream);
 };

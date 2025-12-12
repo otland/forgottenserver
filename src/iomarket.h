@@ -13,7 +13,7 @@ MarketOfferList getActiveOffers(MarketAction_t action, uint16_t itemId);
 MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId);
 HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId);
 
-void processExpiredOffers(DBResult_ptr result, bool);
+void processExpiredOffers(std::shared_ptr<DBResult> result, bool);
 void checkExpiredOffers();
 
 uint32_t getPlayerOfferCount(uint32_t playerId);

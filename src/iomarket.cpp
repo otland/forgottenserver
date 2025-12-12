@@ -26,7 +26,7 @@ MarketOfferList getActiveOffers(MarketAction_t action, uint16_t itemId)
 {
 	MarketOfferList offerList;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(std::format(
+	const auto& result = Database::getInstance().storeQuery(std::format(
 	    "SELECT `id`, `amount`, `price`, `created`, `anonymous`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `player_name` FROM `market_offers` WHERE `sale` = {:d} AND `itemtype` = {:d}",
 	    std::to_underlying(action), itemId));
 	if (!result) {
@@ -58,7 +58,7 @@ MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId)
 
 	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	DBResult_ptr result = Database::getInstance().storeQuery(std::format(
+	const auto& result = Database::getInstance().storeQuery(std::format(
 	    "SELECT `id`, `amount`, `price`, `created`, `itemtype` FROM `market_offers` WHERE `player_id` = {:d} AND `sale` = {:d}",
 	    playerId, std::to_underlying(action)));
 	if (!result) {
@@ -81,7 +81,7 @@ HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId)
 {
 	HistoryMarketOfferList offerList;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(std::format(
+	const auto& result = Database::getInstance().storeQuery(std::format(
 	    "SELECT `itemtype`, `amount`, `price`, `expires_at`, `state` FROM `market_history` WHERE `player_id` = {:d} AND `sale` = {:d}",
 	    playerId, std::to_underlying(action)));
 	if (!result) {
@@ -107,7 +107,7 @@ HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId)
 	return offerList;
 }
 
-void processExpiredOffers(DBResult_ptr result, bool)
+void processExpiredOffers(std::shared_ptr<DBResult> result, bool)
 {
 	if (!result) {
 		return;
@@ -199,7 +199,7 @@ void checkExpiredOffers()
 
 uint32_t getPlayerOfferCount(uint32_t playerId)
 {
-	DBResult_ptr result = Database::getInstance().storeQuery(
+	const auto& result = Database::getInstance().storeQuery(
 	    std::format("SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = {:d}", playerId));
 	if (!result) {
 		return 0;
@@ -213,7 +213,7 @@ MarketOfferEx getOfferByCounter(uint32_t timestamp, uint16_t counter)
 
 	const int32_t created = timestamp - getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	DBResult_ptr result = Database::getInstance().storeQuery(std::format(
+	const auto& result = Database::getInstance().storeQuery(std::format(
 	    "SELECT `id`, `sale`, `itemtype`, `amount`, `created`, `price`, `player_id`, `anonymous`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `player_name` FROM `market_offers` WHERE `created` = {:d} AND (`id` & 65535) = {:d} LIMIT 1",
 	    created, counter));
 	if (!result) {
@@ -272,7 +272,7 @@ bool moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(std::format(
+	const auto& result = db.storeQuery(std::format(
 	    "SELECT `player_id`, `sale`, `itemtype`, `amount`, `price`, `created` FROM `market_offers` WHERE `id` = {:d}",
 	    offerId));
 	if (!result) {
@@ -292,7 +292,7 @@ bool moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 
 void updateStatistics()
 {
-	DBResult_ptr result = Database::getInstance().storeQuery(std::format(
+	const auto& result = Database::getInstance().storeQuery(std::format(
 	    "SELECT `sale` AS `sale`, `itemtype` AS `itemtype`, COUNT(`price`) AS `num`, MIN(`price`) AS `min`, MAX(`price`) AS `max`, SUM(`price`) AS `sum` FROM `market_history` WHERE `state` = {:d} GROUP BY `itemtype`, `sale`",
 	    std::to_underlying(OFFERSTATE_ACCEPTED)));
 	if (!result) {

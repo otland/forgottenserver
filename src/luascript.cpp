@@ -69,7 +69,7 @@ enum LuaDataType
 
 // result map
 uint32_t lastResultId = 0;
-std::map<uint32_t, DBResult_ptr> tempResults = {};
+std::map<uint32_t, std::shared_ptr<DBResult>> tempResults = {};
 
 bool isNumber(lua_State* L, int32_t arg) { return lua_type(L, arg) == LUA_TNUMBER; }
 
@@ -365,9 +365,9 @@ void ScriptEnvironment::removeItemByUID(uint32_t uid)
 	localMap.erase(uid);
 }
 
-static uint32_t addResult(DBResult_ptr res)
+static uint32_t addResult(std::shared_ptr<DBResult> result)
 {
-	tempResults[++lastResultId] = std::move(res);
+	tempResults[++lastResultId] = std::move(result);
 	return lastResultId;
 }
 
@@ -382,7 +382,7 @@ static bool removeResult(uint32_t id)
 	return true;
 }
 
-static DBResult_ptr getResultByID(uint32_t id)
+static std::shared_ptr<DBResult> getResultByID(uint32_t id)
 {
 	auto it = tempResults.find(id);
 	if (it == tempResults.end()) {
@@ -4151,11 +4151,11 @@ int LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 {
 	// db.asyncQuery(query, callback)
-	std::function<void(const DBResult_ptr&, bool)> callback;
+	std::function<void(const std::shared_ptr<DBResult>&, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
 		auto scriptId = tfs::lua::getScriptEnv()->getScriptId();
-		callback = [ref, scriptId](const DBResult_ptr&, bool success) {
+		callback = [ref, scriptId](const std::shared_ptr<DBResult>&, bool success) {
 			lua_State* L = g_luaEnvironment.getLuaState();
 			if (!L) {
 				return;
@@ -4182,8 +4182,8 @@ int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
 	// db.storeQuery(query)
-	if (DBResult_ptr res = Database::getInstance().storeQuery(tfs::lua::getString(L, -1))) {
-		tfs::lua::pushNumber(L, addResult(res));
+	if (const auto& result = Database::getInstance().storeQuery(tfs::lua::getString(L, -1))) {
+		tfs::lua::pushNumber(L, addResult(result));
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}
@@ -4193,11 +4193,11 @@ int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 {
 	// db.asyncStoreQuery(query, callback)
-	std::function<void(const DBResult_ptr&, bool)> callback;
+	std::function<void(const std::shared_ptr<DBResult>&, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
 		auto scriptId = tfs::lua::getScriptEnv()->getScriptId();
-		callback = [ref, scriptId](const DBResult_ptr& result, bool) {
+		callback = [ref, scriptId](const std::shared_ptr<DBResult>& result, bool) {
 			lua_State* L = g_luaEnvironment.getLuaState();
 			if (!L) {
 				return;
@@ -4261,39 +4261,39 @@ const luaL_Reg LuaScriptInterface::luaResultTable[] = {
 
 int LuaScriptInterface::luaResultGetNumber(lua_State* L)
 {
-	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
-	if (!res) {
+	const auto& result = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	if (!result) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
 	const std::string& s = tfs::lua::getString(L, 2);
-	tfs::lua::pushNumber(L, res->getNumber<int64_t>(s));
+	tfs::lua::pushNumber(L, result->getNumber<int64_t>(s));
 	return 1;
 }
 
 int LuaScriptInterface::luaResultGetString(lua_State* L)
 {
-	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
-	if (!res) {
+	const auto& result = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	if (!result) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
 	const std::string& s = tfs::lua::getString(L, 2);
-	tfs::lua::pushString(L, res->getString(s));
+	tfs::lua::pushString(L, result->getString(s));
 	return 1;
 }
 
 int LuaScriptInterface::luaResultGetStream(lua_State* L)
 {
-	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
-	if (!res) {
+	const auto& result = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	if (!result) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	auto stream = res->getString(tfs::lua::getString(L, 2));
+	auto stream = result->getString(tfs::lua::getString(L, 2));
 	lua_pushlstring(L, stream.data(), stream.size());
 	tfs::lua::pushNumber(L, stream.size());
 	return 2;
@@ -4301,13 +4301,13 @@ int LuaScriptInterface::luaResultGetStream(lua_State* L)
 
 int LuaScriptInterface::luaResultNext(lua_State* L)
 {
-	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, -1));
-	if (!res) {
+	const auto& result = getResultByID(tfs::lua::getNumber<uint32_t>(L, -1));
+	if (!result) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	tfs::lua::pushBoolean(L, res->next());
+	tfs::lua::pushBoolean(L, result->next());
 	return 1;
 }
 

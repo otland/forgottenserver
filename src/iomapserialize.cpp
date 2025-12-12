@@ -99,7 +99,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 {
 	int64_t start = OTSYS_TIME();
 
-	DBResult_ptr result = Database::getInstance().storeQuery("SELECT `data` FROM `tile_store`");
+	const auto& result = Database::getInstance().storeQuery("SELECT `data` FROM `tile_store`");
 	if (!result) {
 		return;
 	}
@@ -233,7 +233,7 @@ bool IOMapSerialize::loadHouseInfo()
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
+	const auto& result = db.storeQuery("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
 	if (!result) {
 		return false;
 	}
@@ -247,8 +247,7 @@ bool IOMapSerialize::loadHouseInfo()
 		}
 	} while (result->next());
 
-	result = db.storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`");
-	if (result) {
+	if (const auto& result = db.storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`")) {
 		do {
 			House* house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("house_id"));
 			if (house) {
@@ -273,8 +272,8 @@ bool IOMapSerialize::saveHouseInfo()
 	}
 
 	for (auto&& house : g_game.map.houses.getHouses() | std::views::values | std::views::as_const) {
-		DBResult_ptr result = db.storeQuery(std::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()));
-		if (result) {
+		if (const auto& result =
+		        db.storeQuery(std::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()))) {
 			db.executeQuery(std::format(
 			    "UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}",
 			    house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),

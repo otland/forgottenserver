@@ -7,7 +7,6 @@
 #include "pugicast.h"
 
 class DBResult;
-using DBResult_ptr = std::shared_ptr<DBResult>;
 
 namespace tfs::detail {
 
@@ -61,7 +60,7 @@ public:
 	 *
 	 * @return results object (nullptr on error)
 	 */
-	DBResult_ptr storeQuery(std::string_view query);
+	std::shared_ptr<DBResult> storeQuery(std::string_view query);
 
 	/**
 	 * Escapes string for query.

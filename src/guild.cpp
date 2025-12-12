@@ -57,14 +57,15 @@ std::shared_ptr<GuildRank> Guild::getRankByLevel(uint8_t level) const
 std::shared_ptr<Guild> IOGuild::loadGuild(uint32_t guildId)
 {
 	Database& db = Database::getInstance();
-	DBResult_ptr result = db.storeQuery(std::format("SELECT `name` FROM `guilds` WHERE `id` = {:d}", guildId));
+
+	const auto& result = db.storeQuery(std::format("SELECT `name` FROM `guilds` WHERE `id` = {:d}", guildId));
 	if (!result) {
 		return nullptr;
 	}
 
-	const auto& guild = std::make_shared<Guild>(guildId, result->getString("name"));
-	if ((result = db.storeQuery(
-	         std::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
+	const auto guild = std::make_shared<Guild>(guildId, result->getString("name"));
+	if (const auto& result = db.storeQuery(
+	        std::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId))) {
 		do {
 			guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
 			               result->getNumber<uint16_t>("level"));
@@ -77,7 +78,7 @@ uint32_t IOGuild::getGuildIdByName(const std::string& name)
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result =
+	const auto& result =
 	    db.storeQuery(std::format("SELECT `id` FROM `guilds` WHERE `name` = {:s}", db.escapeString(name)));
 	if (!result) {
 		return 0;
