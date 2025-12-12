@@ -726,9 +726,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			parseSeekInContainer(msg);
 			break;
 		// case 0xCD: break; // request inspect window
-		case 0xD2:
-			g_dispatcher.addTask([playerID = player->getID()]() { g_game.playerRequestOutfit(playerID); });
-			break;
 		case 0xD3:
 			parseSetOutfit(msg);
 			break;

@@ -3305,17 +3305,6 @@ void Game::playerTurn(uint32_t playerId, Direction dir)
 	}
 }
 
-void Game::playerRequestOutfit(uint32_t playerId)
-{
-	if (!getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT)) {
-		return;
-	}
-
-	if (const auto& player = getPlayerByID(playerId)) {
-		player->sendOutfitWindow();
-	}
-}
-
 void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, uint8_t stackPos,
                                    const uint16_t spriteId)
 {
