@@ -131,7 +131,7 @@ public:
 	bool isHealthHidden() const { return hiddenHealth; }
 	void setHiddenHealth(bool b) { hiddenHealth = b; }
 
-	int32_t getThrowRange() const override final { return 1; }
+	int32_t getThrowRange() const { return 1; }
 	bool isPushable() const override { return getWalkDelay() <= 0; }
 	bool isRemoved() const override final { return isInternalRemoved; }
 	virtual bool canSeeInvisibility() const { return false; }

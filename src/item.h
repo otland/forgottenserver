@@ -691,7 +691,7 @@ public:
 	virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
 	bool isPushable() const override final { return isMoveable(); }
-	int32_t getThrowRange() const override final { return (isPickupable() ? 15 : 2); }
+	int32_t getThrowRange() const { return (isPickupable() ? 15 : 2); }
 
 	uint16_t getID() const { return id; }
 	uint16_t getClientID() const { return items[id].clientId; }

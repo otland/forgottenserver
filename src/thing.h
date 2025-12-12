@@ -49,7 +49,6 @@ public:
 	virtual void setParent(const std::shared_ptr<Thing>& thing) { parent = thing; }
 
 	virtual const Position& getPosition() const;
-	virtual int32_t getThrowRange() const { return 0; };
 	virtual bool isPushable() const { return false; };
 
 	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
