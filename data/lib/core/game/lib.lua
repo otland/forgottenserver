@@ -130,3 +130,13 @@ function Game.getPlayerAccountId(name)
 	end
 	return 0
 end
+
+function Game.getBlessings()
+	return {
+		[1] = BLESS_TYPE_WISDOM_OF_SOLITUDE,
+		[2] = BLESS_TYPE_SPARK_OF_PHOENIX,
+		[3] = BLESS_TYPE_FIRE_OF_THE_SUNS,
+		[4] = BLESS_TYPE_SPIRITUAL_SHIELD,
+		[5] = BLESS_TYPE_THE_EMBRACE_OF_THE_WORLD
+	}
+end

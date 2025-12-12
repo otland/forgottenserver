@@ -9002,7 +9002,7 @@ int LuaScriptInterface::luaPlayerGetDeathPenalty(lua_State* L)
 {
 	// player:getDeathPenalty()
 	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
-		tfs::lua::pushNumber(L, player->getLostPercent() * 100);
+		tfs::lua::pushNumber(L, player->getLossPercent() * 100);
 	} else {
 		lua_pushnil(L);
 	}

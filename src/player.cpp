@@ -2101,7 +2101,7 @@ void Player::death(const std::shared_ptr<Creature>& lastHitCreature)
 			sumMana += vocation->getReqMana(i);
 		}
 
-		double deathLossPercent = getLostPercent() * (unfairFightReduction / 100.);
+		double deathLossPercent = getLossPercent() * (unfairFightReduction / 100.);
 		removeManaSpent(static_cast<uint64_t>((sumMana + manaSpent) * deathLossPercent), false);
 
 		// Skill loss
@@ -4030,7 +4030,7 @@ bool Player::isPromoted() const
 	return promotedVocation == VOCATION_NONE && vocation->getId() != promotedVocation;
 }
 
-double Player::getLostPercent() const
+double Player::getLossPercent() const
 {
 	int32_t deathLosePercent = getNumber(ConfigManager::DEATH_LOSE_PERCENT);
 	if (deathLosePercent != -1) {

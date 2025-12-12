@@ -1229,7 +1229,7 @@ public:
 
 	void addExperience(const std::shared_ptr<Creature>& source, uint64_t exp, bool sendText = false);
 	void removeExperience(uint64_t exp, bool sendText = false);
-	double getLostPercent() const;
+	double getLossPercent() const;
 
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
@@ -1413,7 +1413,7 @@ private:
 
 	uint64_t getLostExperience() const override
 	{
-		return skillLoss ? static_cast<uint64_t>(experience * getLostPercent()) : 0;
+		return skillLoss ? static_cast<uint64_t>(experience * getLossPercent()) : 0;
 	}
 	uint32_t getDamageImmunities() const override { return damageImmunities; }
 	uint32_t getConditionImmunities() const override { return conditionImmunities; }
