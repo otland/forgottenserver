@@ -979,8 +979,8 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 	if ((*prev_it).type == type) {
 		attributes.pop_back();
 	} else {
-		auto it = prev_it, end = attributes.rend();
-		while (++it != end) {
+		auto it = prev_it;
+		while (++it != attributes.rend()) {
 			if ((*it).type == type) {
 				(*it) = attributes.back();
 				attributes.pop_back();

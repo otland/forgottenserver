@@ -3802,8 +3802,8 @@ void Game::checkCreatures(size_t index)
 	                                         [=, this]() { checkCreatures((index + 1) % EVENT_CREATURECOUNT); }));
 
 	auto& checkCreatureList = checkCreatureLists[index];
-	auto it = checkCreatureList.begin(), end = checkCreatureList.end();
-	while (it != end) {
+	auto it = checkCreatureList.begin();
+	while (it != checkCreatureList.end()) {
 		const auto& creature = it->lock();
 		if (!creature) {
 			it = checkCreatureList.erase(it);
@@ -4694,17 +4694,18 @@ void Game::checkDecay()
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 	size_t bucket = (lastBucket + 1) % EVENT_DECAY_BUCKETS;
 
-	auto it = decayItems[bucket].begin(), end = decayItems[bucket].end();
-	while (it != end) {
+	auto& decayItemBucket = decayItems[bucket];
+	auto it = decayItemBucket.begin();
+	while (it != decayItemBucket.end()) {
 		const auto item = it->lock();
 		if (!item) {
-			it = decayItems[bucket].erase(it);
+			it = decayItemBucket.erase(it);
 			continue;
 		}
 
 		if (!item->canDecay()) {
 			item->setDecaying(DECAYING_FALSE);
-			it = decayItems[bucket].erase(it);
+			it = decayItemBucket.erase(it);
 			continue;
 		}
 

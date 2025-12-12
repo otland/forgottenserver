@@ -110,8 +110,7 @@ void skip(OTB::iterator& first, const OTB::iterator last, const size_t len)
 	auto end = first + len;
 	while (first < end) {
 		if (*first == Node::ESCAPE) [[unlikely]] {
-			++first;
-			++end;
+			++first, ++end;
 		}
 		++first;
 	}

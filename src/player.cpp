@@ -2171,8 +2171,8 @@ void Player::death(const std::shared_ptr<Creature>& lastHitCreature)
 			mana = manaMax;
 		}
 
-		auto it = conditions.begin(), end = conditions.end();
-		while (it != end) {
+		auto it = conditions.begin();
+		while (it != conditions.end()) {
 			Condition* condition = *it;
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
@@ -2187,8 +2187,8 @@ void Player::death(const std::shared_ptr<Creature>& lastHitCreature)
 	} else {
 		setSkillLoss(true);
 
-		auto it = conditions.begin(), end = conditions.end();
-		while (it != end) {
+		auto it = conditions.begin();
+		while (it != conditions.end()) {
 			Condition* condition = *it;
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
