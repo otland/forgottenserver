@@ -57,7 +57,7 @@ void HouseTile::updateHouse(const std::shared_ptr<Item>& item)
 ReturnValue HouseTile::queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
                                 uint32_t flags, const std::shared_ptr<Creature>& actor /* = nullptr*/) const
 {
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		if (const auto& player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
@@ -82,7 +82,7 @@ ReturnValue HouseTile::queryAdd(int32_t index, const std::shared_ptr<const Thing
 std::shared_ptr<Thing> HouseTile::queryDestination(int32_t& index, const std::shared_ptr<const Thing>& thing,
                                                    std::shared_ptr<Item>& destItem, uint32_t& flags)
 {
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		if (const auto& player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
 				const Position& entryPos = house->getEntryPosition();

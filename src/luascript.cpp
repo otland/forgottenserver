@@ -285,7 +285,7 @@ uint32_t ScriptEnvironment::addThing(const std::shared_ptr<Thing>& thing)
 		return 0;
 	}
 
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		return creature->getID();
 	}
 
@@ -738,7 +738,7 @@ void tfs::lua::pushThing(lua_State* L, const std::shared_ptr<Thing>& thing)
 	if (const auto& item = thing->asItem()) {
 		pushSharedPtr(L, item);
 		setItemMetatable(L, -1, item);
-	} else if (const auto& creature = thing->getCreature()) {
+	} else if (const auto& creature = thing->asCreature()) {
 		pushSharedPtr(L, creature);
 		setCreatureMetatable(L, -1, creature);
 	} else if (const auto& tile = thing->getTile()) {
@@ -5321,7 +5321,7 @@ int LuaScriptInterface::luaTileGetThing(lua_State* L)
 		return 1;
 	}
 
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 	} else if (const auto& item = thing->asItem()) {
@@ -5360,7 +5360,7 @@ int LuaScriptInterface::luaTileGetTopVisibleThing(lua_State* L)
 		return 1;
 	}
 
-	if (const auto& visibleCreature = thing->getCreature()) {
+	if (const auto& visibleCreature = thing->asCreature()) {
 		tfs::lua::pushSharedPtr(L, visibleCreature);
 		tfs::lua::setCreatureMetatable(L, -1, visibleCreature);
 	} else if (const auto& visibleItem = thing->asItem()) {

@@ -325,7 +325,7 @@ std::shared_ptr<const Player> Item::getHoldingPlayer() const
 		return nullptr;
 	}
 
-	if (const auto& creature = topParent->getCreature()) {
+	if (const auto& creature = topParent->asCreature()) {
 		return creature->getPlayer();
 	}
 	return nullptr;

@@ -1149,7 +1149,7 @@ bool RuneSpell::executeUse(const std::shared_ptr<Player>& player, const std::sha
 				}
 			}
 		} else {
-			var.setNumber(target->getCreature()->getID());
+			var.setNumber(target->asCreature()->getID());
 		}
 	} else {
 		var.setPosition(toPosition);
@@ -1164,7 +1164,7 @@ bool RuneSpell::executeUse(const std::shared_ptr<Player>& player, const std::sha
 	if (var.isNumber()) {
 		if (const auto& targetCreature = g_game.getCreatureByID(var.getNumber())) {
 			if (getPzLock()) {
-				player->onAttackedCreature(targetCreature->getCreature());
+				player->onAttackedCreature(targetCreature->asCreature());
 			}
 		}
 	}

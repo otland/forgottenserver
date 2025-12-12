@@ -90,11 +90,11 @@ public:
 	Creature(const Creature&) = delete;
 	Creature& operator=(const Creature&) = delete;
 
-	std::shared_ptr<Creature> getCreature() override final
+	std::shared_ptr<Creature> asCreature() override final
 	{
 		return std::static_pointer_cast<Creature>(shared_from_this());
 	}
-	std::shared_ptr<const Creature> getCreature() const override final
+	std::shared_ptr<const Creature> asCreature() const override final
 	{
 		return std::static_pointer_cast<const Creature>(shared_from_this());
 	}

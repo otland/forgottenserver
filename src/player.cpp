@@ -2202,7 +2202,7 @@ void Player::death(const std::shared_ptr<Creature>& lastHitCreature)
 		}
 
 		health = healthMax;
-		g_game.internalTeleport(getCreature(), getTemplePosition(), true);
+		g_game.internalTeleport(asCreature(), getTemplePosition(), true);
 		g_game.addCreatureHealth(getPlayer());
 		onThink(EVENT_CREATURE_THINK_INTERVAL);
 		onIdleStatus();
@@ -3149,7 +3149,7 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 		if (!shopOwner.expired() && requireListUpdate) {
 			updateSaleShopList(item);
 		}
-	} else if (const auto& creature = thing->getCreature()) {
+	} else if (const auto& creature = thing->asCreature()) {
 		if (creature.get() == this) {
 			// check containers
 			std::vector<std::shared_ptr<Container>> containers;

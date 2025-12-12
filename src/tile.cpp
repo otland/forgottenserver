@@ -459,7 +459,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t flags,
                            const std::shared_ptr<Creature>&) const
 {
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
 			return RETURNVALUE_NOERROR;
 		}
@@ -816,7 +816,7 @@ std::shared_ptr<Thing> Tile::queryDestination(int32_t&, const std::shared_ptr<co
 
 void Tile::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 {
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		g_game.map.clearSpectatorCache();
 		if (creature->getPlayer()) {
 			g_game.map.clearPlayersSpectatorCache();
@@ -1007,7 +1007,7 @@ void Tile::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 
 void Tile::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 {
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		CreatureVector* creatures = getCreatures();
 		if (creatures) {
 			auto it = std::find(creatures->begin(), creatures->end(), thing);
@@ -1134,7 +1134,7 @@ int32_t Tile::getThingIndex(const std::shared_ptr<const Thing>& thing) const
 	}
 
 	if (const CreatureVector* creatures = getCreatures()) {
-		if (thing->getCreature()) {
+		if (thing->asCreature()) {
 			for (const auto& creature : *creatures) {
 				++n;
 				if (creature == thing) {
@@ -1308,7 +1308,7 @@ void Tile::postAddNotification(const std::shared_ptr<Thing>& thing, const std::s
 		}
 
 		// calling movement scripts
-		if (const auto& creature = thing->getCreature()) {
+		if (const auto& creature = thing->asCreature()) {
 			g_moveEvents->onCreatureMove(creature, getTile(), MOVE_EVENT_STEP_IN);
 		} else if (const auto& item = thing->asItem()) {
 			g_moveEvents->onItemMove(item, getTile(), true);
@@ -1338,7 +1338,7 @@ void Tile::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std
 
 	// calling movement scripts
 
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		g_moveEvents->onCreatureMove(creature, getTile(), MOVE_EVENT_STEP_OUT);
 	} else if (const auto& item = thing->asItem()) {
 		g_moveEvents->onItemMove(item, getTile(), false);
@@ -1349,7 +1349,7 @@ void Tile::internalAddThing(uint32_t, const std::shared_ptr<Thing>& thing)
 {
 	thing->setParent(getTile());
 
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		g_game.map.clearSpectatorCache();
 		if (creature->getPlayer()) {
 			g_game.map.clearPlayersSpectatorCache();

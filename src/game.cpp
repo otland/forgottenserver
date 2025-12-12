@@ -305,7 +305,7 @@ std::shared_ptr<Thing> Game::internalGetThing(const std::shared_ptr<Player>& pla
 static std::pair<Position, uint8_t> internalGetPosition(const std::shared_ptr<Item>& item)
 {
 	if (const auto& topParent = item->getTopParent()) {
-		if (const auto& creature = topParent->getCreature()) {
+		if (const auto& creature = topParent->asCreature()) {
 			if (const auto& player = creature->getPlayer()) {
 				const uint16_t x = 0xFFFF;
 
@@ -636,7 +636,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t 
 		return;
 	}
 
-	if (const auto& movingCreature = thing->getCreature()) {
+	if (const auto& movingCreature = thing->asCreature()) {
 		const auto& tile = map.getTile(toPos);
 		if (!tile) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
@@ -1756,7 +1756,7 @@ ReturnValue Game::internalTeleport(const std::shared_ptr<Thing>& thing, const Po
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (const auto& creature = thing->getCreature()) {
+	if (const auto& creature = thing->asCreature()) {
 		ReturnValue ret = toTile->queryAdd(0, creature, 1, FLAG_NOLIMIT);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
@@ -2646,7 +2646,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	if (getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const auto& tile = tradeItem->getTile()) {
 			if (const auto& houseTile = tile->getHouseTile()) {
-				if (!tradeItem->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
+				if (!tradeItem->getTopParent()->asCreature() && !houseTile->getHouse()->isInvited(player)) {
 					player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 					return;
 				}

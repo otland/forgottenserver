@@ -728,7 +728,7 @@ public:
 	void sendLight()
 	{
 		if (client) {
-			client->sendCreatureLight(getCreature());
+			client->sendCreatureLight(asCreature());
 		}
 	}
 	void sendCreatureLight(const std::shared_ptr<const Creature>& creature)
