@@ -31,7 +31,7 @@ maxPlayers = 0
 onePlayerOnlinePerAccount = true
 allowClones = false
 allowWalkthrough = true
-serverName = "Forgotten"
+serverName = "Atlas"
 statusTimeout = 5000
 statusCountMaxPlayersPerIp = 0
 replaceKickOnLogin = true
@@ -78,9 +78,9 @@ maxMarketOffersAtATimePerPlayer = 100
 
 -- MySQL
 mysqlHost = "127.0.0.1"
-mysqlUser = "forgottenserver"
+mysqlUser = "atlas"
 mysqlPass = ""
-mysqlDatabase = "forgottenserver"
+mysqlDatabase = "atlas"
 mysqlPort = 3306
 mysqlSock = ""
 

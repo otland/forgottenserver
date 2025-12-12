@@ -4,10 +4,10 @@
 #ifndef FS_DEFINITIONS_H
 #define FS_DEFINITIONS_H
 
-static constexpr auto STATUS_SERVER_NAME = "The Forgotten Server";
+static constexpr auto STATUS_SERVER_NAME = "Atlas";
 
 static constexpr auto STATUS_SERVER_VERSION = "1.7";
-static constexpr auto STATUS_SERVER_DEVELOPERS = "The Forgotten Server Team";
+static constexpr auto STATUS_SERVER_DEVELOPERS = "Atlas Team";
 static constexpr auto CLIENT_VERSION_MIN = 1310;
 static constexpr auto CLIENT_VERSION_MAX = 1311;
 static constexpr auto CLIENT_VERSION_STR = "13.10";

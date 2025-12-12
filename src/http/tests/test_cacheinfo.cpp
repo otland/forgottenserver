@@ -15,9 +15,9 @@ struct CacheInfoFixture
 	CacheInfoFixture()
 	{
 		setString(ConfigManager::MYSQL_HOST, "0.0.0.0");
-		setString(ConfigManager::MYSQL_USER, "forgottenserver");
-		setString(ConfigManager::MYSQL_PASS, "forgottenserver");
-		setString(ConfigManager::MYSQL_DB, "forgottenserver");
+		setString(ConfigManager::MYSQL_USER, "atlas");
+		setString(ConfigManager::MYSQL_PASS, "atlas");
+		setString(ConfigManager::MYSQL_DB, "atlas");
 		setNumber(ConfigManager::SQL_PORT, 3306);
 
 		db.connect();

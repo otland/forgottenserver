@@ -12,10 +12,10 @@ RUN apt-get update -q && apt-get install -yq \
   libssl-dev \
   ninja-build
 
-COPY cmake /usr/src/forgottenserver/cmake/
-COPY src /usr/src/forgottenserver/src/
-COPY CMakeLists.txt CMakePresets.json /usr/src/forgottenserver/
-WORKDIR /usr/src/forgottenserver
+COPY cmake /usr/src/atlas/cmake/
+COPY src /usr/src/atlas/src/
+COPY CMakeLists.txt CMakePresets.json /usr/src/atlas/
+WORKDIR /usr/src/atlas
 RUN cmake --preset default && cmake --build --config RelWithDebInfo --preset default
 
 FROM debian:forky-slim
@@ -29,7 +29,7 @@ RUN apt-get update -q && apt-get install -yq \
   libssl3t64 \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /usr/src/forgottenserver/build/RelWithDebInfo/tfs /bin/tfs
+COPY --from=build /usr/src/atlas/build/RelWithDebInfo/tfs /bin/tfs
 COPY LICENSE key.pem /srv/
 
 EXPOSE 7171 7172

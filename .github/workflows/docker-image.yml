@@ -13,9 +13,6 @@ on:
     branches:
       - dev
 
-env:
-  IMAGE_NAME: forgottenserver
-
 jobs:
   # Push image to GitHub Package Registry.
   # See also https://docs.docker.com/docker-hub/builds/

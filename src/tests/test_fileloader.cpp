@@ -90,16 +90,16 @@ BOOST_AUTO_TEST_CASE(test_read_escape_not_enough_bytes)
 BOOST_AUTO_TEST_CASE(test_read_string)
 {
 	auto s =
-	    "\x09\x00"
-	    "forgotten"
+	    "\x05\x00"
+	    "atlas"
 	    "\x06\x00"
 	    "server"sv;
-	BOOST_TEST(s.size() == 19, "expected 19 bytes, got " << s.size());
+	BOOST_TEST(s.size() == 15, "expected 15 bytes, got " << s.size());
 
 	auto first = s.begin();
 
 	auto result = OTB::readString(first, s.end());
-	BOOST_TEST(result == "forgotten", "expected 'forgotten', got '" << result << "'");
+	BOOST_TEST(result == "atlas", "expected 'atlas', got '" << result << "'");
 	BOOST_TEST(std::distance(first, s.end()) == 8, "expected 8 bytes left, got " << std::distance(first, s.end()));
 
 	result = OTB::readString(first, s.end());
@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE(test_read_string_escape)
 	auto first = s.begin();
 
 	auto result = OTB::readString(first, s.end());
-	BOOST_TEST(result == "forgotten", "expected 'forgotten', got '" << result << "'");
+	BOOST_TEST(result == "atlas", "expected 'atlas', got '" << result << "'");
 	BOOST_TEST(std::distance(first, s.end()) == 10, "expected 10 bytes left, got " << std::distance(first, s.end()));
 
 	result = OTB::readString(first, s.end());

@@ -114,16 +114,16 @@ struct LoginFixture
 {
 	LoginFixture()
 	{
-		setString(ConfigManager::SERVER_NAME, "Forgotten");
+		setString(ConfigManager::SERVER_NAME, "Atlas");
 		setString(ConfigManager::IP, "tfs.example.com");
 		setNumber(ConfigManager::GAME_PORT, 7171);
 		setString(ConfigManager::LOCATION, "Sweden");
 		setString(ConfigManager::WORLD_TYPE, "pvp");
 
 		setString(ConfigManager::MYSQL_HOST, "0.0.0.0");
-		setString(ConfigManager::MYSQL_USER, "forgottenserver");
-		setString(ConfigManager::MYSQL_PASS, "forgottenserver");
-		setString(ConfigManager::MYSQL_DB, "forgottenserver");
+		setString(ConfigManager::MYSQL_USER, "atlas");
+		setString(ConfigManager::MYSQL_PASS, "atlas");
+		setString(ConfigManager::MYSQL_DB, "atlas");
 		setNumber(ConfigManager::SQL_PORT, 3306);
 
 		auto is = vocationsXml();
@@ -250,7 +250,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 	auto& worlds = body.at("playdata").at("worlds").as_array();
 	BOOST_TEST(worlds.size() == 1);
 	BOOST_TEST(worlds[0].at("id").as_int64() == 0);
-	BOOST_TEST(worlds[0].at("name").as_string() == "Forgotten");
+	BOOST_TEST(worlds[0].at("name").as_string() == "Atlas");
 	BOOST_TEST(worlds[0].at("externaladdressprotected").as_string() == "tfs.example.com");
 	BOOST_TEST(worlds[0].at("externalportprotected").as_int64() == 7171);
 	BOOST_TEST(worlds[0].at("externaladdressunprotected").as_string() == "tfs.example.com");
