@@ -1125,7 +1125,7 @@ void Player::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool is
 		auto slot = static_cast<slots_t>(i);
 		sendInventoryItem(slot, getInventoryItem(slot));
 	}
-	sendInventoryItem(CONST_SLOT_STORE_INBOX, getStoreInbox()->getItem());
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, getStoreInbox()->asItem());
 
 	openSavedContainers();
 
@@ -2408,7 +2408,7 @@ bool Player::hasCapacity(const std::shared_ptr<const Item>& item, uint32_t count
 ReturnValue Player::queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
                              const std::shared_ptr<Creature>&) const
 {
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2662,7 +2662,7 @@ ReturnValue Player::queryAdd(int32_t index, const std::shared_ptr<const Thing>& 
 ReturnValue Player::queryMaxCount(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
                                   uint32_t& maxQueryCount, uint32_t flags) const
 {
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -2707,7 +2707,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const std::shared_ptr<const Thi
 		std::shared_ptr<Item> destItem = nullptr;
 
 		if (const auto& destThing = getThing(index)) {
-			destItem = destThing->getItem();
+			destItem = destThing->asItem();
 		}
 
 		if (destItem) {
@@ -2741,7 +2741,7 @@ ReturnValue Player::queryRemove(const std::shared_ptr<const Thing>& thing, uint3
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2763,7 +2763,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 	destItem = nullptr;
 
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
-		const auto& item = thing->getItem();
+		const auto& item = thing->asItem();
 		if (!item) {
 			return getPlayer();
 		}
@@ -2874,7 +2874,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 		return getPlayer();
 	}
 
-	const auto& item = destThing->getItem();
+	const auto& item = destThing->asItem();
 	if (!item) {
 		return getPlayer();
 	}
@@ -2895,7 +2895,7 @@ void Player::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2914,7 +2914,7 @@ void Player::updateThing(const std::shared_ptr<Thing>& thing, uint16_t itemId, u
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2940,7 +2940,7 @@ void Player::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2958,7 +2958,7 @@ void Player::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 
 void Player::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 {
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -3116,14 +3116,14 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
-		g_moveEvents->onPlayerEquip(getPlayer(), thing->getItem(), static_cast<slots_t>(index), false);
-		tfs::events::player::onInventoryUpdate(getPlayer(), thing->getItem(), static_cast<slots_t>(index), true);
+		g_moveEvents->onPlayerEquip(getPlayer(), thing->asItem(), static_cast<slots_t>(index), false);
+		tfs::events::player::onInventoryUpdate(getPlayer(), thing->asItem(), static_cast<slots_t>(index), true);
 	}
 
 	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		const auto& i = (oldParent ? oldParent->getItem() : nullptr);
+		const auto& i = (oldParent ? oldParent->asItem() : nullptr);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
@@ -3141,7 +3141,7 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 		sendItems();
 	}
 
-	if (const auto& item = thing->getItem()) {
+	if (const auto& item = thing->asItem()) {
 		if (const auto& container = item->getContainer()) {
 			onSendContainer(container);
 		}
@@ -3172,14 +3172,14 @@ void Player::postRemoveNotification(const std::shared_ptr<Thing>& thing, const s
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
-		g_moveEvents->onPlayerDeEquip(getPlayer(), thing->getItem(), static_cast<slots_t>(index));
-		tfs::events::player::onInventoryUpdate(getPlayer(), thing->getItem(), static_cast<slots_t>(index), false);
+		g_moveEvents->onPlayerDeEquip(getPlayer(), thing->asItem(), static_cast<slots_t>(index));
+		tfs::events::player::onInventoryUpdate(getPlayer(), thing->asItem(), static_cast<slots_t>(index), false);
 	}
 
 	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		const auto& i = (newParent ? newParent->getItem() : nullptr);
+		const auto& i = (newParent ? newParent->asItem() : nullptr);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
@@ -3197,7 +3197,7 @@ void Player::postRemoveNotification(const std::shared_ptr<Thing>& thing, const s
 		sendItems();
 	}
 
-	if (const auto& item = thing->getItem()) {
+	if (const auto& item = thing->asItem()) {
 		if (item->isSupply()) {
 			if (const auto& player = item->getHoldingPlayer()) {
 				player->sendSupplyUsed(item->getClientID());
@@ -3287,7 +3287,7 @@ bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 
 void Player::internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 {
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return;
 	}

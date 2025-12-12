@@ -814,7 +814,7 @@ std::string Item::getNameDescription(const ItemType& it, const std::shared_ptr<c
 std::string Item::getNameDescription() const
 {
 	const ItemType& it = items[id];
-	return getNameDescription(it, getItem());
+	return getNameDescription(it, asItem());
 }
 
 std::string Item::getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count /*= 1*/)
@@ -861,7 +861,7 @@ void Item::setUniqueId(uint16_t n)
 		return;
 	}
 
-	if (g_game.addUniqueItem(n, getItem())) {
+	if (g_game.addUniqueItem(n, asItem())) {
 		getAttributes()->setUniqueId(n);
 	}
 }
@@ -1046,7 +1046,7 @@ ItemAttributes::Attribute& ItemAttributes::getAttr(itemAttrTypes type)
 	return attributes.back();
 }
 
-void Item::startDecaying() { g_game.startDecay(getItem()); }
+void Item::startDecaying() { g_game.startDecay(asItem()); }
 
 bool Item::hasMarketAttributes() const
 {

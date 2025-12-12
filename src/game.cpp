@@ -208,7 +208,7 @@ std::shared_ptr<Thing> Game::internalGetThing(const std::shared_ptr<Player>& pla
 
 				if (player && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 					// do extra checks here if the thing is accessible
-					if (thing && thing->getItem()) {
+					if (thing && thing->asItem()) {
 						if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
 							if (player->getPosition().x + 1 == tile->getPosition().x) {
 								return nullptr;
@@ -652,7 +652,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t 
 		} else {
 			playerMoveCreature(player, movingCreature, movingCreature->getPosition(), tile);
 		}
-	} else if (const auto& item = thing->getItem()) {
+	} else if (const auto& item = thing->asItem()) {
 		const auto& toThing = internalGetThing(player, toPos);
 		if (!toThing) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
@@ -928,12 +928,12 @@ void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position&
 		}
 
 		const auto& thing = internalGetThing(player, fromPos, fromIndex, 0, STACKPOS_MOVE);
-		if (!thing || !thing->getItem()) {
+		if (!thing || !thing->asItem()) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return;
 		}
 
-		item = thing->getItem();
+		item = thing->asItem();
 	}
 
 	if (item->getClientID() != spriteId) {
@@ -1197,13 +1197,13 @@ ReturnValue Game::internalMoveItem(std::shared_ptr<Thing> fromThing, std::shared
 	}
 
 	if (tradeItem) {
-		if (toThing->getItem() == tradeItem) {
+		if (toThing->asItem() == tradeItem) {
 			return RETURNVALUE_NOTENOUGHROOM;
 		}
 
 		auto parent = toThing->getParent();
 		while (parent) {
-			if (parent->getItem() == tradeItem) {
+			if (parent->asItem() == tradeItem) {
 				return RETURNVALUE_NOTENOUGHROOM;
 			}
 
@@ -1470,7 +1470,7 @@ std::shared_ptr<Item> Game::findItemOfType(const std::shared_ptr<Thing>& fromThi
 			continue;
 		}
 
-		const auto& item = thing->getItem();
+		const auto& item = thing->asItem();
 		if (!item) {
 			continue;
 		}
@@ -1523,7 +1523,7 @@ bool Game::removeMoney(const std::shared_ptr<Thing>& fromThing, uint64_t money, 
 			continue;
 		}
 
-		const auto& item = thing->getItem();
+		const auto& item = thing->asItem();
 		if (!item) {
 			continue;
 		}
@@ -1764,7 +1764,7 @@ ReturnValue Game::internalTeleport(const std::shared_ptr<Thing>& thing, const Po
 
 		map.moveCreature(creature, toTile, !pushMove);
 		return RETURNVALUE_NOERROR;
-	} else if (const auto& item = thing->getItem()) {
+	} else if (const auto& item = thing->asItem()) {
 		std::shared_ptr<Item> moveItem = nullptr;
 		return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), moveItem,
 		                        flags);
@@ -2069,7 +2069,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item || !item->isUseable() || item->getClientID() != fromSpriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2156,7 +2156,7 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item || item->isUseable() || item->getClientID() != spriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2229,7 +2229,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item || !item->isUseable() || item->getClientID() != spriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2384,7 +2384,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item || item->getClientID() != spriteId || (!item->isRotatable() && !item->isPodium()) ||
 	    item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
@@ -2581,7 +2581,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item || item->getClientID() != spriteId || !item->hasAttribute(ITEM_ATTRIBUTE_WRAPID) ||
 	    item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
@@ -2636,7 +2636,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	const auto& tradeItem = tradeThing->getItem();
+	const auto& tradeItem = tradeThing->asItem();
 	if (tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() ||
 	    tradeItem->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
@@ -3323,7 +3323,7 @@ void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, 
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item || item->getClientID() != spriteId || it.type != ITEM_TYPE_PODIUM) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -3364,7 +3364,7 @@ void Game::playerEditPodium(uint32_t playerId, Outfit_t outfit, const Position& 
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return;
 	}

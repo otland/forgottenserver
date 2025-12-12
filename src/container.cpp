@@ -207,7 +207,7 @@ ReturnValue Container::queryAdd(int32_t index, const std::shared_ptr<const Thing
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -288,7 +288,7 @@ ReturnValue Container::queryAdd(int32_t index, const std::shared_ptr<const Thing
 ReturnValue Container::queryMaxCount(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
                                      uint32_t& maxQueryCount, uint32_t flags) const
 {
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -345,7 +345,7 @@ ReturnValue Container::queryRemove(const std::shared_ptr<const Thing>& thing, ui
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -405,7 +405,7 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 		destItem = nullptr;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return shared_from_this();
 	}
@@ -448,7 +448,7 @@ void Container::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -483,7 +483,7 @@ void Container::updateThing(const std::shared_ptr<Thing>& thing, uint16_t itemId
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -508,7 +508,7 @@ void Container::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -540,7 +540,7 @@ void Container::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 		return;
 	}
 
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -675,7 +675,7 @@ void Container::internalRemoveThing(const std::shared_ptr<Thing>& thing)
 
 void Container::internalAddThing(uint32_t, const std::shared_ptr<Thing>& thing)
 {
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return;
 	}

@@ -19,7 +19,7 @@ void HouseTile::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 		return;
 	}
 
-	if (const auto& item = thing->getItem()) {
+	if (const auto& item = thing->asItem()) {
 		updateHouse(item);
 	}
 }
@@ -32,7 +32,7 @@ void HouseTile::internalAddThing(uint32_t index, const std::shared_ptr<Thing>& t
 		return;
 	}
 
-	if (const auto& item = thing->getItem()) {
+	if (const auto& item = thing->asItem()) {
 		updateHouse(item);
 	}
 }
@@ -65,7 +65,7 @@ ReturnValue HouseTile::queryAdd(int32_t index, const std::shared_ptr<const Thing
 		} else {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-	} else if (const auto& item = thing->getItem()) {
+	} else if (const auto& item = thing->asItem()) {
 		if (item->isStoreItem() && !item->hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
 			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		}
@@ -111,7 +111,7 @@ std::shared_ptr<Thing> HouseTile::queryDestination(int32_t& index, const std::sh
 ReturnValue HouseTile::queryRemove(const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
                                    const std::shared_ptr<Creature>& actor /*= nullptr*/) const
 {
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}

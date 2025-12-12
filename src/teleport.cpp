@@ -73,7 +73,7 @@ void Teleport::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 			g_game.addMagicEffect(origPos, effect);
 			g_game.addMagicEffect(destTile->getPosition(), effect);
 		}
-	} else if (const auto& item = thing->getItem()) {
+	} else if (const auto& item = thing->asItem()) {
 		if (effect != CONST_ME_NONE) {
 			g_game.addMagicEffect(destTile->getPosition(), effect);
 			g_game.addMagicEffect(item->getPosition(), effect);

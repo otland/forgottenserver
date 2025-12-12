@@ -411,7 +411,7 @@ uint32_t MoveEvents::onCreatureMove(const std::shared_ptr<Creature>& creature, c
 			continue;
 		}
 
-		const auto& tileItem = thing->getItem();
+		const auto& tileItem = thing->asItem();
 		if (!tileItem) {
 			continue;
 		}
@@ -475,7 +475,7 @@ uint32_t MoveEvents::onItemMove(const std::shared_ptr<Item>& item, const std::sh
 			continue;
 		}
 
-		const auto& tileItem = thing->getItem();
+		const auto& tileItem = thing->asItem();
 		if (!tileItem || tileItem == item) {
 			continue;
 		}

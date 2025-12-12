@@ -700,7 +700,7 @@ void onLook(const std::shared_ptr<Player>& player, const Position& position, con
 	if (const auto& creature = thing->getCreature()) {
 		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
-	} else if (const auto& item = thing->getItem()) {
+	} else if (const auto& item = thing->asItem()) {
 		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {

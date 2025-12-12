@@ -54,8 +54,8 @@ public:
 
 	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
 	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
-	virtual std::shared_ptr<Item> getItem() { return nullptr; }
-	virtual std::shared_ptr<const Item> getItem() const { return nullptr; }
+	virtual std::shared_ptr<Item> asItem() { return nullptr; }
+	virtual std::shared_ptr<const Item> asItem() const { return nullptr; }
 	virtual std::shared_ptr<Creature> getCreature() { return nullptr; }
 	virtual std::shared_ptr<const Creature> getCreature() const { return nullptr; }
 

@@ -10,7 +10,7 @@
 ReturnValue StoreInbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t flags,
                                  const std::shared_ptr<Creature>&) const
 {
-	const auto& item = thing->getItem();
+	const auto& item = thing->asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}

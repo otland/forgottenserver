@@ -807,7 +807,7 @@ public:
 		if (!sendAll) {
 			// update one slot
 			if (const auto& slotThing = getThing(CONST_SLOT_RIGHT)) {
-				if (const auto& slotItem = slotThing->getItem()) {
+				if (const auto& slotItem = slotThing->asItem()) {
 					if (slotItem->getWeaponType() == WEAPON_QUIVER) {
 						sendInventoryItem(CONST_SLOT_RIGHT, slotItem);
 					}
@@ -818,7 +818,7 @@ public:
 			constexpr auto slots = std::array{CONST_SLOT_RIGHT, CONST_SLOT_LEFT, CONST_SLOT_AMMO};
 			for (const auto& slot : slots) {
 				if (const auto& slotThing = getThing(slot)) {
-					if (const auto& slotItem = slotThing->getItem()) {
+					if (const auto& slotItem = slotThing->asItem()) {
 						if (slotItem->getWeaponType() == WEAPON_QUIVER) {
 							sendInventoryItem(slot, slotItem);
 						}

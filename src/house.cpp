@@ -345,10 +345,10 @@ void HouseTransferItem::onTradeEvent(TradeEvents_t event, const std::shared_ptr<
 {
 	if (event == ON_TRADE_TRANSFER) {
 		if (house) {
-			house->executeTransfer(std::static_pointer_cast<HouseTransferItem>(getItem()), owner);
+			house->executeTransfer(std::static_pointer_cast<HouseTransferItem>(asItem()), owner);
 		}
 
-		g_game.internalRemoveItem(getItem(), 1);
+		g_game.internalRemoveItem(asItem(), 1);
 	} else if (event == ON_TRADE_CANCEL) {
 		if (house) {
 			house->resetTransferItem();

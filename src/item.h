@@ -459,8 +459,8 @@ public:
 	Item& operator=(const Item&) = delete;
 	bool operator==(const Item& otherItem) const;
 
-	std::shared_ptr<Item> getItem() override final { return std::static_pointer_cast<Item>(shared_from_this()); }
-	std::shared_ptr<const Item> getItem() const override final
+	std::shared_ptr<Item> asItem() override final { return std::static_pointer_cast<Item>(shared_from_this()); }
+	std::shared_ptr<const Item> asItem() const override final
 	{
 		return std::static_pointer_cast<const Item>(shared_from_this());
 	}
