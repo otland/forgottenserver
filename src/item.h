@@ -690,7 +690,7 @@ public:
 
 	virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
-	bool isPushable() const override final { return isMoveable(); }
+	bool isPushable() const { return isMoveable(); }
 	int32_t getThrowRange() const { return (isPickupable() ? 15 : 2); }
 
 	uint16_t getID() const { return id; }

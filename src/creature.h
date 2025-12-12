@@ -132,7 +132,8 @@ public:
 	void setHiddenHealth(bool b) { hiddenHealth = b; }
 
 	int32_t getThrowRange() const { return 1; }
-	bool isPushable() const override { return getWalkDelay() <= 0; }
+	virtual bool isPushable() const { return getWalkDelay() <= 0; }
+
 	bool isRemoved() const override final { return isInternalRemoved; }
 	virtual bool canSeeInvisibility() const { return false; }
 	virtual bool isInGhostMode() const { return false; }
