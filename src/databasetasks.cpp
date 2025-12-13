@@ -35,7 +35,8 @@ void DatabaseTasks::threadMain()
 	}
 }
 
-void DatabaseTasks::addTask(std::string query, std::function<void(std::shared_ptr<DBResult>, bool)> callback /* = nullptr*/,
+void DatabaseTasks::addTask(std::string query,
+                            std::function<void(std::shared_ptr<DBResult>, bool)> callback /* = nullptr*/,
                             bool store /* = false*/)
 {
 	bool signal = false;

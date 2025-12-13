@@ -26,7 +26,8 @@ public:
 	void flush();
 	void shutdown();
 
-	void addTask(std::string query, std::function<void(std::shared_ptr<DBResult>, bool)> callback = nullptr, bool store = false);
+	void addTask(std::string query, std::function<void(std::shared_ptr<DBResult>, bool)> callback = nullptr,
+	             bool store = false);
 
 	void threadMain();
 
