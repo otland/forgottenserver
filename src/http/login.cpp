@@ -79,6 +79,7 @@ std::pair<beast::http::status, json::value> tfs::http::handle_login(const json::
 
 	auto accountId = result->getNumber<uint64_t>("id");
 	auto premiumEndsAt = result->getNumber<int64_t>("premium_ends_at");
+	auto freePremium = getBoolean(ConfigManager::FREE_PREMIUM);
 
 	std::string sessionKey = randomBytes(16);
 	if (!db.executeQuery(
@@ -141,7 +142,7 @@ std::pair<beast::http::status, json::value> tfs::http::handle_login(const json::
 	         {
 	             {"sessionkey", tfs::base64::encode(sessionKey)},
 	             {"lastlogintime", lastLogin},
-	             {"ispremium", premiumEndsAt >= now},
+	             {"ispremium", freePremium || premiumEndsAt >= now},
 	             {"premiumuntil", premiumEndsAt},
 	             // not implemented
 	             {"status", "active"},
