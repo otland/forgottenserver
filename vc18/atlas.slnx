@@ -2,5 +2,5 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="theforgottenserver.vcxproj" Id="A10F9657-129F-0FEF-14CB-CEE0B0E5AA3E" />
+  <Project Path="atlas.vcxproj" Id="A10F9657-129F-0FEF-14CB-CEE0B0E5AA3E" />
 </Solution>

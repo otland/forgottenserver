@@ -21,6 +21,68 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="atlas.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\http\error.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\cacheinfo.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\session.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\serverinfo.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\router.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\login.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\listener.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\http.cpp">
+      <Filter>Source Files\http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\talkaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tasks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\teleport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\trashholder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\vocation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\weapons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wildcardtree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\xtea.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\actions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -183,6 +245,9 @@
     <ClCompile Include="..\src\protocolgame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\protocolstatus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\rsa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -210,68 +275,41 @@
     <ClCompile Include="..\src\storeinbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\protocolstatus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\talkaction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\tasks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\teleport.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\thing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\tile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\tools.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\trashholder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\vocation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\weapons.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\wildcardtree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\xtea.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\http\cacheinfo.cpp">
-      <Filter>Source Files\http</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\http\error.cpp">
-      <Filter>Source Files\http</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\http\http.cpp">
-      <Filter>Source Files\http</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\http\listener.cpp">
-      <Filter>Source Files\http</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\http\login.cpp">
-      <Filter>Source Files\http</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\http\router.cpp">
-      <Filter>Source Files\http</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\http\session.cpp">
-      <Filter>Source Files\http</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\http\serverinfo.cpp">
-      <Filter>Source Files\http</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\http\http.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\listener.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\login.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\router.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\serverinfo.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\session.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\cacheinfo.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\error.h">
+      <Filter>Header Files\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\weapons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wildcardtree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\xtea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\actions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -389,6 +427,9 @@
     <ClInclude Include="..\src\luascript.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\luavariant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\mailbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -419,6 +460,9 @@
     <ClInclude Include="..\src\otpch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\otserv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\outfit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -441,6 +485,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\protocolgame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\protocolstatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\pugicast.h">
@@ -467,16 +514,10 @@
     <ClInclude Include="..\src\spawn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\spectators.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\spells.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\storeinbox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\protocolstatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\talkaction.h">
@@ -509,43 +550,5 @@
     <ClInclude Include="..\src\vocation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\weapons.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\wildcardtree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\xtea.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\http\session.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\http\router.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\http\login.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\http\listener.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\http\http.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\http\cacheinfo.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\http\error.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\http\serverinfo.h">
-      <Filter>Header Files\http</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="theforgottenserver.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>
