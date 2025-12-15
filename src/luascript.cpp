@@ -1761,6 +1761,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(L, ITEM_WILDGROWTH_PERSISTENT);
 	registerEnum(L, ITEM_WILDGROWTH_SAFE);
 	registerEnum(L, ITEM_DECORATION_KIT);
+	registerEnum(L, ITEM_MARKET);
 
 	registerEnum(L, WIELDINFO_NONE);
 	registerEnum(L, WIELDINFO_LEVEL);

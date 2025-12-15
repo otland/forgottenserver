@@ -7,9 +7,6 @@
 	<action fromid="7759" toid="7762" script="others/enchanting.lua" />
 	<action itemid="24739" script="others/enchanting.lua" />
 
-	<!-- Market -->
-	<action itemid="14405" function="market" />
-
 	<!-- Quests -->
 	<action itemid="1740" script="quests/quests.lua" />
 	<action fromid="1747" toid="1749" script="quests/quests.lua" />
