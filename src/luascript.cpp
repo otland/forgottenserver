@@ -2262,7 +2262,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::MAX_MESSAGEBUFFER);
 	registerEnumIn(L, "configKeys", ConfigManager::ACTIONS_DELAY_INTERVAL);
 	registerEnumIn(L, "configKeys", ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
-	registerEnumIn(L, "configKeys", ConfigManager::KICK_AFTER_MINUTES);
 	registerEnumIn(L, "configKeys", ConfigManager::PROTECTION_LEVEL);
 	registerEnumIn(L, "configKeys", ConfigManager::DEATH_LOSE_PERCENT);
 	registerEnumIn(L, "configKeys", ConfigManager::STATUSQUERY_TIMEOUT);
@@ -2849,6 +2848,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Player", "isNearDepotBox", LuaScriptInterface::luaPlayerIsNearDepotBox);
 
 	registerMethod(L, "Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
+	registerMethod(L, "Player", "setIdleTime", LuaScriptInterface::luaPlayerSetIdleTime);
 	registerMethod(L, "Player", "resetIdleTime", LuaScriptInterface::luaPlayerResetIdleTime);
 
 	registerMethod(L, "Player", "sendCreatureSquare", LuaScriptInterface::luaPlayerSendCreatureSquare);
@@ -10971,6 +10971,20 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	}
 
 	tfs::lua::pushNumber(L, player->getIdleTime());
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetIdleTime(lua_State* L)
+{
+	// player:setIdleTime(ms)
+	const auto& player = tfs::lua::getSharedPtr<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	player->setIdleTime(tfs::lua::getNumber<uint32_t>(L, 2));
+	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
 

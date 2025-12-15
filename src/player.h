@@ -283,8 +283,8 @@ public:
 	void setInMarket(bool value) { inMarket = value; }
 	bool isInMarket() const { return inMarket; }
 
-	int32_t getIdleTime() const { return idleTime; }
-
+	auto getIdleTime() const { return idleTime; }
+	void setIdleTime(uint32_t ms) { this->idleTime = ms; }
 	void resetIdleTime() { idleTime = 0; }
 
 	bool isInGhostMode() const override { return ghostMode; }
@@ -1186,7 +1186,7 @@ public:
 	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
 	void setNextWalkActionTask(SchedulerTask* task);
-	void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
+	void setNextActionTask(SchedulerTask* task);
 
 	void setNextAction(int64_t time)
 	{
@@ -1348,6 +1348,7 @@ private:
 	uint32_t manaMax = 0;
 	uint16_t manaShieldBar = 0;
 	uint16_t maxManaShieldBar = 0;
+	uint32_t idleTime = 0;
 	int32_t varSkills[SKILL_LAST + 1] = {};
 	int32_t varSpecialSkills[SPECIALSKILL_LAST + 1] = {};
 	int32_t varStats[STAT_LAST + 1] = {};
@@ -1359,7 +1360,6 @@ private:
 	int32_t shieldBlockCount = 0;
 	int32_t offlineTrainingSkill = -1;
 	int32_t offlineTrainingTime = 0;
-	int32_t idleTime = 0;
 
 	uint16_t lastStatsTrainingTime = 0;
 	uint16_t staminaMinutes = 2520;

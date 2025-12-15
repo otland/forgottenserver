@@ -1475,7 +1475,7 @@ void Player::setNextWalkActionTask(SchedulerTask* task)
 	walkTask = task;
 }
 
-void Player::setNextActionTask(SchedulerTask* task, bool resetIdleTime /*= true */)
+void Player::setNextActionTask(SchedulerTask* task)
 {
 	if (actionTaskEvent != 0) {
 		g_scheduler.stopEvent(actionTaskEvent);
@@ -1484,9 +1484,6 @@ void Player::setNextActionTask(SchedulerTask* task, bool resetIdleTime /*= true 
 
 	if (task) {
 		actionTaskEvent = g_scheduler.addEvent(task);
-		if (resetIdleTime) {
-			this->resetIdleTime();
-		}
 	}
 }
 
@@ -1502,20 +1499,6 @@ void Player::onThink(uint32_t interval)
 	if (MessageBufferTicks >= 1500) {
 		MessageBufferTicks = 0;
 		addMessageBuffer();
-	}
-
-	if (!getTile()->hasFlag(TILESTATE_NOLOGOUT) && !isAccessPlayer()) {
-		idleTime += interval;
-		const int32_t kickAfterMinutes = getNumber(ConfigManager::KICK_AFTER_MINUTES);
-		if (idleTime > (kickAfterMinutes * 60000) + 60000) {
-			kickPlayer(true);
-		} else if (client && idleTime == 60000 * kickAfterMinutes) {
-			client->sendTextMessage(TextMessage(
-			    MESSAGE_STATUS_WARNING,
-			    std::format(
-			        "There was no variation in your behaviour for {:d} minutes. You will be disconnected in one minute if there is no change in your actions until then.",
-			        kickAfterMinutes)));
-		}
 	}
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
@@ -1578,7 +1561,7 @@ void Player::onAttacking(uint32_t)
 	SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
 	                                          [id = getID()]() { g_game.checkCreatureAttack(id); });
 	if (!classicSpeed) {
-		setNextActionTask(task, false);
+		setNextActionTask(task);
 	} else {
 		g_scheduler.stopEvent(classicAttackEvent);
 		classicAttackEvent = g_scheduler.addEvent(task);

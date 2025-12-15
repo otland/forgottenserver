@@ -91,7 +91,6 @@ mysqlSock = ""
 -- checkDuplicateStorageKeys checks the values stored in the variables for duplicates.
 allowChangeOutfit = true
 freePremium = false
-kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
 emoteSpells = false
 classicEquipmentSlots = false

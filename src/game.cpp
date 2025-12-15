@@ -649,6 +649,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t 
 				    playerMoveCreatureByID(playerID, creatureID, fromPos, toPos);
 			    });
 			player->setNextActionTask(task);
+			player->resetIdleTime();
 		} else {
 			playerMoveCreature(player, movingCreature, movingCreature->getPosition(), tile);
 		}
@@ -696,6 +697,7 @@ void Game::playerMoveCreature(const std::shared_ptr<Player>& player, const std::
 			    playerMoveCreatureByID(playerID, movingCreatureID, movingCreatureOrigPos, toPos);
 		    });
 		player->setNextActionTask(task);
+		player->resetIdleTime();
 		return;
 	}
 
@@ -910,6 +912,7 @@ void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position&
 			playerMoveItemByPlayerID(playerID, fromPos, spriteId, fromStackPos, toPos, count);
 		});
 		player->setNextActionTask(task);
+		player->resetIdleTime();
 		return;
 	}
 
@@ -2123,6 +2126,8 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 		return;
 	}
 
+	player->resetIdleTime();
+
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, [=, this]() {
@@ -2132,7 +2137,6 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 		return;
 	}
 
-	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
 
 	g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
@@ -2183,6 +2187,8 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 		return;
 	}
 
+	player->resetIdleTime();
+
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task =
@@ -2191,7 +2197,6 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 		return;
 	}
 
-	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
 
 	g_actions->useItem(player, pos, index, item, isHotkey);
@@ -2283,6 +2288,8 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 		return;
 	}
 
+	player->resetIdleTime();
+
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(
@@ -2291,7 +2298,6 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 		return;
 	}
 
-	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
 
 	g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->getThingIndex(creature), item,
