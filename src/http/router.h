@@ -2,6 +2,7 @@
 
 #include <boost/beast/http/message_generator.hpp>
 #include <boost/beast/http/string_body.hpp>
+#include <boost/json.hpp>
 
 namespace beast = boost::beast;
 namespace json = boost::json;
