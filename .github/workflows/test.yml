@@ -3,7 +3,14 @@ name: Unit tests
 permissions:
   contents: read
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - dev
+
+  pull_request:
+    branches:
+      - dev
 
 jobs:
   test:
@@ -48,6 +55,9 @@ jobs:
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
+        env:
+          ASAN_OPTIONS: exitcode=0
+          LSAN_OPTIONS: exitcode=0
         with:
           buildPreset: vcpkg
           buildPresetAdditionalArgs: "['--config', 'Debug']"

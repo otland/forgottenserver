@@ -110,11 +110,11 @@ BOOST_AUTO_TEST_CASE(test_read_string)
 BOOST_AUTO_TEST_CASE(test_read_string_escape)
 {
 	auto s =
-	    "\x09\x00"
-	    "forg\xFDotten"
+	    "\x05\x00"
+	    "atl\x{FD}as"
 	    "\x07\x00"
 	    "ser\xFD\xFDver"sv;
-	BOOST_TEST(s.size() == 22, "expected 22 bytes, got " << s.size());
+	BOOST_TEST(s.size() == 18, "expected 18 bytes, got " << s.size());
 
 	auto first = s.begin();
 
