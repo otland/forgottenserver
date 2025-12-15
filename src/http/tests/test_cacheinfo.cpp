@@ -40,7 +40,7 @@ struct CacheInfoFixture
 
 using status = boost::beast::http::status;
 
-BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, CacheInfoFixture)
+BOOST_FIXTURE_TEST_CASE(test_cacheinfo_players_online, CacheInfoFixture)
 {
 	auto result = db.storeQuery(
 	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('foo', 'foo@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
