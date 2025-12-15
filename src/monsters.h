@@ -250,10 +250,9 @@ public:
 	Monsters& operator=(const Monsters&) = delete;
 
 	bool loadFromXml(bool reloading = false);
-	bool isLoaded() const { return loaded; }
 	bool reload();
 
-	MonsterType* getMonsterType(const std::string& name, bool loadFromFile = true);
+	MonsterType* getMonsterType(const std::string& name);
 	bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
 	MonsterType* getMonsterType(uint32_t raceId);
@@ -274,10 +273,7 @@ private:
 	void loadLootContainer(const pugi::xml_node& node, LootBlock&);
 	bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
-	std::map<std::string, std::string> unloadedMonsters;
 	std::unordered_map<uint32_t, std::string> bestiaryMonsters;
-
-	bool loaded = false;
 };
 
 #endif // FS_MONSTERS_H

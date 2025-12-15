@@ -41,7 +41,6 @@ void MonsterType::loadLoot(MonsterType* monsterType, LootBlock lootBlock)
 
 bool Monsters::loadFromXml(bool reloading /*= false*/)
 {
-	unloadedMonsters = {};
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/monster/monsters.xml");
 	if (!result) {
@@ -49,20 +48,10 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 		return false;
 	}
 
-	loaded = true;
-
 	for (auto monsterNode : doc.child("monsters").children()) {
 		std::string name = boost::algorithm::to_lower_copy<std::string>(monsterNode.attribute("name").as_string());
 		std::string file = "data/monster/" + std::string(monsterNode.attribute("file").as_string());
-		unloadedMonsters.emplace(name, file);
-	}
-
-	bool forceLoad = getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
-
-	for (auto&& [file, monsterName] : unloadedMonsters | std::views::as_const) {
-		if (forceLoad || (reloading && monsters.find(monsterName) != monsters.end())) {
-			loadMonster(file, monsterName, reloading);
-		}
+		loadMonster(file, name, reloading);
 	}
 
 	return true;
@@ -70,8 +59,6 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 
 bool Monsters::reload()
 {
-	loaded = false;
-
 	scriptInterface.reset();
 	bestiary.clear();
 	bestiaryMonsters.clear();
@@ -1588,22 +1575,13 @@ void Monsters::loadLootContainer(const pugi::xml_node& node, LootBlock& lBlock)
 	}
 }
 
-MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile /*= true */)
+MonsterType* Monsters::getMonsterType(const std::string& name)
 {
 	std::string lowerCaseName = boost::algorithm::to_lower_copy(name);
 
 	auto it = monsters.find(lowerCaseName);
 	if (it == monsters.end()) {
-		if (!loadFromFile) {
-			return nullptr;
-		}
-
-		auto it2 = unloadedMonsters.find(lowerCaseName);
-		if (it2 == unloadedMonsters.end()) {
-			return nullptr;
-		}
-
-		return loadMonster(it2->second, name);
+		return nullptr;
 	}
 	return &it->second;
 }

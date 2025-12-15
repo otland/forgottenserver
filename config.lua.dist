@@ -88,8 +88,6 @@ mysqlSock = ""
 -- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
 -- intervals regardless of other actions such as item (potion) use. This setting
 -- may cause high CPU usage with many players and potentially affect performance!
--- NOTE: forceMonsterTypesOnLoad loads all monster types on startup to validate them.
--- You can disable it to save some memory if you don't see any errors at startup.
 -- checkDuplicateStorageKeys checks the values stored in the variables for duplicates.
 allowChangeOutfit = true
 freePremium = false
@@ -104,7 +102,6 @@ yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
 minimumLevelToSendPrivate = 1
 premiumToSendPrivate = false
-forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 checkDuplicateStorageKeys = false
 
