@@ -249,7 +249,9 @@ void Map::moveCreature(const std::shared_ptr<Creature>& creature, const std::sha
 	Position oldPos = oldTile->getPosition();
 	Position newPos = newTile->getPosition();
 
-	bool teleport = forceTeleport || !newTile->getGround() || !oldPos.isInRange(newPos, 1, 1, 0);
+	bool teleport = forceTeleport || !newTile->getGround() ||
+	                !oldPos.isInRange(newPos, maxClientViewportX + (newPos.x > oldPos.x),
+	                                  maxClientViewportY + (newPos.y > oldPos.y), 1);
 
 	SpectatorVec spectators, newPosSpectators;
 	getSpectators(spectators, oldPos, true);

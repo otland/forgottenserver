@@ -2808,23 +2808,37 @@ void ProtocolGame::sendMoveCreature(const std::shared_ptr<const Creature>& creat
 			}
 
 			if (oldPos.y > newPos.y) { // north, for old x
-				msg.addByte(0x65);
-				GetMapDescription(oldPos.x - Map::maxClientViewportX, newPos.y - Map::maxClientViewportY, newPos.z,
-				                  (Map::maxClientViewportX * 2) + 2, 1, msg);
+				for (auto missingRowOffset = oldPos.y - newPos.y - 1; missingRowOffset >= 0; missingRowOffset--) {
+					msg.addByte(0x65);
+					GetMapDescription(oldPos.x - Map::maxClientViewportX,
+					                  newPos.y - Map::maxClientViewportY + missingRowOffset, newPos.z,
+					                  (Map::maxClientViewportX * 2) + 2, 1, msg);
+				}
 			} else if (oldPos.y < newPos.y) { // south, for old x
-				msg.addByte(0x67);
-				GetMapDescription(oldPos.x - Map::maxClientViewportX, newPos.y + (Map::maxClientViewportY + 1),
-				                  newPos.z, (Map::maxClientViewportX * 2) + 2, 1, msg);
+				for (auto missingRowOffset = newPos.y - oldPos.y - 1; missingRowOffset >= 0; missingRowOffset--) {
+					msg.addByte(0x67);
+					GetMapDescription(oldPos.x - Map::maxClientViewportX,
+					                  newPos.y + (Map::maxClientViewportY + 1 - missingRowOffset), newPos.z,
+					                  (Map::maxClientViewportX * 2) + 2, 1, msg);
+				}
 			}
 
 			if (oldPos.x < newPos.x) { // east, [with new y]
-				msg.addByte(0x66);
-				GetMapDescription(newPos.x + (Map::maxClientViewportX + 1), newPos.y - Map::maxClientViewportY,
-				                  newPos.z, 1, (Map::maxClientViewportY * 2) + 2, msg);
+				for (auto missingColumnOffset = newPos.x - oldPos.x - 1; missingColumnOffset >= 0;
+				     missingColumnOffset--) {
+					msg.addByte(0x66);
+					GetMapDescription(newPos.x + (Map::maxClientViewportX + 1 - missingColumnOffset),
+					                  newPos.y - Map::maxClientViewportY, newPos.z, 1,
+					                  (Map::maxClientViewportY * 2) + 2, msg);
+				}
 			} else if (oldPos.x > newPos.x) { // west, [with new y]
-				msg.addByte(0x68);
-				GetMapDescription(newPos.x - Map::maxClientViewportX, newPos.y - Map::maxClientViewportY, newPos.z, 1,
-				                  (Map::maxClientViewportY * 2) + 2, msg);
+				for (auto missingColumnOffset = oldPos.x - newPos.x - 1; missingColumnOffset >= 0;
+				     missingColumnOffset--) {
+					msg.addByte(0x68);
+					GetMapDescription(newPos.x - Map::maxClientViewportX + missingColumnOffset,
+					                  newPos.y - Map::maxClientViewportY, newPos.z, 1,
+					                  (Map::maxClientViewportY * 2) + 2, msg);
+				}
 			}
 			writeToOutputBuffer(msg);
 		}
