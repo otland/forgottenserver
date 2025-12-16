@@ -199,7 +199,6 @@
     <ClCompile Include="..\src\talkaction.cpp" />
     <ClCompile Include="..\src\tasks.cpp" />
     <ClCompile Include="..\src\teleport.cpp" />
-    <ClCompile Include="..\src\thing.cpp" />
     <ClCompile Include="..\src\tile.cpp" />
     <ClCompile Include="..\src\tools.cpp" />
     <ClCompile Include="..\src\trashholder.cpp" />

@@ -305,6 +305,14 @@ std::shared_ptr<const Tile> Item::getTile() const
 	return std::dynamic_pointer_cast<const Tile>(topParent);
 }
 
+const Position& Item::getPosition() const
+{
+	if (const auto& tile = getTile()) {
+		return tile->getPosition();
+	}
+	return Tile::nullptrTile->getPosition();
+}
+
 uint16_t Item::getSubType() const
 {
 	const ItemType& it = items[id];

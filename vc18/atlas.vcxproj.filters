@@ -59,9 +59,6 @@
     <ClCompile Include="..\src\teleport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\thing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

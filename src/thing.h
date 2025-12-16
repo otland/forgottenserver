@@ -48,7 +48,7 @@ public:
 	std::shared_ptr<Thing> getRealParent() const { return parent.lock(); }
 	virtual void setParent(const std::shared_ptr<Thing>& thing) { parent = thing; }
 
-	virtual const Position& getPosition() const;
+	virtual const Position& getPosition() const = 0;
 
 	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
 	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
