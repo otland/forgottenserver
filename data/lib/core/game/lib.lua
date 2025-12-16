@@ -140,3 +140,15 @@ function Game.getBlessings()
 		[5] = BLESS_TYPE_THE_EMBRACE_OF_THE_WORLD
 	}
 end
+
+function Game.getMaxBestiaryRaceId()
+	local max = 0
+
+	for _, monsterType in pairs(Game.getMonsterTypes()) do
+		local info = monsterType:bestiaryInfo()
+		if info.raceId then
+			max = math.max(info.raceId, max)
+		end
+	end
+	return math.floor(max)
+end

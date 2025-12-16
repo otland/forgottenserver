@@ -769,3 +769,61 @@ do
 		return lossPercents[blessingCount]
 	end
 end
+
+function Player.getMaxTrackedBestiary(self)
+	return 50
+end
+
+function Player.isBestiaryTracked(self, raceId)
+	return self:getStorageValue(PlayerStorageKeys.bestiaryTrackerBase + raceId) == 1
+end
+
+function Player.trackBestiary(self, raceId)
+	self:setStorageValue(PlayerStorageKeys.bestiaryTrackerBase + raceId, 1)
+end
+
+function Player.untrackBestiary(self, raceId)
+	self:setStorageValue(PlayerStorageKeys.bestiaryTrackerBase + raceId, -1)
+end
+
+function Player.getTrackedBestiary(self)
+	local result = {}
+
+	local maxRaceId = Game.getMaxBestiaryRaceId()
+	for raceId = 1, maxRaceId do
+		if self:isBestiaryTracked(raceId) then
+			table.insert(result, raceId)
+		end
+	end
+	return result
+end
+
+function Player.sendTrackedBestiary(self)
+	local msg = NetworkMessage()
+	msg:addByte(0xB9)
+
+	local trackedBestiary = self:getTrackedBestiary()
+	msg:addByte(#trackedBestiary)
+
+	for _, raceId in ipairs(trackedBestiary) do
+		msg:addU16(raceId)
+
+		local kills = self:getBestiaryKills(raceId)
+		msg:addU32(kills)
+
+		local monsterType = MonsterType(raceId)
+		if not monsterType then
+			print(string.format("[Warning] MonsterType with raceId %d does not exist.", raceId))
+		end
+
+		local info = monsterType and monsterType:getBestiaryInfo() or {prowess = 1, expertise = 2, mastery = 3}
+		msg:addU16(info.prowess)
+		msg:addU16(info.expertise)
+		msg:addU16(info.mastery)
+		msg:addByte(kills >= info.mastery and 0x01 or 0x00)
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
