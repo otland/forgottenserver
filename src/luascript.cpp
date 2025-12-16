@@ -741,7 +741,7 @@ void tfs::lua::pushThing(lua_State* L, const std::shared_ptr<Thing>& thing)
 	} else if (const auto& creature = thing->asCreature()) {
 		pushSharedPtr(L, creature);
 		setCreatureMetatable(L, -1, creature);
-	} else if (const auto& tile = thing->getTile()) {
+	} else if (const auto& tile = thing->asTile()) {
 		pushSharedPtr(L, tile);
 		setMetatable(L, -1, "Tile");
 	} else {
@@ -3792,7 +3792,7 @@ int LuaScriptInterface::luaIsMoveable(lua_State* L)
 		tfs::lua::pushBoolean(L, item->isPushable());
 	} else if (const auto& creature = thing->asCreature()) {
 		tfs::lua::pushBoolean(L, creature->isPushable());
-	} else if (const auto& tile = thing->getTile()) {
+	} else if (const auto& tile = thing->asTile()) {
 		tfs::lua::pushBoolean(L, false);
 	} else {
 		tfs::lua::pushBoolean(L, false);

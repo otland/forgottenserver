@@ -49,9 +49,11 @@ public:
 	virtual void setParent(const std::shared_ptr<Thing>& thing) { parent = thing; }
 
 	virtual const Position& getPosition() const = 0;
-
 	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
 	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
+
+	virtual std::shared_ptr<Tile> asTile() { return nullptr; }
+	virtual std::shared_ptr<const Tile> asTile() const { return nullptr; }
 	virtual std::shared_ptr<Item> asItem() { return nullptr; }
 	virtual std::shared_ptr<const Item> asItem() const { return nullptr; }
 	virtual std::shared_ptr<Creature> asCreature() { return nullptr; }
