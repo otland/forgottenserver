@@ -1501,10 +1501,6 @@ void Player::onThink(uint32_t interval)
 		addMessageBuffer();
 	}
 
-	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
-		checkSkullTicks(interval / 1000);
-	}
-
 	addOfflineTrainingTime(interval);
 	if (lastStatsTrainingTime != getOfflineTrainingTime() / 60 / 1000) {
 		sendStats();
@@ -3987,22 +3983,6 @@ void Player::addUnjustifiedDead(const std::shared_ptr<const Player>& attacked)
 			setSkull(SKULL_RED);
 		}
 
-		g_game.updateCreatureSkull(getPlayer());
-	}
-}
-
-void Player::checkSkullTicks(int64_t ticks)
-{
-	int64_t newTicks = skullTicks - ticks;
-	if (newTicks < 0) {
-		skullTicks = 0;
-	} else {
-		skullTicks = newTicks;
-	}
-
-	const auto skull = getSkull();
-	if ((skull == SKULL_RED || skull == SKULL_BLACK) && skullTicks < 1 && !hasCondition(CONDITION_INFIGHT)) {
-		setSkull(SKULL_NONE);
 		g_game.updateCreatureSkull(getPlayer());
 	}
 }

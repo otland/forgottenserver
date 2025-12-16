@@ -569,8 +569,6 @@ public:
 			client->sendCreatureSkull(creature);
 		}
 	}
-	void checkSkullTicks(int64_t ticks);
-
 	bool canWear(uint32_t lookType, uint8_t addons) const;
 	bool hasOutfit(uint32_t lookType, uint8_t addons);
 	void addOutfit(uint16_t lookType, uint8_t addons);
