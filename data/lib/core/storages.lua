@@ -13,6 +13,10 @@ GlobalStorageKeys = {
 }
 
 PlayerStorageKeys = {
+	-- connection stability subsystem
+	lastPing = 7464,
+	lastPong = 7465,
+
 	-- Misc:
 	annihilatorReward = 30015,
 	goldenOutfit = 30016,

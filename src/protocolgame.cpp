@@ -524,12 +524,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x14:
 			g_dispatcher.addTask([thisPtr = getThis()]() { thisPtr->logout(true, false); });
 			break;
-		case 0x1D:
-			g_dispatcher.addTask([playerID = player->getID()]() { g_game.playerReceivePingBack(playerID); });
-			break;
-		case 0x1E:
-			g_dispatcher.addTask([playerID = player->getID()]() { g_game.playerReceivePing(playerID); });
-			break;
 		// case 0x2A: break; // bestiary tracker
 		// case 0x2C: break; // team finder (leader)
 		// case 0x2D: break; // team finder (member)
@@ -2518,20 +2512,6 @@ void ProtocolGame::sendSkills()
 {
 	NetworkMessage msg;
 	AddPlayerSkills(msg);
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendPing()
-{
-	NetworkMessage msg;
-	msg.addByte(0x1D);
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendPingBack()
-{
-	NetworkMessage msg;
-	msg.addByte(0x1E);
 	writeToOutputBuffer(msg);
 }
 

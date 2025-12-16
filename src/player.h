@@ -951,13 +951,6 @@ public:
 			client->sendMagicEffect(pos, type);
 		}
 	}
-	void sendPing();
-	void sendPingBack() const
-	{
-		if (client) {
-			client->sendPingBack();
-		}
-	}
 	void sendStats();
 
 	void sendExperienceTracker(int64_t rawExp, int64_t finalExp) const
@@ -1173,8 +1166,6 @@ public:
 		}
 	}
 
-	void receivePing() { lastPong = OTSYS_TIME(); }
-
 	void onThink(uint32_t interval) override;
 	void onAttacking(uint32_t) override;
 
@@ -1303,8 +1294,6 @@ private:
 	int64_t skullTicks = 0;
 	int64_t lastWalkthroughAttempt = 0;
 	int64_t lastToggleMount = 0;
-	int64_t lastPing;
-	int64_t lastPong;
 	int64_t nextAction = 0;
 
 	ProtocolGame_ptr client;

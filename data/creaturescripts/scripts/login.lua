@@ -34,11 +34,17 @@ function onLogin(player)
 		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
 	end
 
+	-- initialize ping-pong timestamps
+	local timeNow = os.mtime()
+	player:setLastPing(timeNow)
+	player:setLastPong(timeNow)
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
 	player:registerEvent("BestiaryKills")
 	player:registerEvent("Idle Timeout")
 	player:registerEvent("Skull Decay")
+	player:registerEvent("PingPong")
 	return true
 end

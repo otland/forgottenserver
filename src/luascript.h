@@ -909,6 +909,7 @@ private:
 	static int luaVocationGetPromotion(lua_State* L);
 
 	static int luaVocationAllowsPvp(lua_State* L);
+	static int luaVocationGetNoPongKickTime(lua_State* L);
 
 	// House
 	static int luaHouseCreate(lua_State* L);

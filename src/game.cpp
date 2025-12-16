@@ -2021,20 +2021,6 @@ void Game::playerCloseNpcChannel(uint32_t playerId)
 	}
 }
 
-void Game::playerReceivePing(uint32_t playerId)
-{
-	if (const auto& player = getPlayerByID(playerId)) {
-		player->receivePing();
-	}
-}
-
-void Game::playerReceivePingBack(uint32_t playerId)
-{
-	if (const auto& player = getPlayerByID(playerId)) {
-		player->sendPingBack();
-	}
-}
-
 void Game::playerAutoWalk(uint32_t playerId, const std::vector<Direction>& listDir)
 {
 	if (const auto& player = getPlayerByID(playerId)) {
