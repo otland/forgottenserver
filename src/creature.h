@@ -223,7 +223,6 @@ public:
 	// Pathfinding functions
 	void addFollower(const std::shared_ptr<Creature>& creature) { followers.insert(creature); }
 	void removeFollower(const std::shared_ptr<Creature>& creature) { followers.erase(creature); }
-	void removeFollowers();
 
 	// Pathfinding events
 	void updateFollowersPaths();

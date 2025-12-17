@@ -169,7 +169,6 @@ void Creature::onWalk()
 		}
 	}
 
-	removeFollowers();
 	updateFollowersPaths();
 
 	if (cancelNextWalk) {
@@ -778,35 +777,24 @@ void Creature::onFollowCreature(const std::shared_ptr<const Creature>&)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
-void Creature::removeFollowers()
-{
-	const Position& position = getPosition();
-
-	followers = followers | tfs::views::lock_weak_ptrs | std::views::filter([&position](const auto& creature) {
-		            const Position& followerPosition = creature->getPosition();
-		            uint16_t distance =
-		                position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
-		            return distance >= Map::maxViewportX + Map::maxViewportY || position.z != followerPosition.z;
-	            }) |
-	            std::ranges::to<decltype(followers)>();
-}
-
 void Creature::updateFollowersPaths()
 {
 	if (followers.empty()) {
 		return;
 	}
 
-	const Position& thisPosition = getPosition();
+	followers = followers | tfs::views::lock_weak_ptrs | std::views::filter([this](const auto& creature) {
+		            if (position.z != creature->position.z) {
+			            return false;
+		            }
+
+		            return position.getDistanceX(creature->position) < Map::maxViewportX &&
+		                   position.getDistanceY(creature->position) < Map::maxViewportY;
+	            }) |
+	            std::ranges::to<decltype(followers)>();
+
 	for (const auto& follower : followers | tfs::views::lock_weak_ptrs) {
-		const Position& followerPosition = follower->getPosition();
-
 		if (follower->lastPathUpdate < OTSYS_TIME()) {
-			continue;
-		}
-
-		if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX ||
-		    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY) {
 			continue;
 		}
 
