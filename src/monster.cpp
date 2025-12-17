@@ -740,7 +740,7 @@ void Monster::onThink(uint32_t interval)
 					if (master->getAttackedCreature()) {
 						// This happens if the monster is summoned during combat
 						selectTarget(master->getAttackedCreature());
-					} else if (tfs::owner_equal(master, getFollowCreature())) {
+					} else if (!tfs::owner_equal(master, getFollowCreature())) {
 						// Our master has not ordered us to attack anything, lets follow him around instead.
 						setFollowCreature(master);
 					}
