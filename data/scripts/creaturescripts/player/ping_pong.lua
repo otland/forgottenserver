@@ -1,14 +1,14 @@
 local event = CreatureEvent("PingPong")
 
-local LOST_CONNECTION_MILLIS = 5000
-local REMOVE_TARGET_PLAYER_MILLIS = 7000
-local PZ_LOCKED_NO_PONG_KICK_MILLIS = 60000
+local LOST_CONNECTION_SECS = 5
+local REMOVE_TARGET_PLAYER_SECS = 7
+local PZ_LOCKED_NO_PONG_KICK_SECS = 60
 
 function event.onThink(player, interval)
-    local timeNow = os.mtime()
+    local timeNow = os.time()
 
     local hasLostConnection = false
-    if timeNow - player:getLastPing() >= LOST_CONNECTION_MILLIS then
+    if timeNow - player:getLastPing() >= LOST_CONNECTION_SECS then
         player:setLastPing(timeNow)
         if player:getClient() then
             local msg = NetworkMessage()
@@ -21,16 +21,16 @@ function event.onThink(player, interval)
     end
 
     local noPongTime = timeNow - player:getLastPong()
-    if hasLostConnection or noPongTime >= REMOVE_TARGET_PLAYER_MILLIS then
+    if hasLostConnection or noPongTime >= REMOVE_TARGET_PLAYER_SECS then
         local target = player:getTarget()
         if target and target:isPlayer() then
             player:setTarget(nil)
         end
     end
 
-    local noPongKickTime = player:getVocation():getNoPongKickTime()
-    if player:isPzLocked() and noPongKickTime < PZ_LOCKED_NO_PONG_KICK_MILLIS then
-        noPongKickTime = PZ_LOCKED_NO_PONG_KICK_MILLIS
+    local noPongKickTime = player:getVocation():getNoPongKickTime() / 1000
+    if player:isPzLocked() and noPongKickTime < PZ_LOCKED_NO_PONG_KICK_SECS then
+        noPongKickTime = PZ_LOCKED_NO_PONG_KICK_SECS
     end
 
     if noPongTime >= noPongKickTime then

@@ -35,7 +35,7 @@ function onLogin(player)
 	end
 
 	-- initialize ping-pong timestamps
-	local timeNow = os.mtime()
+	local timeNow = os.time()
 	player:setLastPing(timeNow)
 	player:setLastPong(timeNow)
 
