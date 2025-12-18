@@ -48,7 +48,7 @@ public:
 		return std::static_pointer_cast<const Door>(shared_from_this());
 	}
 
-	House* getHouse() { return house; }
+	std::shared_ptr<House> getHouse() { return house.lock(); }
 
 	// serialization
 	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
@@ -65,9 +65,9 @@ public:
 	void onRemoved() override;
 
 private:
-	void setHouse(House* house);
+	void setHouse(const std::shared_ptr<House>& house);
 
-	House* house = nullptr;
+	std::weak_ptr<House> house;
 	std::unique_ptr<AccessList> accessList;
 	friend class House;
 };
@@ -89,18 +89,20 @@ enum AccessHouseLevel_t
 class HouseTransferItem final : public Item
 {
 public:
-	static std::shared_ptr<HouseTransferItem> createHouseTransferItem(House* house);
+	static std::shared_ptr<HouseTransferItem> createHouseTransferItem(const std::shared_ptr<House>& house);
 
-	explicit HouseTransferItem(House* house) : Item{0}, house{house} {}
+	explicit HouseTransferItem(const std::shared_ptr<House>& house) : Item{0}, house{house} {}
 
 	void onTradeEvent(TradeEvents_t event, const std::shared_ptr<Player>& owner) override;
 	bool canTransform() const override { return false; }
 
+	std::shared_ptr<House> getHouse() const { return house.lock(); }
+
 private:
-	House* house;
+	std::weak_ptr<House> house;
 };
 
-class House
+class House : public std::enable_shared_from_this<House>
 {
 public:
 	explicit House(uint32_t houseId);
@@ -201,23 +203,6 @@ enum RentPeriod_t
 	RENTPERIOD_MONTHLY,
 	RENTPERIOD_YEARLY,
 	RENTPERIOD_NEVER,
-};
-
-class Houses
-{
-public:
-	House* addHouse(uint32_t id);
-	House* getHouse(uint32_t houseId);
-	House* getHouseByPlayerId(uint32_t playerId);
-
-	bool loadHousesXML(const std::filesystem::path& filename);
-
-	void payHouses(RentPeriod_t rentPeriod) const;
-
-	const auto& getHouses() const { return houseMap; }
-
-private:
-	std::map<uint32_t, std::unique_ptr<House>> houseMap;
 };
 
 #endif // FS_HOUSE_H

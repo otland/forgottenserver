@@ -20,7 +20,7 @@ public:
 	static bool loadHouseInfo();
 	static bool saveHouseInfo();
 
-	static bool saveHouse(House* house);
+	static bool saveHouse(const std::shared_ptr<House>& house);
 
 private:
 	static void saveItem(PropWriteStream& stream, const std::shared_ptr<const Item>& item);

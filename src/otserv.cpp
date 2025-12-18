@@ -244,7 +244,7 @@ void mainLoader(ServiceManager* services)
 		rentPeriod = RENTPERIOD_NEVER;
 	}
 
-	g_game.map.houses.payHouses(rentPeriod);
+	g_game.payHouses(rentPeriod);
 
 	tfs::iomarket::checkExpiredOffers();
 	tfs::iomarket::updateStatistics();

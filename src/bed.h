@@ -23,12 +23,12 @@ public:
 	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
 
-	bool canRemove() const override { return !house; }
+	bool canRemove() const override { return house.expired(); }
 
 	uint32_t getSleeper() const { return sleeperGUID; }
 
-	House* getHouse() const { return house; }
-	void setHouse(House* h) { house = h; }
+	std::shared_ptr<House> getHouse() const { return house.lock(); }
+	void setHouse(const std::shared_ptr<House>& house) { this->house = house; }
 
 	bool canUse(const std::shared_ptr<Player>& player);
 
@@ -44,7 +44,7 @@ private:
 	void internalSetSleeper(const std::shared_ptr<const Player>& player);
 	void internalRemoveSleeper();
 
-	House* house = nullptr;
+	std::weak_ptr<House> house;
 	uint64_t sleepStart;
 	uint32_t sleeperGUID;
 };

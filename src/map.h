@@ -263,7 +263,6 @@ public:
 
 	Spawns spawns;
 	Towns towns;
-	Houses houses;
 
 private:
 	SpectatorCache spectatorCache;

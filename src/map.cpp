@@ -10,8 +10,55 @@
 #include "game.h"
 #include "iomap.h"
 #include "iomapserialize.h"
+#include "pugicast.h"
 
 extern Game g_game;
+
+namespace {
+
+bool loadHousesXML(const std::filesystem::path& filename)
+{
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file(filename.c_str());
+	if (!result) {
+		printXMLError("Error - loadHousesXML", filename.string(), result);
+		return false;
+	}
+
+	for (auto houseNode : doc.child("houses").children()) {
+		pugi::xml_attribute houseIdAttribute = houseNode.attribute("houseid");
+		if (!houseIdAttribute) {
+			return false;
+		}
+
+		int32_t houseId = pugi::cast<int32_t>(houseIdAttribute.value());
+
+		const auto& house = g_game.getHouseById(houseId);
+		if (!house) {
+			std::cout << "Error: [loadHousesXML] Unknown house, id = " << houseId << std::endl;
+			return false;
+		}
+
+		house->setName(houseNode.attribute("name").as_string());
+
+		Position entryPos(pugi::cast<uint16_t>(houseNode.attribute("entryx").value()),
+		                  pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
+		                  pugi::cast<uint16_t>(houseNode.attribute("entryz").value()));
+		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
+			std::cout << "[Warning - loadHousesXML] House entry not set - Name: " << house->getName()
+			          << " - House id: " << houseId << std::endl;
+		}
+		house->setEntryPos(entryPos);
+
+		house->setRent(pugi::cast<uint32_t>(houseNode.attribute("rent").value()));
+		house->setTownId(pugi::cast<uint32_t>(houseNode.attribute("townid").value()));
+
+		house->setOwner(0, false);
+	}
+	return true;
+}
+
+} // namespace
 
 void Map::loadMap(const std::string& identifier, bool loadHouses, bool isCalledByLua)
 {
@@ -24,7 +71,7 @@ void Map::loadMap(const std::string& identifier, bool loadHouses, bool isCalledB
 	}
 
 	if (loadHouses && !isCalledByLua) {
-		if (!houses.loadHousesXML(attributes.houses)) {
+		if (!loadHousesXML(attributes.houses)) {
 			std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
 		}
 

@@ -807,21 +807,21 @@ uint32_t Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWri
 	return ++windowTextId;
 }
 
-House* Player::getEditHouse(uint32_t& windowTextId, uint32_t& listId)
+std::shared_ptr<House> Player::getEditHouse(uint32_t& windowTextId, uint32_t& listId)
 {
 	windowTextId = this->windowTextId;
 	listId = this->editListId;
-	return editHouse;
+	return editHouse.lock();
 }
 
-void Player::setEditHouse(House* house, uint32_t listId /*= 0*/)
+void Player::setEditHouse(const std::shared_ptr<House>& house, uint32_t listId /*= 0*/)
 {
 	windowTextId++;
 	editHouse = house;
 	editListId = listId;
 }
 
-void Player::sendHouseWindow(House* house, uint32_t listId) const
+void Player::sendHouseWindow(const std::shared_ptr<House>& house, uint32_t listId) const
 {
 	if (!client) {
 		return;

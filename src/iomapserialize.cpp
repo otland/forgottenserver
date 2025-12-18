@@ -150,7 +150,7 @@ bool IOMapSerialize::saveHouseItems()
 	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	PropWriteStream stream;
-	for (auto&& house : g_game.map.houses.getHouses() | std::views::values | std::views::as_const) {
+	for (auto&& house : g_game.getHouses() | std::views::values | std::views::as_const) {
 		// save house items
 		for (auto&& tile : house->getTiles() | tfs::views::lock_weak_ptrs | std::views::as_const) {
 			saveTile(stream, tile);
@@ -239,8 +239,7 @@ bool IOMapSerialize::loadHouseInfo()
 	}
 
 	do {
-		House* house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("id"));
-		if (house) {
+		if (const auto& house = g_game.getHouseById(result->getNumber<uint32_t>("id"))) {
 			house->setOwner(result->getNumber<uint32_t>("owner"), false);
 			house->setPaidUntil(result->getNumber<time_t>("paid"));
 			house->setPayRentWarnings(result->getNumber<uint32_t>("warnings"));
@@ -249,8 +248,7 @@ bool IOMapSerialize::loadHouseInfo()
 
 	if (const auto& result = db.storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`")) {
 		do {
-			House* house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("house_id"));
-			if (house) {
+			if (const auto& house = g_game.getHouseById(result->getNumber<uint32_t>("house_id"))) {
 				house->setAccessList(result->getNumber<uint32_t>("listid"), result->getString("list"));
 			}
 		} while (result->next());
@@ -271,7 +269,7 @@ bool IOMapSerialize::saveHouseInfo()
 		return false;
 	}
 
-	for (auto&& house : g_game.map.houses.getHouses() | std::views::values | std::views::as_const) {
+	for (auto&& house : g_game.getHouses() | std::views::values | std::views::as_const) {
 		if (const auto& result =
 		        db.storeQuery(std::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()))) {
 			db.executeQuery(std::format(
@@ -290,7 +288,7 @@ bool IOMapSerialize::saveHouseInfo()
 
 	DBInsert stmt("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
 
-	for (auto&& house : g_game.map.houses.getHouses() | std::views::values | std::views::as_const) {
+	for (auto&& house : g_game.getHouses() | std::views::values | std::views::as_const) {
 		std::string listText;
 		if (house->getAccessList(GUEST_LIST, listText) && !listText.empty()) {
 			if (!stmt.addRow(std::format("{:d}, {:d}, {:s}", house->getId(), std::to_underlying(GUEST_LIST),
@@ -329,7 +327,7 @@ bool IOMapSerialize::saveHouseInfo()
 	return transaction.commit();
 }
 
-bool IOMapSerialize::saveHouse(House* house)
+bool IOMapSerialize::saveHouse(const std::shared_ptr<House>& house)
 {
 	Database& db = Database::getInstance();
 

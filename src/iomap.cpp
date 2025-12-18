@@ -5,7 +5,10 @@
 
 #include "iomap.h"
 
+#include "game.h"
 #include "housetile.h"
+
+extern Game g_game;
 
 /*
         OTBM_ROOTV1
@@ -143,7 +146,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 		auto y = base_y + OTB::read<uint8_t>(it, tileNode.propsEnd);
 
 		bool isHouseTile = false;
-		House* house = nullptr;
+		std::shared_ptr<House> house = nullptr;
 		std::shared_ptr<Tile> tile = nullptr;
 		std::shared_ptr<Item> ground_item = nullptr;
 		uint32_t tileflags = TILESTATE_NONE;
@@ -151,7 +154,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 		if (tileNode.type == OTBM_HOUSETILE) {
 			auto house_id = OTB::read<uint32_t>(it, tileNode.propsEnd);
 
-			house = map.houses.addHouse(house_id);
+			house = g_game.addHouse(house_id);
 
 			auto houseTile = std::make_shared<HouseTile>(x, y, z, house);
 			house->addTile(houseTile);

@@ -925,7 +925,7 @@ public:
 			client->sendDistanceShoot(from, to, type);
 		}
 	}
-	void sendHouseWindow(House* house, uint32_t listId) const;
+	void sendHouseWindow(const std::shared_ptr<House>& house, uint32_t listId) const;
 	void sendCreatePrivateChannel(uint16_t channelId, const std::string& channelName)
 	{
 		if (client) {
@@ -1189,8 +1189,8 @@ public:
 	std::shared_ptr<Item> getWriteItem(uint32_t& windowTextId, uint16_t& maxWriteLen);
 	uint32_t setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLen = 0);
 
-	House* getEditHouse(uint32_t& windowTextId, uint32_t& listId);
-	void setEditHouse(House* house, uint32_t listId = 0);
+	std::shared_ptr<House> getEditHouse(uint32_t& windowTextId, uint32_t& listId);
+	void setEditHouse(const std::shared_ptr<House>& house, uint32_t listId = 0);
 
 	void learnInstantSpell(const std::string& spellName);
 	void forgetInstantSpell(const std::string& spellName);
@@ -1306,7 +1306,7 @@ private:
 	std::weak_ptr<Item> tradeItem;
 	std::shared_ptr<Item> inventory[CONST_SLOT_LAST + 1] = {};
 	std::weak_ptr<Item> writeItem;
-	House* editHouse = nullptr;
+	std::weak_ptr<House> editHouse;
 	std::weak_ptr<Npc> shopOwner;
 	Party* party = nullptr;
 	std::weak_ptr<Player> tradePartner;

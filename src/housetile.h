@@ -11,7 +11,9 @@ class House;
 class HouseTile final : public DynamicTile
 {
 public:
-	HouseTile(uint16_t x, uint16_t y, uint8_t z, House* house) : DynamicTile{x, y, z}, house{house} {}
+	HouseTile(uint16_t x, uint16_t y, uint8_t z, const std::shared_ptr<House>& house) :
+	    DynamicTile{x, y, z}, house{house}
+	{}
 
 	std::shared_ptr<HouseTile> getHouseTile() override
 	{
@@ -35,12 +37,12 @@ public:
 	void addThing(int32_t index, const std::shared_ptr<Thing>& thing) override;
 	void internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing) override;
 
-	House* getHouse() const { return house; }
+	std::shared_ptr<House> getHouse() const { return house.lock(); }
 
 private:
 	void updateHouse(const std::shared_ptr<Item>& item);
 
-	House* house;
+	std::weak_ptr<House> house;
 };
 
 #endif // FS_HOUSETILE_H
