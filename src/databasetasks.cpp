@@ -9,6 +9,8 @@
 
 extern Dispatcher g_dispatcher;
 
+DatabaseTasks g_databaseTasks;
+
 void DatabaseTasks::start()
 {
 	db.connect();

@@ -9,6 +9,8 @@
 #include "database.h"
 #include "databasetasks.h"
 
+extern DatabaseTasks g_databaseTasks;
+
 namespace IOBan {
 
 const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId)

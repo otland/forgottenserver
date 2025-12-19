@@ -67,6 +67,4 @@ private:
 	uint64_t dispatcherCycle = 0;
 };
 
-extern Dispatcher g_dispatcher;
-
 #endif // FS_TASKS_H

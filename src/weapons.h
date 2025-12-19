@@ -14,8 +14,6 @@ class Weapon;
 
 using Weapon_ptr = std::unique_ptr<Weapon>;
 
-extern Vocations g_vocations;
-
 class Weapons final : public BaseEvents
 {
 public:
@@ -111,13 +109,7 @@ public:
 	void setWieldInfo(uint32_t info) { wieldInfo |= info; }
 
 	const auto& getVocationWeaponSet() const { return vocationWeaponSet; }
-	void addVocationWeaponSet(const std::string& vocationName)
-	{
-		int32_t vocationId = g_vocations.getVocationId(vocationName);
-		if (vocationId != -1) {
-			vocationWeaponSet.insert(vocationId);
-		}
-	}
+	void addVocationWeaponSet(const std::string& vocationName);
 	// If the set is empty, it is considered to be for all vocations.
 	bool hasVocationWeaponSet(uint16_t vocationId) const
 	{

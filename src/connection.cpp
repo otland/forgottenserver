@@ -13,6 +13,8 @@
 
 #include <print>
 
+extern Dispatcher g_dispatcher;
+
 Connection_ptr ConnectionManager::createConnection(boost::asio::io_context& io_context,
                                                    ConstServicePort_ptr servicePort)
 {

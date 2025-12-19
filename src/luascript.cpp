@@ -33,18 +33,21 @@
 #include "teleport.h"
 #include "weapons.h"
 
+extern Actions* g_actions;
 extern Chat* g_chat;
+extern CreatureEvents* g_creatureEvents;
+extern DatabaseTasks g_databaseTasks;
+extern Dispatcher g_dispatcher;
 extern Game g_game;
 extern GlobalEvents* g_globalEvents;
-extern Monsters g_monsters;
-extern Vocations g_vocations;
-extern Spells* g_spells;
-extern Actions* g_actions;
-extern TalkActions* g_talkActions;
-extern CreatureEvents* g_creatureEvents;
-extern MoveEvents* g_moveEvents;
 extern GlobalEvents* g_globalEvents;
+extern Monsters g_monsters;
+extern MoveEvents* g_moveEvents;
+extern Scheduler g_scheduler;
 extern Scripts* g_scripts;
+extern Spells* g_spells;
+extern TalkActions* g_talkActions;
+extern Vocations g_vocations;
 extern Weapons* g_weapons;
 
 LuaEnvironment g_luaEnvironment;

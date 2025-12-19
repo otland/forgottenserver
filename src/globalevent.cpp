@@ -9,6 +9,8 @@
 #include "scheduler.h"
 #include "tools.h"
 
+extern Scheduler g_scheduler;
+
 GlobalEvents::GlobalEvents() : scriptInterface("GlobalEvent Interface") { scriptInterface.initState(); }
 
 GlobalEvents::~GlobalEvents() { clear(false); }

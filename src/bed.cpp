@@ -11,6 +11,7 @@
 #include "scheduler.h"
 
 extern Game g_game;
+extern Scheduler g_scheduler;
 
 BedItem::BedItem(uint16_t id) : Item(id) { internalRemoveSleeper(); }
 

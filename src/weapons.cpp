@@ -424,6 +424,14 @@ void Weapon::decrementItemCount(const std::shared_ptr<Item>& item)
 	}
 }
 
+void Weapon::addVocationWeaponSet(const std::string& vocationName)
+{
+	int32_t vocationId = g_vocations.getVocationId(vocationName);
+	if (vocationId != -1) {
+		vocationWeaponSet.insert(vocationId);
+	}
+}
+
 WeaponMelee::WeaponMelee(LuaScriptInterface* interface) : Weapon(interface)
 {
 	params.blockedByArmor = true;

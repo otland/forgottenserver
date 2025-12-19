@@ -12,6 +12,8 @@
 #include "iomap.h"
 #include "storeinbox.h"
 
+extern Game g_game;
+
 Container::~Container()
 {
 	if (getID() == ITEM_BROWSEFIELD) {

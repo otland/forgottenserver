@@ -25,8 +25,6 @@ enum SessionEndTypes_t : uint8_t
 
 using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
-extern Game g_game;
-
 struct TextMessage
 {
 	MessageClasses type = MESSAGE_STATUS_DEFAULT;

@@ -18,8 +18,11 @@
 #include "podium.h"
 #include "scheduler.h"
 
-extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
+extern CreatureEvents* g_creatureEvents;
+extern Dispatcher g_dispatcher;
+extern Game g_game;
+extern Scheduler g_scheduler;
 
 namespace {
 

@@ -35,15 +35,20 @@
 
 extern Actions* g_actions;
 extern Chat* g_chat;
-extern TalkActions* g_talkActions;
-extern Spells* g_spells;
-extern Vocations g_vocations;
-extern GlobalEvents* g_globalEvents;
 extern CreatureEvents* g_creatureEvents;
+extern DatabaseTasks g_databaseTasks;
+extern Dispatcher g_dispatcher;
+extern GlobalEvents* g_globalEvents;
 extern Monsters g_monsters;
 extern MoveEvents* g_moveEvents;
-extern Weapons* g_weapons;
+extern Scheduler g_scheduler;
 extern Scripts* g_scripts;
+extern Spells* g_spells;
+extern TalkActions* g_talkActions;
+extern Vocations g_vocations;
+extern Weapons* g_weapons;
+
+Game g_game;
 
 Game::Game()
 {

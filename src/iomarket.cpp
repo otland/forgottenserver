@@ -11,7 +11,9 @@
 #include "iologindata.h"
 #include "scheduler.h"
 
+extern DatabaseTasks g_databaseTasks;
 extern Game g_game;
+extern Scheduler g_scheduler;
 
 namespace {
 

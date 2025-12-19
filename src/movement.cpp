@@ -1033,3 +1033,11 @@ bool MoveEvent::executeAddRemItem(const std::shared_ptr<Item>& item, const std::
 
 	return scriptInterface->callFunction(3);
 }
+
+void MoveEvent::addVocationEquipSet(const std::string& vocationName)
+{
+	int32_t vocationId = g_vocations.getVocationId(vocationName);
+	if (vocationId != -1) {
+		vocationEquipSet.insert(vocationId);
+	}
+}

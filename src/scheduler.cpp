@@ -5,6 +5,10 @@
 
 #include "scheduler.h"
 
+extern Dispatcher g_dispatcher;
+
+Scheduler g_scheduler;
+
 uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
 	// check if the event has a valid id

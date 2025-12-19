@@ -22,12 +22,14 @@
 #include "tools.h"
 #include "weapons.h"
 
-extern Game g_game;
 extern Chat* g_chat;
-extern Vocations g_vocations;
-extern MoveEvents* g_moveEvents;
-extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
+extern Dispatcher g_dispatcher;
+extern Game g_game;
+extern MoveEvents* g_moveEvents;
+extern Scheduler g_scheduler;
+extern Vocations g_vocations;
+extern Weapons* g_weapons;
 
 MuteCountMap Player::muteCountMap;
 

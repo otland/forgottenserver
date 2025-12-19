@@ -16,8 +16,10 @@ double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
 double Creature::speedC = -4795.01;
 
-extern Game g_game;
 extern CreatureEvents* g_creatureEvents;
+extern Dispatcher g_dispatcher;
+extern Game g_game;
+extern Scheduler g_scheduler;
 
 Creature::Creature() { onIdleStatus(); }
 

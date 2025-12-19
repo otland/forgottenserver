@@ -15,7 +15,8 @@
 
 extern Game g_game;
 extern Spells* g_spells;
-extern Monsters g_monsters;
+
+Monsters g_monsters;
 
 spellBlock_t::~spellBlock_t()
 {

@@ -9,6 +9,8 @@
 #include "pugicast.h"
 #include "tools.h"
 
+Vocations g_vocations;
+
 bool Vocations::loadFromXml(std::istream& is, std::string_view filename)
 {
 	pugi::xml_document doc;

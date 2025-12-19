@@ -9,6 +9,8 @@
 #include "scheduler.h"
 #include "tools.h"
 
+extern Scheduler g_scheduler;
+
 namespace {
 
 struct ConnectBlock

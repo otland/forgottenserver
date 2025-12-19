@@ -40,6 +40,4 @@ private:
 	std::condition_variable taskSignal;
 };
 
-extern DatabaseTasks g_databaseTasks;
-
 #endif // FS_DATABASETASKS_H

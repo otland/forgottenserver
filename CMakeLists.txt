@@ -55,7 +55,8 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if (NOT WIN32)
-    add_compile_options(-Wall -Wextra -Wnon-virtual-dtor -Wold-style-cast -pedantic -Werror -pipe -fvisibility=hidden)
+    # zlib 1.3.1 has an old-style cast
+    add_compile_options(-Wall -Wextra -Wnon-virtual-dtor -Wno-error=old-style-cast -pedantic -Werror -pipe -fvisibility=hidden)
 endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -76,6 +77,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/bigobj>")
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 find_package(Lua REQUIRED)
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
@@ -119,16 +121,16 @@ find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS ${BOOST_REQUIRE
 include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
 option(ENABLE_UNITY_BUILD "Enable unity build" ON)
-
-add_subdirectory(src)
-add_executable(tfs ${tfs_MAIN})
-target_link_libraries(tfs tfslib)
-target_precompile_headers(tfs PUBLIC src/otpch.h)
+set(CMAKE_UNITY_BUILD ${ENABLE_UNITY_BUILD})
 
 include(CheckIPOSupported)
-check_ipo_supported(RESULT result OUTPUT error)
-if (result)
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
-else ()
-    message(STATUS "IPO is not supported: ${error}")
+check_ipo_supported(
+    RESULT CMAKE_INTERPROCEDURAL_OPTIMIZATION
+    OUTPUT INTERPROCEDURAL_OPTIMIZATION_ERROR
+    LANGUAGES CXX
+)
+if (NOT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+    message(STATUS "IPO is not supported: ${INTERPROCEDURAL_OPTIMIZATION_ERROR}")
 endif ()
+
+add_subdirectory(src)

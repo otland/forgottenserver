@@ -45,6 +45,4 @@ private:
 	boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work{io_context.get_executor()};
 };
 
-extern Scheduler g_scheduler;
-
 #endif // FS_SCHEDULER_H

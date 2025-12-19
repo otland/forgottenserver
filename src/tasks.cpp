@@ -10,6 +10,8 @@
 
 extern Game g_game;
 
+Dispatcher g_dispatcher;
+
 Task* createTask(TaskFunc&& f) { return new Task(std::move(f)); }
 
 Task* createTask(uint32_t expiration, TaskFunc&& f) { return new Task(expiration, std::move(f)); }

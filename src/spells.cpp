@@ -14,9 +14,10 @@
 #include "pugicast.h"
 
 extern Game g_game;
-extern Spells* g_spells;
-extern Monsters g_monsters;
 extern LuaEnvironment g_luaEnvironment;
+extern Monsters g_monsters;
+extern Spells* g_spells;
+extern Vocations g_vocations;
 
 Spells::Spells() { scriptInterface.initState(); }
 
@@ -793,6 +794,14 @@ uint32_t Spell::getManaCost(const std::shared_ptr<const Player>& player) const
 	}
 
 	return 0;
+}
+
+void Spell::addVocationSpellMap(std::string_view vocationName, bool showInDescription)
+{
+	int32_t vocationId = g_vocations.getVocationId(vocationName);
+	if (vocationId != -1) {
+		vocationSpellMap[vocationId] = showInDescription;
+	}
 }
 
 bool InstantSpell::configureEvent(const pugi::xml_node& node)

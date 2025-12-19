@@ -10,6 +10,7 @@
 #include "outputmessage.h"
 #include "tasks.h"
 
+extern Dispatcher g_dispatcher;
 extern Game g_game;
 
 std::map<Connection::Address, int64_t> ProtocolStatus::ipConnectMap;

@@ -6,6 +6,8 @@
 #include "../game.h"
 #include "http.h"
 
+extern Game g_game;
+
 std::pair<beast::http::status, json::value> tfs::http::handle_serverinfo(const json::object&, std::string_view)
 {
 	uint32_t mapWidth, mapHeight;
