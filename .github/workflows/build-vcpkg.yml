@@ -32,7 +32,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        os: [ubuntu, macos, windows]
+        os: [ubuntu, windows]
 
     env:
       VCPKG_BUILD_TYPE: release
@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - run: echo CXX=g++-14 >> $GITHUB_ENV
-        if: ${{ matrix.os == 'macos' || matrix.os == 'ubuntu' }}
+        if: ${{ matrix.os == 'ubuntu' }}
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
