@@ -28,15 +28,15 @@ on:
 
 jobs:
   build-vcpkg:
-    name: ${{ matrix.os }}-${{ matrix.buildtype }}
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
         os: [ubuntu, macos, windows]
-        buildtype: [Debug, Release]
 
     env:
       VCPKG_BUILD_TYPE: release
+      VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
 
     steps:
       - uses: actions/checkout@v6
@@ -62,14 +62,14 @@ jobs:
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
           configurePreset: vcpkg
+          buildPreset: vcpkg
+          buildPresetAdditionalArgs: "['--config', 'Debug']"
 
       - name: Upload build logs
         uses: actions/upload-artifact@v6
         with:
-          name: logs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
+          name: logs-${{ matrix.os }}-${{ github.sha }}
           path: ${{ github.workspace }}/vcpkg/buildtrees/**/*.log
         if: ${{ failure() }}
 
@@ -77,14 +77,14 @@ jobs:
         uses: actions/upload-artifact@v6
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
-          path: ${{ github.workspace }}/build/${{ matrix.buildtype }}/tfs
+          name: tfs-${{ matrix.os }}-${{ github.sha }}
+          path: ${{ github.workspace }}/build/Debug/tfs
 
       - name: Upload artifact binary (exe)
         uses: actions/upload-artifact@v6
         if: ${{ startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ github.sha }}
           path: |
-            ${{ github.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
-            ${{ github.workspace }}/build/${{ matrix.buildtype }}/*.dll
+            ${{ github.workspace }}/build/Debug/tfs.exe
+            ${{ github.workspace }}/build/Debug/*.dll

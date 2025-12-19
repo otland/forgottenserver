@@ -1,18 +1,31 @@
 {
-  "version": 3,
+  "$schema": "https://cmake.org/cmake/help/v3.30/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+  "version": 9,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 30,
+    "patch": 0
+  },
   "configurePresets": [
     {
-      "name": "default",
-      "description": "Generate Ninja project files",
+      "name": "base",
+      "hidden": true,
       "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/build"
     },
     {
-      "name": "vcpkg",
+      "name": "default",
+      "description": "Generate Ninja project files",
       "inherits": [
-        "default"
-      ],
+        "base"
+      ]
+    },
+    {
+      "name": "vcpkg",
       "description": "Configure with vcpkg toolchain and generate Ninja project files",
+      "inherits": [
+        "base"
+      ],
       "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
     }
   ],
@@ -28,11 +41,24 @@
   ],
   "testPresets": [
     {
+      "name": "base",
+      "hidden": true,
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
       "name": "default",
+      "inherits": [
+        "base"
+      ],
       "configurePreset": "default"
     },
     {
       "name": "vcpkg",
+      "inherits": [
+        "base"
+      ],
       "configurePreset": "vcpkg"
     }
   ]

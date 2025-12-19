@@ -179,7 +179,7 @@ if (APPLE)
 	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
 endif()
 
-if (HTTP)
+if (ENABLE_HTTP)
 	add_subdirectory(http)
 	target_link_libraries(tfslib PRIVATE http)
 endif ()

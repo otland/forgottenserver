@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.30)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
@@ -11,19 +11,15 @@ if (DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
     set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "The vcpkg triplet")
 endif()
 
-set(BOOST_REQUIRED_VERSION 1.71.0)
 set(VCPKG_MANIFEST_NO_DEFAULT_FEATURES ON)
 
-option(HTTP "Enable HTTP support" ON)
-if (HTTP)
+set(BOOST_REQUIRED_VERSION 1.71.0)
+
+option(ENABLE_HTTP "Enable HTTP support" ON)
+if (ENABLE_HTTP)
     list(APPEND VCPKG_MANIFEST_FEATURES "http")
     set(BOOST_REQUIRED_VERSION 1.75.0)
     add_compile_definitions(HTTP)
-endif()
-
-option(BUILD_TESTING "Build unit tests" OFF)
-if (BUILD_TESTING)
-    list(APPEND VCPKG_MANIFEST_FEATURES "unit-tests")
 endif()
 
 option(USE_LIBMYSQL "Use libmysql instead of libmariadb (vcpkg only)" OFF)
@@ -33,8 +29,13 @@ else()
     list(APPEND VCPKG_MANIFEST_FEATURES "libmariadb")
 endif()
 
-option(ASAN "Enable address sanitizer" OFF)
-if (ASAN)
+option(BUILD_TESTING "Build the testing tree" OFF)
+if (BUILD_TESTING)
+    list(APPEND VCPKG_MANIFEST_FEATURES "unit-tests")
+endif()
+
+option(ENABLE_ASAN "Enable address sanitizer" OFF)
+if (ENABLE_ASAN)
     if (MSVC)
         message(WARNING "ASAN is experimental on Windows/MSVC")
         add_compile_options(/fsanitize=address)
@@ -47,6 +48,10 @@ endif ()
 
 project(tfs CXX)
 
+if (BUILD_TESTING)
+    include(CTest)
+endif()
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if (NOT WIN32)
@@ -55,6 +60,12 @@ endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     add_compile_options(-fno-strict-aliasing)
+
+    if (APPLE)
+        # MacOS SDK is not compatible with GCC
+        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116827
+        set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
+    endif ()
 endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -63,9 +74,14 @@ endif ()
 
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/bigobj>")
 
-# Find packages.
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Lua REQUIRED)
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
+find_package(PugiXML CONFIG REQUIRED)
 find_package(simdutf CONFIG REQUIRED)
+find_package(Threads REQUIRED)
 find_package(ZLIB REQUIRED)
 
 # Look for vcpkg-provided packages first
@@ -87,16 +103,12 @@ if (NOT MYSQL_CLIENT_LIBS)
     find_package(MySQL REQUIRED)
 endif ()
 
-find_package(Lua REQUIRED)
-find_package(PugiXML CONFIG REQUIRED)
-find_package(Threads REQUIRED)
-
 if (APPLE)
     find_package(Iconv REQUIRED)
 endif()
 
 set(BOOST_REQUIRED_COMPONENTS system iostreams)
-if (HTTP)
+if (ENABLE_HTTP)
     list(APPEND BOOST_REQUIRED_COMPONENTS json)
 endif ()
 if (BUILD_TESTING)
@@ -106,22 +118,13 @@ find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS ${BOOST_REQUIRE
 
 include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-if (BUILD_TESTING)
-    message(STATUS "Building unit tests")
-    enable_testing()
-endif()
-
-# Option to disable unity builds
 option(ENABLE_UNITY_BUILD "Enable unity build" ON)
 
 add_subdirectory(src)
 add_executable(tfs ${tfs_MAIN})
 target_link_libraries(tfs tfslib)
+target_precompile_headers(tfs PUBLIC src/otpch.h)
 
-### INTERPROCEDURAL_OPTIMIZATION ###
 include(CheckIPOSupported)
 check_ipo_supported(RESULT result OUTPUT error)
 if (result)
@@ -129,21 +132,3 @@ if (result)
 else ()
     message(STATUS "IPO is not supported: ${error}")
 endif ()
-### END INTERPROCEDURAL_OPTIMIZATION ###
-
-### Git Version ###
-# Define the two required variables before including
-# the source code for watching a git repository.
-option(SKIP_GIT "Skip checking for git updates" OFF)
-if(NOT SKIP_GIT)
-	set(PRE_CONFIGURE_FILE "cmake/gitmetadata.h.in")
-	set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/gitmetadata.h")
-	include(git_watcher)
-	if(Git_FOUND)
-		add_dependencies(tfs check_git)
-		target_include_directories(tfs PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-	endif()
-endif()
-### END  Git Version ###
-
-target_precompile_headers(tfs PUBLIC src/otpch.h)
