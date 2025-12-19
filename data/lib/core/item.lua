@@ -430,7 +430,7 @@ do
 		do
 			local suppressions = abilities.conditionSuppressions
 			for conditionId, conditionName in pairs(suppressedConditionNames) do
-				if bit.band(abilities.conditionSuppressions, conditionId) ~= 0 then
+				if (abilities.conditionSuppressions & conditionId) ~= 0 then
 					descriptions[#descriptions + 1] = conditionName
 				end
 			end
@@ -587,7 +587,7 @@ do
 		-- imbuements (to do)
 		-- \nImbuements: (Basic Strike 2:30h, Basic Void 2:30h, Empty Slot).
 
-		
+
 		-- item class (placeholder)
 		-- Classification: x.
 		-- Disabled until classification system is implemented.
@@ -659,7 +659,7 @@ do
 				local wieldInfo = itemType:getWieldInfo()
 				if wieldInfo ~= 0 then
 					local wieldAttrs = {}
-					if bit.band(wieldInfo, WIELDINFO_PREMIUM) ~= 0 then
+					if (wieldInfo & WIELDINFO_PREMIUM) ~= 0 then
 						wieldAttrs[#wieldAttrs + 1] = "premium"
 					end
 
@@ -671,11 +671,11 @@ do
 					end
 
 					local levelInfo = {}
-					if bit.band(wieldInfo, WIELDINFO_LEVEL) ~= 0 then
+					if (wieldInfo & WIELDINFO_LEVEL) ~= 0 then
 						levelInfo[#levelInfo + 1] = string.format("level %d", itemType:getMinReqLevel())
 					end
 
-					if bit.band(wieldInfo, WIELDINFO_MAGLV) ~= 0 then
+					if (wieldInfo & WIELDINFO_MAGLV) ~= 0 then
 						levelInfo[#levelInfo + 1] = string.format("magic level %d", itemType:getMinReqMagicLevel())
 					end
 

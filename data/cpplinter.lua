@@ -7,14 +7,6 @@
 ---@field __index fun(self: table, key: any): any
 rawgetmetatable = {}
 
----@class bit
----@field band fun(a: number, b: number): number
----@field bor fun(a: number, b: number): number
----@field bxor fun(a: number, b: number): number
----@field lshift fun(a: number, b: number): number
----@field rshift fun(a: number, b: number): number
-bit = {}
-
 ---@alias Outfit_t table<string, integer>
 ---@alias MagicEffect_t table<string, integer>
 

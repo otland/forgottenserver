@@ -12,7 +12,7 @@ local function levitate(creature, parameter)
 
 			if tile and tile:getGround() and not tile:hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) then
 				local fromPos = creature:getPosition()
-				local moved = creature:move(tile, bit.bor(FLAG_IGNOREBLOCKITEM, FLAG_IGNOREBLOCKCREATURE))
+				local moved = creature:move(tile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE)
 
 				if moved == RETURNVALUE_NOERROR then
 					fromPos:sendMagicEffect(CONST_ME_TELEPORT)

@@ -1192,11 +1192,6 @@ void LuaScriptInterface::registerFunctions()
 	// isScriptsInterface()
 	lua_register(L, "isScriptsInterface", LuaScriptInterface::luaIsScriptsInterface);
 
-	// bit operations for Lua, based on bitlib project release 24
-	// bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
-	luaL_register(L, "bit", LuaScriptInterface::luaBitReg);
-	lua_pop(L, 1);
-
 	// configManager table
 	luaL_register(L, "configManager", LuaScriptInterface::luaConfigManagerTable);
 	lua_pop(L, 1);
@@ -2292,10 +2287,6 @@ void LuaScriptInterface::registerFunctions()
 
 	// os
 	registerMethod(L, "os", "mtime", LuaScriptInterface::luaSystemTime);
-
-	// table
-	registerMethod(L, "table", "create", LuaScriptInterface::luaTableCreate);
-	registerMethod(L, "table", "pack", LuaScriptInterface::luaTablePack);
 
 	// DB Insert
 	registerClass(L, "DBInsert", "", LuaScriptInterface::luaDBInsertCreate);
@@ -4067,52 +4058,6 @@ int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
 	return 1;
 }
 
-const luaL_Reg LuaScriptInterface::luaBitReg[] = {
-    //{"tobit", LuaScriptInterface::luaBitToBit},
-    {"bnot", LuaScriptInterface::luaBitNot},
-    {"band", LuaScriptInterface::luaBitAnd},
-    {"bor", LuaScriptInterface::luaBitOr},
-    {"bxor", LuaScriptInterface::luaBitXor},
-    {"lshift", LuaScriptInterface::luaBitLeftShift},
-    {"rshift", LuaScriptInterface::luaBitRightShift},
-    //{"arshift", LuaScriptInterface::luaBitArithmeticalRightShift},
-    //{"rol", LuaScriptInterface::luaBitRotateLeft},
-    //{"ror", LuaScriptInterface::luaBitRotateRight},
-    //{"bswap", LuaScriptInterface::luaBitSwapEndian},
-    //{"tohex", LuaScriptInterface::luaBitToHex},
-    {nullptr, nullptr}};
-
-int LuaScriptInterface::luaBitNot(lua_State* L)
-{
-	tfs::lua::pushNumber(L, ~tfs::lua::getNumber<uint32_t>(L, -1));
-	return 1;
-}
-
-#define MULTIOP(name, op) \
-	int LuaScriptInterface::luaBit##name(lua_State* L) \
-	{ \
-		int n = lua_gettop(L); \
-		uint32_t w = tfs::lua::getNumber<uint32_t>(L, -1); \
-		for (int i = 1; i < n; ++i) w op tfs::lua::getNumber<uint32_t>(L, i); \
-		tfs::lua::pushNumber(L, w); \
-		return 1; \
-	}
-
-MULTIOP(And, &=)
-MULTIOP(Or, |=)
-MULTIOP(Xor, ^=)
-
-#define SHIFTOP(name, op) \
-	int LuaScriptInterface::luaBit##name(lua_State* L) \
-	{ \
-		uint32_t n1 = tfs::lua::getNumber<uint32_t>(L, 1), n2 = tfs::lua::getNumber<uint32_t>(L, 2); \
-		tfs::lua::pushNumber(L, (n1 op n2)); \
-		return 1; \
-	}
-
-SHIFTOP(LeftShift, <<)
-SHIFTOP(RightShift, >>)
-
 const luaL_Reg LuaScriptInterface::luaConfigManagerTable[] = {
     {"getString", LuaScriptInterface::luaConfigManagerGetString},
     {"getNumber", LuaScriptInterface::luaConfigManagerGetNumber},
@@ -4372,31 +4317,6 @@ int LuaScriptInterface::luaSystemTime(lua_State* L)
 	// os.mtime()
 	tfs::lua::pushNumber(L, OTSYS_TIME());
 	return 1;
-}
-
-// table
-int LuaScriptInterface::luaTableCreate(lua_State* L)
-{
-	// table.create(arrayLength, keyLength)
-	lua_createtable(L, tfs::lua::getNumber<int32_t>(L, 1), tfs::lua::getNumber<int32_t>(L, 2));
-	return 1;
-}
-
-int LuaScriptInterface::luaTablePack(lua_State* L)
-{
-	// table.pack(...)
-	int n = lua_gettop(L);         /* number of elements to pack */
-	lua_createtable(L, n, 1);      /* create result table */
-	lua_insert(L, 1);              /* put it at index 1 */
-	for (int i = n; i >= 1; i--) { /* assign elements */
-		lua_rawseti(L, 1, i);
-	}
-	if (luaL_callmeta(L, -1, "__index") != 0) {
-		lua_replace(L, -2);
-	}
-	tfs::lua::pushNumber(L, n);
-	lua_setfield(L, 1, "n"); /* t.n = number of elements */
-	return 1;                /* return table */
 }
 
 // DB Insert

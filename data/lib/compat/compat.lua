@@ -620,12 +620,11 @@ function getPlayersByIPAddress(ip, mask)
 	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking getPlayersByIPAddress with a numeric IP is deprecated and will be removed in the future. Please use the string representation of the IP.")
 
 	if not mask then mask = 0xFFFFFFFF end
-	local masked = bit.band(ip, mask)
-	local lshift = bit.lshift
+	local masked = ip & mask
 	local players = {}
 	for _, player in ipairs(Game.getPlayers()) do
 		local a, b, c, d = player:getIp():match("(%d*)%.(%d*)%.(%d*)%.(%d*)")
-		if a and b and c and d and bit.band(lshift(a, 24) + lshift(b, 16) + lshift(c, 8) + d, mask) == masked then
+		if a and b and c and d and (((a << 24) + (b << 16) + (c << 8) + d) & mask) == masked then
 			players[#players + 1] = player:getId()
 		end
 	end
@@ -1027,11 +1026,11 @@ function getItemRWInfo(uid)
 	local rwFlags = 0
 	local itemType = ItemType(item:getId())
 	if itemType:isReadable() then
-		rwFlags = bit.bor(rwFlags, 1)
+		rwFlags = rwFlags | 1
 	end
 
 	if itemType:isWritable() then
-		rwFlags = bit.bor(rwFlags, 2)
+		rwFlags = rwFlags | 2
 	end
 	return rwFlags
 end
@@ -1353,13 +1352,11 @@ function Game.convertIpToString(ip)
 		return ip
 	end
 
-	local band = bit.band
-	local rshift = bit.rshift
 	return string.format("%d.%d.%d.%d",
-		band(ip, 0xFF),
-		band(rshift(ip, 8), 0xFF),
-		band(rshift(ip, 16), 0xFF),
-		rshift(ip, 24)
+		ip & 0xFF,
+		(ip >> 8) & 0xFF,
+		(ip >> 16) & 0xFF,
+		ip >> 24
 	)
 end
 
@@ -1608,7 +1605,7 @@ do
 end
 
 function indexToCombatType(idx)
-	return bit.lshift(1, idx)
+	return 1 << idx
 end
 
 function showpos(v)
@@ -1619,6 +1616,14 @@ end
 if not unpack then unpack = table.unpack end
 
 if not loadstring then loadstring = load end
+
+bit = bit or {}
+function bit.bnot(a) return ~a end
+function bit.band(a, b) return a & b end
+function bit.bor(a, b) return a | b end
+function bit.bxor(a, b) return a ~ b end
+function bit.lshift(a, b) return a << b end
+function bit.rshift(a, b) return a >> b end
 
 function table.maxn(t)
 	local max = 0

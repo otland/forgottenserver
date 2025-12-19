@@ -17,7 +17,7 @@ do
 	}
 
 	function ItemType:usesSlot(slot)
-		return bit.band(self:getSlotPosition(), slotBits[slot] or 0) ~= 0
+		return (self:getSlotPosition() & (slotBits[slot] or 0)) ~= 0
 	end
 end
 
@@ -43,7 +43,7 @@ function ItemType:isWeapon()
 end
 
 function ItemType:isTwoHanded()
-	return bit.band(self:getSlotPosition(), SLOTP_TWO_HAND) ~= 0
+	return (self:getSlotPosition() & SLOTP_TWO_HAND) ~= 0
 end
 
 function ItemType:isBow()

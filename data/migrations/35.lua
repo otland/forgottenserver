@@ -27,8 +27,8 @@ function onUpdateDatabase()
 	if resultId then
 		repeat
 			local playerId = result.getNumber(resultId, "player_id")
-			local outfitId = bit.rshift(result.getNumber(resultId, "value"), 16)
-			local addons = bit.band(result.getNumber(resultId, "value"), 0xFF)
+			local outfitId = result.getNumber(resultId, "value") >> 16
+			local addons = result.getNumber(resultId, "value") & 0xFF
 
 			db.query(string.format("INSERT INTO `player_outfits` (`player_id`, `outfit_id`, `addons`) VALUES (%d, %d, %d)", playerId, outfitId, addons))
 		until not result.next(resultId)
@@ -42,8 +42,7 @@ function onUpdateDatabase()
 				local key = mountRange + ((i-1) / 31)
 				if key == result.getNumber(resultId, "key") then
 					local playerId = result.getNumber(resultId, "player_id")
-					local lshift = bit.lshift(1, ((i-1) % 31))
-					local mount = bit.band(lshift, result.getNumber(resultId, "value"))
+					local mount = (1 << ((i-1) % 31)) & result.getNumber(resultId, "value")
 
 					if mount ~= 0 then
 						db.query(string.format("INSERT INTO `player_mounts` (`player_id`, `mount_id`) VALUES (%d, %d)", playerId, i))

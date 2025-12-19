@@ -145,7 +145,6 @@ public:
 	bool callFunction(int params);
 	void callVoidFunction(int params);
 
-	static const luaL_Reg luaBitReg[7];
 	static const luaL_Reg luaConfigManagerTable[4];
 	static const luaL_Reg luaDatabaseTable[9];
 	static const luaL_Reg luaResultTable[6];
@@ -205,13 +204,6 @@ private:
 
 	static int luaIsScriptsInterface(lua_State* L);
 
-	static int luaBitNot(lua_State* L);
-	static int luaBitAnd(lua_State* L);
-	static int luaBitOr(lua_State* L);
-	static int luaBitXor(lua_State* L);
-	static int luaBitLeftShift(lua_State* L);
-	static int luaBitRightShift(lua_State* L);
-
 	static int luaConfigManagerGetString(lua_State* L);
 	static int luaConfigManagerGetNumber(lua_State* L);
 	static int luaConfigManagerGetBoolean(lua_State* L);
@@ -240,10 +232,6 @@ private:
 
 	// os
 	static int luaSystemTime(lua_State* L);
-
-	// table
-	static int luaTableCreate(lua_State* L);
-	static int luaTablePack(lua_State* L);
 
 	// DB Insert
 	static int luaDBInsertCreate(lua_State* L);
