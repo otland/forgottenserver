@@ -172,12 +172,11 @@
     <ClCompile Include="..\src\movement.cpp" />
     <ClCompile Include="..\src\networkmessage.cpp" />
     <ClCompile Include="..\src\npc.cpp" />
-    <ClCompile Include="..\src\otpch.cpp">
+    <ClCompile Include="..\src\otserv.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile>otpch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="..\src\otserv.cpp" />
     <ClCompile Include="..\src\outfit.cpp" />
     <ClCompile Include="..\src\outputmessage.cpp" />
     <ClCompile Include="..\src\party.cpp" />

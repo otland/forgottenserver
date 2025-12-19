@@ -212,9 +212,6 @@
     <ClCompile Include="..\src\npc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\otpch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\otserv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
