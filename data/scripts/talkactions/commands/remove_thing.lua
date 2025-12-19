@@ -1,10 +1,6 @@
 local talkaction = TalkAction("/r")
 
 function talkaction.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
 	local position = player:getPosition()
 	position:getNextPosition(player:getDirection())
 
@@ -35,4 +31,5 @@ function talkaction.onSay(player, words, param)
 end
 
 talkaction:separator(" ")
+talkaction:access(true)
 talkaction:register()

@@ -25,14 +25,6 @@ local function getSkillId(skillName)
 end
 
 function talkaction.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
-	if player:getAccountType() < ACCOUNT_TYPE_GOD then
-		return false
-	end
-
 	local split = param:splitTrimmed(",")
 	if not split[2] then
 		player:sendCancelMessage("Insufficient parameters.")
@@ -61,4 +53,6 @@ function talkaction.onSay(player, words, param)
 end
 
 talkaction:separator(" ")
+talkaction:access(true)
+talkaction:accountType(ACCOUNT_TYPE_GOD)
 talkaction:register()

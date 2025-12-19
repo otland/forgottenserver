@@ -31,10 +31,6 @@ local invalidTypes = {
 }
 
 function talkaction.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
 	local lookType = tonumber(param)
 	if lookType >= 0 and lookType < 1469 and not table.contains(invalidTypes, lookType) then
 		local playerOutfit = player:getOutfit()
@@ -47,4 +43,5 @@ function talkaction.onSay(player, words, param)
 end
 
 talkaction:separator(" ")
+talkaction:access(true)
 talkaction:register()

@@ -1,14 +1,6 @@
 local talkaction = TalkAction("/s")
 
 function talkaction.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
-	if player:getAccountType() < ACCOUNT_TYPE_GOD then
-		return false
-	end
-
 	local position = player:getPosition()
 	local npc = Game.createNpc(param, position)
 	if npc then
@@ -22,4 +14,6 @@ function talkaction.onSay(player, words, param)
 end
 
 talkaction:separator(" ")
+talkaction:access(true)
+talkaction:accountType(ACCOUNT_TYPE_GOD)
 talkaction:register()

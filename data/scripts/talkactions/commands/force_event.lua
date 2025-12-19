@@ -1,14 +1,6 @@
-local talk = TalkAction("/event", "!event")
+local talkaction = TalkAction("/event")
 
-function talk.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
-	if player:getAccountType() < ACCOUNT_TYPE_GAMEMASTER then
-		return false
-	end
-
+function talkaction.onSay(player, words, param)
 	logCommand(player, words, param)
 
 	local returnValue = Game.startEvent(param)
@@ -21,5 +13,7 @@ function talk.onSay(player, words, param)
 	return returnValue
 end
 
-talk:separator(" ")
-talk:register()
+talkaction:separator(" ")
+talkaction:access(true)
+talkaction:accountType(ACCOUNT_TYPE_GAMEMASTER)
+talkaction:register()

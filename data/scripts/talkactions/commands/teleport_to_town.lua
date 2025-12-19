@@ -1,10 +1,6 @@
 local talkaction = TalkAction("/town")
 
 function talkaction.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
 	local town = Town(param) or Town(tonumber(param))
 	if town then
 		player:teleportTo(town:getTemplePosition())
@@ -15,4 +11,5 @@ function talkaction.onSay(player, words, param)
 end
 
 talkaction:separator(" ")
+talkaction:access(true)
 talkaction:register()

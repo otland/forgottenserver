@@ -1,10 +1,6 @@
 local talkaction = TalkAction("/goto")
 
 function talkaction.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
 	local target = Creature(param)
 	if target then
 		player:teleportTo(target:getPosition())
@@ -15,4 +11,5 @@ function talkaction.onSay(player, words, param)
 end
 
 talkaction:separator(" ")
+talkaction:access(true)
 talkaction:register()

@@ -64,14 +64,6 @@ local function sendPlayerItemInformation(player, data)
 end
 
 function talkaction.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
-	if player:getAccountType() < ACCOUNT_TYPE_GOD then
-		return false
-	end
-
 	if not param:find(',') then
 		player:sendTextMessage(MESSAGE_INFO_DESCR, string.format("Usage: %s [item id or name], [count], [subtype or key number], [destination], [player name], [index].\nPossible destinations: %s", words, table.concat(destinations, ", ")))
 		return false
@@ -154,4 +146,6 @@ function talkaction.onSay(player, words, param)
 end
 
 talkaction:separator(" ")
+talkaction:access(true)
+talkaction:accountType(ACCOUNT_TYPE_GOD)
 talkaction:register()

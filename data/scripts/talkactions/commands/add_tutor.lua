@@ -1,10 +1,6 @@
 local talkaction = TalkAction("/addtutor")
 
 function talkaction.onSay(player, words, param)
-	if player:getAccountType() <= ACCOUNT_TYPE_SENIORTUTOR then
-		return true
-	end
-
 	local target = Player(param)
 	if not target then
 		player:sendCancelMessage("A player with that name is not online.")
@@ -23,4 +19,5 @@ function talkaction.onSay(player, words, param)
 end
 
 talkaction:separator(" ")
+talkaction:accountType(ACCOUNT_TYPE_GAMEMASTER)
 talkaction:register()

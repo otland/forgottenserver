@@ -1,14 +1,6 @@
 local talkaction = TalkAction("/mccheck")
 
 function talkaction.onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
-
-	if player:getAccountType() < ACCOUNT_TYPE_GOD then
-		return false
-	end
-
 	player:sendTextMessage(MESSAGE_INFO_DESCR, "Multiclient Check List:")
 
 	local ipList = {}
@@ -41,4 +33,6 @@ function talkaction.onSay(player, words, param)
 	return false
 end
 
+talkaction:access(true)
+talkaction:accountType(ACCOUNT_TYPE_GOD)
 talkaction:register()
