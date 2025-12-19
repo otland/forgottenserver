@@ -166,6 +166,7 @@ target_link_libraries(tfslib PRIVATE
 	OpenSSL::Crypto
 	pugixml::pugixml
 	simdutf::simdutf
+	spdlog::spdlog
 	ZLIB::ZLIB
 	${CMAKE_THREAD_LIBS_INIT}
 	${LUA_LIBRARIES}

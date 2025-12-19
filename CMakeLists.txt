@@ -74,6 +74,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif ()
 
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/bigobj>")
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -83,6 +84,7 @@ find_package(Lua REQUIRED)
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
 find_package(PugiXML CONFIG REQUIRED)
 find_package(simdutf CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 find_package(Threads REQUIRED)
 find_package(ZLIB REQUIRED)
 

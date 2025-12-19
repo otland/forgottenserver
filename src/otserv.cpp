@@ -304,13 +304,12 @@ bool argumentsHandler(const std::vector<std::string_view>& args)
 {
 	for (const auto& arg : args) {
 		if (arg == "--help") {
-			std::clog << "Usage:\n"
-			             "\n"
-			             "\t--config=$1\t\tAlternate configuration file path.\n"
-			             "\t--ip=$1\t\t\tIP address of the server.\n"
-			             "\t\t\t\tShould be equal to the global IP.\n"
-			             "\t--http-port=$1\tPort for http to listen on.\n"
-			             "\t--game-port=$1\tPort for game server to listen on.\n";
+			std::println("Usage:");
+			std::println("  --config=<path>      Alternate configuration file path.");
+			std::println("  --ip=<address>       IP address of the server.");
+			std::println("  --http-port=<port>   Port for http to listen on.");
+			std::println("  --game-port=<port>   Port for game server to listen on.");
+			std::println("  --log-level=<level>  Logging level (trace, debug, info, warn, error, critical).");
 			return false;
 		} else if (arg == "--version") {
 			printServerVersion();
@@ -327,6 +326,14 @@ bool argumentsHandler(const std::vector<std::string_view>& args)
 			ConfigManager::setNumber(ConfigManager::HTTP_PORT, std::stoi(tmp[1].data()));
 		else if (tmp[0] == "--game-port")
 			ConfigManager::setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1].data()));
+		else if (tmp[0] == "--log-level") {
+			auto level = spdlog::level::from_str(std::string{tmp[1]});
+			if (level == spdlog::level::off && tmp[1] != "off") {
+				std::println("Invalid log level: {:s}", tmp[1]);
+				return false;
+			}
+			spdlog::set_level(level);
+		}
 	}
 
 	return true;
@@ -340,6 +347,9 @@ int main(int argc, const char** argv)
 	if (!argumentsHandler(args)) {
 		return 1;
 	}
+
+	spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v");
+	[[maybe_unused]] auto spdlog_exit = tfs::scope_exit([] { spdlog::shutdown(); });
 
 	// Setup bad allocation handler
 	std::set_new_handler(badAllocationHandler);

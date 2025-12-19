@@ -99,6 +99,20 @@ bool owner_equal(const std::weak_ptr<T>& x, const std::weak_ptr<U>& y) noexcept
 	return x.owner_before(y) == false && y.owner_before(x) == false;
 }
 
+template <class T>
+class scope_exit
+{
+public:
+	explicit scope_exit(T&& func) : func_{std::move(func)} {}
+	~scope_exit() { func_(); }
+
+	scope_exit(const scope_exit&) = delete;
+	scope_exit& operator=(const scope_exit&) = delete;
+
+private:
+	T func_;
+};
+
 } // namespace tfs
 
 #endif // FS_TOOLS_H

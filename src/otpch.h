@@ -42,6 +42,7 @@
 #include <random>
 #include <ranges>
 #include <set>
+#include <spdlog/spdlog.h>
 #include <sstream>
 #include <string>
 #include <string_view>
