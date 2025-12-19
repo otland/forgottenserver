@@ -25,7 +25,7 @@ RUN apt-get update -q && apt-get install -yq \
   liblua5.4-0 \
   libmariadb3 \
   libpugixml1v5 \
-  libsimdutf27 \
+  libsimdutf29 \
   libssl3t64 \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
