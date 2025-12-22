@@ -239,7 +239,7 @@ void Spawn::startSpawnCheck()
 
 Spawn::~Spawn()
 {
-	for (auto&& monster : spawnedMap | std::views::values | tfs::views::lock_weak_ptrs | std::views::as_const) {
+	for (const auto& monster : spawnedMap | std::views::values | tfs::views::lock_weak_ptrs) {
 		monster->setSpawn(nullptr);
 	}
 }

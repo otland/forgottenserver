@@ -949,7 +949,7 @@ void Monster::onThinkDefense(uint32_t interval)
 		}
 	}
 
-	const auto summons = getSummons() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	const auto& summons = getSummons() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	if (!isSummon() && summons.size() < mType->info.maxSummons && hasFollowPath) {
 		for (const summonBlock_t& summonBlock : mType->info.summons) {
 			if (summonBlock.speed > defenseTicks) {

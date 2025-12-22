@@ -111,7 +111,7 @@ void ProtocolStatus::sendStatusString()
 	uint32_t maxPlayersPerIp = getNumber(ConfigManager::STATUS_COUNT_MAX_PLAYERS_PER_IP);
 	if (maxPlayersPerIp > 0) {
 		std::map<Connection::Address, uint32_t> playersPerIp;
-		for (auto&& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::views::as_const) {
+		for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
 			if (!player->getIP().is_unspecified()) {
 				++playersPerIp[player->getIP()];
 			}
@@ -209,7 +209,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 
 		const auto& players = g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 		output->add<uint32_t>(players.size());
-		for (auto&& player : players) {
+		for (const auto& player : players) {
 			output->addString(player->getName());
 			output->add<uint32_t>(player->getLevel());
 		}

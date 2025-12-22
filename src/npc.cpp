@@ -15,11 +15,11 @@ uint32_t Npc::npcAutoID = 0x20000000;
 
 void Npcs::reload()
 {
-	for (auto&& npc : g_game.getNpcs() | tfs::views::lock_weak_ptrs | std::views::as_const) {
+	for (const auto& npc : g_game.getNpcs() | tfs::views::lock_weak_ptrs) {
 		npc->closeAllShopWindows();
 	}
 
-	for (auto&& npc : g_game.getNpcs() | tfs::views::lock_weak_ptrs | std::views::as_const) {
+	for (const auto& npc : g_game.getNpcs() | tfs::views::lock_weak_ptrs) {
 		npc->reload();
 	}
 }

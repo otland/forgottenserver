@@ -152,7 +152,7 @@ bool IOMapSerialize::saveHouseItems()
 	PropWriteStream stream;
 	for (auto&& house : g_game.getHouses() | std::views::values | std::views::as_const) {
 		// save house items
-		for (auto&& tile : house->getTiles() | tfs::views::lock_weak_ptrs | std::views::as_const) {
+		for (const auto& tile : house->getTiles() | tfs::views::lock_weak_ptrs) {
 			saveTile(stream, tile);
 
 			if (auto attributes = stream.getStream(); !attributes.empty()) {
