@@ -22,8 +22,12 @@ std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 
 	auto it = reinterpret_cast<char*>(buffer.data() + info.position);
 	info.position += stringLen;
-	auto out = std::string(simdutf::utf8_length_from_latin1(it, stringLen), '\0');
-	std::ignore = simdutf::convert_latin1_to_utf8(it, stringLen, out.data());
+	const auto outLen = simdutf::utf8_length_from_latin1(it, stringLen);
+	auto out = std::string();
+	out.resize_and_overwrite(outLen, [&](char* data, size_t) {
+		std::ignore = simdutf::convert_latin1_to_utf8(it, stringLen, data);
+		return outLen;
+	});
 	return out;
 }
 
