@@ -79,10 +79,14 @@ void DatabaseManager::updateDatabase()
 	luaL_openlibs(L);
 
 	// db table
-	luaL_register(L, "db", LuaScriptInterface::luaDatabaseTable);
+	luaL_newlib(L, LuaScriptInterface::luaDatabaseTable);
+	lua_pushvalue(L, -1);
+	lua_setglobal(L, "db");
 
 	// result table
-	luaL_register(L, "result", LuaScriptInterface::luaResultTable);
+	luaL_newlib(L, LuaScriptInterface::luaResultTable);
+	lua_pushvalue(L, -1);
+	lua_setglobal(L, "result");
 
 	int32_t version = getDatabaseVersion();
 	do {

@@ -1193,15 +1193,21 @@ void LuaScriptInterface::registerFunctions()
 	lua_register(L, "isScriptsInterface", LuaScriptInterface::luaIsScriptsInterface);
 
 	// configManager table
-	luaL_register(L, "configManager", LuaScriptInterface::luaConfigManagerTable);
+	luaL_newlib(L, LuaScriptInterface::luaConfigManagerTable);
+	lua_pushvalue(L, -1);
+	lua_setglobal(L, "configManager");
 	lua_pop(L, 1);
 
 	// db table
-	luaL_register(L, "db", LuaScriptInterface::luaDatabaseTable);
+	luaL_newlib(L, LuaScriptInterface::luaDatabaseTable);
+	lua_pushvalue(L, -1);
+	lua_setglobal(L, "db");
 	lua_pop(L, 1);
 
 	// result table
-	luaL_register(L, "result", LuaScriptInterface::luaResultTable);
+	luaL_newlib(L, LuaScriptInterface::luaResultTable);
+	lua_pushvalue(L, -1);
+	lua_setglobal(L, "result");
 	lua_pop(L, 1);
 
 	/* New functions */

@@ -9,11 +9,6 @@
 #include "game.h"
 #include "pugicast.h"
 
-#if LUA_VERSION_NUM >= 502
-#undef lua_strlen
-#define lua_strlen lua_rawlen
-#endif
-
 extern Game g_game;
 
 namespace {
@@ -55,7 +50,7 @@ std::string getGlobalString(lua_State* L, const char* identifier, const char* de
 		return defaultValue;
 	}
 
-	size_t len = lua_strlen(L, -1);
+	size_t len = lua_rawlen(L, -1);
 	std::string ret(lua_tostring(L, -1), len);
 	lua_pop(L, 1);
 	return ret;
@@ -83,7 +78,7 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 			return defaultValue;
 		}
 
-		size_t len = lua_strlen(L, -1);
+		size_t len = lua_rawlen(L, -1);
 		std::string ret(lua_tostring(L, -1), len);
 		lua_pop(L, 1);
 		return booleanString(ret);
