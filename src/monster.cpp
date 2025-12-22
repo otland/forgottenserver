@@ -747,7 +747,7 @@ void Monster::onThink(uint32_t interval)
 					}
 				} else if (attackedCreature.get() == this) {
 					removeFollowCreature();
-				} else if (tfs::owner_equal(attackedCreature, getFollowCreature())) {
+				} else if (!tfs::owner_equal(attackedCreature, getFollowCreature())) {
 					// This happens just after a master orders an attack, so lets follow it as well.
 					setFollowCreature(attackedCreature);
 				}
