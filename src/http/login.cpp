@@ -90,34 +90,34 @@ std::pair<beast::http::status, json::value> tfs::http::handle_login(const json::
 
 	json::array characters;
 	uint32_t lastLogin = 0;
-	if (const auto& result = db.storeQuery(std::format(
+	if (const auto& playersRes = db.storeQuery(std::format(
 	        "SELECT `id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons` FROM `players` WHERE `account_id` = {:d}",
 	        accountId))) {
 		do {
-			auto vocation = g_vocations.getVocation(result->getNumber<uint32_t>("vocation"));
+			auto vocation = g_vocations.getVocation(playersRes->getNumber<uint32_t>("vocation"));
 			assert(vocation);
 
 			characters.push_back({
 			    {"worldid", 0}, // not implemented
-			    {"name", result->getString("name")},
-			    {"level", result->getNumber<uint32_t>("level")},
+			    {"name", playersRes->getString("name")},
+			    {"level", playersRes->getNumber<uint32_t>("level")},
 			    {"vocation", vocation->getVocName()},
-			    {"lastlogin", result->getNumber<uint64_t>("lastlogin")},
-			    {"ismale", result->getNumber<uint16_t>("sex") == PLAYERSEX_MALE},
+			    {"lastlogin", playersRes->getNumber<uint64_t>("lastlogin")},
+			    {"ismale", playersRes->getNumber<uint16_t>("sex") == PLAYERSEX_MALE},
 			    {"ishidden", false},        // not implemented
 			    {"ismaincharacter", false}, // not implemented
 			    {"tutorial", false},        // not implemented
-			    {"outfitid", result->getNumber<uint32_t>("looktype")},
-			    {"headcolor", result->getNumber<uint32_t>("lookhead")},
-			    {"torsocolor", result->getNumber<uint32_t>("lookbody")},
-			    {"legscolor", result->getNumber<uint32_t>("looklegs")},
-			    {"detailcolor", result->getNumber<uint32_t>("lookfeet")},
-			    {"addonsflags", result->getNumber<uint32_t>("lookaddons")},
+			    {"outfitid", playersRes->getNumber<uint32_t>("looktype")},
+			    {"headcolor", playersRes->getNumber<uint32_t>("lookhead")},
+			    {"torsocolor", playersRes->getNumber<uint32_t>("lookbody")},
+			    {"legscolor", playersRes->getNumber<uint32_t>("looklegs")},
+			    {"detailcolor", playersRes->getNumber<uint32_t>("lookfeet")},
+			    {"addonsflags", playersRes->getNumber<uint32_t>("lookaddons")},
 			    {"dailyrewardstate", 0}, // not implemented
 			});
 
-			lastLogin = std::max(lastLogin, result->getNumber<uint32_t>("lastlogin"));
-		} while (result->next());
+			lastLogin = std::max(lastLogin, playersRes->getNumber<uint32_t>("lastlogin"));
+		} while (playersRes->next());
 	}
 
 	json::array worlds{

@@ -64,12 +64,12 @@ std::shared_ptr<Guild> IOGuild::loadGuild(uint32_t guildId)
 	}
 
 	const auto guild = std::make_shared<Guild>(guildId, result->getString("name"));
-	if (const auto& result = db.storeQuery(
+	if (const auto& ranksRes = db.storeQuery(
 	        std::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId))) {
 		do {
-			guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
-			               result->getNumber<uint16_t>("level"));
-		} while (result->next());
+			guild->addRank(ranksRes->getNumber<uint32_t>("id"), ranksRes->getString("name"),
+			               ranksRes->getNumber<uint16_t>("level"));
+		} while (ranksRes->next());
 	}
 	return guild;
 }

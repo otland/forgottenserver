@@ -298,12 +298,12 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, std::shared_
 		player->skills[i].percent = Player::getBasisPointLevel(skillTries, nextSkillTries);
 	}
 
-	if (const auto& result = db.storeQuery(
+	if (const auto& guildMembershipRes = db.storeQuery(
 	        std::format("SELECT `guild_id`, `rank_id`, `nick` FROM `guild_membership` WHERE `player_id` = {:d}",
 	                    player->getGUID()))) {
-		uint32_t guildId = result->getNumber<uint32_t>("guild_id");
-		uint32_t playerRankId = result->getNumber<uint32_t>("rank_id");
-		player->guildNick = result->getString("nick");
+		uint32_t guildId = guildMembershipRes->getNumber<uint32_t>("guild_id");
+		uint32_t playerRankId = guildMembershipRes->getNumber<uint32_t>("rank_id");
+		player->guildNick = guildMembershipRes->getString("nick");
 
 		auto guild = g_game.getGuild(guildId);
 		if (!guild) {
@@ -320,10 +320,10 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, std::shared_
 			player->guild = guild;
 			auto rank = guild->getRankById(playerRankId);
 			if (!rank) {
-				if (const auto& result = db.storeQuery(std::format(
+				if (const auto& rankRes = db.storeQuery(std::format(
 				        "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `id` = {:d}", playerRankId))) {
-					guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
-					               result->getNumber<uint16_t>("level"));
+					guild->addRank(rankRes->getNumber<uint32_t>("id"), rankRes->getString("name"),
+					               rankRes->getNumber<uint16_t>("level"));
 				}
 
 				rank = guild->getRankById(playerRankId);
@@ -335,28 +335,28 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, std::shared_
 			player->guildRank = rank;
 			player->guildWarVector = getWarList(guildId);
 
-			if (const auto& result = db.storeQuery(std::format(
+			if (const auto& membersRes = db.storeQuery(std::format(
 			        "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = {:d}", guildId))) {
-				guild->setMemberCount(result->getNumber<uint32_t>("members"));
+				guild->setMemberCount(membersRes->getNumber<uint32_t>("members"));
 			}
 		}
 	}
 
-	if (const auto& result = db.storeQuery(std::format(
+	if (const auto& spellsRes = db.storeQuery(std::format(
 	        "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = {:d}", player->getGUID()))) {
 		do {
-			player->learnedInstantSpellList.emplace_front(result->getString("name"));
-		} while (result->next());
+			player->learnedInstantSpellList.emplace_front(spellsRes->getString("name"));
+		} while (spellsRes->next());
 	}
 
 	// load inventory items
 	ItemMap itemMap;
 	std::map<uint8_t, std::shared_ptr<Container>> openContainersList;
 
-	if (const auto& result = db.storeQuery(std::format(
+	if (const auto& playerItemsRes = db.storeQuery(std::format(
 	        "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	        player->getGUID()))) {
-		loadItems(itemMap, result);
+		loadItems(itemMap, playerItemsRes);
 
 		for (auto&& [item, pid] : itemMap | std::views::reverse | std::views::values) {
 			if (const auto& itemContainer = item->getContainer()) {
@@ -389,10 +389,10 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, std::shared_
 	// load depot items
 	itemMap.clear();
 
-	if (const auto& result = db.storeQuery(std::format(
+	if (const auto& depotItemsRes = db.storeQuery(std::format(
 	        "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	        player->getGUID()))) {
-		loadItems(itemMap, result);
+		loadItems(itemMap, depotItemsRes);
 
 		for (auto&& [item, pid] : itemMap | std::views::reverse | std::views::values | std::views::as_const) {
 			if (pid < 100) {
@@ -415,10 +415,10 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, std::shared_
 	// load inbox items
 	itemMap.clear();
 
-	if (const auto& result = db.storeQuery(std::format(
+	if (const auto& inboxItemsRes = db.storeQuery(std::format(
 	        "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	        player->getGUID()))) {
-		loadItems(itemMap, result);
+		loadItems(itemMap, inboxItemsRes);
 
 		for (auto&& [item, pid] : itemMap | std::views::reverse | std::views::values | std::views::as_const) {
 			if (pid < 100) {
@@ -439,10 +439,10 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, std::shared_
 	// load store inbox items
 	itemMap.clear();
 
-	if (const auto& result = db.storeQuery(std::format(
+	if (const auto& storeInboxItemsRes = db.storeQuery(std::format(
 	        "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_storeinboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	        player->getGUID()))) {
-		loadItems(itemMap, result);
+		loadItems(itemMap, storeInboxItemsRes);
 
 		for (auto&& [item, pid] : itemMap | std::views::reverse | std::views::values | std::views::as_const) {
 			if (pid < 100) {
@@ -461,35 +461,36 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, std::shared_
 	}
 
 	// load storage map
-	if (const auto& result = db.storeQuery(
+	if (const auto& storageRes = db.storeQuery(
 	        std::format("SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = {:d}", player->getGUID()))) {
 		do {
-			player->setStorageValue(result->getNumber<uint32_t>("key"), result->getNumber<int32_t>("value"), true);
-		} while (result->next());
+			player->setStorageValue(storageRes->getNumber<uint32_t>("key"), storageRes->getNumber<int32_t>("value"),
+			                        true);
+		} while (storageRes->next());
 	}
 
 	// load vip list
-	if (const auto& result = db.storeQuery(
+	if (const auto& vipRes = db.storeQuery(
 	        std::format("SELECT `player_id` FROM `account_viplist` WHERE `account_id` = {:d}", player->getAccount()))) {
 		do {
-			player->addVIPInternal(result->getNumber<uint32_t>("player_id"));
-		} while (result->next());
+			player->addVIPInternal(vipRes->getNumber<uint32_t>("player_id"));
+		} while (vipRes->next());
 	}
 
 	// load outfits & addons
-	if (const auto& result = db.storeQuery(std::format(
+	if (const auto& outfitsRes = db.storeQuery(std::format(
 	        "SELECT `outfit_id`, `addons` FROM `player_outfits` WHERE `player_id` = {:d}", player->getGUID()))) {
 		do {
-			player->addOutfit(result->getNumber<uint16_t>("outfit_id"), result->getNumber<uint8_t>("addons"));
-		} while (result->next());
+			player->addOutfit(outfitsRes->getNumber<uint16_t>("outfit_id"), outfitsRes->getNumber<uint8_t>("addons"));
+		} while (outfitsRes->next());
 	}
 
 	// load mounts
-	if (const auto& result = db.storeQuery(
+	if (const auto& mountsRes = db.storeQuery(
 	        std::format("SELECT `mount_id` FROM `player_mounts` WHERE `player_id` = {:d}", player->getGUID()))) {
 		do {
-			player->tameMount(result->getNumber<uint16_t>("mount_id"));
-		} while (result->next());
+			player->tameMount(mountsRes->getNumber<uint16_t>("mount_id"));
+		} while (mountsRes->next());
 	}
 
 	player->updateBaseSpeed();

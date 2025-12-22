@@ -230,15 +230,15 @@ void parseTileArea(const OTB::Node& node, Map& map)
 				    std::format("Unknown item node: {:d}.", static_cast<uint16_t>(itemNode.type)));
 			}
 
-			auto it = itemNode.propsBegin;
-			auto id = OTB::read<uint16_t>(it, itemNode.propsEnd);
+			auto itemIt = itemNode.propsBegin;
+			auto id = OTB::read<uint16_t>(itemIt, itemNode.propsEnd);
 			auto item = Item::CreateItem(Item::getPersistentId(id));
 			if (!item) [[unlikely]] {
 				throw std::runtime_error(
 				    std::format("[{:s}:{:d} - {:s}] Invalid item id: {:d}", __FILE__, __LINE__, __FUNCTION__, id));
 			}
 
-			item->unserializeItemNode(it, itemNode.propsEnd, itemNode);
+			item->unserializeItemNode(itemIt, itemNode.propsEnd, itemNode);
 
 			if (isHouseTile && item->isMoveable()) {
 				std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID()

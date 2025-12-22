@@ -246,12 +246,12 @@ bool IOMapSerialize::loadHouseInfo()
 		}
 	} while (result->next());
 
-	if (const auto& result = db.storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`")) {
+	if (const auto& houseListsRes = db.storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`")) {
 		do {
-			if (const auto& house = g_game.getHouseById(result->getNumber<uint32_t>("house_id"))) {
-				house->setAccessList(result->getNumber<uint32_t>("listid"), result->getString("list"));
+			if (const auto& house = g_game.getHouseById(houseListsRes->getNumber<uint32_t>("house_id"))) {
+				house->setAccessList(houseListsRes->getNumber<uint32_t>("listid"), houseListsRes->getString("list"));
 			}
-		} while (result->next());
+		} while (houseListsRes->next());
 	}
 	return true;
 }

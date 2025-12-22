@@ -2832,9 +2832,9 @@ void Game::playerAcceptTrade(uint32_t playerId)
 				playerRet = internalRemoveItem(playerTradeItem, playerTradeItem->getItemCount(), true);
 				tradePartnerRet = internalRemoveItem(partnerTradeItem, partnerTradeItem->getItemCount(), true);
 				if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
-					std::shared_ptr<Item> moveItem = nullptr;
+					std::shared_ptr<Item> moveItemOut = nullptr;
 					tradePartnerRet = internalMoveItem(playerTradeItem->getParent(), tradePartner, INDEX_WHEREEVER,
-					                                   playerTradeItem, playerTradeItem->getItemCount(), moveItem,
+					                                   playerTradeItem, playerTradeItem->getItemCount(), moveItemOut,
 					                                   FLAG_IGNOREAUTOSTACK, nullptr, partnerTradeItem);
 
 					if (tradePartnerRet == RETURNVALUE_NOERROR) {
