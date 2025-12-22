@@ -40,6 +40,16 @@ Position NetworkMessage::getPosition()
 	return pos;
 }
 
+bool NetworkMessage::getBool()
+{
+	const uint8_t value = getByte();
+	if (value > 1) {
+		std::cout << "[Warning - NetworkMessage::getBool] Invalid boolean value received: " << static_cast<int>(value)
+		          << std::endl;
+	}
+	return value != 0;
+}
+
 void NetworkMessage::addString(std::string_view value)
 {
 	auto stringLen = simdutf::latin1_length_from_utf8(value.data(), value.size());
@@ -193,3 +203,5 @@ void NetworkMessage::addItem(const std::shared_ptr<const Item>& item)
 }
 
 void NetworkMessage::addItemId(uint16_t itemId) { add<uint16_t>(Item::items[itemId].clientId); }
+
+void NetworkMessage::addBool(bool value) { addByte(value ? 1 : 0); }

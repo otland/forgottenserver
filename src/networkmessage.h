@@ -75,6 +75,7 @@ public:
 
 	std::string getString(uint16_t stringLen = 0);
 	Position getPosition();
+	bool getBool();
 
 	// skips count unknown/unused bytes in an incoming message
 	void skipBytes(int16_t count) { info.position += count; }
@@ -114,6 +115,7 @@ public:
 	void addItem(uint16_t id, uint8_t count);
 	void addItem(const std::shared_ptr<const Item>& item);
 	void addItemId(uint16_t itemId);
+	void addBool(bool value);
 
 	MsgSize_t getLength() const { return info.length; }
 
