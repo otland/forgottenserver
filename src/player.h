@@ -233,14 +233,14 @@ public:
 
 	bool hasSecureMode() const { return secureMode; }
 
-	void setParty(Party* party) { this->party = party; }
-	Party* getParty() const { return party; }
+	void setParty(const std::shared_ptr<Party>& party) { this->party = party; }
+	std::shared_ptr<Party> getParty() const { return party; }
 	PartyShields_t getPartyShield(const std::shared_ptr<const Player>& player) const;
 	bool isInviting(const std::shared_ptr<const Player>& player) const;
 	bool isPartner(const std::shared_ptr<const Player>& player) const;
 	void sendPlayerPartyIcons(const std::shared_ptr<Player>& player);
-	bool addPartyInvitation(Party* party);
-	void removePartyInvitation(Party* party);
+	bool addPartyInvitation(const std::shared_ptr<Party>& party);
+	void removePartyInvitation(const std::shared_ptr<Party>& party);
 	void clearPartyInvitations();
 
 	GuildEmblems_t getGuildEmblem(const std::shared_ptr<const Player>& player) const;
@@ -1268,7 +1268,7 @@ private:
 
 	std::list<ShopInfo> shopItemList;
 
-	std::forward_list<Party*> invitePartyList;
+	std::forward_list<std::weak_ptr<Party>> invitePartyList;
 	std::forward_list<uint32_t> modalWindows;
 	std::forward_list<std::string> learnedInstantSpellList;
 	std::forward_list<Condition*>
@@ -1308,7 +1308,7 @@ private:
 	std::weak_ptr<Item> writeItem;
 	std::weak_ptr<House> editHouse;
 	std::weak_ptr<Npc> shopOwner;
-	Party* party = nullptr;
+	std::shared_ptr<Party> party = nullptr;
 	std::weak_ptr<Player> tradePartner;
 	SchedulerTask* walkTask = nullptr;
 	const Town* town = nullptr;

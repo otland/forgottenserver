@@ -46,13 +46,13 @@ void onUpdateStorage(const std::shared_ptr<Creature>& creature, uint32_t key, st
 
 namespace tfs::events::party {
 
-bool onJoin(Party* party, const std::shared_ptr<Player>& player);
-bool onLeave(Party* party, const std::shared_ptr<Player>& player);
-bool onDisband(Party* party);
-void onShareExperience(Party* party, uint64_t& exp);
-bool onInvite(Party* party, const std::shared_ptr<Player>& player);
-bool onRevokeInvitation(Party* party, const std::shared_ptr<Player>& player);
-bool onPassLeadership(Party* party, const std::shared_ptr<Player>& player);
+bool onJoin(const std::shared_ptr<Party>& party, const std::shared_ptr<Player>& player);
+bool onLeave(const std::shared_ptr<Party>& party, const std::shared_ptr<Player>& player);
+bool onDisband(const std::shared_ptr<Party>& party);
+void onShareExperience(const std::shared_ptr<Party>& party, uint64_t& exp);
+bool onInvite(const std::shared_ptr<Party>& party, const std::shared_ptr<Player>& player);
+bool onRevokeInvitation(const std::shared_ptr<Party>& party, const std::shared_ptr<Player>& player);
+bool onPassLeadership(const std::shared_ptr<Party>& party, const std::shared_ptr<Player>& player);
 
 } // namespace tfs::events::party
 
