@@ -495,7 +495,7 @@ public:
 	std::shared_ptr<House> addHouse(uint32_t id);
 	std::shared_ptr<House> getHouseById(uint32_t id);
 	std::shared_ptr<House> getHouseByPlayerId(uint32_t playerId);
-	const auto& getHouses() const { return houses; }
+	auto getHouses() const { return houses | std::views::values; }
 	void payHouses(RentPeriod_t rentPeriod) const;
 
 private:

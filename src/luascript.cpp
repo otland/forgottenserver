@@ -4651,11 +4651,11 @@ int LuaScriptInterface::luaGameGetTowns(lua_State* L)
 int LuaScriptInterface::luaGameGetHouses(lua_State* L)
 {
 	// Game.getHouses()
-	const auto& houses = g_game.getHouses();
+	const auto& houses = g_game.getHouses() | std::ranges::to<std::vector>();
 	lua_createtable(L, houses.size(), 0);
 
 	int index = 0;
-	for (auto&& house : houses | std::views::values | std::views::as_const) {
+	for (auto&& house : houses | std::views::as_const) {
 		tfs::lua::pushSharedPtr(L, house);
 		tfs::lua::setMetatable(L, -1, "House");
 		lua_rawseti(L, -2, ++index);
