@@ -77,8 +77,6 @@ bool onMoveCreature(const std::shared_ptr<Player>& player, const std::shared_ptr
                     const Position& fromPosition, const Position& toPosition);
 void onReportRuleViolation(const std::shared_ptr<Player>& player, const std::string& targetName, uint8_t reportType,
                            uint8_t reportReason, const std::string& comment, const std::string& translation);
-bool onReportBug(const std::shared_ptr<Player>& player, const std::string& message, const Position& position,
-                 uint8_t category);
 void onRotateItem(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item);
 bool onTurn(const std::shared_ptr<Player>& player, Direction direction);
 bool onTradeRequest(const std::shared_ptr<Player>& player, const std::shared_ptr<Player>& target,

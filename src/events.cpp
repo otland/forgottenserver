@@ -48,7 +48,6 @@ struct PlayerHandlers
 	int32_t onItemMoved = -1;
 	int32_t onMoveCreature = -1;
 	int32_t onReportRuleViolation = -1;
-	int32_t onReportBug = -1;
 	int32_t onRotateItem = -1;
 	int32_t onTurn = -1;
 	int32_t onTradeRequest = -1;
@@ -170,8 +169,6 @@ bool load_from_xml()
 				playerHandlers.onMoveCreature = event;
 			} else if (methodName == "onReportRuleViolation") {
 				playerHandlers.onReportRuleViolation = event;
-			} else if (methodName == "onReportBug") {
-				playerHandlers.onReportBug = event;
 			} else if (methodName == "onRotateItem") {
 				playerHandlers.onRotateItem = event;
 			} else if (methodName == "onTurn") {
@@ -983,35 +980,6 @@ void onReportRuleViolation(const std::shared_ptr<Player>& player, const std::str
 	tfs::lua::pushString(L, translation);
 
 	scriptInterface.callVoidFunction(6);
-}
-
-bool onReportBug(const std::shared_ptr<Player>& player, const std::string& message, const Position& position,
-                 uint8_t category)
-{
-	// Player:onReportBug(message, position, category)
-	if (playerHandlers.onReportBug == -1) {
-		return true;
-	}
-
-	if (!tfs::lua::reserveScriptEnv()) {
-		std::cout << "[Error - tfs::events::player::onReportBug] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	const auto env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerHandlers.onReportBug, &scriptInterface);
-
-	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerHandlers.onReportBug);
-
-	tfs::lua::pushSharedPtr(L, player);
-	tfs::lua::setMetatable(L, -1, "Player");
-
-	tfs::lua::pushString(L, message);
-	tfs::lua::pushPosition(L, position);
-	tfs::lua::pushNumber(L, category);
-
-	return scriptInterface.callFunction(4);
 }
 
 void onRotateItem(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item)

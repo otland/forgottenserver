@@ -27,7 +27,6 @@
 	<event class="Player" method="onMoveItem" enabled="1" />
 	<event class="Player" method="onItemMoved" enabled="0" />
 	<event class="Player" method="onMoveCreature" enabled="0" />
-	<event class="Player" method="onReportBug" enabled="1" />
 	<event class="Player" method="onReportRuleViolation" enabled="1" />
 	<event class="Player" method="onRotateItem" enabled="1" />
 	<event class="Player" method="onTurn" enabled="0" />

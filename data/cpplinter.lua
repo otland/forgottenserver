@@ -1037,7 +1037,6 @@ Weapon = {}
 ---@field onItemMoved fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):nil
 ---@field onMoveCreature fun(player:Player, creature:Creature, fromPosition:Position, toPosition:Position):boolean
 ---@field onReportRuleViolation fun(player:Player, targetName:string, reportType:integer, reportReason:integer, comment:string, translation:string):nil
----@field onReportBug fun(player:Player, message:string, position:Position, category:any):boolean
 ---@field onTurn fun(player:Player, direction:integer):boolean
 ---@field onTradeRequest fun(player:Player, target:Player, item:Item):boolean
 ---@field onTradeAccept fun(player:Player, target:Player, item:Item, targetItem:Item):boolean
@@ -1078,7 +1077,6 @@ EventCallback = Event()
 ---@field onItemMoved boolean
 ---@field onMoveCreature boolean
 ---@field onReportRuleViolation boolean
----@field onReportBug boolean
 ---@field onTurn boolean
 ---@field onTradeRequest boolean
 ---@field onTradeAccept boolean
