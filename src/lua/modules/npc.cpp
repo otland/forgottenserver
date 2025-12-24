@@ -46,7 +46,7 @@ int luaNpcIsNpc(lua_State* L)
 {
 	// npc:isNpc()
 	if (const auto& creature = tfs::lua::getCreature(L, 1)) {
-		tfs::lua::pushBoolean(L, creature->getNpc() != nullptr);
+		tfs::lua::pushBoolean(L, creature->asNpc() != nullptr);
 	} else {
 		lua_pushnil(L);
 	}

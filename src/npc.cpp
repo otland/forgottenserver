@@ -93,7 +93,7 @@ void Npc::reload()
 
 	// Simulate that the creature is placed on the map again.
 	if (npcEventHandler) {
-		npcEventHandler->onCreatureAppear(getNpc());
+		npcEventHandler->onCreatureAppear(asNpc());
 	}
 }
 
@@ -145,7 +145,7 @@ bool Npc::loadFromXml()
 
 	if ((attr = npcNode.attribute("skull"))) {
 		setSkull(getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string())));
-		g_game.updateCreatureSkull(getNpc());
+		g_game.updateCreatureSkull(asNpc());
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");
@@ -193,7 +193,7 @@ bool Npc::loadFromXml()
 
 	pugi::xml_attribute scriptFile = npcNode.attribute("script");
 	if (scriptFile) {
-		auto handler = std::make_unique<NpcEventsHandler>(scriptFile.as_string(), getNpc());
+		auto handler = std::make_unique<NpcEventsHandler>(scriptFile.as_string(), asNpc());
 		if (!handler->isLoaded()) {
 			return false;
 		}
@@ -339,13 +339,13 @@ void Npc::onThink(uint32_t interval)
 	}
 }
 
-void Npc::doSay(const std::string& text) { g_game.internalCreatureSay(getNpc(), TALKTYPE_SAY, text, false); }
+void Npc::doSay(const std::string& text) { g_game.internalCreatureSay(asNpc(), TALKTYPE_SAY, text, false); }
 
 void Npc::doSayToPlayer(const std::shared_ptr<Player>& player, const std::string& text)
 {
 	if (player) {
-		player->sendCreatureSay(getNpc(), TALKTYPE_PRIVATE_NP, text);
-		player->onCreatureSay(getNpc(), TALKTYPE_PRIVATE_NP, text);
+		player->sendCreatureSay(asNpc(), TALKTYPE_PRIVATE_NP, text);
+		player->onCreatureSay(asNpc(), TALKTYPE_PRIVATE_NP, text);
 	}
 }
 
@@ -427,7 +427,7 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 	}
 
 	const auto& tile = g_game.map.getTile(toPos);
-	if (!tile || tile->queryAdd(0, getNpc(), 1, 0) != RETURNVALUE_NOERROR) {
+	if (!tile || tile->queryAdd(0, asNpc(), 1, 0) != RETURNVALUE_NOERROR) {
 		return false;
 	}
 
@@ -493,7 +493,7 @@ void Npc::turnToCreature(const std::shared_ptr<Creature>& creature)
 			dir = DIRECTION_SOUTH;
 		}
 	}
-	g_game.internalCreatureTurn(getNpc(), dir);
+	g_game.internalCreatureTurn(asNpc(), dir);
 }
 
 void Npc::setCreatureFocus(const std::shared_ptr<Creature>& creature)

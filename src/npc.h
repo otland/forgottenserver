@@ -95,8 +95,8 @@ public:
 	Npc(const Npc&) = delete;
 	Npc& operator=(const Npc&) = delete;
 
-	std::shared_ptr<Npc> getNpc() override { return std::static_pointer_cast<Npc>(shared_from_this()); }
-	std::shared_ptr<const Npc> getNpc() const override
+	std::shared_ptr<Npc> asNpc() override { return std::static_pointer_cast<Npc>(shared_from_this()); }
+	std::shared_ptr<const Npc> asNpc() const override
 	{
 		return std::static_pointer_cast<const Npc>(shared_from_this());
 	}

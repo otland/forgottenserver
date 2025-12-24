@@ -508,7 +508,7 @@ bool Game::internalPlaceCreature(const std::shared_ptr<Creature>& creature, cons
 		mappedPlayerGuids[player->getGUID()] = player;
 		wildcardTree.insert(lowercase_name);
 		players[player->getID()] = player;
-	} else if (const auto& npc = creature->getNpc()) {
+	} else if (const auto& npc = creature->asNpc()) {
 		npcs[npc->getID()] = npc;
 	} else if (const auto& monster = creature->getMonster()) {
 		monsters[monster->getID()] = monster;
@@ -593,7 +593,7 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 		mappedPlayerGuids.erase(player->getGUID());
 		wildcardTree.remove(lowercase_name);
 		players.erase(player->getID());
-	} else if (const auto& npc = creature->getNpc()) {
+	} else if (const auto& npc = creature->asNpc()) {
 		npcs.erase(npc->getID());
 	} else if (const auto& monster = creature->getMonster()) {
 		monsters.erase(monster->getID());
@@ -772,7 +772,7 @@ void Game::playerMoveCreature(const std::shared_ptr<Player>& player, const std::
 				}
 			}
 
-			if (const auto& movingNpc = movingCreature->getNpc()) {
+			if (const auto& movingNpc = movingCreature->asNpc()) {
 				if (!Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
 					player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
 					return;
@@ -2020,7 +2020,7 @@ void Game::playerCloseNpcChannel(uint32_t playerId)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
 	for (const auto& spectator : spectators) {
-		if (const auto& npc = spectator->getNpc()) {
+		if (const auto& npc = spectator->asNpc()) {
 			npc->onPlayerCloseChannel(player);
 		}
 	}
@@ -3646,7 +3646,7 @@ void Game::playerSpeakToNpc(const std::shared_ptr<Player>& player, const std::st
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
 	for (const auto& spectator : spectators) {
-		if (spectator->getNpc()) {
+		if (spectator->asNpc()) {
 			spectator->onCreatureSay(player, TALKTYPE_PRIVATE_PN, text);
 		}
 	}
