@@ -510,7 +510,7 @@ bool Game::internalPlaceCreature(const std::shared_ptr<Creature>& creature, cons
 		players[player->getID()] = player;
 	} else if (const auto& npc = creature->asNpc()) {
 		npcs[npc->getID()] = npc;
-	} else if (const auto& monster = creature->getMonster()) {
+	} else if (const auto& monster = creature->asMonster()) {
 		monsters[monster->getID()] = monster;
 	}
 
@@ -595,7 +595,7 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 		players.erase(player->getID());
 	} else if (const auto& npc = creature->asNpc()) {
 		npcs.erase(npc->getID());
-	} else if (const auto& monster = creature->getMonster()) {
+	} else if (const auto& monster = creature->asMonster()) {
 		monsters.erase(monster->getID());
 	}
 

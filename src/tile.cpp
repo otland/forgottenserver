@@ -472,7 +472,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
-		if (const auto& monster = creature->getMonster()) {
+		if (const auto& monster = creature->asMonster()) {
 			if (hasFlag(TILESTATE_PROTECTIONZONE | TILESTATE_FLOORCHANGE | TILESTATE_TELEPORT)) {
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
@@ -486,7 +486,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 							}
 						}
 
-						const auto& creatureMonster = tileCreature->getMonster();
+						const auto& creatureMonster = tileCreature->asMonster();
 						if (!creatureMonster || !tileCreature->isPushable() ||
 						    (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
 							return RETURNVALUE_NOTPOSSIBLE;

@@ -269,7 +269,7 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const
 				}
 			}
 		}
-	} else if (target->getMonster()) {
+	} else if (target->asMonster()) {
 		if (const auto& attackerPlayer = attacker->getPlayer()) {
 			if (attackerPlayer->hasFlag(PlayerFlag_CannotAttackMonster)) {
 				return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
@@ -278,7 +278,7 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const
 			if (target->isSummon() && target->getMaster()->getPlayer() && target->getZone() == ZONE_NOPVP) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			}
-		} else if (attacker->getMonster()) {
+		} else if (attacker->asMonster()) {
 			const auto& targetMaster = target->getMaster();
 
 			if (!targetMaster || !targetMaster->getPlayer()) {

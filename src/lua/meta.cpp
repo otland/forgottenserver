@@ -66,7 +66,7 @@ void setCreatureMetatable(lua_State* L, int32_t index, const std::shared_ptr<con
 {
 	if (creature->getPlayer()) {
 		luaL_getmetatable(L, "Player");
-	} else if (creature->getMonster()) {
+	} else if (creature->asMonster()) {
 		luaL_getmetatable(L, "Monster");
 	} else {
 		luaL_getmetatable(L, "Npc");

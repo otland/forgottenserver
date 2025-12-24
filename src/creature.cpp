@@ -485,7 +485,7 @@ bool Creature::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
                           const std::shared_ptr<Creature>& mostDamageCreature, bool lastHitUnjustified,
                           bool mostDamageUnjustified)
 {
-	if (!lootDrop && getMonster()) {
+	if (!lootDrop && asMonster()) {
 		if (!master.expired()) {
 			// scripting event - onDeath
 			const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
@@ -1228,7 +1228,7 @@ int64_t Creature::getStepDuration() const
 	double duration = std::floor(1000 * groundSpeed / calculatedStepSpeed);
 	int64_t stepDuration = std::ceil(duration / 50) * 50;
 
-	const auto& monster = this->getMonster();
+	const auto& monster = this->asMonster();
 	if (monster && monster->isTargetNearby() && !monster->isFleeing() && !monster->getMaster()) {
 		stepDuration *= 2;
 	}

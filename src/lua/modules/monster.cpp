@@ -41,7 +41,7 @@ int luaMonsterIsMonster(lua_State* L)
 {
 	// monster:isMonster()
 	if (const auto& creature = tfs::lua::getCreature(L, 1)) {
-		tfs::lua::pushBoolean(L, creature->getMonster() != nullptr);
+		tfs::lua::pushBoolean(L, creature->asMonster() != nullptr);
 	} else {
 		lua_pushnil(L);
 	}

@@ -3460,7 +3460,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const std::shared_ptr<const 
 void ProtocolGame::AddCreatureIcons(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature)
 {
 	const auto& creatureIcons = creature->getIcons();
-	if (const auto& monster = creature->getMonster()) {
+	if (const auto& monster = creature->asMonster()) {
 		const auto& monsterIcons = monster->getSpecialIcons();
 		msg.addByte(creatureIcons.size() + monsterIcons.size());
 		for (const auto& [iconId, level] : monsterIcons) {

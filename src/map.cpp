@@ -996,7 +996,7 @@ uint16_t AStarNodes::getTileWalkCost(const std::shared_ptr<const Creature>& crea
 
 	if (const auto& field = tile->getFieldItem()) {
 		CombatType_t combatType = field->getCombatType();
-		const auto& monster = creature->getMonster();
+		const auto& monster = creature->asMonster();
 		if (!creature->isImmune(combatType) && !creature->hasCondition(DamageToConditionType(combatType)) &&
 		    (monster && !monster->canWalkOnFieldType(combatType))) {
 			cost += MAP_NORMALWALKCOST * 18;

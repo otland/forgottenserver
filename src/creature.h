@@ -103,8 +103,8 @@ public:
 	virtual std::shared_ptr<const Player> getPlayer() const { return nullptr; }
 	virtual std::shared_ptr<Npc> asNpc() { return nullptr; }
 	virtual std::shared_ptr<const Npc> asNpc() const { return nullptr; }
-	virtual std::shared_ptr<Monster> getMonster() { return nullptr; }
-	virtual std::shared_ptr<const Monster> getMonster() const { return nullptr; }
+	virtual std::shared_ptr<Monster> asMonster() { return nullptr; }
+	virtual std::shared_ptr<const Monster> asMonster() const { return nullptr; }
 
 	virtual const std::string& getName() const = 0;
 	virtual const std::string& getNameDescription() const = 0;
