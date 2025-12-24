@@ -64,6 +64,7 @@ configManager = {}
 ---@field getCurrencyItems fun(): table
 ---@field getItemTypeByClientId fun(clientId: number): ItemType
 ---@field getMountIdByLookType fun(lookType: number): number
+---@field getParties fun(): table
 ---@field getTowns fun(): table
 ---@field getHouses fun(): table
 ---@field getOutfits fun(sex: number): table

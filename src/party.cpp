@@ -55,6 +55,8 @@ void Party::disband()
 		currentLeader->sendCreatureSkull(member);
 	}
 	memberList.clear();
+
+	g_game.removeParty(shared_from_this());
 }
 
 bool Party::leaveParty(const std::shared_ptr<Player>& player, bool forceRemove /* = false */)

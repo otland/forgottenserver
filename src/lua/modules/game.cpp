@@ -238,6 +238,21 @@ int luaGameGetMountIdByLookType(lua_State* L)
 	return 1;
 }
 
+int luaGameGetParties(lua_State* L)
+{
+	// Game.getParties()
+	const auto& parties = g_game.getParties();
+	lua_createtable(L, parties.size(), 0);
+
+	int index = 0;
+	for (const auto& party : parties) {
+		tfs::lua::pushSharedPtr(L, party);
+		tfs::lua::setMetatable(L, -1, "Party");
+		lua_rawseti(L, -2, ++index);
+	}
+	return 1;
+}
+
 int luaGameGetTowns(lua_State* L)
 {
 	// Game.getTowns()
@@ -685,6 +700,7 @@ void tfs::lua::registerGame(LuaScriptInterface& lsi)
 	lsi.registerMethod("Game", "getItemTypeByClientId", luaGameGetItemTypeByClientId);
 	lsi.registerMethod("Game", "getMountIdByLookType", luaGameGetMountIdByLookType);
 
+	lsi.registerMethod("Game", "getParties", luaGameGetParties);
 	lsi.registerMethod("Game", "getTowns", luaGameGetTowns);
 	lsi.registerMethod("Game", "getHouses", luaGameGetHouses);
 	lsi.registerMethod("Game", "getOutfits", luaGameGetOutfits);

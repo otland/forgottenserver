@@ -234,7 +234,7 @@ public:
 	bool hasSecureMode() const { return secureMode; }
 
 	void setParty(const std::shared_ptr<Party>& party) { this->party = party; }
-	std::shared_ptr<Party> getParty() const { return party; }
+	std::shared_ptr<Party> getParty() const { return party.lock(); }
 	PartyShields_t getPartyShield(const std::shared_ptr<const Player>& player) const;
 	bool isInviting(const std::shared_ptr<const Player>& player) const;
 	bool isPartner(const std::shared_ptr<const Player>& player) const;
@@ -1307,7 +1307,7 @@ private:
 	std::weak_ptr<Item> writeItem;
 	std::weak_ptr<House> editHouse;
 	std::weak_ptr<Npc> shopOwner;
-	std::shared_ptr<Party> party = nullptr;
+	std::weak_ptr<Party> party;
 	std::weak_ptr<Player> tradePartner;
 	SchedulerTask_ptr walkTask;
 	const Town* town = nullptr;

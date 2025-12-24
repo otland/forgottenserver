@@ -4116,7 +4116,7 @@ PartyShields_t Player::getPartyShield(const std::shared_ptr<const Player>& playe
 		return SHIELD_WHITEYELLOW;
 	}
 
-	if (player->party) {
+	if (player->getParty()) {
 		return SHIELD_GRAY;
 	}
 

@@ -26,6 +26,7 @@ int luaPartyCreate(lua_State* L)
 	if (!party) {
 		party = std::make_shared<Party>();
 		party->setLeader(player);
+		g_game.addParty(party);
 
 		g_game.updatePlayerShield(player);
 		player->sendCreatureSkull(player);
