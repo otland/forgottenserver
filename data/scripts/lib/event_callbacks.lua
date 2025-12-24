@@ -39,10 +39,10 @@ ec.onRevokeInvitation = {}
 ec.onPassLeadership = {}
 -- Player
 ec.onBrowseField = {}
-ec.onLook = {[5] = 1}
-ec.onLookInBattleList = {[4] = 1}
-ec.onLookInTrade = {[5] = 1}
-ec.onLookInShop = {[4] = 1}
+ec.onLook = {}
+ec.onLookInBattleList = {}
+ec.onLookInTrade = {}
+ec.onLookInShop = {}
 ec.onLookInMarket = {}
 ec.onTradeRequest = {}
 ec.onTradeAccept = {}
@@ -130,6 +130,10 @@ Event = setmetatable({
 
 		local events = EventData[callback]
 		local eventsCount = events.maxn
+		if eventsCount == 0 then
+			return
+		end
+
 		local updateableParams = updateableParameters[callback]
 		return function(...)
 			local results, args, info = {}, pack(...), callbacks[callback]
@@ -162,15 +166,6 @@ Event = setmetatable({
 					args[i] = results[value]
 				end
 			end
-		end
-	end
-})
-
-hasEvent = setmetatable({}, {
-	__index = function(self, key)
-		local callback = callbacks[key]
-		if callback then
-			return EventData[callback].maxn > 0
 		end
 	end
 })

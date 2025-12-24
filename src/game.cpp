@@ -5628,7 +5628,8 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return true;
 		}
 		case RELOAD_TYPE_EVENTS:
-			return tfs::events::reload();
+			tfs::events::reload();
+			return true;
 		case RELOAD_TYPE_GLOBALEVENTS:
 			return g_globalEvents->reload();
 		case RELOAD_TYPE_ITEMS:

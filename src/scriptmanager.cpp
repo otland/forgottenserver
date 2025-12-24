@@ -85,10 +85,6 @@ bool ScriptingManager::loadScriptSystems()
 		return false;
 	}
 
-	if (!tfs::events::load()) {
-		std::cout << "> ERROR: Unable to load events!" << std::endl;
-		return false;
-	}
-
+	tfs::events::load();
 	return true;
 }

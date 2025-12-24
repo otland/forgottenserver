@@ -1,82 +1,62 @@
 function Player:onBrowseField(position)
-	if hasEvent.onBrowseField then
+	if Event.onBrowseField then
 		return Event.onBrowseField(self, position)
 	end
 	return true
 end
 
 function Player:onLook(thing, position, distance)
-	local description = ""
-	if hasEvent.onLook then
-		description = Event.onLook(self, thing, position, distance, description)
-	end
-
-	if description ~= "" then
-		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	if Event.onLook then
+		Event.onLook(self, thing, position, distance)
 	end
 end
 
 function Player:onLookInBattleList(creature, distance)
-	local description = ""
-	if hasEvent.onLookInBattleList then
-		description = Event.onLookInBattleList(self, creature, distance, description)
-	end
-
-	if description ~= "" then
-		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	if Event.onLookInBattleList then
+		Event.onLookInBattleList(self, creature, distance)
 	end
 end
 
 function Player:onLookInTrade(partner, item, distance)
-	local description = "You see " .. item:getDescription(distance)
-	if hasEvent.onLookInTrade then
-		description = Event.onLookInTrade(self, partner, item, distance, description)
-	end
-
-	if description ~= "" then
-		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	if Event.onLookInTrade then
+		Event.onLookInTrade(self, partner, item, distance)
 	end
 end
 
 function Player:onLookInShop(itemType, count)
-	local description = "You see "
-	if hasEvent.onLookInShop then
-		description = Event.onLookInShop(self, itemType, count, description)
-	end
-
-	if description ~= "" then
-		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	if Event.onLookInShop then
+		Event.onLookInShop(self, itemType, count)
 	end
 end
 
 function Player:onLookInMarket(itemType)
-	if hasEvent.onLookInMarket then
+	if Event.onLookInMarket then
 		Event.onLookInMarket(self, itemType)
 	end
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromThing, toThing)
-	if hasEvent.onMoveItem then
+	if Event.onMoveItem then
 		return Event.onMoveItem(self, item, count, fromPosition, toPosition, fromThing, toThing)
 	end
 	return RETURNVALUE_NOERROR
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromThing, toThing)
-	if hasEvent.onItemMoved then
+	if Event.onItemMoved then
 		Event.onItemMoved(self, item, count, fromPosition, toPosition, fromThing, toThing)
 	end
 end
 
 function Player:onMoveCreature(creature, fromPosition, toPosition)
-	if hasEvent.onMoveCreature then
+	if Event.onMoveCreature then
 		return Event.onMoveCreature(self, creature, fromPosition, toPosition)
 	end
 	return true
 end
 
 function Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
-	if hasEvent.onReportRuleViolation then
+	if Event.onReportRuleViolation then
 		Event.onReportRuleViolation(self, targetName, reportType, reportReason, comment, translation)
 	end
 end
@@ -90,28 +70,28 @@ function Player:onRotateItem(item)
 end
 
 function Player:onTurn(direction)
-	if hasEvent.onTurn then
+	if Event.onTurn then
 		return Event.onTurn(self, direction)
 	end
 	return true
 end
 
 function Player:onTradeRequest(target, item)
-	if hasEvent.onTradeRequest then
+	if Event.onTradeRequest then
 		return Event.onTradeRequest(self, target, item)
 	end
 	return true
 end
 
 function Player:onTradeAccept(target, item, targetItem)
-	if hasEvent.onTradeAccept then
+	if Event.onTradeAccept then
 		return Event.onTradeAccept(self, target, item, targetItem)
 	end
 	return true
 end
 
 function Player:onTradeCompleted(target, item, targetItem, isSuccess)
-	if hasEvent.onTradeCompleted then
+	if Event.onTradeCompleted then
 		Event.onTradeCompleted(self, target, item, targetItem, isSuccess)
 	end
 end
@@ -205,24 +185,30 @@ function Player:onPodiumEdit(item, outfit, direction, isVisible)
 end
 
 function Player:onGainExperience(source, exp, rawExp, sendText)
-	return hasEvent.onGainExperience and Event.onGainExperience(self, source, exp, rawExp, sendText) or exp
+	if Event.onGainExperience then
+		return Event.onGainExperience(self, source, exp, rawExp, sendText)
+	end
+	return exp
 end
 
 function Player:onLoseExperience(exp)
-	return hasEvent.onLoseExperience and Event.onLoseExperience(self, exp) or exp
+	if Event.onLoseExperience then
+		return Event.onLoseExperience(self, exp)
+	end
+	return exp
 end
 
 function Player:onGainSkillTries(skill, tries)
 	if not APPLY_SKILL_MULTIPLIER then
-		return hasEvent.onGainSkillTries and Event.onGainSkillTries(self, skill, tries) or tries
+		return Event.onGainSkillTries and Event.onGainSkillTries(self, skill, tries) or tries
 	end
 
 	if skill == SKILL_MAGLEVEL then
 		tries = tries * configManager.getNumber(configKeys.RATE_MAGIC)
-		return hasEvent.onGainSkillTries and Event.onGainSkillTries(self, skill, tries) or tries
+		return Event.onGainSkillTries and Event.onGainSkillTries(self, skill, tries) or tries
 	end
 	tries = tries * configManager.getNumber(configKeys.RATE_SKILL)
-	return hasEvent.onGainSkillTries and Event.onGainSkillTries(self, skill, tries) or tries
+	return Event.onGainSkillTries and Event.onGainSkillTries(self, skill, tries) or tries
 end
 
 function Player:onWrapItem(item)
@@ -252,7 +238,7 @@ function Player:onWrapItem(item)
 		return
 	end
 
-	if not hasEvent.onWrapItem or Event.onWrapItem(self, item) then
+	if not Event.onWrapItem or Event.onWrapItem(self, item) then
 		local oldId = item:getId()
 		item:remove(1)
 		local item = tile:addItem(wrapId)
@@ -263,7 +249,7 @@ function Player:onWrapItem(item)
 end
 
 function Player:onInventoryUpdate(item, slot, equip)
-	if hasEvent.onInventoryUpdate then
+	if Event.onInventoryUpdate then
 		Event.onInventoryUpdate(self, item, slot, equip)
 	end
 end
@@ -279,7 +265,7 @@ function Player:onNetworkMessage(recvByte, msg)
 end
 
 function Player:onSpellCheck(spell)
-	if hasEvent.onSpellCheck then
+	if Event.onSpellCheck then
 		return Event.onSpellCheck(self, spell)
 	end
 	return true

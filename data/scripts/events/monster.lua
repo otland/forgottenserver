@@ -1,5 +1,5 @@
 function Monster:onDropLoot(corpse)
-	if hasEvent.onDropLoot then
+	if Event.onDropLoot then
 		Event.onDropLoot(self, corpse)
 	end
 	local player = Player(corpse:getCorpseOwner())
@@ -9,7 +9,7 @@ function Monster:onDropLoot(corpse)
 end
 
 function Monster:onSpawn(position, startup, artificial)
-	if hasEvent.onSpawn then
+	if Event.onSpawn then
 		return Event.onSpawn(self, position, startup, artificial)
 	end
 	return true

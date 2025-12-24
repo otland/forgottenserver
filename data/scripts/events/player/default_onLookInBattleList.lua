@@ -20,7 +20,7 @@ event.onLookInBattleList = function(self, creature, distance)
 			description = string.format("%s\nIP: %s", description, creature:getIp())
 		end
 	end
-	return description
+	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
 event:register()

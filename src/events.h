@@ -25,8 +25,8 @@ enum class EventInfoId
 
 namespace tfs::events {
 
-bool load();
-bool reload();
+void load();
+void reload();
 int32_t getScriptId(EventInfoId eventInfoId);
 
 } // namespace tfs::events

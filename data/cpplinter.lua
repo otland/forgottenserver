@@ -1030,10 +1030,10 @@ Weapon = {}
 ---@field onInvite fun(party:Party, player:Player):boolean
 ---@field onRevokeInvitation fun(party:Party, player:Player):boolean
 ---@field onPassLeadership fun(party:Party, player:Player):boolean
----@field onLook fun(player:Player, thing:Thing, position:Position, distance:integer, description?:string):string
----@field onLookInBattleList fun(player:Player, creature:Creature, distance:integer, description?:string):string
----@field onLookInTrade fun(player:Player, partner:Player, item:Item, distance:integer, description?:string):string
----@field onLookInShop fun(player:Player, itemType:ItemType, count:integer, description?:string):string
+---@field onLook fun(player:Player, thing:Thing, position:Position, distance:integer):nil
+---@field onLookInBattleList fun(player:Player, creature:Creature, distance:integer):nil
+---@field onLookInTrade fun(player:Player, partner:Player, item:Item, distance:integer):nil
+---@field onLookInShop fun(player:Player, itemType:ItemType, count:integer):nil
 ---@field onMoveItem fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):integer
 ---@field onItemMoved fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):nil
 ---@field onMoveCreature fun(player:Player, creature:Creature, fromPosition:Position, toPosition:Position):boolean
@@ -1042,6 +1042,8 @@ Weapon = {}
 ---@field onTradeRequest fun(player:Player, target:Player, item:Item):boolean
 ---@field onTradeAccept fun(player:Player, target:Player, item:Item, targetItem:Item):boolean
 ---@field onTradeCompleted fun(player:Player, target:Player, item:Item, targetItem:Item, isSuccess:boolean):nil
+---@field onPodiumRequest fun(player:Player, item:Item):nil
+---@field onPodiumEdit fun(player:Player, item:Item, outfit:Outfit, direction:integer, isVisible:boolean):nil
 ---@field onGainExperience fun(player:Player, source?:Creature, exp:integer, rawExp:integer, sendText:boolean):integer
 ---@field onLoseExperience fun(player:Player, exp:integer):integer
 ---@field onGainSkillTries fun(player:Player, skill:integer, tries:integer, artificial?:boolean):integer
@@ -1055,44 +1057,6 @@ Weapon = {}
 ---@operator call():Event
 Event = {}
 EventCallback = Event()
-
----@class hasEvent
----@field onChangeOutfit boolean
----@field onAreaCombat boolean
----@field onTargetCombat boolean
----@field onHear boolean
----@field onChangeZone boolean
----@field onUpdateStorage boolean
----@field onJoin boolean
----@field onLeave boolean
----@field onDisband boolean
----@field onShareExperience boolean
----@field onInvite boolean
----@field onRevokeInvitation boolean
----@field onPassLeadership boolean
----@field onLook boolean
----@field onLookInBattleList boolean
----@field onLookInTrade boolean
----@field onLookInShop boolean
----@field onMoveItem boolean
----@field onItemMoved boolean
----@field onMoveCreature boolean
----@field onReportRuleViolation boolean
----@field onTurn boolean
----@field onTradeRequest boolean
----@field onTradeAccept boolean
----@field onTradeCompleted boolean
----@field onGainExperience boolean
----@field onLoseExperience boolean
----@field onGainSkillTries boolean
----@field onNetworkMessage boolean
----@field onUpdateInventory boolean
----@field onRotateItem boolean
----@field onSpellCheck boolean
----@field onDropLoot boolean
----@field onSpawn boolean
----@field onReload boolean
-hasEvent = {}
 
 -- MARK: Thing
 ---@class Thing

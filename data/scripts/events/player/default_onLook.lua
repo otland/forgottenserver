@@ -51,7 +51,7 @@ event.onLook = function(self, thing, position, distance, description)
 			end
 		end
 	end
-	return description
+	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
 event:register()
