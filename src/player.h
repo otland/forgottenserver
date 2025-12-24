@@ -12,6 +12,7 @@
 #include "guild.h"
 #include "inbox.h"
 #include "protocolgame.h"
+#include "scheduler.h"
 #include "storeinbox.h"
 #include "town.h"
 #include "vocation.h"
@@ -21,7 +22,6 @@ struct Mount;
 class NetworkMessage;
 class Npc;
 class Party;
-class SchedulerTask;
 
 enum skillsid_t
 {
@@ -1173,8 +1173,8 @@ public:
 	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
 	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
-	void setNextWalkActionTask(SchedulerTask* task);
-	void setNextActionTask(SchedulerTask* task);
+	void setNextWalkActionTask(SchedulerTask_ptr task);
+	void setNextActionTask(SchedulerTask_ptr task);
 
 	void setNextAction(int64_t time)
 	{
@@ -1309,7 +1309,7 @@ private:
 	std::weak_ptr<Npc> shopOwner;
 	std::shared_ptr<Party> party = nullptr;
 	std::weak_ptr<Player> tradePartner;
-	SchedulerTask* walkTask = nullptr;
+	SchedulerTask_ptr walkTask;
 	const Town* town = nullptr;
 	Vocation* vocation = nullptr;
 	std::shared_ptr<StoreInbox> storeInbox = nullptr;
