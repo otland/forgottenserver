@@ -1,6 +1,6 @@
 local ec = Event()
 
-ec.onRotateItem = function(self, item)
+ec.onPlayerRotateItem = function(self, item)
 	local newId = item:getType():getRotateTo()
 	if newId ~= 0 then
 		item:transform(newId)

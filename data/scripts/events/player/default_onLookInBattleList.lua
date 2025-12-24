@@ -1,6 +1,6 @@
 local event = Event()
 
-event.onLookInBattleList = function(self, creature, distance)
+event.onPlayerLookInBattleList = function(self, creature, distance)
 	local description = "You see " .. creature:getDescription(distance)
 	if self:getGroup():getAccess() then
 		local str = "%s\nHealth: %d / %d"

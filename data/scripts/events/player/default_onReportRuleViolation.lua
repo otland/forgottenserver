@@ -9,7 +9,7 @@ end
 
 local event = Event()
 
-event.onReportRuleViolation = function(self, targetName, reportType, reportReason, comment, translation)
+event.onPlayerReportRuleViolation = function(self, targetName, reportType, reportReason, comment, translation)
 	local name = self:getName()
 	if hasPendingReport(name, targetName, reportType) then
 		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your report is being processed.")

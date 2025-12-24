@@ -2,13 +2,13 @@ local cobras = {"cobra scout", "cobra vizier", "cobra assassin"}
 
 local event = Event()
 
-function event.onSpawn(monster, position, startup, artificial)
-	if table.contains(cobras, monster:getName():lower()) then
+event.onMonsterSpawn = function(self, position, startup, artificial)
+	if table.contains(cobras, self:getName():lower()) then
 		local storage = Game.getStorageValue(GlobalStorageKeys.cobraBastionFlask)
 		if storage then
 			if storage >= os.time() then
-				monster:setHealth(monster:getMaxHealth() * 0.75)
-				monster:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
+				self:setHealth(self:getMaxHealth() * 0.75)
+				self:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
 			else
 				Game.setStorageValue(GlobalStorageKeys.cobraBastionFlask, nil)
 			end

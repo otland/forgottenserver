@@ -65,8 +65,8 @@ void onLookInBattleList(const std::shared_ptr<Player>& player, const std::shared
                         int32_t lookDistance);
 void onLookInTrade(const std::shared_ptr<Player>& player, const std::shared_ptr<Player>& partner,
                    const std::shared_ptr<Item>& item, int32_t lookDistance);
-bool onLookInShop(const std::shared_ptr<Player>& player, const ItemType* itemType, uint8_t count);
-bool onLookInMarket(const std::shared_ptr<Player>& player, const ItemType* itemType);
+void onLookInShop(const std::shared_ptr<Player>& player, const ItemType* itemType, uint8_t count);
+void onLookInMarket(const std::shared_ptr<Player>& player, const ItemType* itemType);
 ReturnValue onMoveItem(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, uint16_t count,
                        const Position& fromPosition, const Position& toPosition,
                        const std::shared_ptr<Thing>& fromThing, const std::shared_ptr<Thing>& toThing);

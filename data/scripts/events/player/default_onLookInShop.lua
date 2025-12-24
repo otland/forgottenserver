@@ -1,6 +1,6 @@
 local event = Event()
 
-event.onLookInShop = function(self, itemType, count)
+event.onPlayerLookInShop = function(self, itemType, count)
 	local description = "You see " .. itemType:getItemDescription()
 	if self:getGroup():getAccess() then
 		description = string.format("%s\nItem ID: %d", description, itemType:getId())

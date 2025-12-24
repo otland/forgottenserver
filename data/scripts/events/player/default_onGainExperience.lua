@@ -35,32 +35,32 @@ end
 
 local default = Event()
 
-function default.onGainExperience(player, source, exp, rawExp, sendText)
+default.onPlayerGainExperience = function(self, source, exp, rawExp, sendText)
 	if not source or source:isPlayer() then
 		return exp
 	end
 
-	local level = player:getLevel()
+	local level = self:getLevel()
 
 	-- Soul regeneration
-	local vocation = player:getVocation()
-	if player:getSoul() < vocation:getMaxSoul() and exp >= level then
+	local vocation = self:getVocation()
+	if self:getSoul() < vocation:getMaxSoul() and exp >= level then
 		soulCondition:setParameter(CONDITION_PARAM_SOULTICKS, vocation:getSoulGainTicks() * 1000)
-		player:addCondition(soulCondition)
+		self:addCondition(soulCondition)
 	end
 
 	-- Apply experience stage multiplier
 	exp = exp * Game.getExperienceStage(level)
 
 	-- Apply low level bonus
-	exp = exp * (1 + player:calculateLowLevelBonus(level) / 100)
+	exp = exp * (1 + self:calculateLowLevelBonus(level) / 100)
 
 	-- Stamina modifier
 	if configManager.getBoolean(configKeys.STAMINA_SYSTEM) then
-		useStamina(player)
+		useStamina(self)
 
-		local staminaMinutes = player:getStamina()
-		if staminaMinutes > 2340 and player:isPremium() then
+		local staminaMinutes = self:getStamina()
+		if staminaMinutes > 2340 and self:isPremium() then
 			exp = exp * 1.5
 		elseif staminaMinutes <= 840 then
 			exp = exp * 0.5
@@ -76,16 +76,16 @@ default:register()
 
 local message = Event()
 
-function message.onGainExperience(player, source, exp, rawExp, sendText)
+message.onPlayerGainExperience = function(self, source, exp, rawExp, sendText)
 	if sendText and exp ~= 0 then
-		local pos = player:getPosition()
+		local pos = self:getPosition()
 		local expString = exp .. (exp ~= 1 and " experience points." or " experience point.")
-		player:sendTextMessage(MESSAGE_EXPERIENCE, "You gained " .. expString, pos, exp, TEXTCOLOR_WHITE_EXP)
+		self:sendTextMessage(MESSAGE_EXPERIENCE, "You gained " .. expString, pos, exp, TEXTCOLOR_WHITE_EXP)
 
 		local spectators = Game.getSpectators(pos, false, true)
 		for _, spectator in ipairs(spectators) do
-			if spectator ~= player then
-				spectator:sendTextMessage(MESSAGE_EXPERIENCE_OTHERS, player:getName() .. " gained " .. expString)
+			if spectator ~= self then
+				spectator:sendTextMessage(MESSAGE_EXPERIENCE_OTHERS, self:getName() .. " gained " .. expString)
 			end
 		end
 	end

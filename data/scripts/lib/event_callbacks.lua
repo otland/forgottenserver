@@ -22,46 +22,46 @@ end})
 --@ Definitions of valid Event types to hook according to the given field name
 --@ The fields within the assigned table, allow to save arbitrary information
 -- Creature
-ec.onChangeOutfit = {}
-ec.onChangeMount = {}
-ec.onAreaCombat = {returnValue=true}
-ec.onTargetCombat = {returnValue=true}
-ec.onHear = {}
-ec.onChangeZone = {}
-ec.onUpdateStorage = {}
+ec.onCreatureChangeOutfit = {}
+ec.onCreatureChangeMount = {}
+ec.onCreatureAreaCombat = {returnValue=true}
+ec.onCreatureTargetCombat = {returnValue=true}
+ec.onCreatureHear = {}
+ec.onCreatureChangeZone = {}
+ec.onCreatureUpdateStorage = {}
 -- Party
-ec.onJoin = {}
-ec.onLeave = {}
-ec.onDisband = {}
-ec.onShareExperience = {}
-ec.onInvite = {}
-ec.onRevokeInvitation = {}
-ec.onPassLeadership = {}
+ec.onPartyJoin = {}
+ec.onPartyLeave = {}
+ec.onPartyDisband = {}
+ec.onPartyShareExperience = {}
+ec.onPartyInvite = {}
+ec.onPartyRevokeInvitation = {}
+ec.onPartyPassLeadership = {}
 -- Player
-ec.onBrowseField = {}
-ec.onLook = {}
-ec.onLookInBattleList = {}
-ec.onLookInTrade = {}
-ec.onLookInShop = {}
-ec.onLookInMarket = {}
-ec.onTradeRequest = {}
-ec.onTradeAccept = {}
-ec.onTradeCompleted = {}
-ec.onMoveItem = {returnValue=true}
-ec.onItemMoved = {}
-ec.onMoveCreature = {}
-ec.onReportRuleViolation = {}
-ec.onRotateItem = {}
-ec.onTurn = {}
-ec.onGainExperience = {[3] = 1}
-ec.onLoseExperience = {[2] = 1}
-ec.onGainSkillTries = {[3] = 1}
-ec.onWrapItem = {}
-ec.onInventoryUpdate = {}
-ec.onSpellCheck = {}
+ec.onPlayerBrowseField = {}
+ec.onPlayerLook = {}
+ec.onPlayerLookInBattleList = {}
+ec.onPlayerLookInTrade = {}
+ec.onPlayerLookInShop = {}
+ec.onPlayerLookInMarket = {}
+ec.onPlayerTradeRequest = {}
+ec.onPlayerTradeAccept = {}
+ec.onPlayerTradeCompleted = {}
+ec.onPlayerMoveItem = {returnValue=true}
+ec.onPlayerItemMoved = {}
+ec.onPlayerMoveCreature = {}
+ec.onPlayerReportRuleViolation = {}
+ec.onPlayerRotateItem = {}
+ec.onPlayerTurn = {}
+ec.onPlayerGainExperience = {[3] = 1}
+ec.onPlayerLoseExperience = {[2] = 1}
+ec.onPlayerGainSkillTries = {[3] = 1}
+ec.onPlayerWrapItem = {}
+ec.onPlayerInventoryUpdate = {}
+ec.onPlayerSpellCheck = {}
 -- Monster
-ec.onDropLoot = {}
-ec.onSpawn = {}
+ec.onMonsterDropLoot = {}
+ec.onMonsterSpawn = {}
 
 local EventMeta = {
 	__newindex = function(self, key, callback)

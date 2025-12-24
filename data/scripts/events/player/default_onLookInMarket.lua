@@ -3,7 +3,7 @@ local showDefWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTAN
 
 local event = Event()
 
-event.onLookInMarket = function(self, itemType)
+event.onPlayerLookInMarket = function(self, itemType)
 	local response = NetworkMessage()
 	response:addByte(0xF8)
 	response:addU16(itemType:getClientId())

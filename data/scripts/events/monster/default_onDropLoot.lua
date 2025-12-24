@@ -1,6 +1,6 @@
 local event = Event()
 
-event.onDropLoot = function(self, corpse)
+event.onMonsterDropLoot = function(self, corpse)
 	if configManager.getNumber(configKeys.RATE_LOOT) == 0 then
 		return
 	end

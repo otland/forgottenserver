@@ -1,41 +1,41 @@
 function Party:onJoin(player)
-	if Event.onJoin then
-		return Event.onJoin(self, player)
+	if Event.onPartyJoin then
+		return Event.onPartyJoin(self, player)
 	end
 	return true
 end
 
 function Party:onLeave(player)
-	if Event.onLeave then
-		return Event.onLeave(self, player)
+	if Event.onPartyLeave then
+		return Event.onPartyLeave(self, player)
 	end
 	return true
 end
 
 function Party:onDisband()
-	if Event.onDisband then
-		return Event.onDisband(self)
+	if Event.onPartyDisband then
+		return Event.onPartyDisband(self)
 	end
 	return true
 end
 
 function Party:onInvite(player)
-	if Event.onInvite then
-		return Event.onInvite(self, player)
+	if Event.onPartyInvite then
+		return Event.onPartyInvite(self, player)
 	end
 	return true
 end
 
 function Party:onRevokeInvitation(player)
-	if Event.onRevokeInvitation then
-		return Event.onRevokeInvitation(self, player)
+	if Event.onPartyRevokeInvitation then
+		return Event.onPartyRevokeInvitation(self, player)
 	end
 	return true
 end
 
 function Party:onPassLeadership(player)
-	if Event.onPassLeadership then
-		return Event.onPassLeadership(self, player)
+	if Event.onPartyPassLeadership then
+		return Event.onPartyPassLeadership(self, player)
 	end
 	return true
 end
@@ -63,5 +63,8 @@ function Party:onShareExperience(exp)
 	end
 
 	exp = math.ceil((exp * sharedExperienceMultiplier) / (#self:getMembers() + 1))
-	return Event.onShareExperience and Event.onShareExperience(self, exp, rawExp) or exp
+	if Event.onPartyShareExperience then
+		return Event.onPartyShareExperience(self, exp, rawExp)
+	end
+	return exp
 end

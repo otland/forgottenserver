@@ -734,16 +734,16 @@ void onLookInTrade(const std::shared_ptr<Player>& player, const std::shared_ptr<
 	scriptInterface.callVoidFunction(4);
 }
 
-bool onLookInShop(const std::shared_ptr<Player>& player, const ItemType* itemType, uint8_t count)
+void onLookInShop(const std::shared_ptr<Player>& player, const ItemType* itemType, uint8_t count)
 {
 	// Player:onLookInShop(itemType, count) or Player.onLookInShop(self, itemType, count)
 	if (playerHandlers.onLookInShop == -1) {
-		return true;
+		return;
 	}
 
 	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - tfs::events::player::onLookInShop] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	const auto env = tfs::lua::getScriptEnv();
@@ -760,19 +760,19 @@ bool onLookInShop(const std::shared_ptr<Player>& player, const ItemType* itemTyp
 
 	tfs::lua::pushNumber(L, count);
 
-	return scriptInterface.callFunction(3);
+	scriptInterface.callVoidFunction(3);
 }
 
-bool onLookInMarket(const std::shared_ptr<Player>& player, const ItemType* itemType)
+void onLookInMarket(const std::shared_ptr<Player>& player, const ItemType* itemType)
 {
 	// Player:onLookInMarket(itemType) or Player.onLookInMarket(self, itemType)
 	if (playerHandlers.onLookInMarket == -1) {
-		return true;
+		return;
 	}
 
 	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - tfs::events::player::onLookInMarket] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	const auto env = tfs::lua::getScriptEnv();
@@ -787,7 +787,7 @@ bool onLookInMarket(const std::shared_ptr<Player>& player, const ItemType* itemT
 	tfs::lua::pushUserdata(L, itemType);
 	tfs::lua::setMetatable(L, -1, "ItemType");
 
-	return scriptInterface.callFunction(2);
+	scriptInterface.callVoidFunction(2);
 }
 
 ReturnValue onMoveItem(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, uint16_t count,

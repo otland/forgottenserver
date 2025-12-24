@@ -1017,43 +1017,42 @@ Weapon = {}
 
 ---@class Event
 ---@field register fun(self:Event, triggerIndex?:integer):boolean
----@field onChangeOutfit fun(creature:Creature, outfit: Outfit_t):boolean
----@field onAreaCombat fun(creature:Creature, tile:Tile, aggresive:boolean): integer
----@field onTargetCombat fun(creature:Creature, target:Creature): integer
----@field onHear fun(creature:Creature, speaker:Creature, words:string, type:integer):nil
----@field onChangeZone fun(creature:Creature, fromZone:integer, toZone:integer):nil
----@field onUpdateStorage fun(creature:Creature, key:integer, value?:integer, oldValue?:integer, isSpawn?:boolean):nil
----@field onJoin fun(party:Party, player:Player):boolean
----@field onLeave fun(party:Party, player:Player):boolean
----@field onDisband fun(party:Party):boolean
----@field onShareExperience fun(party:Party, exp:integer, rawExp:integer):integer
----@field onInvite fun(party:Party, player:Player):boolean
----@field onRevokeInvitation fun(party:Party, player:Player):boolean
----@field onPassLeadership fun(party:Party, player:Player):boolean
----@field onLook fun(player:Player, thing:Thing, position:Position, distance:integer):nil
----@field onLookInBattleList fun(player:Player, creature:Creature, distance:integer):nil
----@field onLookInTrade fun(player:Player, partner:Player, item:Item, distance:integer):nil
----@field onLookInShop fun(player:Player, itemType:ItemType, count:integer):nil
----@field onMoveItem fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):integer
----@field onItemMoved fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):nil
----@field onMoveCreature fun(player:Player, creature:Creature, fromPosition:Position, toPosition:Position):boolean
----@field onReportRuleViolation fun(player:Player, targetName:string, reportType:integer, reportReason:integer, comment:string, translation:string):nil
----@field onTurn fun(player:Player, direction:integer):boolean
----@field onTradeRequest fun(player:Player, target:Player, item:Item):boolean
----@field onTradeAccept fun(player:Player, target:Player, item:Item, targetItem:Item):boolean
----@field onTradeCompleted fun(player:Player, target:Player, item:Item, targetItem:Item, isSuccess:boolean):nil
----@field onPodiumRequest fun(player:Player, item:Item):nil
----@field onPodiumEdit fun(player:Player, item:Item, outfit:Outfit, direction:integer, isVisible:boolean):nil
----@field onGainExperience fun(player:Player, source?:Creature, exp:integer, rawExp:integer, sendText:boolean):integer
----@field onLoseExperience fun(player:Player, exp:integer):integer
----@field onGainSkillTries fun(player:Player, skill:integer, tries:integer, artificial?:boolean):integer
----@field onNetworkMessage fun(player:Player, recvByte:integer, msg:NetworkMessage):nil
----@field onUpdateInventory fun(player:Player, item:Item, slot:integer, equip?:boolean):nil
----@field onRotateItem fun(player:Player, item:Item)
----@field onSpellCheck fun(player:Player, spell:Spell):boolean
----@field onDropLoot fun(monster:Monster, corpse?:Container):nil
----@field onSpawn fun(monster:Monster, position:Position, startup:boolean, artificial:boolean):nil
----@field onReload fun(player:Player, reloadType:integer):nil
+---@field onCreatureChangeOutfit fun(creature:Creature, outfit: Outfit_t):boolean
+---@field onCreatureAreaCombat fun(creature:Creature, tile:Tile, aggresive:boolean): integer
+---@field onCreatureTargetCombat fun(creature:Creature, target:Creature): integer
+---@field onCreatureHear fun(creature:Creature, speaker:Creature, words:string, type:integer):nil
+---@field onCreatureChangeZone fun(creature:Creature, fromZone:integer, toZone:integer):nil
+---@field onCreatureUpdateStorage fun(creature:Creature, key:integer, value?:integer, oldValue?:integer, isSpawn?:boolean):nil
+---@field onPartyJoin fun(party:Party, player:Player):boolean
+---@field onPartyLeave fun(party:Party, player:Player):boolean
+---@field onPartyDisband fun(party:Party):boolean
+---@field onPartyShareExperience fun(party:Party, exp:integer, rawExp:integer):integer
+---@field onPartyInvite fun(party:Party, player:Player):boolean
+---@field onPartyRevokeInvitation fun(party:Party, player:Player):boolean
+---@field onPartyPassLeadership fun(party:Party, player:Player):boolean
+---@field onPlayerLook fun(player:Player, thing:Thing, position:Position, distance:integer):nil
+---@field onPlayerLookInBattleList fun(player:Player, creature:Creature, distance:integer):nil
+---@field onPlayerLookInTrade fun(player:Player, partner:Player, item:Item, distance:integer):nil
+---@field onPlayerLookInShop fun(player:Player, itemType:ItemType, count:integer):nil
+---@field onPlayerMoveItem fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):integer
+---@field onPlayerItemMoved fun(player:Player, item:Item, count:integer, fromPosition:Position, toPosition:Position, fromThing?:Thing, toThing?:Thing):nil
+---@field onPlayerMoveCreature fun(player:Player, creature:Creature, fromPosition:Position, toPosition:Position):boolean
+---@field onPlayerReportRuleViolation fun(player:Player, targetName:string, reportType:integer, reportReason:integer, comment:string, translation:string):nil
+---@field onPlayerTurn fun(player:Player, direction:integer):boolean
+---@field onPlayerTradeRequest fun(player:Player, target:Player, item:Item):boolean
+---@field onPlayerTradeAccept fun(player:Player, target:Player, item:Item, targetItem:Item):boolean
+---@field onPlayerTradeCompleted fun(player:Player, target:Player, item:Item, targetItem:Item, isSuccess:boolean):nil
+---@field onPlayerPodiumRequest fun(player:Player, item:Item):nil
+---@field onPlayerPodiumEdit fun(player:Player, item:Item, outfit:Outfit, direction:integer, isVisible:boolean):nil
+---@field onPlayerGainExperience fun(player:Player, source?:Creature, exp:integer, rawExp:integer, sendText:boolean):integer
+---@field onPlayerLoseExperience fun(player:Player, exp:integer):integer
+---@field onPlayerGainSkillTries fun(player:Player, skill:integer, tries:integer, artificial?:boolean):integer
+---@field onPlayerNetworkMessage fun(player:Player, recvByte:integer, msg:NetworkMessage):nil
+---@field onPlayerUpdateInventory fun(player:Player, item:Item, slot:integer, equip?:boolean):nil
+---@field onPlayerRotateItem fun(player:Player, item:Item)
+---@field onPlayerSpellCheck fun(player:Player, spell:Spell):boolean
+---@field onMonsterDropLoot fun(monster:Monster, corpse?:Container):nil
+---@field onMonsterSpawn fun(monster:Monster, position:Position, startup:boolean, artificial:boolean):nil
 ---@operator call():Event
 Event = {}
 EventCallback = Event()
