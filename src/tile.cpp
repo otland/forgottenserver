@@ -242,7 +242,7 @@ std::shared_ptr<Creature> Tile::getTopVisibleCreature(const std::shared_ptr<cons
 		} else {
 			for (const auto& tileCreature : *creatures) {
 				if (!tileCreature->isInvisible()) {
-					const auto& player = tileCreature->getPlayer();
+					const auto& player = tileCreature->asPlayer();
 					if (!player || !player->isInGhostMode()) {
 						return tileCreature;
 					}
@@ -266,7 +266,7 @@ std::shared_ptr<const Creature> Tile::getBottomVisibleCreature(const std::shared
 		} else {
 			for (const auto& tileCreature : *creatures | std::views::reverse) {
 				if (!tileCreature->isInvisible()) {
-					const auto& player = tileCreature->getPlayer();
+					const auto& player = tileCreature->asPlayer();
 					if (!player || !player->isInGhostMode()) {
 						return tileCreature;
 					}
@@ -358,7 +358,7 @@ void Tile::onAddTileItem(const std::shared_ptr<Item>& item)
 
 	// send to client
 	for (const auto& spectator : spectators) {
-		if (const auto& spectatorPlayer = spectator->getPlayer()) {
+		if (const auto& spectatorPlayer = spectator->asPlayer()) {
 			spectatorPlayer->sendAddTileItem(asTile(), tilePos, item);
 		}
 	}
@@ -397,7 +397,7 @@ void Tile::onUpdateTileItem(const std::shared_ptr<Item>& oldItem, const ItemType
 
 	// send to client
 	for (const auto& spectator : spectators) {
-		if (const auto& spectatorPlayer = spectator->getPlayer()) {
+		if (const auto& spectatorPlayer = spectator->asPlayer()) {
 			spectatorPlayer->sendUpdateTileItem(asTile(), tilePos, newItem);
 		}
 	}
@@ -425,7 +425,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 	// send to client
 	size_t i = 0;
 	for (const auto& spectator : spectators) {
-		if (const auto& spectatorPlayer = spectator->getPlayer()) {
+		if (const auto& spectatorPlayer = spectator->asPlayer()) {
 			spectatorPlayer->sendRemoveTileThing(tilePos, oldStackPosVector[i++]);
 		}
 	}
@@ -480,7 +480,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 			if (const CreatureVector* creatures = getCreatures()) {
 				if (monster->canPushCreatures() && !monster->isSummon()) {
 					for (const auto& tileCreature : *creatures) {
-						if (const auto& tilePlayer = tileCreature->getPlayer()) {
+						if (const auto& tilePlayer = tileCreature->asPlayer()) {
 							if (tilePlayer->isInGhostMode()) {
 								continue;
 							}
@@ -488,7 +488,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 
 						const auto& creatureMonster = tileCreature->asMonster();
 						if (!creatureMonster || !tileCreature->isPushable() ||
-						    (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
+						    (creatureMonster->isSummon() && creatureMonster->getMaster()->asPlayer())) {
 							return RETURNVALUE_NOTPOSSIBLE;
 						}
 					}
@@ -542,7 +542,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 		}
 
 		const CreatureVector* creatures = getCreatures();
-		if (const auto& player = creature->getPlayer()) {
+		if (const auto& player = creature->asPlayer()) {
 			if (creatures && !creatures->empty() && !hasBitSet(FLAG_IGNOREBLOCKCREATURE, flags) &&
 			    !player->isAccessPlayer()) {
 				for (const auto& tileCreature : *creatures) {
@@ -818,7 +818,7 @@ void Tile::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 {
 	if (const auto& creature = thing->asCreature()) {
 		g_game.map.clearSpectatorCache();
-		if (creature->getPlayer()) {
+		if (creature->asPlayer()) {
 			g_game.map.clearPlayersSpectatorCache();
 		}
 
@@ -1013,7 +1013,7 @@ void Tile::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 			auto it = std::find(creatures->begin(), creatures->end(), thing);
 			if (it != creatures->end()) {
 				g_game.map.clearSpectatorCache();
-				if (creature->getPlayer()) {
+				if (creature->asPlayer()) {
 					g_game.map.clearPlayersSpectatorCache();
 				}
 
@@ -1060,7 +1060,7 @@ void Tile::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 		SpectatorVec spectators;
 		g_game.map.getSpectators(spectators, getPosition(), true);
 		for (const auto& spectator : spectators) {
-			if (const auto& spectatorPlayer = spectator->getPlayer()) {
+			if (const auto& spectatorPlayer = spectator->asPlayer()) {
 				oldStackPosVector.push_back(getStackposOfItem(spectatorPlayer, item));
 			}
 		}
@@ -1081,7 +1081,7 @@ void Tile::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 			SpectatorVec spectators;
 			g_game.map.getSpectators(spectators, getPosition(), true);
 			for (const auto& spectator : spectators) {
-				if (const auto& spectatorPlayer = spectator->getPlayer()) {
+				if (const auto& spectatorPlayer = spectator->asPlayer()) {
 					oldStackPosVector.push_back(getStackposOfItem(spectatorPlayer, item));
 				}
 			}
@@ -1288,7 +1288,7 @@ void Tile::postAddNotification(const std::shared_ptr<Thing>& thing, const std::s
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
 
@@ -1325,7 +1325,7 @@ void Tile::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std
 	g_game.map.getSpectators(spectators, tilePos, true, true);
 
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 
 		if (thingCount > TILE_UPDATE_THRESHOLD) {
 			// If the tile contains more than the defined threshold of things,
@@ -1350,7 +1350,7 @@ void Tile::internalAddThing(uint32_t, const std::shared_ptr<Thing>& thing)
 
 	if (const auto& creature = thing->asCreature()) {
 		g_game.map.clearSpectatorCache();
-		if (creature->getPlayer()) {
+		if (creature->asPlayer()) {
 			g_game.map.clearPlayersSpectatorCache();
 		}
 

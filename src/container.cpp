@@ -56,7 +56,7 @@ bool Container::hasContainerParent() const
 
 	if (hasParent()) {
 		if (const auto& creature = getParent()->asCreature()) {
-			return !creature->getPlayer();
+			return !creature->asPlayer();
 		}
 	}
 	return true;
@@ -147,13 +147,13 @@ void Container::onAddContainerItem(const std::shared_ptr<Item>& item)
 
 	// send to client
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendAddContainerItem(getContainer(), item);
 	}
 
 	// event methods
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->onAddContainerItem(item);
 	}
 }
@@ -166,13 +166,13 @@ void Container::onUpdateContainerItem(uint32_t index, const std::shared_ptr<Item
 
 	// send to client
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendUpdateContainerItem(getContainer(), index, newItem);
 	}
 
 	// event methods
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->onUpdateContainerItem(getContainer(), oldItem, newItem);
 	}
 }
@@ -184,13 +184,13 @@ void Container::onRemoveContainerItem(uint32_t index, const std::shared_ptr<Item
 
 	// send change to client
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendRemoveContainerItem(getContainer(), index);
 	}
 
 	// event methods
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->onRemoveContainerItem(getContainer(), item);
 	}
 }
@@ -273,7 +273,7 @@ ReturnValue Container::queryAdd(int32_t index, const std::shared_ptr<const Thing
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const auto& tile = topParent->getTile()) {
 			if (const auto& houseTile = tile->getHouseTile()) {
-				if (!topParent->asCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+				if (!topParent->asCreature() && !houseTile->getHouse()->isInvited(actor->asPlayer())) {
 					return RETURNVALUE_PLAYERISNOTINVITED;
 				}
 			}
@@ -364,7 +364,7 @@ ReturnValue Container::queryRemove(const std::shared_ptr<const Thing>& thing, ui
 		const auto& topParent = getTopParent();
 		if (const auto& tile = topParent->getTile()) {
 			if (const auto& houseTile = tile->getHouseTile()) {
-				if (!topParent->asCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+				if (!topParent->asCreature() && !houseTile->getHouse()->isInvited(actor->asPlayer())) {
 					return RETURNVALUE_PLAYERISNOTINVITED;
 				}
 			}
@@ -636,7 +636,7 @@ void Container::postAddNotification(const std::shared_ptr<Thing>& thing, const s
 			tile->postAddNotification(thing, oldParent, index, LINK_NEAR);
 		}
 	} else if (const auto& creature = topParent->asCreature()) {
-		if (const auto& player = creature->getPlayer()) {
+		if (const auto& player = creature->asPlayer()) {
 			// Container is inside a player's inventory
 			player->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 		}
@@ -656,7 +656,7 @@ void Container::postRemoveNotification(const std::shared_ptr<Thing>& thing,
 			tile->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 		}
 	} else if (const auto& creature = topParent->asCreature()) {
-		if (const auto& player = creature->getPlayer()) {
+		if (const auto& player = creature->asPlayer()) {
 			// Container is inside a player's inventory
 			player->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 		}

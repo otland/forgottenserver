@@ -1626,7 +1626,7 @@ void ProtocolGame::sendCreatureShield(const std::shared_ptr<const Creature>& cre
 	NetworkMessage msg;
 	msg.addByte(0x91);
 	msg.add<uint32_t>(creature->getID());
-	msg.addByte(player->getPartyShield(creature->getPlayer()));
+	msg.addByte(player->getPartyShield(creature->asPlayer()));
 	writeToOutputBuffer(msg);
 }
 
@@ -2417,7 +2417,7 @@ void ProtocolGame::sendCreatureSay(const std::shared_ptr<const Creature>& creatu
 	msg.addByte(0x00); // "(Traded)" suffix after player name
 
 	// Add level only for players
-	if (const auto& speaker = creature->getPlayer()) {
+	if (const auto& speaker = creature->asPlayer()) {
 		msg.add<uint16_t>(speaker->getLevel());
 	} else {
 		msg.add<uint16_t>(0x00);
@@ -2450,7 +2450,7 @@ void ProtocolGame::sendToChannel(const std::shared_ptr<const Creature>& creature
 		msg.addByte(0x00); // "(Traded)" suffix after player name
 
 		// Add level only for players
-		if (const auto& speaker = creature->getPlayer()) {
+		if (const auto& speaker = creature->asPlayer()) {
 			msg.add<uint16_t>(speaker->getLevel());
 		} else {
 			msg.add<uint16_t>(0x00);
@@ -3377,7 +3377,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const std::shared_ptr<const 
 
 	if (creatureType == CREATURETYPE_MONSTER) {
 		if (const auto& master = creature->getMaster()) {
-			if (const auto& masterPlayer = master->getPlayer()) {
+			if (const auto& masterPlayer = master->asPlayer()) {
 				masterId = master->getID();
 				creatureType = CREATURETYPE_SUMMON_OWN;
 			}
@@ -3427,7 +3427,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const std::shared_ptr<const 
 
 	msg.addByte(player->getCombatSkull(creature));
 
-	const auto& otherPlayer = creature->getPlayer();
+	const auto& otherPlayer = creature->asPlayer();
 	msg.addByte(player->getPartyShield(otherPlayer));
 
 	if (!known) {

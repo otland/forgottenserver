@@ -377,17 +377,17 @@ void Monster::onCreatureEnter(const std::shared_ptr<Creature>& creature)
 
 bool Monster::isFriend(const std::shared_ptr<const Creature>& creature) const
 {
-	if (isSummon() && getMaster()->getPlayer()) {
-		const auto& masterPlayer = getMaster()->getPlayer();
+	if (isSummon() && getMaster()->asPlayer()) {
+		const auto& masterPlayer = getMaster()->asPlayer();
 		std::shared_ptr<const Player> tmpPlayer = nullptr;
 
-		if (creature->getPlayer()) {
-			tmpPlayer = creature->getPlayer();
+		if (creature->asPlayer()) {
+			tmpPlayer = creature->asPlayer();
 		} else {
 			const auto& creatureMaster = creature->getMaster();
 
-			if (creatureMaster && creatureMaster->getPlayer()) {
-				tmpPlayer = creatureMaster->getPlayer();
+			if (creatureMaster && creatureMaster->asPlayer()) {
+				tmpPlayer = creatureMaster->asPlayer();
 			}
 		}
 
@@ -403,13 +403,13 @@ bool Monster::isFriend(const std::shared_ptr<const Creature>& creature) const
 
 bool Monster::isOpponent(const std::shared_ptr<const Creature>& creature) const
 {
-	if (isSummon() && getMaster()->getPlayer()) {
+	if (isSummon() && getMaster()->asPlayer()) {
 		if (creature != getMaster()) {
 			return true;
 		}
 	} else {
-		if ((creature->getPlayer() && !creature->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
-		    (creature->getMaster() && creature->getMaster()->getPlayer())) {
+		if ((creature->asPlayer() && !creature->asPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
+		    (creature->getMaster() && creature->getMaster()->asPlayer())) {
 			return true;
 		}
 	}
@@ -778,7 +778,7 @@ void Monster::onAttacking(uint32_t interval)
 		return;
 	}
 
-	if (const auto& player = attackedCreature->getPlayer()) {
+	if (const auto& player = attackedCreature->asPlayer()) {
 		player->addInFightTicks();
 	}
 
@@ -1164,7 +1164,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 			result = getRandomStep(getPosition(), direction);
 		}
 	} else if ((isSummon() && isMasterInRange) || getFollowCreature() || walkingToSpawn) {
-		if (!hasFollowPath && getMaster() && !getMaster()->getPlayer()) {
+		if (!hasFollowPath && getMaster() && !getMaster()->asPlayer()) {
 			randomStepping = true;
 			result = getRandomStep(getPosition(), direction);
 		} else {
@@ -1845,11 +1845,11 @@ std::shared_ptr<Item> Monster::getCorpse(const std::shared_ptr<Creature>& lastHi
 	}
 
 	if (mostDamageCreature) {
-		if (mostDamageCreature->getPlayer()) {
+		if (mostDamageCreature->asPlayer()) {
 			corpse->setCorpseOwner(mostDamageCreature->getID());
 		} else {
 			const auto& mostDamageCreatureMaster = mostDamageCreature->getMaster();
-			if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
+			if (mostDamageCreatureMaster && mostDamageCreatureMaster->asPlayer()) {
 				corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
 			}
 		}

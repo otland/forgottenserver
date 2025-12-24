@@ -136,7 +136,7 @@ int luaPlayerIsPlayer(lua_State* L)
 {
 	// player:isPlayer()
 	if (const auto& creature = tfs::lua::getCreature(L, 1)) {
-		tfs::lua::pushBoolean(L, creature->getPlayer() != nullptr);
+		tfs::lua::pushBoolean(L, creature->asPlayer() != nullptr);
 	} else {
 		lua_pushnil(L);
 	}
@@ -2042,7 +2042,7 @@ int luaPlayerSetGhostMode(lua_State* L)
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 
 		const auto& spectatorPlayer = std::static_pointer_cast<Player>(spectator);
 		if (spectatorPlayer != player && !spectatorPlayer->isAccessPlayer()) {

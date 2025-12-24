@@ -723,7 +723,7 @@ bool Spell::playerRuneSpellCheck(const std::shared_ptr<Player>& player, const Po
 	}
 
 	if (aggressive && needTarget && topVisibleCreature && player->hasSecureMode()) {
-		if (const auto& targetPlayer = topVisibleCreature->getPlayer()) {
+		if (const auto& targetPlayer = topVisibleCreature->asPlayer()) {
 			if (targetPlayer != player && player->getCombatSkull(targetPlayer) == SKULL_NONE &&
 			    !Combat::isInPvpZone(player, targetPlayer)) {
 				player->sendCancelMessage(RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);

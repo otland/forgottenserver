@@ -311,7 +311,7 @@ static std::pair<Position, uint8_t> internalGetPosition(const std::shared_ptr<It
 {
 	if (const auto& topParent = item->getTopParent()) {
 		if (const auto& creature = topParent->asCreature()) {
-			if (const auto& player = creature->getPlayer()) {
+			if (const auto& player = creature->asPlayer()) {
 				const uint16_t x = 0xFFFF;
 
 				if (const auto& container = std::dynamic_pointer_cast<Container>(item->getTopParent())) {
@@ -502,7 +502,7 @@ bool Game::internalPlaceCreature(const std::shared_ptr<Creature>& creature, cons
 
 	creature->setID();
 
-	if (const auto& player = creature->getPlayer()) {
+	if (const auto& player = creature->asPlayer()) {
 		const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
 		mappedPlayerNames[lowercase_name] = player;
 		mappedPlayerGuids[player->getGUID()] = player;
@@ -552,7 +552,7 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 	SpectatorVec spectators;
 	map.getSpectators(spectators, tile->getPosition(), true);
 	for (const auto& spectator : spectators) {
-		if (const auto& player = spectator->getPlayer()) {
+		if (const auto& player = spectator->asPlayer()) {
 			oldStackPosVector.push_back(
 			    player->canSeeCreature(creature) ? tile->getClientIndexOfCreature(player, creature) : -1);
 		}
@@ -565,7 +565,7 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 	// send to client
 	size_t i = 0;
 	for (const auto& spectator : spectators) {
-		if (const auto& player = spectator->getPlayer()) {
+		if (const auto& player = spectator->asPlayer()) {
 			player->sendRemoveTileCreature(creature, tilePosition, oldStackPosVector[i++]);
 		}
 	}
@@ -587,7 +587,7 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 	creature->getParent()->postRemoveNotification(creature, nullptr, 0);
 	creature->setRemoved();
 
-	if (const auto& player = creature->getPlayer()) {
+	if (const auto& player = creature->asPlayer()) {
 		const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
 		mappedPlayerNames.erase(lowercase_name);
 		mappedPlayerGuids.erase(player->getGUID());
@@ -797,7 +797,7 @@ ReturnValue Game::internalMoveCreature(const std::shared_ptr<Creature>& creature
 	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
 	Position destPos = getNextPosition(direction, currentPos);
-	const auto& player = creature->getPlayer();
+	const auto& player = creature->asPlayer();
 
 	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
 	if (player && !diagonalMovement) {
@@ -1097,7 +1097,7 @@ ReturnValue Game::internalMoveItem(std::shared_ptr<Thing> fromThing, std::shared
                                    const std::shared_ptr<Item>& tradeItem /* = nullptr*/,
                                    const Position* fromPos /*= nullptr*/, const Position* toPos /*= nullptr*/)
 {
-	const auto& actorPlayer = actor ? actor->getPlayer() : nullptr;
+	const auto& actorPlayer = actor ? actor->asPlayer() : nullptr;
 	if (actorPlayer && fromPos && toPos) {
 		const ReturnValue ret =
 		    tfs::events::player::onMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromThing, toThing);
@@ -2213,7 +2213,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 
 	bool isHotkey = (fromPos.x == 0xFFFF && fromPos.y == 0 && fromPos.z == 0);
 	if (!getBoolean(ConfigManager::AIMBOT_HOTKEY_ENABLED)) {
-		if (creature->getPlayer() || isHotkey) {
+		if (creature->asPlayer() || isHotkey) {
 			player->sendCancelMessage(RETURNVALUE_DIRECTPLAYERSHOOT);
 			return;
 		}
@@ -3544,7 +3544,7 @@ void Game::playerWhisper(const std::shared_ptr<Player>& player, const std::strin
 
 	// send to client
 	for (const auto& spectator : spectators) {
-		if (const auto& spectatorPlayer = spectator->getPlayer()) {
+		if (const auto& spectatorPlayer = spectator->asPlayer()) {
 			if (!player->getPosition().isInRange(spectatorPlayer->getPosition(), 1, 1)) {
 				spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, "pspsps");
 			} else {
@@ -3677,7 +3677,7 @@ bool Game::internalCreatureTurn(const std::shared_ptr<Creature>& creature, Direc
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendCreatureTurn(creature);
 	}
 	return true;
@@ -3716,7 +3716,7 @@ bool Game::internalCreatureSay(const std::shared_ptr<Creature>& creature, SpeakC
 
 	// send to client
 	for (const auto& spectator : spectators) {
-		if (const auto& tmpPlayer = spectator->getPlayer()) {
+		if (const auto& tmpPlayer = spectator->asPlayer()) {
 			if (!ghostMode || tmpPlayer->canSeeCreature(creature)) {
 				tmpPlayer->sendCreatureSay(creature, type, text, pos);
 			}
@@ -3835,7 +3835,7 @@ void Game::changeSpeed(const std::shared_ptr<Creature>& creature, int32_t varSpe
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), false, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendChangeSpeed(creature, creature->getStepSpeed());
 	}
 }
@@ -3856,7 +3856,7 @@ void Game::internalCreatureChangeOutfit(const std::shared_ptr<Creature>& creatur
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendCreatureChangeOutfit(creature, outfit);
 	}
 }
@@ -3867,7 +3867,7 @@ void Game::internalCreatureChangeVisible(const std::shared_ptr<Creature>& creatu
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendCreatureChangeVisible(creature, visible);
 	}
 }
@@ -3878,7 +3878,7 @@ void Game::changeLight(const std::shared_ptr<const Creature>& creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendCreatureLight(creature);
 	}
 }
@@ -3891,7 +3891,7 @@ bool Game::combatBlockHit(CombatDamage& damage, const std::shared_ptr<Creature>&
 		return true;
 	}
 
-	if (target->getPlayer() && target->isInGhostMode()) {
+	if (target->asPlayer() && target->isInGhostMode()) {
 		return true;
 	}
 
@@ -4081,8 +4081,8 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const s
 			return false;
 		}
 
-		const auto& attackerPlayer = attacker ? attacker->getPlayer() : nullptr;
-		const auto& targetPlayer = target->getPlayer();
+		const auto& attackerPlayer = attacker ? attacker->asPlayer() : nullptr;
+		const auto& targetPlayer = target->asPlayer();
 		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK &&
 		    attackerPlayer->getCombatSkull(targetPlayer) == SKULL_NONE) {
 			return false;
@@ -4135,7 +4135,7 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const s
 			SpectatorVec spectators;
 			map.getSpectators(spectators, targetPos, false, true);
 			for (const auto& spectator : spectators) {
-				assert(spectator->getPlayer() != nullptr);
+				assert(spectator->asPlayer() != nullptr);
 
 				const auto& spectatorPlayer = std::static_pointer_cast<Player>(spectator);
 				if (spectatorPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
@@ -4181,8 +4181,8 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const s
 			return true;
 		}
 
-		const auto& attackerPlayer = attacker ? attacker->getPlayer() : nullptr;
-		const auto& targetPlayer = target->getPlayer();
+		const auto& attackerPlayer = attacker ? attacker->asPlayer() : nullptr;
+		const auto& targetPlayer = target->asPlayer();
 		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK &&
 		    attackerPlayer->getCombatSkull(targetPlayer) == SKULL_NONE) {
 			return false;
@@ -4244,7 +4244,7 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const s
 				message.primary.color = TEXTCOLOR_BLUE;
 
 				for (const auto& spectator : spectators) {
-					assert(spectator->getPlayer() != nullptr);
+					assert(spectator->asPlayer() != nullptr);
 
 					const auto& spectatorPlayer = std::static_pointer_cast<Player>(spectator);
 					if (spectatorPlayer->getPosition().z != targetPos.z) {
@@ -4393,7 +4393,7 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const s
 			std::string spectatorMessage;
 
 			for (const auto& spectator : spectators) {
-				assert(spectator->getPlayer() != nullptr);
+				assert(spectator->asPlayer() != nullptr);
 
 				const auto& spectatorPlayer = std::static_pointer_cast<Player>(spectator);
 				if (spectatorPlayer->getPosition().z != targetPos.z) {
@@ -4456,7 +4456,7 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const s
 bool Game::combatChangeMana(const std::shared_ptr<Creature>& attacker, const std::shared_ptr<Creature>& target,
                             CombatDamage& damage)
 {
-	const auto& targetPlayer = target->getPlayer();
+	const auto& targetPlayer = target->asPlayer();
 	if (!targetPlayer) {
 		return true;
 	}
@@ -4464,7 +4464,7 @@ bool Game::combatChangeMana(const std::shared_ptr<Creature>& attacker, const std
 	int32_t manaChange = damage.primary.value + damage.secondary.value;
 	if (manaChange > 0) {
 		if (attacker) {
-			const auto& attackerPlayer = attacker->getPlayer();
+			const auto& attackerPlayer = attacker->asPlayer();
 			if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK &&
 			    attackerPlayer->getCombatSkull(target) == SKULL_NONE) {
 				return false;
@@ -4502,7 +4502,7 @@ bool Game::combatChangeMana(const std::shared_ptr<Creature>& attacker, const std
 			return false;
 		}
 
-		const auto& attackerPlayer = attacker ? attacker->getPlayer() : nullptr;
+		const auto& attackerPlayer = attacker ? attacker->asPlayer() : nullptr;
 		if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK &&
 		    attackerPlayer->getCombatSkull(targetPlayer) == SKULL_NONE) {
 			return false;
@@ -4542,7 +4542,7 @@ bool Game::combatChangeMana(const std::shared_ptr<Creature>& attacker, const std
 		SpectatorVec spectators;
 		map.getSpectators(spectators, targetPos, false, true);
 		for (const auto& spectator : spectators) {
-			assert(spectator->getPlayer() != nullptr);
+			assert(spectator->asPlayer() != nullptr);
 
 			const auto& spectatorPlayer = std::static_pointer_cast<Player>(spectator);
 			if (spectatorPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
@@ -4595,7 +4595,7 @@ void Game::addCreatureHealth(const std::shared_ptr<const Creature>& target)
 void Game::addCreatureHealth(const SpectatorVec& spectators, const std::shared_ptr<const Creature>& target)
 {
 	for (const auto& spectator : spectators) {
-		if (const auto& tmpPlayer = spectator->getPlayer()) {
+		if (const auto& tmpPlayer = spectator->asPlayer()) {
 			tmpPlayer->sendCreatureHealth(target);
 		}
 	}
@@ -4611,7 +4611,7 @@ void Game::addMagicEffect(const Position& pos, uint8_t effect)
 void Game::addMagicEffect(const SpectatorVec& spectators, const Position& pos, uint8_t effect)
 {
 	for (const auto& spectator : spectators) {
-		if (const auto& tmpPlayer = spectator->getPlayer()) {
+		if (const auto& tmpPlayer = spectator->asPlayer()) {
 			tmpPlayer->sendMagicEffect(pos, effect);
 		}
 	}
@@ -4631,7 +4631,7 @@ void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fro
                              uint8_t effect)
 {
 	for (const auto& spectator : spectators) {
-		if (const auto& tmpPlayer = spectator->getPlayer()) {
+		if (const auto& tmpPlayer = spectator->asPlayer()) {
 			tmpPlayer->sendDistanceShoot(fromPos, toPos, effect);
 		}
 	}
@@ -4768,7 +4768,7 @@ void Game::updateCreatureWalkthrough(const std::shared_ptr<const Creature>& crea
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 
 		const auto& spectatorPlayer = std::static_pointer_cast<Player>(spectator);
 		spectatorPlayer->sendCreatureWalkthrough(creature, spectatorPlayer->canWalkthroughEx(creature));
@@ -4781,7 +4781,7 @@ void Game::updateKnownCreature(const std::shared_ptr<const Creature>& creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendUpdateTileCreature(creature);
 	}
 }
@@ -4795,7 +4795,7 @@ void Game::updateCreatureSkull(const std::shared_ptr<const Creature>& creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendCreatureSkull(creature);
 	}
 }
@@ -4805,7 +4805,7 @@ void Game::updatePlayerShield(const std::shared_ptr<Player>& player)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendCreatureShield(player);
 	}
 }
@@ -5591,7 +5591,7 @@ void Game::updatePodium(const std::shared_ptr<Podium>& podium)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, podium->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
-		assert(spectator->getPlayer() != nullptr);
+		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendUpdateTileItem(tile, podium->getPosition(), podium);
 	}
 }

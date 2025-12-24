@@ -529,7 +529,7 @@ int luaCreatureSetHealth(lua_State* L)
 	creature->setHealth(std::min<int32_t>(tfs::lua::getNumber<uint32_t>(L, 2), creature->getMaxHealth()));
 	g_game.addCreatureHealth(creature);
 
-	if (const auto& player = creature->getPlayer()) {
+	if (const auto& player = creature->asPlayer()) {
 		player->sendStats();
 	}
 	tfs::lua::pushBoolean(L, true);
@@ -580,7 +580,7 @@ int luaCreatureSetMaxHealth(lua_State* L)
 	creature->setHealth(std::min<int32_t>(creature->getHealth(), creature->getMaxHealth()));
 	g_game.addCreatureHealth(creature);
 
-	if (const auto& player = creature->getPlayer()) {
+	if (const auto& player = creature->asPlayer()) {
 		player->sendStats();
 	}
 	tfs::lua::pushBoolean(L, true);
@@ -783,7 +783,7 @@ int luaCreatureRemove(lua_State* L)
 		return 1;
 	}
 
-	if (const auto& player = creature->getPlayer()) {
+	if (const auto& player = creature->asPlayer()) {
 		player->kickPlayer(true);
 	} else {
 		g_game.removeCreature(creature);

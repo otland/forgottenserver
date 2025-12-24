@@ -200,7 +200,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 	if (const auto& tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK]) {
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
-				if (const auto& player = (*creatures)[i]->getPlayer()) {
+				if (const auto& player = (*creatures)[i]->asPlayer()) {
 					g_game.internalTeleport(player, player->getTown()->templePosition, false, FLAG_NOLIMIT);
 				} else {
 					g_game.removeCreature((*creatures)[i]);
@@ -307,7 +307,7 @@ void Map::moveCreature(const std::shared_ptr<Creature>& creature, const std::sha
 
 	std::vector<int32_t> oldStackPosVector;
 	for (const auto& spectator : spectators) {
-		if (const auto& tmpPlayer = spectator->getPlayer()) {
+		if (const auto& tmpPlayer = spectator->asPlayer()) {
 			if (tmpPlayer->canSeeCreature(creature)) {
 				oldStackPosVector.push_back(oldTile->getClientIndexOfCreature(tmpPlayer, creature));
 			} else {
@@ -348,7 +348,7 @@ void Map::moveCreature(const std::shared_ptr<Creature>& creature, const std::sha
 	// send to client
 	size_t i = 0;
 	for (const auto& spectator : spectators) {
-		if (const auto& tmpPlayer = spectator->getPlayer()) {
+		if (const auto& tmpPlayer = spectator->asPlayer()) {
 			// Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
@@ -399,7 +399,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 		for (int_fast32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
 			if (leafE) {
 				for (auto&& creature : leafE->creatures | std::views::filter([onlyPlayers](const auto& creature) {
-					                       return !onlyPlayers || creature->getPlayer() != nullptr;
+					                       return !onlyPlayers || creature->asPlayer() != nullptr;
 				                       })) {
 					const Position& cpos = creature->getPosition();
 					if (minRangeZ > cpos.z || maxRangeZ < cpos.z) {
@@ -472,7 +472,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 				} else {
 					const SpectatorVec& cachedSpectators = it->second;
 					for (const auto& spectator : cachedSpectators) {
-						if (spectator->getPlayer()) {
+						if (spectator->asPlayer()) {
 							spectators.emplace(spectator);
 						}
 					}
@@ -691,7 +691,7 @@ const std::shared_ptr<Tile> Map::canWalkTo(const std::shared_ptr<const Creature>
 		}
 
 		uint32_t flags = FLAG_PATHFINDING;
-		if (!creature->getPlayer()) {
+		if (!creature->asPlayer()) {
 			flags |= FLAG_IGNOREFIELDDAMAGE;
 		}
 

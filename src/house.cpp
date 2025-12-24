@@ -48,7 +48,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 		for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
 			if (const CreatureVector* creatures = tile->getCreatures()) {
 				for (int32_t i = creatures->size(); --i >= 0;) {
-					kickPlayer(nullptr, (*creatures)[i]->getPlayer());
+					kickPlayer(nullptr, (*creatures)[i]->asPlayer());
 				}
 			}
 		}
@@ -183,7 +183,7 @@ void House::setAccessList(uint32_t listId, std::string_view textlist)
 	for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
-				const auto& player = (*creatures)[i]->getPlayer();
+				const auto& player = (*creatures)[i]->asPlayer();
 				if (player && !isInvited(player)) {
 					kickPlayer(nullptr, player);
 				}

@@ -99,8 +99,8 @@ public:
 		return std::static_pointer_cast<const Creature>(shared_from_this());
 	}
 
-	virtual std::shared_ptr<Player> getPlayer() { return nullptr; }
-	virtual std::shared_ptr<const Player> getPlayer() const { return nullptr; }
+	virtual std::shared_ptr<Player> asPlayer() { return nullptr; }
+	virtual std::shared_ptr<const Player> asPlayer() const { return nullptr; }
 	virtual std::shared_ptr<Npc> asNpc() { return nullptr; }
 	virtual std::shared_ptr<const Npc> asNpc() const { return nullptr; }
 	virtual std::shared_ptr<Monster> asMonster() { return nullptr; }

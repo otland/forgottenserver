@@ -80,7 +80,7 @@ void Npc::reload()
 	SpectatorVec players;
 	g_game.map.getSpectators(players, getPosition(), true, true);
 	for (const auto& player : players) {
-		assert(player->getPlayer() != nullptr);
+		assert(player->asPlayer() != nullptr);
 		spectators.insert(std::static_pointer_cast<Player>(player));
 	}
 
@@ -236,7 +236,7 @@ void Npc::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool, Magi
 		SpectatorVec players;
 		g_game.map.getSpectators(players, getPosition(), true, true);
 		for (const auto& player : players) {
-			assert(player->getPlayer() != nullptr);
+			assert(player->asPlayer() != nullptr);
 			spectators.insert(std::static_pointer_cast<Player>(player));
 		}
 
@@ -250,7 +250,7 @@ void Npc::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool, Magi
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	} else if (const auto& player = creature->getPlayer()) {
+	} else if (const auto& player = creature->asPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
@@ -269,7 +269,7 @@ void Npc::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool isLog
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (const auto& player = creature->getPlayer()) {
+	} else if (const auto& player = creature->asPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
@@ -285,13 +285,13 @@ void Npc::onCreatureMove(const std::shared_ptr<Creature>& creature, const std::s
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
-	if (creature.get() == this || creature->getPlayer()) {
+	if (creature.get() == this || creature->asPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureMove(creature, oldPos, newPos);
 		}
 
 		if (creature.get() != this) {
-			const auto& player = creature->getPlayer();
+			const auto& player = creature->asPlayer();
 
 			// if player is now in range, add to spectators list, otherwise erase
 			if (player->canSee(getPosition())) {
@@ -312,7 +312,7 @@ void Npc::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses 
 	}
 
 	// only players for script events
-	if (const auto& player = creature->getPlayer()) {
+	if (const auto& player = creature->asPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureSay(player, type, text);
 		}
