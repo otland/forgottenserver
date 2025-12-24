@@ -25,15 +25,6 @@ int luaCombatCreate(lua_State* L)
 	return 1;
 }
 
-int luaCombatDelete(lua_State* L)
-{
-	Combat_ptr& combat = tfs::lua::getSharedPtr<Combat>(L, 1);
-	if (combat) {
-		combat.reset();
-	}
-	return 0;
-}
-
 int luaCombatSetParameter(lua_State* L)
 {
 	// combat:setParameter(key, value)
@@ -619,8 +610,7 @@ void tfs::lua::registerCombat(LuaScriptInterface& lsi)
 
 	lsi.registerClass("Combat", "", luaCombatCreate);
 	lsi.registerMetaMethod("Combat", "__eq", tfs::lua::luaUserdataCompare);
-	lsi.registerMetaMethod("Combat", "__gc", luaCombatDelete);
-	lsi.registerMethod("Combat", "delete", luaCombatDelete);
+	lsi.registerMetaMethod("Combat", "__gc", tfs::lua::luaSharedPtrDelete<Combat>);
 
 	lsi.registerMethod("Combat", "setParameter", luaCombatSetParameter);
 	lsi.registerMethod("Combat", "getParameter", luaCombatGetParameter);

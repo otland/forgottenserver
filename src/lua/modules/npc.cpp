@@ -143,6 +143,7 @@ void tfs::lua::registerNpc(LuaScriptInterface& lsi)
 
 	lsi.registerClass("Npc", "Creature", luaNpcCreate);
 	lsi.registerMetaMethod("Npc", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Npc", "__gc", tfs::lua::luaSharedPtrDelete<Npc>);
 
 	lsi.registerMethod("Npc", "isNpc", luaNpcIsNpc);
 

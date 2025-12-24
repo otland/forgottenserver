@@ -111,6 +111,7 @@ void tfs::lua::registerPodium(LuaScriptInterface& lsi)
 {
 	lsi.registerClass("Podium", "Item", luaPodiumCreate);
 	lsi.registerMetaMethod("Podium", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Podium", "__gc", tfs::lua::luaSharedPtrDelete<Podium>);
 
 	lsi.registerMethod("Podium", "getOutfit", luaPodiumGetOutfit);
 	lsi.registerMethod("Podium", "setOutfit", luaPodiumSetOutfit);

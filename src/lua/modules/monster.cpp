@@ -482,6 +482,7 @@ void tfs::lua::registerMonster(LuaScriptInterface& lsi)
 
 	lsi.registerClass("Monster", "Creature", luaMonsterCreate);
 	lsi.registerMetaMethod("Monster", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Monster", "__gc", tfs::lua::luaSharedPtrDelete<Monster>);
 
 	lsi.registerMethod("Monster", "isMonster", luaMonsterIsMonster);
 

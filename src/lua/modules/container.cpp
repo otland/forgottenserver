@@ -334,6 +334,7 @@ void tfs::lua::registerContainer(LuaScriptInterface& lsi)
 
 	lsi.registerClass("Container", "Item", luaContainerCreate);
 	lsi.registerMetaMethod("Container", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Container", "__gc", tfs::lua::luaSharedPtrDelete<Container>);
 
 	lsi.registerMethod("Container", "getSize", luaContainerGetSize);
 	lsi.registerMethod("Container", "getCapacity", luaContainerGetCapacity);

@@ -156,6 +156,7 @@ void tfs::lua::registerGuild(LuaScriptInterface& lsi)
 {
 	lsi.registerClass("Guild", "", luaGuildCreate);
 	lsi.registerMetaMethod("Guild", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Guild", "__gc", tfs::lua::luaSharedPtrDelete<Guild>);
 
 	lsi.registerMethod("Guild", "getId", luaGuildGetId);
 	lsi.registerMethod("Guild", "getName", luaGuildGetName);

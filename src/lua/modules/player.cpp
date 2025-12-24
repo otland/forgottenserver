@@ -2479,6 +2479,7 @@ void tfs::lua::registerPlayer(LuaScriptInterface& lsi)
 
 	lsi.registerClass("Player", "Creature", luaPlayerCreate);
 	lsi.registerMetaMethod("Player", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Player", "__gc", tfs::lua::luaSharedPtrDelete<Player>);
 
 	lsi.registerMethod("Player", "isPlayer", luaPlayerIsPlayer);
 

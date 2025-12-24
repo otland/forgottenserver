@@ -476,6 +476,7 @@ void tfs::lua::registerHouse(LuaScriptInterface& lsi)
 
 	lsi.registerClass("House", "", luaHouseCreate);
 	lsi.registerMetaMethod("House", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("House", "__gc", tfs::lua::luaSharedPtrDelete<House>);
 
 	lsi.registerMethod("House", "getId", luaHouseGetId);
 	lsi.registerMethod("House", "getName", luaHouseGetName);

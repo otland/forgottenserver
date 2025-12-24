@@ -348,6 +348,10 @@ setCombatCallback = Combat.setCallback
 setCombatFormula = Combat.setFormula
 setCombatParam = Combat.setParameter
 
+Combat.delete = function(...)
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Combat.delete is deprecated and will be removed in the future")
+end
+
 Combat.setCondition = function(...)
 	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Combat.setCondition was renamed to Combat.addCondition and will be removed in the future")
 	Combat.addCondition(...)

@@ -54,6 +54,7 @@ void tfs::lua::registerTeleport(LuaScriptInterface& lsi)
 {
 	lsi.registerClass("Teleport", "Item", luaTeleportCreate);
 	lsi.registerMetaMethod("Teleport", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Teleport", "__gc", tfs::lua::luaSharedPtrDelete<Teleport>);
 
 	lsi.registerMethod("Teleport", "getDestination", luaTeleportGetDestination);
 	lsi.registerMethod("Teleport", "setDestination", luaTeleportSetDestination);

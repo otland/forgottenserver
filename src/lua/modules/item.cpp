@@ -817,6 +817,7 @@ void tfs::lua::registerItem(LuaScriptInterface& lsi)
 
 	lsi.registerClass("Item", "", luaItemCreate);
 	lsi.registerMetaMethod("Item", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Item", "__gc", tfs::lua::luaSharedPtrDelete<Item>);
 
 	lsi.registerMethod("Item", "isItem", luaItemIsItem);
 

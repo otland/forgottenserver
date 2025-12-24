@@ -769,6 +769,7 @@ void tfs::lua::registerTile(LuaScriptInterface& lsi)
 
 	lsi.registerClass("Tile", "", luaTileCreate);
 	lsi.registerMetaMethod("Tile", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Tile", "__gc", tfs::lua::luaSharedPtrDelete<Tile>);
 
 	lsi.registerMethod("Tile", "remove", luaTileRemove);
 

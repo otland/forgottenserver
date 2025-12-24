@@ -264,6 +264,7 @@ void tfs::lua::registerParty(LuaScriptInterface& lsi)
 {
 	lsi.registerClass("Party", "", luaPartyCreate);
 	lsi.registerMetaMethod("Party", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Party", "__gc", tfs::lua::luaSharedPtrDelete<Party>);
 
 	lsi.registerMethod("Party", "disband", luaPartyDisband);
 

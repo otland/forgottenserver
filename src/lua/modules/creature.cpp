@@ -1175,6 +1175,7 @@ void tfs::lua::registerCreature(LuaScriptInterface& lsi)
 
 	lsi.registerClass("Creature", "", luaCreatureCreate);
 	lsi.registerMetaMethod("Creature", "__eq", tfs::lua::luaUserdataCompare);
+	lsi.registerMetaMethod("Creature", "__gc", tfs::lua::luaSharedPtrDelete<Creature>);
 
 	lsi.registerMethod("Creature", "getEvents", luaCreatureGetEvents);
 	lsi.registerMethod("Creature", "registerEvent", luaCreatureRegisterEvent);
