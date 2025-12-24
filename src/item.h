@@ -5,7 +5,8 @@
 #define FS_ITEM_H
 
 #include "items.h"
-#include "luascript.h"
+#include "lua/api.h"
+#include "lua/script.h"
 #include "thing.h"
 
 class BedItem;

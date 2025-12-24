@@ -9,6 +9,8 @@
 #include "configmanager.h"
 #include "game.h"
 #include "housetile.h"
+#include "lua/env.h"
+#include "lua/meta.h"
 #include "spells.h"
 
 extern Game g_game;
@@ -382,7 +384,7 @@ bool Action::executeUse(const std::shared_ptr<Player>& player, const std::shared
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();

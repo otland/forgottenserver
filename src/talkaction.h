@@ -6,7 +6,7 @@
 
 #include "baseevents.h"
 #include "const.h"
-#include "luascript.h"
+#include "lua/script.h"
 
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;

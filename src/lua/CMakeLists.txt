@@ -1,0 +1,50 @@
+set(lua_SRC
+	${CMAKE_CURRENT_LIST_DIR}/api.cpp
+	${CMAKE_CURRENT_LIST_DIR}/env.cpp
+	${CMAKE_CURRENT_LIST_DIR}/error.cpp
+	${CMAKE_CURRENT_LIST_DIR}/meta.cpp
+	${CMAKE_CURRENT_LIST_DIR}/modules.cpp
+	${CMAKE_CURRENT_LIST_DIR}/script.cpp
+	)
+
+set(luamodules_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/modules/action.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/combat.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/condition.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/configmanager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/container.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/creature.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/creatureevent.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/database.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/game.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/globalevent.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/globals.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/group.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/guild.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/house.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/item.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/itemtype.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/modalwindow.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/monster.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/monsters.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/moveevent.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/networkmessage.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/npc.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/outfit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/party.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/player.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/podium.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/position.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/spell.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/stdlib.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/talkaction.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/teleport.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/thing.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/tile.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/variant.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/vocation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/weapon.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modules/xml.cpp
+	)
+
+add_library(luascript OBJECT ${lua_SRC} ${luamodules_SRC})

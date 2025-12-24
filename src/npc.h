@@ -5,7 +5,7 @@
 #define FS_NPC_H
 
 #include "creature.h"
-#include "luascript.h"
+#include "lua/script.h"
 
 class Npc;
 class Player;

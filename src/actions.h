@@ -6,7 +6,7 @@
 
 #include "baseevents.h"
 #include "enums.h"
-#include "luascript.h"
+#include "lua/script.h"
 
 class Action;
 using Action_ptr = std::unique_ptr<Action>;

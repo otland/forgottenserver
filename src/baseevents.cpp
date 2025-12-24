@@ -5,7 +5,7 @@
 
 #include "baseevents.h"
 
-#include "luascript.h"
+#include "lua/script.h"
 #include "tools.h"
 
 extern LuaEnvironment g_luaEnvironment;

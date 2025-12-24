@@ -6,7 +6,7 @@
 
 #include "baseevents.h"
 #include "creature.h"
-#include "luascript.h"
+#include "lua/script.h"
 #include "vocation.h"
 
 class MoveEvent;

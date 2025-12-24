@@ -5,6 +5,8 @@
 
 #include "talkaction.h"
 
+#include "lua/env.h"
+#include "lua/meta.h"
 #include "player.h"
 
 TalkActions::TalkActions() : scriptInterface("TalkAction Interface") { scriptInterface.initState(); }
@@ -126,7 +128,7 @@ bool TalkAction::executeSay(const std::shared_ptr<Player>& player, const std::st
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();

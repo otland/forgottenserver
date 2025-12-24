@@ -7,7 +7,7 @@
 #include "baseevents.h"
 #include "combat.h"
 #include "const.h"
-#include "luascript.h"
+#include "lua/script.h"
 #include "vocation.h"
 
 class Weapon;

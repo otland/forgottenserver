@@ -131,6 +131,27 @@ public:
 	MonsterIconHashMap& getSpecialIcons() { return monsterIcons; }
 	const MonsterIconHashMap& getSpecialIcons() const { return monsterIcons; }
 
+	void addFriend(const std::shared_ptr<Creature>& creature)
+	{
+		assert(creature.get() != this);
+		friendList.emplace(creature);
+	}
+	void removeFriend(const std::shared_ptr<Creature>& creature) { friendList.erase(creature); }
+
+	void addTarget(const std::shared_ptr<Creature>& creature, bool pushFront = false);
+	void removeTarget(const std::shared_ptr<Creature>& creature);
+
+	bool isFriend(const std::shared_ptr<const Creature>& creature) const;
+	bool isOpponent(const std::shared_ptr<const Creature>& creature) const;
+
+	void setIdle(bool idle);
+	bool getIdleStatus() const { return isIdle; }
+
+	bool isInSpawnRange(const Position& pos) const;
+
+	MonsterType* getMonsterType() { return mType; }
+	const MonsterType* getMonsterType() const { return mType; }
+
 	static uint32_t monsterAutoID;
 
 private:
@@ -170,15 +191,6 @@ private:
 
 	void updateLookDirection();
 
-	void addFriend(const std::shared_ptr<Creature>& creature)
-	{
-		assert(creature.get() != this);
-		friendList.emplace(creature);
-	}
-	void removeFriend(const std::shared_ptr<Creature>& creature) { friendList.erase(creature); }
-	void addTarget(const std::shared_ptr<Creature>& creature, bool pushFront = false);
-	void removeTarget(const std::shared_ptr<Creature>& creature);
-
 	void updateTargetList();
 	void clearTargetList() { targetList.clear(); }
 	void clearFriendList() { friendList.clear(); }
@@ -187,9 +199,7 @@ private:
 	std::shared_ptr<Item> getCorpse(const std::shared_ptr<Creature>& lastHitCreature,
 	                                const std::shared_ptr<Creature>& mostDamageCreature) override;
 
-	void setIdle(bool idle);
 	void updateIdleStatus();
-	bool getIdleStatus() const { return isIdle; }
 
 	void onAddCondition(ConditionType_t type) override;
 	void onEndCondition(ConditionType_t type) override;
@@ -200,15 +210,11 @@ private:
 	bool getRandomStep(const Position& creaturePos, Direction& direction) const;
 	bool getDanceStep(const Position& creaturePos, Direction& direction, bool keepAttack = true,
 	                  bool keepDistance = true);
-	bool isInSpawnRange(const Position& pos) const;
 	bool canWalkTo(Position pos, Direction direction) const;
 
 	void onThinkTarget(uint32_t interval);
 	void onThinkYell(uint32_t interval);
 	void onThinkDefense(uint32_t interval);
-
-	bool isFriend(const std::shared_ptr<const Creature>& creature) const;
-	bool isOpponent(const std::shared_ptr<const Creature>& creature) const;
 
 	uint64_t getLostExperience() const override { return skillLoss ? mType->info.experience : 0; }
 	uint16_t getLookCorpse() const override { return mType->info.lookcorpse; }

@@ -6,7 +6,7 @@
 
 #include "const.h"
 #include "creature.h"
-#include "luascript.h"
+#include "lua/script.h"
 #include "networkmessage.h"
 
 class ItemType;

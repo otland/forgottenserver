@@ -5,7 +5,7 @@
 #define FS_GLOBALEVENT_H
 
 #include "baseevents.h"
-#include "luascript.h"
+#include "lua/script.h"
 
 class GlobalEvent;
 using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;

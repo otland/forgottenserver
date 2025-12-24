@@ -5,7 +5,7 @@
 #define FS_CREATUREEVENT_H
 
 #include "baseevents.h"
-#include "luascript.h"
+#include "lua/script.h"
 
 class CreatureEvent;
 using CreatureEvent_ptr = std::unique_ptr<CreatureEvent>;

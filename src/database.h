@@ -4,6 +4,7 @@
 #ifndef FS_DATABASE_H
 #define FS_DATABASE_H
 
+#include "lua/env.h"
 #include "pugicast.h"
 
 class DBResult;

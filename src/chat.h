@@ -5,7 +5,7 @@
 #define FS_CHAT_H
 
 #include "const.h"
-#include "luascript.h"
+#include "lua/script.h"
 
 class Party;
 class Player;

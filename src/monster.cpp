@@ -9,6 +9,8 @@
 #include "configmanager.h"
 #include "events.h"
 #include "game.h"
+#include "lua/env.h"
+#include "lua/meta.h"
 #include "spells.h"
 #include "tasks.h"
 
@@ -113,7 +115,7 @@ void Monster::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool, 
 			return;
 		}
 
-		ScriptEnvironment* env = tfs::lua::getScriptEnv();
+		const auto env = tfs::lua::getScriptEnv();
 		env->setScriptId(mType->info.creatureAppearEvent, scriptInterface);
 
 		lua_State* L = scriptInterface->getLuaState();
@@ -155,7 +157,7 @@ void Monster::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool i
 			return;
 		}
 
-		ScriptEnvironment* env = tfs::lua::getScriptEnv();
+		const auto env = tfs::lua::getScriptEnv();
 		env->setScriptId(mType->info.creatureDisappearEvent, scriptInterface);
 
 		lua_State* L = scriptInterface->getLuaState();
@@ -197,7 +199,7 @@ void Monster::onCreatureMove(const std::shared_ptr<Creature>& creature, const st
 			return;
 		}
 
-		ScriptEnvironment* env = tfs::lua::getScriptEnv();
+		const auto env = tfs::lua::getScriptEnv();
 		env->setScriptId(mType->info.creatureMoveEvent, scriptInterface);
 
 		lua_State* L = scriptInterface->getLuaState();
@@ -279,7 +281,7 @@ void Monster::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClas
 			return;
 		}
 
-		ScriptEnvironment* env = tfs::lua::getScriptEnv();
+		const auto env = tfs::lua::getScriptEnv();
 		env->setScriptId(mType->info.creatureSayEvent, scriptInterface);
 
 		lua_State* L = scriptInterface->getLuaState();
@@ -698,7 +700,7 @@ void Monster::onThink(uint32_t interval)
 		}
 
 		LuaScriptInterface* scriptInterface = mType->info.scriptInterface;
-		ScriptEnvironment* env = tfs::lua::getScriptEnv();
+		const auto env = tfs::lua::getScriptEnv();
 		env->setScriptId(mType->info.thinkEvent, scriptInterface);
 
 		lua_State* L = scriptInterface->getLuaState();

@@ -19,6 +19,15 @@
     <Filter Include="Header Files\http">
       <UniqueIdentifier>{e3fe1ede-9fb2-4fba-be9f-022a17f378a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\lua">
+      <UniqueIdentifier>{7664f8cf-4fb8-45fc-855b-503f01a329d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lua">
+      <UniqueIdentifier>{b423ff28-e8be-42dd-914e-8bbbe48fdc86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lua\modules">
+      <UniqueIdentifier>{204d093a-c85d-4688-b824-d8307abd324b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="atlas.rc">
@@ -179,9 +188,6 @@
     <ClCompile Include="..\src\items.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\luascript.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\mailbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -265,6 +271,135 @@
     </ClCompile>
     <ClCompile Include="..\src\storeinbox.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\error.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\meta.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\env.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\api.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\xml.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\weapon.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\globalevent.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\moveevent.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\creatureevent.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\talkaction.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\action.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\spell.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\party.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\outfit.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\condition.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\combat.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\itemtype.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\house.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\vocation.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\group.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\guild.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\npc.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\monster.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\player.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\creature.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\podium.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\teleport.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\container.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\item.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\modalwindow.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\networkmessage.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\tile.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\position.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\variant.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\game.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\configmanager.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\script.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\database.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\thing.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\globals.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules.cpp">
+      <Filter>Source Files\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\monsters.cpp">
+      <Filter>Source Files\lua\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lua\modules\stdlib.cpp">
+      <Filter>Source Files\lua\modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -415,12 +550,6 @@
     <ClInclude Include="..\src\lockfree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\luascript.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\luavariant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\mailbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -540,6 +669,30 @@
     </ClInclude>
     <ClInclude Include="..\src\vocation.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lua\error.h">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lua\meta.h">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lua\env.h">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lua\api.h">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lua\variant.h">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lua\script.h">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lua\modules.h">
+      <Filter>Header Files\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lua\modules\register.h">
+      <Filter>Header Files\lua\modules</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

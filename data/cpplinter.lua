@@ -1,8 +1,5 @@
 ---@alias os.mtime fun(): number
 
----@alias table.create fun(arrayLength: number, keyLength: number): table
----@alias table.pack fun(...): table
-
 ---@class rawgetmetatable
 ---@field __index fun(self: table, key: any): any
 rawgetmetatable = {}

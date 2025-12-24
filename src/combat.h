@@ -7,7 +7,7 @@
 #include "baseevents.h"
 #include "condition.h"
 #include "item.h"
-#include "map.h"
+#include "matrixarea.h"
 #include "tools.h"
 
 class Creature;

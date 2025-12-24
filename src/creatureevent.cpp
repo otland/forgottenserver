@@ -6,6 +6,9 @@
 #include "creatureevent.h"
 
 #include "item.h"
+#include "lua/env.h"
+#include "lua/error.h"
+#include "lua/meta.h"
 
 CreatureEvents::CreatureEvents() : scriptInterface("CreatureScript Interface") { scriptInterface.initState(); }
 
@@ -282,7 +285,7 @@ bool CreatureEvent::executeOnLogin(const std::shared_ptr<Player>& player) const
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -301,7 +304,7 @@ bool CreatureEvent::executeOnLogout(const std::shared_ptr<Player>& player) const
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -320,7 +323,7 @@ void CreatureEvent::executeOnReconnect(const std::shared_ptr<Player>& player) co
 		return;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -339,7 +342,7 @@ bool CreatureEvent::executeOnThink(const std::shared_ptr<Creature>& creature, ui
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -361,7 +364,7 @@ bool CreatureEvent::executeOnPrepareDeath(const std::shared_ptr<Creature>& creat
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -392,7 +395,7 @@ bool CreatureEvent::executeOnDeath(const std::shared_ptr<Creature>& creature, co
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -432,7 +435,7 @@ bool CreatureEvent::executeAdvance(const std::shared_ptr<Player>& player, skills
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -455,7 +458,7 @@ void CreatureEvent::executeOnKill(const std::shared_ptr<Creature>& creature, con
 		return;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -477,7 +480,7 @@ void CreatureEvent::executeModalWindow(const std::shared_ptr<Player>& player, ui
 		return;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -502,7 +505,7 @@ bool CreatureEvent::executeTextEdit(const std::shared_ptr<Player>& player, const
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -541,7 +544,7 @@ void CreatureEvent::executeHealthChange(const std::shared_ptr<Creature>& creatur
 		return;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -559,7 +562,7 @@ void CreatureEvent::executeHealthChange(const std::shared_ptr<Creature>& creatur
 	pushCombatDamage(L, damage);
 
 	if (tfs::lua::protectedCall(L, 7, 4) != 0) {
-		reportErrorFunc(nullptr, tfs::lua::popString(L));
+		tfs::lua::reportError(tfs::lua::popString(L));
 	} else {
 		damage.primary.value = std::abs(tfs::lua::getNumber<int32_t>(L, -4));
 		damage.primary.type = tfs::lua::getNumber<CombatType_t>(L, -3);
@@ -585,7 +588,7 @@ void CreatureEvent::executeManaChange(const std::shared_ptr<Creature>& creature,
 		return;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -603,7 +606,7 @@ void CreatureEvent::executeManaChange(const std::shared_ptr<Creature>& creature,
 	pushCombatDamage(L, damage);
 
 	if (tfs::lua::protectedCall(L, 7, 4) != 0) {
-		reportErrorFunc(nullptr, tfs::lua::popString(L));
+		tfs::lua::reportError(tfs::lua::popString(L));
 	} else {
 		damage.primary.value = tfs::lua::getNumber<int32_t>(L, -4);
 		damage.primary.type = tfs::lua::getNumber<CombatType_t>(L, -3);
@@ -624,7 +627,7 @@ void CreatureEvent::executeExtendedOpcode(const std::shared_ptr<Player>& player,
 		return;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();

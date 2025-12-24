@@ -84,7 +84,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <ObjectFileName>$(IntDir)\obj_d\</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename)\obj_d\</ObjectFileName>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -105,7 +105,7 @@
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <AdditionalIncludeDirectories>$(VcpkgRoot)include\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <ObjectFileName>$(IntDir)\obj_r\</ObjectFileName>
+      <ObjectFileName>$(IntDir)%(RelativeDir)%(Filename)\obj_r\</ObjectFileName>
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
@@ -161,7 +161,49 @@
     <ClCompile Include="..\src\iomarket.cpp" />
     <ClCompile Include="..\src\item.cpp" />
     <ClCompile Include="..\src\items.cpp" />
-    <ClCompile Include="..\src\luascript.cpp" />
+    <ClCompile Include="..\src\lua\api.cpp" />
+    <ClCompile Include="..\src\lua\env.cpp" />
+    <ClCompile Include="..\src\lua\error.cpp" />
+    <ClCompile Include="..\src\lua\meta.cpp" />
+    <ClCompile Include="..\src\lua\modules.cpp" />
+    <ClCompile Include="..\src\lua\modules\action.cpp" />
+    <ClCompile Include="..\src\lua\modules\combat.cpp" />
+    <ClCompile Include="..\src\lua\modules\condition.cpp" />
+    <ClCompile Include="..\src\lua\modules\configmanager.cpp" />
+    <ClCompile Include="..\src\lua\modules\container.cpp" />
+    <ClCompile Include="..\src\lua\modules\creature.cpp" />
+    <ClCompile Include="..\src\lua\modules\creatureevent.cpp" />
+    <ClCompile Include="..\src\lua\modules\database.cpp" />
+    <ClCompile Include="..\src\lua\modules\game.cpp" />
+    <ClCompile Include="..\src\lua\modules\globalevent.cpp" />
+    <ClCompile Include="..\src\lua\modules\globals.cpp" />
+    <ClCompile Include="..\src\lua\modules\group.cpp" />
+    <ClCompile Include="..\src\lua\modules\guild.cpp" />
+    <ClCompile Include="..\src\lua\modules\house.cpp" />
+    <ClCompile Include="..\src\lua\modules\item.cpp" />
+    <ClCompile Include="..\src\lua\modules\itemtype.cpp" />
+    <ClCompile Include="..\src\lua\modules\modalwindow.cpp" />
+    <ClCompile Include="..\src\lua\modules\monster.cpp" />
+    <ClCompile Include="..\src\lua\modules\monsters.cpp" />
+    <ClCompile Include="..\src\lua\modules\moveevent.cpp" />
+    <ClCompile Include="..\src\lua\modules\networkmessage.cpp" />
+    <ClCompile Include="..\src\lua\modules\npc.cpp" />
+    <ClCompile Include="..\src\lua\modules\outfit.cpp" />
+    <ClCompile Include="..\src\lua\modules\party.cpp" />
+    <ClCompile Include="..\src\lua\modules\player.cpp" />
+    <ClCompile Include="..\src\lua\modules\podium.cpp" />
+    <ClCompile Include="..\src\lua\modules\position.cpp" />
+    <ClCompile Include="..\src\lua\modules\spell.cpp" />
+    <ClCompile Include="..\src\lua\modules\stdlib.cpp" />
+    <ClCompile Include="..\src\lua\modules\talkaction.cpp" />
+    <ClCompile Include="..\src\lua\modules\teleport.cpp" />
+    <ClCompile Include="..\src\lua\modules\thing.cpp" />
+    <ClCompile Include="..\src\lua\modules\tile.cpp" />
+    <ClCompile Include="..\src\lua\modules\variant.cpp" />
+    <ClCompile Include="..\src\lua\modules\vocation.cpp" />
+    <ClCompile Include="..\src\lua\modules\weapon.cpp" />
+    <ClCompile Include="..\src\lua\modules\xml.cpp" />
+    <ClCompile Include="..\src\lua\script.cpp" />
     <ClCompile Include="..\src\mailbox.cpp" />
     <ClCompile Include="..\src\map.cpp" />
     <ClCompile Include="..\src\matrixarea.cpp" />
@@ -252,8 +294,14 @@
     <ClInclude Include="..\src\itemloader.h" />
     <ClInclude Include="..\src\items.h" />
     <ClInclude Include="..\src\lockfree.h" />
-    <ClInclude Include="..\src\luascript.h" />
-    <ClInclude Include="..\src\luavariant.h" />
+    <ClInclude Include="..\src\lua\api.h" />
+    <ClInclude Include="..\src\lua\env.h" />
+    <ClInclude Include="..\src\lua\error.h" />
+    <ClInclude Include="..\src\lua\meta.h" />
+    <ClInclude Include="..\src\lua\modules.h" />
+    <ClInclude Include="..\src\lua\script.h" />
+    <ClInclude Include="..\src\lua\variant.h" />
+    <ClInclude Include="..\src\lua\modules\register.h" />
     <ClInclude Include="..\src\mailbox.h" />
     <ClInclude Include="..\src\map.h" />
     <ClInclude Include="..\src\matrixarea.h" />

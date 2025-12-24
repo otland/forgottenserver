@@ -7,7 +7,7 @@
 #include "actions.h"
 #include "baseevents.h"
 #include "creature.h"
-#include "luascript.h"
+#include "lua/script.h"
 #include "talkaction.h"
 #include "vocation.h"
 

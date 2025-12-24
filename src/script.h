@@ -4,7 +4,7 @@
 #ifndef FS_SCRIPT_H
 #define FS_SCRIPT_H
 
-#include "luascript.h"
+#include "lua/script.h"
 
 class Scripts
 {

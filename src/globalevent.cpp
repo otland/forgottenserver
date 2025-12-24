@@ -5,6 +5,8 @@
 
 #include "globalevent.h"
 
+#include "lua/api.h"
+#include "lua/env.h"
 #include "pugicast.h"
 #include "scheduler.h"
 #include "tools.h"
@@ -327,7 +329,7 @@ bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -345,7 +347,7 @@ bool GlobalEvent::executeEvent() const
 		return false;
 	}
 
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	const auto env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 	lua_State* L = scriptInterface->getLuaState();
 	scriptInterface->pushFunction(scriptId);

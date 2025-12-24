@@ -1,7 +1,9 @@
-#ifndef FS_LUAVARIANT_H
-#define FS_LUAVARIANT_H
+#pragma once
 
-#include "position.h"
+#include "../position.h"
+
+#include <string>
+#include <variant>
 
 enum LuaVariantType_t
 {
@@ -36,5 +38,3 @@ public:
 private:
 	std::variant<uint32_t, Position, Position, std::string> variant;
 };
-
-#endif // FS_LUAVARIANT_H
