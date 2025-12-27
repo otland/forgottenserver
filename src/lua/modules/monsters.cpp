@@ -656,6 +656,18 @@ int luaMonsterTypeNameDescription(lua_State* L)
 	return 1;
 }
 
+int32_t luaMonsterTypeMonsterName(lua_State* L)
+{
+	// monsterType:monsterName()
+	MonsterType* monsterType = tfs::lua::getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		tfs::lua::pushString(L, monsterType->monsterName);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int luaMonsterTypeHealth(lua_State* L)
 {
 	// get: monsterType:health() set: monsterType:health(health)
@@ -1694,6 +1706,7 @@ void tfs::lua::registerMonsters(LuaScriptInterface& lsi)
 
 	lsi.registerMethod("MonsterType", "name", luaMonsterTypeName);
 	lsi.registerMethod("MonsterType", "nameDescription", luaMonsterTypeNameDescription);
+	lsi.registerMethod("MonsterType", "monsterName", luaMonsterTypeMonsterName);
 
 	lsi.registerMethod("MonsterType", "health", luaMonsterTypeHealth);
 	lsi.registerMethod("MonsterType", "maxHealth", luaMonsterTypeMaxHealth);

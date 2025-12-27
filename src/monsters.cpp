@@ -814,6 +814,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		mType->info = {};
 	}
 
+	mType->monsterName = monsterName;
 	mType->name = attr.as_string();
 
 	if ((attr = monsterNode.attribute("nameDescription"))) {

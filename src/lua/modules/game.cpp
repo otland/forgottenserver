@@ -606,6 +606,7 @@ int luaGameCreateMonsterType(lua_State* L)
 		monsterType = &g_monsters.monsters[boost::algorithm::to_lower_copy(name)];
 		monsterType->name = name;
 		monsterType->nameDescription = "a " + name;
+		monsterType->monsterName = boost::algorithm::to_lower_copy(name);
 	} else {
 		monsterType->info.lootItems.clear();
 		monsterType->info.attackSpells.clear();
