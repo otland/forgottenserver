@@ -184,21 +184,9 @@ do
 			self:type("timer")
 			self:onTime(value)
 			return
-		elseif key == "onStartup" then
-			self:type("startup")
-			self:onStartup(value)
-			return
-		elseif key == "onShutdown" then
-			self:type("shutdown")
-			self:onShutdown(value)
-			return
 		elseif key == "onRecord" then
 			self:type("record")
 			self:onRecord(value)
-			return
-		elseif key == "onSave" then
-			self:type("save")
-			self:onSave(value)
 			return
 		end
 		rawset(self, key, value)

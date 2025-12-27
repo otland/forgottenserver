@@ -236,7 +236,7 @@ int luaDoChallengeCreature(lua_State* L)
 
 int luaSaveServer(lua_State* L)
 {
-	g_globalEvents->save();
+	tfs::events::game::onSave();
 	g_game.saveGameState();
 	tfs::lua::pushBoolean(L, true);
 	return 1;

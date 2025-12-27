@@ -44,7 +44,7 @@ void sigusr1Handler()
 {
 	// Dispatcher thread
 	std::cout << "SIGUSR1 received, saving the game state..." << std::endl;
-	g_globalEvents->save();
+	tfs::events::game::onSave();
 	g_game.saveGameState();
 }
 

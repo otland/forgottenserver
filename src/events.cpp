@@ -16,6 +16,28 @@ namespace {
 
 LuaScriptInterface scriptInterface{"Event Interface"};
 
+struct GameHandlers
+{
+	int32_t onStartup = -1;
+	int32_t onShutdown = -1;
+	int32_t onSave = -1;
+} gameHandlers;
+
+void load_game_from_scripts()
+{
+	gameHandlers = {};
+
+	if (scriptInterface.loadFile("data/scripts/events/game.lua") != 0) {
+		std::cout << "[Warning - tfs::events::load_game_from_scripts] Cannot load game events." << std::endl;
+		std::cout << scriptInterface.getLastLuaError() << std::endl;
+		return;
+	}
+
+	gameHandlers.onStartup = scriptInterface.getMetaEvent("Game", "onStartup");
+	gameHandlers.onShutdown = scriptInterface.getMetaEvent("Game", "onShutdown");
+	gameHandlers.onSave = scriptInterface.getMetaEvent("Game", "onSave");
+}
+
 struct CreatureHandlers
 {
 	int32_t onChangeOutfit = -1;
@@ -206,6 +228,7 @@ void load()
 {
 	scriptInterface.initState();
 
+	load_game_from_scripts();
 	load_creature_from_scripts();
 	load_party_from_scripts();
 	load_player_from_scripts();
@@ -216,6 +239,7 @@ void reload()
 {
 	scriptInterface.reInitState();
 
+	load_game_from_scripts();
 	load_creature_from_scripts();
 	load_party_from_scripts();
 	load_player_from_scripts();
@@ -223,6 +247,70 @@ void reload()
 }
 
 } // namespace tfs::events
+
+namespace tfs::events::game {
+
+void onStartup()
+{
+	// Game:onStartup()
+	if (gameHandlers.onStartup == -1) {
+		return;
+	}
+
+	if (!tfs::lua::reserveScriptEnv()) {
+		std::cout << "[Error - tfs::events::game::onStartup] Call stack overflow" << std::endl;
+		return;
+	}
+
+	const auto env = tfs::lua::getScriptEnv();
+	env->setScriptId(gameHandlers.onStartup, &scriptInterface);
+
+	scriptInterface.pushFunction(gameHandlers.onStartup);
+
+	scriptInterface.callVoidFunction(0);
+}
+
+void onShutdown()
+{
+	// Game:onShutdown()
+	if (gameHandlers.onShutdown == -1) {
+		return;
+	}
+
+	if (!tfs::lua::reserveScriptEnv()) {
+		std::cout << "[Error - tfs::events::game::onShutdown] Call stack overflow" << std::endl;
+		return;
+	}
+
+	const auto env = tfs::lua::getScriptEnv();
+	env->setScriptId(gameHandlers.onShutdown, &scriptInterface);
+
+	scriptInterface.pushFunction(gameHandlers.onShutdown);
+
+	scriptInterface.callVoidFunction(0);
+}
+
+void onSave()
+{
+	// Game:onSave()
+	if (gameHandlers.onSave == -1) {
+		return;
+	}
+
+	if (!tfs::lua::reserveScriptEnv()) {
+		std::cout << "[Error - tfs::events::game::onSave] Call stack overflow" << std::endl;
+		return;
+	}
+
+	const auto env = tfs::lua::getScriptEnv();
+	env->setScriptId(gameHandlers.onSave, &scriptInterface);
+
+	scriptInterface.pushFunction(gameHandlers.onSave);
+
+	scriptInterface.callVoidFunction(0);
+}
+
+} // namespace tfs::events::game
 
 namespace tfs::events::creature {
 

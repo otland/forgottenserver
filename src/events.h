@@ -31,6 +31,14 @@ int32_t getScriptId(EventInfoId eventInfoId);
 
 } // namespace tfs::events
 
+namespace tfs::events::game {
+
+void onStartup();
+void onShutdown();
+void onSave();
+
+} // namespace tfs::events::game
+
 namespace tfs::events::creature {
 
 bool onChangeOutfit(const std::shared_ptr<Creature>& creature, const Outfit_t& outfit);

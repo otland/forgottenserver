@@ -21,6 +21,10 @@ end})
 
 --@ Definitions of valid Event types to hook according to the given field name
 --@ The fields within the assigned table, allow to save arbitrary information
+-- Game
+ec.onGameStartup = {}
+ec.onGameShutdown = {}
+ec.onGameSave = {}
 -- Creature
 ec.onCreatureChangeOutfit = {}
 ec.onCreatureChangeMount = {}

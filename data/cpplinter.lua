@@ -947,8 +947,6 @@ MoveEvent = {}
 ---
 ---@field time fun(self:GlobalEvent, time:string):boolean -- "hh:mm:ss"
 ---@field interval fun(self:GlobalEvent, interval:integer):boolean
----@field onStartup fun():boolean
----@field onShutdown fun():boolean
 ---@field onRecord fun(current:integer, old:integer):boolean
 ---@field onThink fun(interval:integer):boolean
 ---@field onTime fun(interval:integer):boolean
@@ -993,6 +991,9 @@ Weapon = {}
 
 ---@class Event
 ---@field register fun(self:Event, triggerIndex?:integer):boolean
+---@field onGameStartup fun():nil
+---@field onGameShutdown fun():nil
+---@field onGameSave fun():nil
 ---@field onCreatureChangeOutfit fun(creature:Creature, outfit: Outfit_t):boolean
 ---@field onCreatureAreaCombat fun(creature:Creature, tile:Tile, aggresive:boolean): integer
 ---@field onCreatureTargetCombat fun(creature:Creature, target:Creature): integer

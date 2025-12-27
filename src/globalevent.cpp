@@ -112,10 +112,6 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 	return false;
 }
 
-void GlobalEvents::startup() const { execute(GLOBALEVENT_STARTUP); }
-void GlobalEvents::shutdown() const { execute(GLOBALEVENT_SHUTDOWN); }
-void GlobalEvents::save() const { execute(GLOBALEVENT_SAVE); }
-
 void GlobalEvents::timer()
 {
 	auto now = OTSYS_TIME();
@@ -201,10 +197,7 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 			return thinkMap;
 		case GLOBALEVENT_TIMER:
 			return timerMap;
-		case GLOBALEVENT_STARTUP:
-		case GLOBALEVENT_SHUTDOWN:
-		case GLOBALEVENT_RECORD:
-		case GLOBALEVENT_SAVE: {
+		case GLOBALEVENT_RECORD: {
 			GlobalEventMap retMap;
 			for (const auto& [name, globalEvent] : serverMap) {
 				if (globalEvent.getEventType() == type) {
@@ -279,14 +272,8 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		eventType = GLOBALEVENT_TIMER;
 	} else if ((attr = node.attribute("type"))) {
 		const char* value = attr.value();
-		if (boost::iequals(value, "startup")) {
-			eventType = GLOBALEVENT_STARTUP;
-		} else if (boost::iequals(value, "shutdown")) {
-			eventType = GLOBALEVENT_SHUTDOWN;
-		} else if (boost::iequals(value, "record")) {
+		if (boost::iequals(value, "record")) {
 			eventType = GLOBALEVENT_RECORD;
-		} else if (boost::iequals(value, "save")) {
-			eventType = GLOBALEVENT_SAVE;
 		} else {
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string()
 			          << "\" for globalevent with name " << name << std::endl;
@@ -306,14 +293,8 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 std::string_view GlobalEvent::getScriptEventName() const
 {
 	switch (eventType) {
-		case GLOBALEVENT_STARTUP:
-			return "onStartup";
-		case GLOBALEVENT_SHUTDOWN:
-			return "onShutdown";
 		case GLOBALEVENT_RECORD:
 			return "onRecord";
-		case GLOBALEVENT_SAVE:
-			return "onSave";
 		case GLOBALEVENT_TIMER:
 			return "onTime";
 		default:
