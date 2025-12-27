@@ -40,9 +40,7 @@ int luaGlobalEventType(lua_State* L)
 	if (global) {
 		std::string typeName = tfs::lua::getString(L, 2);
 		std::string tmpStr = boost::algorithm::to_lower_copy(typeName);
-		if (tmpStr == "record") {
-			global->setEventType(GLOBALEVENT_RECORD);
-		} else if (tmpStr == "timer") {
+		if (tmpStr == "timer") {
 			global->setEventType(GLOBALEVENT_TIMER);
 		} else {
 			std::cout << "[Error - luaGlobalEventType] Invalid type for global event: " << typeName << '\n';
@@ -81,7 +79,7 @@ int luaGlobalEventRegister(lua_State* L)
 
 int luaGlobalEventOnCallback(lua_State* L)
 {
-	// globalevent:onThink / record / etc. (callback)
+	// globalevent:onThink / onTime
 	GlobalEvent* globalevent = tfs::lua::getUserdata<GlobalEvent>(L, 1);
 	if (globalevent) {
 		if (!globalevent->loadCallback()) {
@@ -180,5 +178,4 @@ void tfs::lua::registerGlobalEvent(LuaScriptInterface& lsi)
 	lsi.registerMethod("GlobalEvent", "interval", luaGlobalEventInterval);
 	lsi.registerMethod("GlobalEvent", "onThink", luaGlobalEventOnCallback);
 	lsi.registerMethod("GlobalEvent", "onTime", luaGlobalEventOnCallback);
-	lsi.registerMethod("GlobalEvent", "onRecord", luaGlobalEventOnCallback);
 }

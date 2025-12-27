@@ -663,6 +663,21 @@ int luaGameReload(lua_State* L)
 	return 1;
 }
 
+int luaGameGetPlayerRecord(lua_State* L)
+{
+	// Game.getPlayerRecord()
+	tfs::lua::pushNumber(L, g_game.getPlayerRecord());
+	return 1;
+}
+
+int luaGameSetPlayerRecord(lua_State* L)
+{
+	// Game.setPlayerRecord(record)
+	g_game.setPlayerRecord(tfs::lua::getNumber<uint32_t>(L, 1));
+	tfs::lua::pushBoolean(L, true);
+	return 1;
+}
+
 } // namespace
 
 void tfs::lua::registerGame(LuaScriptInterface& lsi)
@@ -730,4 +745,7 @@ void tfs::lua::registerGame(LuaScriptInterface& lsi)
 	lsi.registerMethod("Game", "getClientVersion", luaGameGetClientVersion);
 
 	lsi.registerMethod("Game", "reload", luaGameReload);
+
+	lsi.registerMethod("Game", "getPlayerRecord", luaGameGetPlayerRecord);
+	lsi.registerMethod("Game", "setPlayerRecord", luaGameSetPlayerRecord);
 }

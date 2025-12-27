@@ -96,8 +96,6 @@ void Game::setGameState(GameState_t newState)
 
 			mounts.loadFromXml();
 
-			loadPlayersRecord();
-
 			tfs::events::game::onStartup();
 			break;
 		}
@@ -4774,38 +4772,6 @@ void Game::updatePlayerShield(const std::shared_ptr<Player>& player)
 	for (const auto& spectator : spectators) {
 		assert(spectator->asPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendCreatureShield(player);
-	}
-}
-
-void Game::checkPlayersRecord()
-{
-	const size_t playersOnline = getPlayersOnline();
-	if (playersOnline > playersRecord) {
-		uint32_t previousRecord = playersRecord;
-		playersRecord = playersOnline;
-
-		for (auto&& globalEvent : g_globalEvents->getEventMap(GLOBALEVENT_RECORD) | std::views::values) {
-			globalEvent.executeRecord(playersRecord, previousRecord);
-		}
-		updatePlayersRecord();
-	}
-}
-
-void Game::updatePlayersRecord() const
-{
-	Database& db = Database::getInstance();
-	db.executeQuery(
-	    std::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = 'players_record'", playersRecord));
-}
-
-void Game::loadPlayersRecord()
-{
-	Database& db = Database::getInstance();
-
-	if (const auto& result = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'players_record'")) {
-		playersRecord = result->getNumber<uint32_t>("value");
-	} else {
-		db.executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')");
 	}
 }
 

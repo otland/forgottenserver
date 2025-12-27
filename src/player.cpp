@@ -1040,8 +1040,6 @@ void Player::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool is
 			}
 		}
 
-		g_game.checkPlayersRecord();
-
 		IOLoginData::updateOnlineStatus(guid, true);
 
 		if (const auto& bed = g_game.getBedBySleeper(guid)) {

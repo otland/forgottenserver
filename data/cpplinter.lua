@@ -85,6 +85,8 @@ configManager = {}
 ---@field startEvent fun(eventName: string): boolean
 ---@field getClientVersion fun(): string
 ---@field reload fun(reloadType: number): boolean
+---@field getPlayerRecord fun(): integer
+---@field setPlayerRecord fun(record: integer): boolean
 Game = {}
 
 ---@class Variant
@@ -947,7 +949,6 @@ MoveEvent = {}
 ---
 ---@field time fun(self:GlobalEvent, time:string):boolean -- "hh:mm:ss"
 ---@field interval fun(self:GlobalEvent, interval:integer):boolean
----@field onRecord fun(current:integer, old:integer):boolean
 ---@field onThink fun(interval:integer):boolean
 ---@field onTime fun(interval:integer):boolean
 ---@operator call(string):GlobalEvent

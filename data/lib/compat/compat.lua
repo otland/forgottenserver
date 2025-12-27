@@ -184,10 +184,6 @@ do
 			self:type("timer")
 			self:onTime(value)
 			return
-		elseif key == "onRecord" then
-			self:type("record")
-			self:onRecord(value)
-			return
 		end
 		rawset(self, key, value)
 	end

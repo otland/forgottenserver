@@ -126,7 +126,7 @@ void ProtocolStatus::sendStatusString()
 
 	players.append_attribute("online") = std::to_string(reportableOnlinePlayerCount).c_str();
 	players.append_attribute("max") = std::to_string(getNumber(ConfigManager::MAX_PLAYERS)).c_str();
-	players.append_attribute("peak") = std::to_string(g_game.getPlayersRecord()).c_str();
+	players.append_attribute("peak") = std::to_string(g_game.getPlayerRecord()).c_str();
 
 	pugi::xml_node monsters = tsqp.append_child("monsters");
 	monsters.append_attribute("total") = std::to_string(g_game.getMonstersOnline()).c_str();
@@ -191,7 +191,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->addByte(0x20);
 		output->add<uint32_t>(g_game.getPlayersOnline());
 		output->add<uint32_t>(getNumber(ConfigManager::MAX_PLAYERS));
-		output->add<uint32_t>(g_game.getPlayersRecord());
+		output->add<uint32_t>(g_game.getPlayerRecord());
 	}
 
 	if (requestedInfo & REQUEST_MAP_INFO) {

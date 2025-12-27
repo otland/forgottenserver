@@ -36,7 +36,6 @@ void GlobalEvents::clear(bool fromLua)
 	timerEventId = 0;
 
 	clearMap(thinkMap, fromLua);
-	clearMap(serverMap, fromLua);
 	clearMap(timerMap, fromLua);
 
 	reInitState(fromLua);
@@ -59,11 +58,6 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { timer(); }));
 			}
-			return true;
-		}
-	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
-		auto result = serverMap.emplace(globalEvent->getName(), std::move(*globalEvent));
-		if (result.second) {
 			return true;
 		}
 	} else { // think event
@@ -90,11 +84,6 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { timer(); }));
 			}
-			return true;
-		}
-	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
-		auto result = serverMap.emplace(globalEvent->getName(), std::move(*globalEvent));
-		if (result.second) {
 			return true;
 		}
 	} else { // think event
@@ -180,15 +169,6 @@ void GlobalEvents::think()
 	}
 }
 
-void GlobalEvents::execute(GlobalEvent_t type) const
-{
-	for (auto&& globalEvent : serverMap | std::views::values | std::views::as_const) {
-		if (globalEvent.getEventType() == type) {
-			globalEvent.executeEvent();
-		}
-	}
-}
-
 GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 {
 	// TODO: This should be better implemented. Maybe have a map for every type.
@@ -197,15 +177,6 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 			return thinkMap;
 		case GLOBALEVENT_TIMER:
 			return timerMap;
-		case GLOBALEVENT_RECORD: {
-			GlobalEventMap retMap;
-			for (const auto& [name, globalEvent] : serverMap) {
-				if (globalEvent.getEventType() == type) {
-					retMap.emplace(name, globalEvent);
-				}
-			}
-			return retMap;
-		}
 		default:
 			return GlobalEventMap();
 	}
@@ -270,15 +241,6 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 
 		nextExecution = (current_time + difference) * 1000;
 		eventType = GLOBALEVENT_TIMER;
-	} else if ((attr = node.attribute("type"))) {
-		const char* value = attr.value();
-		if (boost::iequals(value, "record")) {
-			eventType = GLOBALEVENT_RECORD;
-		} else {
-			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string()
-			          << "\" for globalevent with name " << name << std::endl;
-			return false;
-		}
 	} else if ((attr = node.attribute("interval"))) {
 		interval = std::max<int32_t>(SCHEDULER_MINTICKS, pugi::cast<int32_t>(attr.value()));
 		nextExecution = OTSYS_TIME() + interval;
@@ -293,32 +255,11 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 std::string_view GlobalEvent::getScriptEventName() const
 {
 	switch (eventType) {
-		case GLOBALEVENT_RECORD:
-			return "onRecord";
 		case GLOBALEVENT_TIMER:
 			return "onTime";
 		default:
 			return "onThink";
 	}
-}
-
-bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
-{
-	// onRecord(current, old)
-	if (!tfs::lua::reserveScriptEnv()) {
-		std::cout << "[Error - GlobalEvent::executeRecord] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	const auto env = tfs::lua::getScriptEnv();
-	env->setScriptId(scriptId, scriptInterface);
-
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(scriptId);
-
-	tfs::lua::pushNumber(L, current);
-	tfs::lua::pushNumber(L, old);
-	return scriptInterface->callFunction(2);
 }
 
 bool GlobalEvent::executeEvent() const

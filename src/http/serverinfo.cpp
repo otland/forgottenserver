@@ -30,7 +30,7 @@ std::pair<beast::http::status, json::value> tfs::http::handle_serverinfo(const j
 	     {"players",
 	      {{"online", g_game.getPlayersOnline()},
 	       {"max", getNumber(ConfigManager::MAX_PLAYERS)},
-	       {"peak", g_game.getPlayersRecord()}}},
+	       {"peak", g_game.getPlayerRecord()}}},
 	     {"monsters", {{"total", g_game.getMonstersOnline()}}},
 	     {"npcs", {{"total", g_game.getNpcsOnline()}}},
 	     {"rates",

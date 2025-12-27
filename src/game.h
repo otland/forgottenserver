@@ -210,7 +210,6 @@ public:
 	size_t getPlayersOnline() const { return players.size(); }
 	size_t getMonstersOnline() const { return monsters.size(); }
 	size_t getNpcsOnline() const { return npcs.size(); }
-	uint32_t getPlayersRecord() const { return playersRecord; }
 
 	ReturnValue internalMoveCreature(const std::shared_ptr<Creature>& creature, Direction direction,
 	                                 uint32_t flags = 0);
@@ -297,9 +296,6 @@ public:
 	bool internalCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses type, const std::string& text,
 	                         bool ghostMode, SpectatorVec* spectatorsPtr = nullptr, const Position* pos = nullptr,
 	                         bool echo = false);
-
-	void loadPlayersRecord();
-	void checkPlayersRecord();
 
 	void sendGuildMotd(uint32_t playerId);
 	void kickPlayer(uint32_t playerId, bool displayEffect);
@@ -502,6 +498,9 @@ public:
 	void addParty(const std::shared_ptr<Party>& party) { parties.insert(party); }
 	void removeParty(const std::shared_ptr<Party>& party) { parties.erase(party); }
 
+	auto getPlayerRecord() const { return playerRecord; }
+	void setPlayerRecord(uint32_t record) { playerRecord = record; }
+
 private:
 	bool playerSaySpell(const std::shared_ptr<Player>& player, SpeakClasses type, const std::string& text);
 	void playerWhisper(const std::shared_ptr<Player>& player, const std::string& text);
@@ -545,10 +544,9 @@ private:
 	GameState_t gameState = GAME_STATE_NORMAL;
 	WorldType_t worldType = WORLD_TYPE_PVP;
 
-	ServiceManager* serviceManager = nullptr;
+	uint32_t playerRecord = 0;
 
-	void updatePlayersRecord() const;
-	uint32_t playersRecord = 0;
+	ServiceManager* serviceManager = nullptr;
 };
 
 #endif // FS_GAME_H
