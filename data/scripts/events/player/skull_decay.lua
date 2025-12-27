@@ -1,11 +1,15 @@
-local event = CreatureEvent("Skull Decay")
+local event = Event()
 
-function event.onThink(player, interval)
+event.onCreatureThink = function(self, interval)
+	if not self:isPlayer() then
+		return
+	end
+
 	if Game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
 		return true
 	end
 
-	local skullTime = player:getSkullTime()
+	local skullTime = self:getSkullTime()
 	if skullTime <= 0 then
 		return true
 	end
@@ -13,19 +17,19 @@ function event.onThink(player, interval)
 	local elapsed = interval / 1000
 	skullTime = math.max(0, skullTime - elapsed)
 
-	player:setSkullTime(skullTime)
+	self:setSkullTime(skullTime)
 
 	if skullTime > 0 then
 		return true
 	end
 
-	if player:hasCondition(CONDITION_INFIGHT) then
+	if self:hasCondition(CONDITION_INFIGHT) then
 		return true
 	end
 
-	local skull = player:getSkull()
+	local skull = self:getSkull()
 	if skull == SKULL_RED or skull == SKULL_BLACK then
-		player:setSkull(SKULL_NONE)
+		self:setSkull(SKULL_NONE)
 	end
 	return true
 end

@@ -10,7 +10,6 @@ void registerCondition(LuaScriptInterface& i);
 void registerConfigManager(LuaScriptInterface& i);
 void registerContainer(LuaScriptInterface& i);
 void registerCreature(LuaScriptInterface& i);
-void registerCreatureEvent(LuaScriptInterface& i);
 void registerDatabase(LuaScriptInterface& i);
 void registerGame(LuaScriptInterface& i);
 void registerGlobalEvent(LuaScriptInterface& i);

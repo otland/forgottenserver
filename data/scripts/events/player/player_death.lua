@@ -18,19 +18,25 @@ local function getKiller(killer)
 	return false, killer:getName()
 end
 
-function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
-	local playerId = player:getId()
+local event = Event()
+
+event.onCreatureDeath = function(self, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
+	if not self:isPlayer() then
+		return
+	end
+
+	local playerId = self:getId()
 	if nextUseStaminaTime[playerId] then
 		nextUseStaminaTime[playerId] = nil
 	end
 
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are dead.")
-	player:sendBlessings()
+	self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are dead.")
+	self:sendBlessings()
 
 	local byPlayer, killerName = getKiller(killer)
 	local byPlayerMostDamage, killerNameMostDamage = getKiller(mostDamageKiller)
 
-	player:takeScreenshot(byPlayer and SCREENSHOT_TYPE_DEATHPVP or SCREENSHOT_TYPE_DEATHPVE)
+	self:takeScreenshot(byPlayer and SCREENSHOT_TYPE_DEATHPVP or SCREENSHOT_TYPE_DEATHPVE)
 
 	if byPlayer then
 		killer:takeScreenshot(SCREENSHOT_TYPE_PLAYERKILL)
@@ -44,8 +50,8 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 		return
 	end
 
-	local playerGuid = player:getGuid()
-	db.query("INSERT INTO `player_deaths` (`player_id`, `time`, `level`, `killed_by`, `is_player`, `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`) VALUES (" .. playerGuid .. ", " .. os.time() .. ", " .. player:getLevel() .. ", " .. db.escapeString(killerName) .. ", " .. (byPlayer and 1 or 0) .. ", " .. db.escapeString(killerNameMostDamage) .. ", " .. (byPlayerMostDamage and 1 or 0) .. ", " .. (lastHitUnjustified and 1 or 0) .. ", " .. (mostDamageUnjustified and 1 or 0) .. ")")
+	local playerGuid = self:getGuid()
+	db.query("INSERT INTO `player_deaths` (`player_id`, `time`, `level`, `killed_by`, `is_player`, `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`) VALUES (" .. playerGuid .. ", " .. os.time() .. ", " .. self:getLevel() .. ", " .. db.escapeString(killerName) .. ", " .. (byPlayer and 1 or 0) .. ", " .. db.escapeString(killerNameMostDamage) .. ", " .. (byPlayerMostDamage and 1 or 0) .. ", " .. (lastHitUnjustified and 1 or 0) .. ", " .. (mostDamageUnjustified and 1 or 0) .. ")")
 	local resultId = db.storeQuery("SELECT `player_id` FROM `player_deaths` WHERE `player_id` = " .. playerGuid)
 
 	local deathRecords = 0
@@ -65,7 +71,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 	end
 
 	if byPlayer then
-		local targetGuild = player:getGuild()
+		local targetGuild = self:getGuild()
 		targetGuild = targetGuild and targetGuild:getId() or 0
 		if targetGuild ~= 0 then
 			local killerGuild = killer:getGuild()
@@ -79,9 +85,11 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 				end
 
 				if warId then
-					db.asyncQuery("INSERT INTO `guildwar_kills` (`killer`, `target`, `killerguild`, `targetguild`, `time`, `warid`) VALUES (" .. db.escapeString(killerName) .. ", " .. db.escapeString(player:getName()) .. ", " .. killerGuild .. ", " .. targetGuild .. ", " .. os.time() .. ", " .. warId .. ")")
+					db.asyncQuery("INSERT INTO `guildwar_kills` (`killer`, `target`, `killerguild`, `targetguild`, `time`, `warid`) VALUES (" .. db.escapeString(killerName) .. ", " .. db.escapeString(self:getName()) .. ", " .. killerGuild .. ", " .. targetGuild .. ", " .. os.time() .. ", " .. warId .. ")")
 				end
 			end
 		end
 	end
 end
+
+event:register()

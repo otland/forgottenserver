@@ -21,9 +21,13 @@ local function getKillersForBestiary(monster)
 	return killers
 end
 
-local creatureEvent = CreatureEvent("BestiaryKills")
+local event = Event()
 
-function creatureEvent.onKill(player, target)
+event.onCreatureKill = function(self, target)
+	if not self:isPlayer() then
+		return true
+	end
+
 	local monster = target:getMonster()
 	if not monster or monster:getMaster() then
 		return true
@@ -44,4 +48,4 @@ function creatureEvent.onKill(player, target)
 	return true
 end
 
-creatureEvent:register()
+event:register()

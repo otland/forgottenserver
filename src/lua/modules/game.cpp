@@ -611,7 +611,6 @@ int luaGameCreateMonsterType(lua_State* L)
 		monsterType->info.lootItems.clear();
 		monsterType->info.attackSpells.clear();
 		monsterType->info.defenseSpells.clear();
-		monsterType->info.scripts.clear();
 		monsterType->info.thinkEvent = -1;
 		monsterType->info.creatureAppearEvent = -1;
 		monsterType->info.creatureDisappearEvent = -1;

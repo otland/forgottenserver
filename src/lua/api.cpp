@@ -388,4 +388,22 @@ void pushTown(lua_State* L, const Town& town)
 	lua_setmetatable(L, -2);
 }
 
+void pushParty(lua_State* L, const std::shared_ptr<Party>& party) 
+{
+	pushSharedPtr(L, party);
+	setMetatable(L, -1, "Party");
+}
+
+void pushItemType(lua_State* L, const ItemType* itemType)
+{
+	pushUserdata(L, itemType);
+	setMetatable(L, -1, "ItemType");
+}
+
+void pushNetworkMessage(lua_State* L, NetworkMessage* msg)
+{
+	pushUserdata(L, msg);
+	setMetatable(L, -1, "NetworkMessage");
+}
+
 } // namespace tfs::lua

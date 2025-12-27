@@ -31,7 +31,4 @@
 	<voices interval="5000" chance="10">
 		<voice sentence="Blub!" />
 	</voices>
-	<script>
-		<event name="NorthernPikeDeath" />
-	</script>
 </monster>

@@ -121,7 +121,6 @@ class MonsterType
 		std::vector<voiceBlock_t> voiceVector;
 
 		std::vector<LootBlock> lootItems;
-		std::vector<std::string> scripts;
 		std::vector<spellBlock_t> attackSpells;
 		std::vector<spellBlock_t> defenseSpells;
 		std::vector<summonBlock_t> summons;

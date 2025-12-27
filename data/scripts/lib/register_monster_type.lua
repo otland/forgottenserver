@@ -195,13 +195,6 @@ registerMonsterType.summons = function(mtype, mask)
 		end
 	end
 end
-registerMonsterType.events = function(mtype, mask)
-	if type(mask.events) == "table" then
-		for k, v in pairs(mask.events) do
-			mtype:registerEvent(v)
-		end
-	end
-end
 registerMonsterType.loot = function(mtype, mask)
 	if type(mask.loot) == "table" then
 		local lootError = false

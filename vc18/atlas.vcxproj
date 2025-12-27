@@ -132,7 +132,6 @@
     <ClCompile Include="..\src\connection.cpp" />
     <ClCompile Include="..\src\container.cpp" />
     <ClCompile Include="..\src\creature.cpp" />
-    <ClCompile Include="..\src\creatureevent.cpp" />
     <ClCompile Include="..\src\database.cpp" />
     <ClCompile Include="..\src\databasemanager.cpp" />
     <ClCompile Include="..\src\databasetasks.cpp" />
@@ -172,7 +171,6 @@
     <ClCompile Include="..\src\lua\modules\configmanager.cpp" />
     <ClCompile Include="..\src\lua\modules\container.cpp" />
     <ClCompile Include="..\src\lua\modules\creature.cpp" />
-    <ClCompile Include="..\src\lua\modules\creatureevent.cpp" />
     <ClCompile Include="..\src\lua\modules\database.cpp" />
     <ClCompile Include="..\src\lua\modules\game.cpp" />
     <ClCompile Include="..\src\lua\modules\globalevent.cpp" />
@@ -261,7 +259,6 @@
     <ClInclude Include="..\src\const.h" />
     <ClInclude Include="..\src\container.h" />
     <ClInclude Include="..\src\creature.h" />
-    <ClInclude Include="..\src\creatureevent.h" />
     <ClInclude Include="..\src\database.h" />
     <ClInclude Include="..\src\databasemanager.h" />
     <ClInclude Include="..\src\databasetasks.h" />

@@ -125,9 +125,6 @@
     <ClCompile Include="..\src\creature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\creatureevent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\database.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -294,9 +291,6 @@
       <Filter>Source Files\lua\modules</Filter>
     </ClCompile>
     <ClCompile Include="..\src\lua\modules\moveevent.cpp">
-      <Filter>Source Files\lua\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\lua\modules\creatureevent.cpp">
       <Filter>Source Files\lua\modules</Filter>
     </ClCompile>
     <ClCompile Include="..\src\lua\modules\talkaction.cpp">
@@ -473,9 +467,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\creature.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\creatureevent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\database.h">

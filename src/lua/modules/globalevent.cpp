@@ -51,8 +51,7 @@ int luaGlobalEventType(lua_State* L)
 		} else if (tmpStr == "save") {
 			global->setEventType(GLOBALEVENT_SAVE);
 		} else {
-			std::cout << "[Error - CreatureEvent::configureLuaEvent] Invalid type for global event: " << typeName
-			          << '\n';
+			std::cout << "[Error - luaGlobalEventType] Invalid type for global event: " << typeName << '\n';
 			tfs::lua::pushBoolean(L, false);
 		}
 		tfs::lua::pushBoolean(L, true);

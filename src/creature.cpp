@@ -16,7 +16,6 @@ double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
 double Creature::speedC = -4795.01;
 
-extern CreatureEvents* g_creatureEvents;
 extern Dispatcher g_dispatcher;
 extern Game g_game;
 extern Scheduler g_scheduler;
@@ -124,11 +123,7 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 
-	// scripting event - onThink
-	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
-	for (CreatureEvent* thinkEvent : thinkEvents) {
-		thinkEvent->executeOnThink(asCreature(), interval);
-	}
+	tfs::events::creature::onThink(asCreature(), interval);
 }
 
 void Creature::forceUpdatePath()
@@ -487,12 +482,8 @@ bool Creature::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
 {
 	if (!lootDrop && asMonster()) {
 		if (!master.expired()) {
-			// scripting event - onDeath
-			const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
-			for (CreatureEvent* deathEvent : deathEvents) {
-				deathEvent->executeOnDeath(asCreature(), nullptr, lastHitCreature, mostDamageCreature,
-				                           lastHitUnjustified, mostDamageUnjustified);
-			}
+			tfs::events::creature::onDeath(asCreature(), nullptr, lastHitCreature, mostDamageCreature,
+			                               lastHitUnjustified, mostDamageUnjustified);
 		}
 
 		g_game.addMagicEffect(getPosition(), CONST_ME_POFF);
@@ -529,11 +520,8 @@ bool Creature::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
 			g_game.startDecay(corpse);
 		}
 
-		// scripting event - onDeath
-		for (CreatureEvent* deathEvent : getCreatureEvents(CREATURE_EVENT_DEATH)) {
-			deathEvent->executeOnDeath(asCreature(), corpse, lastHitCreature, mostDamageCreature, lastHitUnjustified,
-			                           mostDamageUnjustified);
-		}
+		tfs::events::creature::onDeath(asCreature(), corpse, lastHitCreature, mostDamageCreature, lastHitUnjustified,
+		                               mostDamageUnjustified);
 
 		if (corpse) {
 			dropLoot(corpse->getContainer(), lastHitCreature);
@@ -920,11 +908,7 @@ bool Creature::onKilledCreature(const std::shared_ptr<Creature>& target, bool)
 		master->onKilledCreature(target);
 	}
 
-	// scripting event - onKill
-	const CreatureEventList& killEvents = getCreatureEvents(CREATURE_EVENT_KILL);
-	for (CreatureEvent* killEvent : killEvents) {
-		killEvent->executeOnKill(asCreature(), target);
-	}
+	tfs::events::creature::onKill(asCreature(), target);
 	return false;
 }
 
@@ -1255,83 +1239,6 @@ LightInfo Creature::getCreatureLight() const { return internalLight; }
 void Creature::setCreatureLight(LightInfo lightInfo) { internalLight = std::move(lightInfo); }
 
 void Creature::setNormalCreatureLight() { internalLight = {}; }
-
-bool Creature::registerCreatureEvent(const std::string& name)
-{
-	CreatureEvent* event = g_creatureEvents->getEventByName(name);
-	if (!event) {
-		return false;
-	}
-
-	CreatureEventType_t type = event->getEventType();
-	if (hasEventRegistered(type)) {
-		for (CreatureEvent* creatureEvent : eventsList) {
-			if (creatureEvent == event) {
-				return false;
-			}
-		}
-	} else {
-		scriptEventsBitField |= static_cast<uint32_t>(1) << type;
-	}
-
-	eventsList.push_back(event);
-	return true;
-}
-
-bool Creature::unregisterCreatureEvent(const std::string& name)
-{
-	CreatureEvent* event = g_creatureEvents->getEventByName(name);
-	if (!event) {
-		return false;
-	}
-
-	CreatureEventType_t type = event->getEventType();
-	if (!hasEventRegistered(type)) {
-		return false;
-	}
-
-	bool resetTypeBit = true;
-
-	auto it = eventsList.begin();
-	while (it != eventsList.end()) {
-		CreatureEvent* curEvent = *it;
-		if (curEvent == event) {
-			it = eventsList.erase(it);
-			continue;
-		}
-
-		if (curEvent->getEventType() == type) {
-			resetTypeBit = false;
-		}
-		++it;
-	}
-
-	if (resetTypeBit) {
-		scriptEventsBitField &= ~(static_cast<uint32_t>(1) << type);
-	}
-	return true;
-}
-
-CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
-{
-	CreatureEventList tmpEventList;
-
-	if (!hasEventRegistered(type)) {
-		return tmpEventList;
-	}
-
-	for (CreatureEvent* creatureEvent : eventsList) {
-		if (!creatureEvent->isLoaded()) {
-			continue;
-		}
-
-		if (creatureEvent->getEventType() == type) {
-			tmpEventList.push_back(creatureEvent);
-		}
-	}
-
-	return tmpEventList;
-}
 
 bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Position& testPos,
                                            const FindPathParams& fpp) const

@@ -30,9 +30,6 @@
 		<voice sentence="*sniff*" />
 		<voice sentence="*wheeze*" />
 	</voices>
-	<script>
-		<event name="WhiteDeerScouts" />
-	</script>
 	<loot>
 		<item id="13533" name="white deer antlers" chance="21286" />
 		<item id="13534" name="white deer skin" chance="20418" />

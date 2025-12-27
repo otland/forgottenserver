@@ -210,15 +210,14 @@ function ModalWindow:sendToPlayer(player)
 	local playerId = player:getId()
 	ModalWindows[playerId] = ModalWindows[playerId] or {}
 	ModalWindows[playerId][self.modalWindowId] = self
-	player:registerEvent("modalWindowHelper")
 	self.using = self.using + 1
 	return modalWindow:sendToPlayer(player)
 end
 
-local creatureEvent = CreatureEvent("modalWindowHelper")
+local event = Event()
 
-function creatureEvent.onModalWindow(player, modalWindowId, buttonId, choiceId)
-	local playerId = player:getId()
+event.onPlayerModalWindow = function(self, modalWindowId, buttonId, choiceId)
+	local playerId = self:getId()
 	local modalWindows = ModalWindows[playerId]
 	if not modalWindows then
 		return true
@@ -232,11 +231,11 @@ function creatureEvent.onModalWindow(player, modalWindowId, buttonId, choiceId)
 	local button = modalWindow.buttons[buttonId] or {}
 	local choice = modalWindow.choices[choiceId] or {}
 	if button.callback then
-		button.callback(player, button, choice)
+		button.callback(self, button, choice)
 	elseif choice.callback then
-		choice.callback(player, button, choice)
+		choice.callback(self, button, choice)
 	elseif modalWindow.defaultCallback then
-		modalWindow.defaultCallback(player, button, choice)
+		modalWindow.defaultCallback(self, button, choice)
 	end
 
 	modalWindow.using = modalWindow.using - 1
@@ -249,4 +248,4 @@ function creatureEvent.onModalWindow(player, modalWindowId, buttonId, choiceId)
 	return true
 end
 
-creatureEvent:register()
+event:register()

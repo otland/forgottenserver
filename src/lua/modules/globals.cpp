@@ -314,7 +314,6 @@ void tfs::lua::registerGlobals(LuaScriptInterface& lsi)
 	registerEnum(lsi, RELOAD_TYPE_ACTIONS);
 	registerEnum(lsi, RELOAD_TYPE_CHAT);
 	registerEnum(lsi, RELOAD_TYPE_CONFIG);
-	registerEnum(lsi, RELOAD_TYPE_CREATURESCRIPTS);
 	registerEnum(lsi, RELOAD_TYPE_EVENTS);
 	registerEnum(lsi, RELOAD_TYPE_GLOBAL);
 	registerEnum(lsi, RELOAD_TYPE_GLOBALEVENTS);

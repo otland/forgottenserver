@@ -93,6 +93,4 @@ void reportError(std::string_view function, std::string_view error_desc, lua_Sta
 
 void reportError(lua_State* L, std::string_view error_desc) { reportError(__FUNCTION__, error_desc, L, true); }
 
-void reportError(std::string_view error_desc) { reportError(__FUNCTION__, error_desc, nullptr, true); }
-
 } // namespace tfs::lua

@@ -29,6 +29,12 @@ ec.onCreatureTargetCombat = {returnValue=true}
 ec.onCreatureHear = {}
 ec.onCreatureChangeZone = {}
 ec.onCreatureUpdateStorage = {}
+ec.onCreatureChangeHealth = {}
+ec.onCreatureChangeMana = {}
+ec.onCreatureThink = {}
+ec.onCreaturePrepareDeath = {}
+ec.onCreatureDeath = {}
+ec.onCreatureKill = {}
 -- Party
 ec.onPartyJoin = {}
 ec.onPartyLeave = {}
@@ -59,6 +65,14 @@ ec.onPlayerGainSkillTries = {[3] = 1}
 ec.onPlayerWrapItem = {}
 ec.onPlayerInventoryUpdate = {}
 ec.onPlayerSpellCheck = {}
+ec.onPlayerLogin = {}
+ec.onPlayerJoin = {}
+ec.onPlayerLogout = {}
+ec.onPlayerReconnect = {}
+ec.onPlayerAdvance = {}
+ec.onPlayerModalWindow = {}
+ec.onPlayerTextEdit = {}
+ec.onPlayerExtendedOpcode = {}
 -- Monster
 ec.onMonsterDropLoot = {}
 ec.onMonsterSpawn = {}

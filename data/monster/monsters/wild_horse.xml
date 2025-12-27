@@ -26,7 +26,4 @@
 		<voice sentence="*snort*" />
 		<voice sentence="*Weeeeheeeeaaa*" />
 	</voices>
-	<script>
-		<event name="WildHorseDeath" />
-	</script>
 </monster>

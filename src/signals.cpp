@@ -33,7 +33,6 @@ extern MoveEvents* g_moveEvents;
 extern Spells* g_spells;
 extern Weapons* g_weapons;
 extern Game g_game;
-extern CreatureEvents* g_creatureEvents;
 extern GlobalEvents* g_globalEvents;
 extern Chat* g_chat;
 extern LuaEnvironment g_luaEnvironment;
@@ -59,9 +58,6 @@ void sighupHandler()
 
 	ConfigManager::load();
 	std::cout << "Reloaded config." << std::endl;
-
-	g_creatureEvents->reload();
-	std::cout << "Reloaded creature scripts." << std::endl;
 
 	g_moveEvents->reload();
 	std::cout << "Reloaded movements." << std::endl;

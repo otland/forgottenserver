@@ -1,17 +1,18 @@
-function onLogin(player)
+local event = Event()
+
+event.onPlayerJoin = function(self)
 	if not configManager.getBoolean(configKeys.STAMINA_SYSTEM) then
-		return true
+		return
 	end
 
-	local lastLogout = player:getLastLogout()
+	local lastLogout = self:getLastLogout()
 	local offlineTime = lastLogout ~= 0 and math.min(os.time() - lastLogout, 86400 * 21) or 0
 	offlineTime = offlineTime - 600
-
 	if offlineTime < 180 then
-		return true
+		return
 	end
 
-	local staminaMinutes = player:getStamina()
+	local staminaMinutes = self:getStamina()
 	local maxNormalStaminaRegen = 2340 - math.min(2340, staminaMinutes)
 
 	local regainStaminaMinutes = offlineTime / configManager.getNumber(configKeys.STAMINA_REGEN_MINUTE)
@@ -22,6 +23,7 @@ function onLogin(player)
 		staminaMinutes = staminaMinutes + regainStaminaMinutes
 	end
 
-	player:setStamina(staminaMinutes)
-	return true
+	self:setStamina(staminaMinutes)
 end
+
+event:register()

@@ -33,7 +33,6 @@ extern Spells* g_spells;
 extern Actions* g_actions;
 extern TalkActions* g_talkActions;
 extern Scheduler g_scheduler;
-extern CreatureEvents* g_creatureEvents;
 extern Scripts* g_scripts;
 extern Weapons* g_weapons;
 
@@ -525,7 +524,7 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, const std::shared_
 	// execute it
 	ret = tfs::lua::protectedCall(L, 0, 0);
 	if (ret != 0) {
-		tfs::lua::reportError(tfs::lua::popString(L));
+		tfs::lua::reportError(L, tfs::lua::popString(L));
 		tfs::lua::resetScriptEnv();
 		return -1;
 	}
@@ -676,14 +675,14 @@ bool LuaScriptInterface::callFunction(int params)
 	bool result = false;
 	int size = lua_gettop(L);
 	if (tfs::lua::protectedCall(L, params, 1) != 0) {
-		tfs::lua::reportError(tfs::lua::getString(L, -1));
+		tfs::lua::reportError(L, tfs::lua::getString(L, -1));
 	} else {
 		result = tfs::lua::getBoolean(L, -1);
 	}
 
 	lua_pop(L, 1);
 	if ((lua_gettop(L) + params + 1) != size) {
-		tfs::lua::reportError("Stack size changed!");
+		tfs::lua::reportError(L, "Stack size changed!");
 	}
 
 	tfs::lua::resetScriptEnv();
@@ -694,11 +693,11 @@ void LuaScriptInterface::callVoidFunction(int params)
 {
 	int size = lua_gettop(L);
 	if (tfs::lua::protectedCall(L, params, 0) != 0) {
-		tfs::lua::reportError(tfs::lua::popString(L));
+		tfs::lua::reportError(L, tfs::lua::popString(L));
 	}
 
 	if ((lua_gettop(L) + params + 1) != size) {
-		tfs::lua::reportError("Stack size changed!");
+		tfs::lua::reportError(L, "Stack size changed!");
 	}
 
 	tfs::lua::resetScriptEnv();

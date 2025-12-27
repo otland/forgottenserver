@@ -398,7 +398,7 @@ public:
 	void playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter);
 	void playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
 
-	void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
+	void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, std::string_view buffer);
 	void parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage_ptr msg);
 
 	std::vector<std::shared_ptr<Item>> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player& player);

@@ -25,6 +25,5 @@ int luaErrorHandler(lua_State* L);
 
 void reportError(std::string_view function, std::string_view error_desc, lua_State* L, bool stack_trace);
 void reportError(lua_State* L, std::string_view error_desc);
-void reportError(std::string_view error_desc);
 
 } // namespace tfs::lua

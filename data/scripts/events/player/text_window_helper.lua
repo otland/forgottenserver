@@ -31,9 +31,6 @@ function textWindow.setLength(window, length)
 end
 
 function textWindow.sendToPlayer(window, player)
-	player:registerEvent("TextWindowHelperClearLogout")
-	player:registerEvent("TextWindowHelperClearDeath")
-	player:registerEvent("TextWindowHelper")
 	window.id = player:showTextDialog(window.itemId, window.text, window.canWrite, window.length)
 	local playerGuid = player:getGuid()
 	local windows = TextWindows[playerGuid]
@@ -46,38 +43,44 @@ function textWindow.sendToPlayer(window, player)
 	return window.id
 end
 
-local textWindowHelper = CreatureEvent("TextWindowHelper")
+local event = Event()
 
-function textWindowHelper.onTextEdit(player, item, text, windowTextId)
-	player:unregisterEvent("TextWindowHelper")
-	local playerGuid = player:getGuid()
+event.onPlayerTextEdit = function(self, item, text, windowTextId)
+	local playerGuid = self:getGuid()
 	local windows = TextWindows[playerGuid]
-	if not windows then return true end
+	if not windows then
+		return true
+	end
+
 	local window = windows[windowTextId]
-	if not window then return true end
+	if not window then
+		return true
+	end
+
 	windows[windowTextId] = nil
 	if window.id == windowTextId and window.callback then
-		return window.callback(player, item, text)
+		return window.callback(self, item, text)
 	end
 	return true
 end
 
-textWindowHelper:register()
+event:register()
 
-local clearWindows = CreatureEvent("TextWindowHelperClearLogout")
+event = Event()
 
-function clearWindows.onLogout(player)
-	TextWindows[player:getGuid()] = nil
+event.onPlayerLogout = function(self)
+	TextWindows[self:getGuid()] = nil
 	return true
 end
 
-clearWindows:register()
+event:register()
 
-local clearWindows = CreatureEvent("TextWindowHelperClearDeath")
+event = Event()
 
-function clearWindows.onDeath(player)
-	TextWindows[player:getGuid()] = nil
-	return true
+event.onCreatureDeath = function(self)
+	if self:isPlayer() then
+		TextWindows[self:getGuid()] = nil
+	end
 end
 
-clearWindows:register()
+event:register()

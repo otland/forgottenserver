@@ -262,8 +262,6 @@ Podium = {}
 ---@field create fun(): Creature
 ---@field __eq fun(self: Creature, other: Creature): boolean
 ---@field getEvents fun(self: Creature): table
----@field registerEvent fun(self: Creature, eventName: string, callback: function)
----@field unregisterEvent fun(self: Creature, eventName: string)
 ---@field isRemoved fun(self: Creature): boolean
 ---@field isCreature fun(self: Creature): boolean
 ---@field isInGhostMode fun(self: Creature): boolean
@@ -758,8 +756,6 @@ Outfit = {}
 ---@field addVoice fun(self: MonsterType, voice: table)
 ---@field getLoot fun(self: MonsterType): table
 ---@field addLoot fun(self: MonsterType, loot: table)
----@field getCreatureEvents fun(self: MonsterType): table
----@field registerEvent fun(self: MonsterType, event: string)
 ---@field eventType fun(self: MonsterType): string
 ---@field onThink fun(self: MonsterType, callback: function)
 ---@field onAppear fun(self: MonsterType, callback: function)
@@ -920,26 +916,6 @@ Action = {}
 ---@overload fun(...:string):TalkAction
 TalkAction = {}
 
--- MARK: CreatureEvemt
----@class CreatureEvent
----@field type fun(self:CreatureEvent, callback:string):boolean
----@field register fun(self:CreatureEvent):boolean
----@field onLogin fun(player:Player):boolean
----@field onLogout fun(player:Player):boolean
----@field onReconnect fun(player:Player)
----@field onThink fun(creature:Creature, interval:integer):boolean
----@field onPrepareDeath fun(creature:Creature, killer:Creature):boolean
----@field onDeath fun(creature:Creature, corpse:Item, killer:Creature, mostDamageKiller:Creature, lastHitUnjustified:boolean, mostDamageUnjustified:boolean):boolean
----@field onAdvance fun(player:Player, skill:integer, oldLevel:integer, newLevel:integer):boolean
----@field onKill fun(player:Player, target:Creature):boolean
----@field onTextEdit fun(player:Player, item:Item, text:string, windowTextId:integer):boolean
----@field onHealthChange fun(creature:Creature, attacker:Creature, primaryDamage:integer, primaryType:integer, secondaryDamage:integer, secondaryType:integer, origin:integer):integer, integer, integer, integer
----@field onManaChange fun(creature:Creature, attacker:Creature, primaryDamage:integer, primaryType:integer, secondaryDamage:integer, secondaryType:integer, origin:integer):integer, integer, integer, integer
----@field onModalWindow fun(player:Player, modalWindowId:integer, buttonId:integer, choiceId:integer):nil
----@field onExtendedOpcode fun(player:Player, opcode:integer, buffer:string):boolean
----@operator call(string):CreatureEvent
-CreatureEvent = {}
-
 -- MARK: MoveEvent
 ---@class MoveEvent
 ---@field type fun(self:MoveEvent, callback:string):boolean
@@ -1022,7 +998,13 @@ Weapon = {}
 ---@field onCreatureTargetCombat fun(creature:Creature, target:Creature): integer
 ---@field onCreatureHear fun(creature:Creature, speaker:Creature, words:string, type:integer):nil
 ---@field onCreatureChangeZone fun(creature:Creature, fromZone:integer, toZone:integer):nil
+---@field onCreatureChangeHealth fun(creature:Creature, attacker:Creature, primaryDamage:integer, primaryType:integer, secondaryDamage:integer, secondaryType:integer, origin:integer):integer, integer, integer, integer
+---@field onCreatureChangeMana fun(creature:Creature, attacker:Creature, primaryDamage:integer, primaryType:integer, secondaryDamage:integer, secondaryType:integer, origin:integer):integer, integer, integer, integer
 ---@field onCreatureUpdateStorage fun(creature:Creature, key:integer, value?:integer, oldValue?:integer, isSpawn?:boolean):nil
+---@field onCreatureThink fun(creature:Creature, interval:integer):nil
+---@field onCreaturePrepareDeath fun(creature:Creature, killer:Creature):boolean
+---@field onCreatureDeath fun(creature:Creature, corpse?:Container, killer?:Creature, mostDamageKiller?:Creature, lastHitUnjustified:boolean, mostDamageUnjustified:boolean):nil
+---@field onCreatureKill fun(creature:Creature, target:Creature):nil
 ---@field onPartyJoin fun(party:Party, player:Player):boolean
 ---@field onPartyLeave fun(party:Party, player:Player):boolean
 ---@field onPartyDisband fun(party:Party):boolean
@@ -1049,8 +1031,16 @@ Weapon = {}
 ---@field onPlayerGainSkillTries fun(player:Player, skill:integer, tries:integer, artificial?:boolean):integer
 ---@field onPlayerNetworkMessage fun(player:Player, recvByte:integer, msg:NetworkMessage):nil
 ---@field onPlayerUpdateInventory fun(player:Player, item:Item, slot:integer, equip?:boolean):nil
----@field onPlayerRotateItem fun(player:Player, item:Item)
+---@field onPlayerRotateItem fun(player:Player, item:Item):nil
 ---@field onPlayerSpellCheck fun(player:Player, spell:Spell):boolean
+---@field onPlayerLogin fun(player:Player):boolean
+---@field onPlayerJoin fun(player:Player):nil
+---@field onPlayerLogout fun(player:Player):boolean
+---@field onPlayerReconnect fun(player:Player):nil
+---@field onPlayerAdvance fun(player:Player, skill:integer, oldLvl:integer, newLvl:integer):nil
+---@field onPlayerModalWindow fun(player:Player, modalWindowId:integer, buttonId:integer, choiceId:integer):nil
+---@field onPlayerTextEdit fun(player:Player, item:Item, text:string, windowTextId:integer):boolean
+---@field onPlayerExtendedOpcode fun(player:Player, opcode:integer, buffer:string):nil
 ---@field onMonsterDropLoot fun(monster:Monster, corpse?:Container):nil
 ---@field onMonsterSpawn fun(monster:Monster, position:Position, startup:boolean, artificial:boolean):nil
 ---@operator call():Event
@@ -1857,20 +1847,19 @@ RELOAD_TYPE_ALL = 0
 RELOAD_TYPE_ACTIONS = 1
 RELOAD_TYPE_CHAT = 2
 RELOAD_TYPE_CONFIG = 3
-RELOAD_TYPE_CREATURESCRIPTS = 4
-RELOAD_TYPE_EVENTS = 5
-RELOAD_TYPE_GLOBAL = 6
-RELOAD_TYPE_GLOBALEVENTS = 7
-RELOAD_TYPE_ITEMS = 8
-RELOAD_TYPE_MONSTERS = 9
-RELOAD_TYPE_MOUNTS = 10
-RELOAD_TYPE_MOVEMENTS = 11
-RELOAD_TYPE_NPCS = 12
-RELOAD_TYPE_QUESTS = 13
-RELOAD_TYPE_SCRIPTS = 14
-RELOAD_TYPE_SPELLS = 15
-RELOAD_TYPE_TALKACTIONS = 16
-RELOAD_TYPE_WEAPONS = 17
+RELOAD_TYPE_EVENTS = 4
+RELOAD_TYPE_GLOBAL = 5
+RELOAD_TYPE_GLOBALEVENTS = 6
+RELOAD_TYPE_ITEMS = 7
+RELOAD_TYPE_MONSTERS = 8
+RELOAD_TYPE_MOUNTS = 9
+RELOAD_TYPE_MOVEMENTS = 10
+RELOAD_TYPE_NPCS = 11
+RELOAD_TYPE_QUESTS = 12
+RELOAD_TYPE_SCRIPTS = 13
+RELOAD_TYPE_SPELLS = 14
+RELOAD_TYPE_TALKACTIONS = 15
+RELOAD_TYPE_WEAPONS = 16
 
 PlayerFlag_CannotUseCombat = 1 * 2 ^ 0
 PlayerFlag_CannotAttackPlayer = 1 * 2 ^ 1

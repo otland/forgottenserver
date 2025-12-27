@@ -9,6 +9,7 @@
 #include "base64.h"
 #include "condition.h"
 #include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "iologindata.h"
 #include "iomarket.h"
@@ -19,7 +20,6 @@
 #include "scheduler.h"
 
 extern Chat* g_chat;
-extern CreatureEvents* g_creatureEvents;
 extern Dispatcher g_dispatcher;
 extern Game g_game;
 extern Scheduler g_scheduler;
@@ -226,10 +226,6 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			}
 		}
 
-		if (operatingSystem >= CLIENTOS_OTCLIENT_LINUX) {
-			player->registerCreatureEvent("ExtendedOpcode");
-		}
-
 		player->lastIP = player->getIP();
 		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 		acceptPackets = true;
@@ -285,10 +281,10 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->resetIdleTime();
 	acceptPackets = true;
 
-	g_creatureEvents->playerReconnect(player);
+	tfs::events::player::onReconnect(player);
 }
 
-void ProtocolGame::logout(bool displayEffect, bool forced)
+void ProtocolGame::forceLogout(bool displayEffect)
 {
 	// dispatcher thread
 	if (!player) {
@@ -296,24 +292,39 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 	}
 
 	if (!player->isRemoved()) {
-		if (!forced) {
-			if (!player->isAccessPlayer()) {
-				if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
-					player->sendCancelMessage(RETURNVALUE_YOUCANNOTLOGOUTHERE);
-					return;
-				}
+		if (displayEffect && !player->isDead() && !player->isInGhostMode()) {
+			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+		}
+	}
 
-				if (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT)) {
-					player->sendCancelMessage(RETURNVALUE_YOUMAYNOTLOGOUTDURINGAFIGHT);
-					return;
-				}
-			}
+	sendSessionEnd(SESSION_END_FORCECLOSE);
+	disconnect();
 
-			// scripting event - onLogout
-			if (!g_creatureEvents->playerLogout(player)) {
-				// Let the script handle the error message
+	g_game.removeCreature(player);
+}
+
+void ProtocolGame::logout(bool displayEffect)
+{
+	// dispatcher thread
+	if (!player) {
+		return;
+	}
+
+	if (!player->isRemoved()) {
+		if (!player->isAccessPlayer()) {
+			if (player->getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
+				player->sendCancelMessage(RETURNVALUE_YOUCANNOTLOGOUTHERE);
 				return;
 			}
+
+			if (!player->getTile()->hasFlag(TILESTATE_PROTECTIONZONE) && player->hasCondition(CONDITION_INFIGHT)) {
+				player->sendCancelMessage(RETURNVALUE_YOUMAYNOTLOGOUTDURINGAFIGHT);
+				return;
+			}
+		}
+
+		if (!tfs::events::player::onLogout(player)) {
+			return;
 		}
 
 		if (displayEffect && !player->isDead() && !player->isInGhostMode()) {
@@ -321,7 +332,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 		}
 	}
 
-	sendSessionEnd(forced ? SESSION_END_FORCECLOSE : SESSION_END_LOGOUT);
+	sendSessionEnd(SESSION_END_LOGOUT);
 	disconnect();
 
 	g_game.removeCreature(player);
@@ -523,7 +534,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 
 	switch (recvbyte) {
 		case 0x14:
-			g_dispatcher.addTask([thisPtr = getThis()]() { thisPtr->logout(true, false); });
+			g_dispatcher.addTask([thisPtr = getThis()]() { thisPtr->logout(true); });
 			break;
 		// case 0x2A: break; // bestiary tracker
 		// case 0x2C: break; // team finder (leader)

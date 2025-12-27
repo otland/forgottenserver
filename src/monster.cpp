@@ -42,13 +42,6 @@ Monster::Monster(MonsterType* mType) : Creature(), nameDescription(mType->nameDe
 	baseSpeed = mType->info.baseSpeed;
 	internalLight = mType->info.light;
 	hiddenHealth = mType->info.hiddenHealth;
-
-	// register creature events
-	for (const std::string& scriptName : mType->info.scripts) {
-		if (!registerCreatureEvent(scriptName)) {
-			std::cout << "[Warning - Monster::Monster] Unknown event name: " << scriptName << std::endl;
-		}
-	}
 }
 
 const std::string& Monster::getName() const

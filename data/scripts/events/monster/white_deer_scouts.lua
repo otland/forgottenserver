@@ -1,9 +1,18 @@
-local creatureevent = CreatureEvent("WhiteDeerScouts")
+local event = Event()
 
-function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
-	local targetMonster = creature:getMonster()
+event.onCreatureDeath = function(self, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
+	if not self:isMonster() then
+		return
+	end
+
+	local mType = self:getType()
+	if mType:monsterName() ~= "enraged white deer" and mType:monsterName() ~= "desperate white deer" then
+		return
+	end
+
+	local targetMonster = self:getMonster()
 	if not targetMonster or targetMonster:getMaster() then
-		return true
+		return
 	end
 
 	local chance = math.random(100)
@@ -16,7 +25,6 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 		end
 		targetMonster:say("The elves came too late to save the deer, however they might avenge it.", TALKTYPE_MONSTER_SAY)
 	end
-	return true
 end
 
-creatureevent:register()
+event:register()

@@ -20,9 +20,6 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Giant Spider Locations..." />
-	<script>
-		<event name="GiantSpiderWyda" />
-	</script>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-9" />
 	</attacks>

@@ -63,9 +63,8 @@ end
 
 function Player:onRotateItem(item)
 	if Event.onPlayerRotateItem then
-		return Event.onPlayerRotateItem(self, item)
+		Event.onPlayerRotateItem(self, item)
 	end
-	return true
 end
 
 function Player:onTurn(direction)
@@ -267,4 +266,55 @@ function Player:onSpellCheck(spell)
 		return Event.onPlayerSpellCheck(self, spell)
 	end
 	return true
+end
+
+function Player:onLogin()
+	if Event.onPlayerLogin then
+		return Event.onPlayerLogin(self)
+	end
+	return true
+end
+
+function Player:onJoin()
+	if Event.onPlayerJoin then
+		Event.onPlayerJoin(self)
+	end
+end
+
+function Player:onLogout()
+	if Event.onPlayerLogout then
+		return Event.onPlayerLogout(self)
+	end
+	return true
+end
+
+function Player:onReconnect()
+	if Event.onPlayerReconnect then
+		Event.onPlayerReconnect(self)
+	end
+end
+
+function Player:onAdvance(skill, oldLevel, newLevel)
+	if Event.onPlayerAdvance then
+		Event.onPlayerAdvance(self, skill, oldLevel, newLevel)
+	end
+end
+
+function Player:onModalWindow(modalWindowId, buttonId, choiceId)
+	if Event.onPlayerModalWindow then
+		Event.onPlayerModalWindow(self, modalWindowId, buttonId, choiceId)
+	end
+end
+
+function Player:onTextEdit(item, text, windowTextId)
+	if Event.onPlayerTextEdit then
+		return Event.onPlayerTextEdit(self, item, text, windowTextId)
+	end
+	return true
+end
+
+function Player:onExtendedOpcode(opcode, buffer)
+	if Event.onPlayerExtendedOpcode then
+		Event.onPlayerExtendedOpcode(self, opcode, buffer)
+	end
 end

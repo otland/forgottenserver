@@ -13,9 +13,6 @@ local reloadTypes = {
 	["config"] = RELOAD_TYPE_CONFIG,
 	["configuration"] = RELOAD_TYPE_CONFIG,
 
-	["creaturescript"] = RELOAD_TYPE_CREATURESCRIPTS,
-	["creaturescripts"] = RELOAD_TYPE_CREATURESCRIPTS,
-
 	["events"] = RELOAD_TYPE_EVENTS,
 
 	["global"] = RELOAD_TYPE_GLOBAL,

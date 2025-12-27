@@ -41,51 +41,6 @@ int luaCreatureCreate(lua_State* L)
 	return 1;
 }
 
-int luaCreatureGetEvents(lua_State* L)
-{
-	// creature:getEvents(type)
-	const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1);
-	if (!creature) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	CreatureEventType_t eventType = tfs::lua::getNumber<CreatureEventType_t>(L, 2);
-	const auto& eventList = creature->getCreatureEvents(eventType);
-	lua_createtable(L, eventList.size(), 0);
-
-	int index = 0;
-	for (CreatureEvent* event : eventList) {
-		tfs::lua::pushString(L, event->getName());
-		lua_rawseti(L, -2, ++index);
-	}
-	return 1;
-}
-
-int luaCreatureRegisterEvent(lua_State* L)
-{
-	// creature:registerEvent(name)
-	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
-		const std::string& name = tfs::lua::getString(L, 2);
-		tfs::lua::pushBoolean(L, creature->registerCreatureEvent(name));
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int luaCreatureUnregisterEvent(lua_State* L)
-{
-	// creature:unregisterEvent(name)
-	const std::string& name = tfs::lua::getString(L, 2);
-	if (const auto& creature = tfs::lua::getSharedPtr<Creature>(L, 1)) {
-		tfs::lua::pushBoolean(L, creature->unregisterCreatureEvent(name));
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int luaCreatureIsRemoved(lua_State* L)
 {
 	// creature:isRemoved()
@@ -1176,10 +1131,6 @@ void tfs::lua::registerCreature(LuaScriptInterface& lsi)
 	lsi.registerClass("Creature", "", luaCreatureCreate);
 	lsi.registerMetaMethod("Creature", "__eq", tfs::lua::luaUserdataCompare);
 	lsi.registerMetaMethod("Creature", "__gc", tfs::lua::luaSharedPtrDelete<Creature>);
-
-	lsi.registerMethod("Creature", "getEvents", luaCreatureGetEvents);
-	lsi.registerMethod("Creature", "registerEvent", luaCreatureRegisterEvent);
-	lsi.registerMethod("Creature", "unregisterEvent", luaCreatureUnregisterEvent);
 
 	lsi.registerMethod("Creature", "isRemoved", luaCreatureIsRemoved);
 	lsi.registerMethod("Creature", "isCreature", luaCreatureIsCreature);

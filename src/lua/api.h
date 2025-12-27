@@ -7,9 +7,12 @@
 class Creature;
 class Cylinder;
 class InstantSpell;
+class NetworkMessage;
+class Party;
 class Player;
 class Spell;
 class Thing;
+class ItemType;
 
 struct LootBlock;
 struct Mount;
@@ -164,6 +167,9 @@ void pushThing(lua_State* L, const std::shared_ptr<Thing>& thing);
 void pushSpell(lua_State* L, const Spell& spell);
 void pushTown(lua_State* L, const Town& town);
 void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList);
+void pushParty(lua_State* L, const std::shared_ptr<Party>& party);
+void pushItemType(lua_State* L, const ItemType* itemType);
+void pushNetworkMessage(lua_State* L, NetworkMessage* msg);
 
 // Callback helpers
 void pushCallback(lua_State* L, int32_t callback);

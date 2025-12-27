@@ -6,22 +6,11 @@ if not MonsterStorages then
 				return
 			end
 
-			if self:registerEvent("MonsterStorages") then
-				storage[cid] = {}
-				return storage[cid]
-			end
+			storage[cid] = {}
+			return storage[cid]
 		end
 	})
 end
-
-local creatureEvent = CreatureEvent("MonsterStorages")
-
-function creatureEvent.onDeath(self)
-	MonsterStorages[self:getId()] = nil
-	return true
-end
-
-creatureEvent:register()
 
 function Monster:getStorageValue(key)
 	return MonsterStorages[self:getId()][key] or -1
@@ -31,3 +20,13 @@ function Monster:setStorageValue(key, value)
 	MonsterStorages[self:getId()][key] = value
 	return true
 end
+
+local event = Event()
+
+event.onCreatureDeath = function(self, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
+	if self:isMonster() then
+		MonsterStorages[self:getId()] = nil
+	end
+end
+
+event:register()
