@@ -12,6 +12,7 @@ public:
 	Scripts();
 	~Scripts();
 
+	void reInitState();
 	bool loadScripts(std::string folderName, bool isLib, bool reload);
 	LuaScriptInterface& getScriptInterface() { return scriptInterface; }
 
