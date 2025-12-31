@@ -40,9 +40,6 @@ LuaEnvironment g_luaEnvironment;
 
 namespace {
 
-std::unordered_map<uint32_t, LuaTimerEventDesc> timerEvents;
-uint32_t lastEventTimerId = 1;
-
 bool getArea(lua_State* L, std::vector<uint32_t>& vec, uint32_t& rows)
 {
 	lua_pushnil(L);
@@ -440,11 +437,11 @@ int luaAddEvent(lua_State* L)
 	eventDesc.function = luaL_ref(L, LUA_REGISTRYINDEX);
 	eventDesc.scriptId = tfs::lua::getScriptEnv()->getScriptId();
 
-	auto& lastTimerEventId = lastEventTimerId;
+	auto& lastTimerEventId = g_luaEnvironment.lastEventTimerId;
 	eventDesc.eventId = g_scheduler.addEvent(
 	    createSchedulerTask(delay, [=]() { g_luaEnvironment.executeTimerEvent(lastTimerEventId); }));
 
-	timerEvents.emplace(lastTimerEventId, std::move(eventDesc));
+	g_luaEnvironment.timerEvents.emplace(lastTimerEventId, std::move(eventDesc));
 	tfs::lua::pushNumber(L, lastTimerEventId++);
 	return 1;
 }
@@ -454,7 +451,7 @@ int luaStopEvent(lua_State* L)
 	// stopEvent(eventid)
 	uint32_t eventId = tfs::lua::getNumber<uint32_t>(L, 1);
 
-	auto& events = timerEvents;
+	auto& events = g_luaEnvironment.timerEvents;
 	auto it = events.find(eventId);
 	if (it == events.end()) {
 		tfs::lua::pushBoolean(L, false);

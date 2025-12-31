@@ -117,6 +117,9 @@ public:
 
 	void executeTimerEvent(uint32_t eventIndex);
 
+	std::unordered_map<uint32_t, LuaTimerEventDesc> timerEvents;
+	uint32_t lastEventTimerId = 1;
+
 private:
 	std::unordered_map<uint32_t, Combat_ptr> combatMap;
 	std::unordered_map<uint32_t, AreaCombat*> areaMap;
