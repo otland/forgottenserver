@@ -196,7 +196,7 @@ void Creature::onWalk()
 		}
 	}
 
-	removeFollowers();
+	removeOutOfRangeFollowers();
 	updateFollowersPaths();
 
 	if (cancelNextWalk) {
@@ -519,6 +519,7 @@ void Creature::onDeath()
 		followCreature->removeFollower(this);
 		setFollowCreature(nullptr);
 	}
+	releaseFollowers();
 
 	if (droppedCorpse) {
 		g_game.removeCreature(this, false);
@@ -823,8 +824,8 @@ bool Creature::isFollower(const Creature* creature)
 void Creature::addFollower(Creature* creature)
 {
 	if (!isFollower(creature)) {
-		followers.push_back(creature);
 		creature->incrementReferenceCounter();
+		followers.push_back(creature);
 	}
 }
 
@@ -837,23 +838,29 @@ void Creature::removeFollower(Creature* creature)
 	}
 }
 
-void Creature::removeFollowers()
+void Creature::removeOutOfRangeFollowers()
 {
 	const Position& position = getPosition();
-
 	followers.erase(std::remove_if(followers.begin(), followers.end(),
-		[&position](Creature* creature) {
-			const Position& followerPosition = creature->getPosition();
-			uint16_t distance = position.getDistanceX(followerPosition) +
-				position.getDistanceY(followerPosition);
-			if (creature && distance >= Map::maxViewportX + Map::maxViewportY ||
-				position.z != followerPosition.z) {
-				creature->decrementReferenceCounter();
-				return true;
-			}
-			return false;
-		}),
-		followers.end());
+	                               [&position](Creature* creature) {
+		                               const Position& followerPosition = creature->getPosition();
+		                               uint16_t distance = position.getDistanceX(followerPosition) +
+		                                                   position.getDistanceY(followerPosition);
+		                               bool isInRemoveRange = distance >= Map::maxViewportX + Map::maxViewportY ||
+		                                                      position.z != followerPosition.z;
+		                               if (isInRemoveRange) {
+			                               creature->decrementReferenceCounter();
+		                               }
+		                               return isInRemoveRange;
+	                               }),
+	                followers.end());
+}
+
+void Creature::releaseFollowers()
+{
+	for (const auto& follower : followers) {
+		follower->decrementReferenceCounter();
+	}
 }
 
 void Creature::updateFollowersPaths()
