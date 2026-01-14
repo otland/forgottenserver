@@ -547,6 +547,11 @@ bool Game::removeCreature(Creature* creature, bool isLogout /* = true*/)
 		return false;
 	}
 
+	if (Creature* followCreature = creature->getFollowCreature()) {
+		followCreature->removeFollower(creature);
+		creature->decrementReferenceCounter();
+	}
+
 	Tile* tile = creature->getTile();
 
 	std::vector<int32_t> oldStackPosVector;

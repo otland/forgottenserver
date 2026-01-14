@@ -204,6 +204,7 @@ public:
 	// Pathfinding functions
 	bool isFollower(Creature* creature);
 	void addFollower(Creature* creature);
+	void removeFollower(Creature* creature);
 	void removeFollowers();
 
 	// Pathfinding events

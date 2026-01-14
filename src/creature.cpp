@@ -524,6 +524,11 @@ void Creature::onDeath()
 		setMaster(nullptr);
 	}
 
+	if (followCreature) {
+		followCreature->removeFollower(this);
+		setFollowCreature(nullptr);
+	}
+
 	if (droppedCorpse) {
 		g_game.removeCreature(this, false);
 	}
@@ -826,6 +831,16 @@ void Creature::addFollower(Creature* creature)
 {
 	if (!isFollower(creature)) {
 		followers.push_back(creature);
+		incrementReferenceCounter();
+	}
+}
+
+void Creature::removeFollower(Creature* creature)
+{
+	auto it = std::find(followers.begin(), followers.end(), creature);
+	if (it != followers.end()) {
+		creature->decrementReferenceCounter();
+		followers.erase(it);
 	}
 }
 
@@ -838,8 +853,12 @@ void Creature::removeFollowers()
 		                               const Position& followerPosition = creature->getPosition();
 		                               uint16_t distance = position.getDistanceX(followerPosition) +
 		                                                   position.getDistanceY(followerPosition);
-		                               return distance >= Map::maxViewportX + Map::maxViewportY ||
-		                                      position.z != followerPosition.z;
+		                               if (creature && distance >= Map::maxViewportX + Map::maxViewportY ||
+		                                   position.z != followerPosition.z) {
+			                               creature->decrementReferenceCounter();
+			                               return true;
+		                               }
+		                               return false;
 	                               }),
 	                followers.end());
 }
