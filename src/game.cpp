@@ -546,7 +546,6 @@ bool Game::removeCreature(Creature* creature, bool isLogout /* = true*/)
 
 	if (Creature* followCreature = creature->getFollowCreature()) {
 		followCreature->removeFollower(creature);
-		followCreature->setFollowCreature(nullptr);
 	}
 
 	creature->releaseFollowers();
