@@ -856,13 +856,6 @@ void Creature::removeFollowers()
 		followers.end());
 }
 
-void Creature::releaseFollowers()
-{
-	for (const auto& follower : followers) {
-		follower->decrementReferenceCounter();
-	}
-}
-
 void Creature::updateFollowersPaths()
 {
 	if (followers.empty()) {

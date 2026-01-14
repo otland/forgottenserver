@@ -544,14 +544,10 @@ bool Game::removeCreature(Creature* creature, bool isLogout /* = true*/)
 		return false;
 	}
 
-<<<<<<< HEAD
 	if (Creature* followCreature = creature->getFollowCreature()) {
 		followCreature->removeFollower(creature);
 		creature->decrementReferenceCounter();
 	}
-=======
-	creature->releaseFollowers();
->>>>>>> 5b3b0d7460f377a599d5d7df6627e3a1c9fc7e46
 
 	Tile* tile = creature->getTile();
 
