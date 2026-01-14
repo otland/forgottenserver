@@ -223,8 +223,8 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 
 		player->setOperatingSystem(operatingSystem);
 
-		if (!g_game.placeCreature(player, player->getLoginPosition())) {
-			if (!g_game.placeCreature(player, player->getTemplePosition(), false, true)) {
+		if (!g_game.placeCreature(player, player->getLoginPosition(), false, false, CONST_ME_TELEPORT)) {
+			if (!g_game.placeCreature(player, player->getTemplePosition(), false, true, CONST_ME_TELEPORT)) {
 				disconnectClient("Temple position is wrong. Contact the administrator.");
 				return;
 			}
@@ -286,7 +286,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->isConnecting = false;
 
 	player->client = getThis();
-	sendAddCreature(player, player->getPosition(), 0);
+	player->onCreatureAppear(player, false, CONST_ME_NONE);
 	player->lastIP = player->getIP();
 	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 	player->resetIdleTime();
@@ -2097,7 +2097,7 @@ void ProtocolGame::sendMarketEnter()
 	NetworkMessage msg;
 	msg.addByte(0xF6);
 	msg.addByte(
-	    std::min<uint32_t>(IOMarket::getPlayerOfferCount(player->getGUID()), std::numeric_limits<uint8_t>::max()));
+	    std::min<uint32_t>(tfs::iomarket::getPlayerOfferCount(player->getGUID()), std::numeric_limits<uint8_t>::max()));
 
 	player->setInMarket(true);
 
@@ -2749,81 +2749,40 @@ void ProtocolGame::sendFightModes()
 void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos,
                                    MagicEffectClasses magicEffect /*= CONST_ME_NONE*/)
 {
+	assert(creature != player);
+
 	if (!canSee(pos)) {
 		return;
 	}
 
-	if (creature != player) {
-		// stack pos is always real index now, so it can exceed the limit if stack pos exceeds the limit, we need to
-		// refresh the tile instead
-		// 1. this is a rare case, and is only triggered by forcing summon in a position
-		// 2. since no stackpos will be send to the client about that creature, removing it must be done with its id if
-		// its stackpos remains >= MAX_STACKPOS. this is done to add creatures to battle list instead of rendering on
-		// screen
-		if (stackpos >= MAX_STACKPOS) {
-			// @todo: should we avoid this check?
-			if (const Tile* tile = creature->getTile()) {
-				sendUpdateTile(tile, pos);
-			}
-		} else {
-			// if stackpos is -1, the client will automatically detect it
-			NetworkMessage msg;
-			msg.addByte(0x6A);
-			msg.addPosition(pos);
-			msg.addByte(stackpos);
-
-			bool known;
-			uint32_t removedKnown;
-			checkCreatureAsKnown(creature->getID(), known, removedKnown);
-			AddCreature(msg, creature, known, removedKnown);
-			writeToOutputBuffer(msg);
+	// stack pos is always real index now, so it can exceed the limit if stack pos exceeds the limit, we need to
+	// refresh the tile instead
+	// 1. this is a rare case, and is only triggered by forcing summon in a position
+	// 2. since no stackpos will be send to the client about that creature, removing it must be done with its id if
+	// its stackpos remains >= MAX_STACKPOS. this is done to add creatures to battle list instead of rendering on
+	// screen
+	if (stackpos >= MAX_STACKPOS) {
+		// @todo: should we avoid this check?
+		if (const Tile* tile = creature->getTile()) {
+			sendUpdateTile(tile, pos);
 		}
+	} else {
+		// if stackpos is -1, the client will automatically detect it
+		NetworkMessage msg;
+		msg.addByte(0x6A);
+		msg.addPosition(pos);
+		msg.addByte(stackpos);
 
-		if (magicEffect != CONST_ME_NONE) {
-			sendMagicEffect(pos, magicEffect);
-		}
-		return;
+		bool known;
+		uint32_t removedKnown;
+		checkCreatureAsKnown(creature->getID(), known, removedKnown);
+		AddCreature(msg, creature, known, removedKnown);
+		writeToOutputBuffer(msg);
 	}
 
-	// send player stats
-	sendStats();         // hp, cap, level, xp rate, etc.
-	sendSkills();        // skills and special skills
-	player->sendIcons(); // active conditions
-
-	// send client info
-	sendClientFeatures(); // player speed, bug reports, store url, pvp mode, etc
-	sendBasicData();      // premium account, vocation, known spells, prey system status, magic shield status
-	sendItems();          // send carried items for action bars
-
-	// enter world and send game screen
-	sendPendingStateEntered();
-	sendEnterWorld();
-	sendMapDescription(pos);
-
-	// send login effect
 	if (magicEffect != CONST_ME_NONE) {
 		sendMagicEffect(pos, magicEffect);
 	}
-
-	// send equipment
-	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
-		sendInventoryItem(static_cast<slots_t>(i), player->getInventoryItem(static_cast<slots_t>(i)));
-	}
-
-	// send store inbox
-	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
-
-	// player light level
-	sendCreatureLight(creature);
-
-	// player vip list
-	sendVIPEntries();
-
-	// tiers for forge and market
-	sendItemClasses();
-
-	// opened containers
-	player->openSavedContainers();
 }
 
 void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos,
@@ -3503,7 +3462,12 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		msg.addByte(otherPlayer ? otherPlayer->getVocation()->getClientId() : 0x00);
 	}
 
-	msg.addByte(creature->getSpeechBubble());
+	if (const auto npc = creature->getNpc()) {
+		msg.addByte(npc->getSpeechBubble());
+	} else {
+		msg.addByte(SPEECHBUBBLE_NONE);
+	}
+
 	msg.addByte(0xFF); // MARK_UNMARKED
 	msg.addByte(0x00); // inspection type (bool?)
 

@@ -4,7 +4,6 @@
 #ifndef FS_CONTAINER_H
 #define FS_CONTAINER_H
 
-#include "cylinder.h"
 #include "item.h"
 #include "tile.h"
 
@@ -27,7 +26,7 @@ private:
 	friend class Container;
 };
 
-class Container : public Item, public Cylinder
+class Container : public Item
 {
 public:
 	explicit Container(uint16_t type);
@@ -40,6 +39,9 @@ public:
 	Container& operator=(const Container&) = delete;
 
 	Item* clone() const override final;
+
+	Thing* getReceiver() override final { return this; }
+	const Thing* getReceiver() const override final { return this; }
 
 	Container* getContainer() override final { return this; }
 	const Container* getContainer() const override final { return this; }
@@ -79,16 +81,15 @@ public:
 	bool isUnlocked() const { return unlocked; }
 	bool hasPagination() const { return pagination; }
 
-	// cylinder implementations
 	virtual ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
 	                             Creature* actor = nullptr) const override;
 	ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 	                          uint32_t flags) const override final;
 	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
 	                        Creature* actor = nullptr) const override final;
-	Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override final;
+	Thing* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override final;
 
-	void addThing(Thing* thing) override final;
+	void addThing(Thing* thing) override final { return addThing(0, thing); }
 	void addThing(int32_t index, Thing* thing) override final;
 	void addItemBack(Item* item);
 
@@ -98,21 +99,21 @@ public:
 	void removeThing(Thing* thing, uint32_t count) override final;
 
 	int32_t getThingIndex(const Thing* thing) const override final;
-	size_t getFirstIndex() const override final;
-	size_t getLastIndex() const override final;
+	size_t getFirstIndex() const override final { return 0; }
+	size_t getLastIndex() const override final { return size(); }
 	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override final;
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override final;
-	Thing* getThing(size_t index) const override final;
+	Thing* getThing(size_t index) const override final { return getItemByIndex(index); }
 
 	ItemVector getItems(bool recursive = false);
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                            cylinderlink_t link = LINK_OWNER) override;
+	void postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
+	                         ReceiverLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
+	                            ReceiverLink_t link = LINK_OWNER) override;
 
 	void internalRemoveThing(Thing* thing) override final;
-	void internalAddThing(Thing* thing) override final;
+	void internalAddThing(Thing* thing) override final { internalAddThing(0, thing); }
 	void internalAddThing(uint32_t index, Thing* thing) override final;
 	void startDecaying() override final;
 
@@ -132,7 +133,6 @@ private:
 	void onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem);
 	void onRemoveContainerItem(uint32_t index, Item* item);
 
-	Container* getParentContainer();
 	void updateItemWeight(int32_t diff);
 
 	friend class ContainerIterator;

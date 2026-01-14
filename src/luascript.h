@@ -22,7 +22,6 @@ class AreaCombat;
 class Combat;
 class Container;
 class Creature;
-class Cylinder;
 class Spell;
 class Item;
 class LuaScriptInterface;
@@ -286,6 +285,8 @@ private:
 	static int luaGameGetOutfits(lua_State* L);
 	static int luaGameGetMounts(lua_State* L);
 	static int luaGameGetVocations(lua_State* L);
+	static int luaGameGetRuneSpells(lua_State* L);
+	static int luaGameGetInstantSpells(lua_State* L);
 
 	static int luaGameGetGameState(lua_State* L);
 	static int luaGameSetGameState(lua_State* L);
@@ -776,6 +777,7 @@ private:
 	static int luaPlayerGetContainerById(lua_State* L);
 	static int luaPlayerGetContainerIndex(lua_State* L);
 
+	static int luaPlayerGetRuneSpells(lua_State* L);
 	static int luaPlayerGetInstantSpells(lua_State* L);
 	static int luaPlayerCanCast(lua_State* L);
 
@@ -1428,7 +1430,6 @@ void pushThing(lua_State* L, Thing* thing);
 void pushVariant(lua_State* L, const LuaVariant& var);
 void pushString(lua_State* L, std::string_view value);
 void pushCallback(lua_State* L, int32_t callback);
-void pushCylinder(lua_State* L, Cylinder* cylinder);
 
 std::string popString(lua_State* L);
 int32_t popCallback(lua_State* L);

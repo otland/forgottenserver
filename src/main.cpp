@@ -13,7 +13,7 @@ static bool argumentsHandler(const std::vector<std::string_view>& args)
 			             "\t--config=$1\t\tAlternate configuration file path.\n"
 			             "\t--ip=$1\t\t\tIP address of the server.\n"
 			             "\t\t\t\tShould be equal to the global IP.\n"
-			             "\t--login-port=$1\tPort for login server to listen on.\n"
+			             "\t--http-port=$1\tPort for http to listen on.\n"
 			             "\t--game-port=$1\tPort for game server to listen on.\n";
 			return false;
 		} else if (arg == "--version") {
@@ -27,8 +27,8 @@ static bool argumentsHandler(const std::vector<std::string_view>& args)
 			ConfigManager::setString(ConfigManager::CONFIG_FILE, tmp[1]);
 		else if (tmp[0] == "--ip")
 			ConfigManager::setString(ConfigManager::IP, tmp[1]);
-		else if (tmp[0] == "--login-port")
-			ConfigManager::setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1].data()));
+		else if (tmp[0] == "--http-port")
+			ConfigManager::setNumber(ConfigManager::HTTP_PORT, std::stoi(tmp[1].data()));
 		else if (tmp[0] == "--game-port")
 			ConfigManager::setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1].data()));
 	}

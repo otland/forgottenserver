@@ -328,15 +328,6 @@ void Creature::updateIcons() const
 	}
 }
 
-void Creature::onCreatureAppear(Creature* creature, bool isLogin)
-{
-	if (creature == this) {
-		if (isLogin) {
-			setLastPosition(getPosition());
-		}
-	}
-}
-
 void Creature::onRemoveCreature(Creature* creature, bool) { onCreatureDisappear(creature, true); }
 
 void Creature::onCreatureDisappear(const Creature* creature, bool isLogout)
@@ -745,6 +736,7 @@ void Creature::setAttackedCreature(Creature* creature)
 	creature->addFollower(this);
 	onAttackedCreature(attackedCreature);
 	attackedCreature->onAttacked();
+	forceUpdatePath();
 
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(creature);
@@ -793,6 +785,7 @@ void Creature::setFollowCreature(Creature* creature)
 	creature->addFollower(this);
 	hasFollowPath = false;
 	onFollowCreature(creature);
+	forceUpdatePath();
 }
 
 void Creature::removeFollowCreature()
@@ -821,7 +814,7 @@ void Creature::onFollowCreature(const Creature*)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
-bool Creature::isFollower(Creature* creature)
+bool Creature::isFollower(const Creature* creature)
 {
 	auto it = std::find(followers.begin(), followers.end(), creature);
 	return it != followers.end();
@@ -831,7 +824,7 @@ void Creature::addFollower(Creature* creature)
 {
 	if (!isFollower(creature)) {
 		followers.push_back(creature);
-		incrementReferenceCounter();
+		creature->incrementReferenceCounter();
 	}
 }
 
@@ -849,18 +842,25 @@ void Creature::removeFollowers()
 	const Position& position = getPosition();
 
 	followers.erase(std::remove_if(followers.begin(), followers.end(),
-	                               [&position](Creature* creature) {
-		                               const Position& followerPosition = creature->getPosition();
-		                               uint16_t distance = position.getDistanceX(followerPosition) +
-		                                                   position.getDistanceY(followerPosition);
-		                               if (creature && distance >= Map::maxViewportX + Map::maxViewportY ||
-		                                   position.z != followerPosition.z) {
-			                               creature->decrementReferenceCounter();
-			                               return true;
-		                               }
-		                               return false;
-	                               }),
-	                followers.end());
+		[&position](Creature* creature) {
+			const Position& followerPosition = creature->getPosition();
+			uint16_t distance = position.getDistanceX(followerPosition) +
+				position.getDistanceY(followerPosition);
+			if (creature && distance >= Map::maxViewportX + Map::maxViewportY ||
+				position.z != followerPosition.z) {
+				creature->decrementReferenceCounter();
+				return true;
+			}
+			return false;
+		}),
+		followers.end());
+}
+
+void Creature::releaseFollowers()
+{
+	for (const auto& follower : followers) {
+		follower->decrementReferenceCounter();
+	}
 }
 
 void Creature::updateFollowersPaths()
@@ -950,7 +950,12 @@ void Creature::onEndCondition(ConditionType_t)
 
 void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 {
-	const MagicField* field = getTile()->getFieldItem();
+	const Tile* tile = getTile();
+	if (!tile) {
+		return;
+	}
+
+	const MagicField* field = tile->getFieldItem();
 	if (!field) {
 		return;
 	}

@@ -13,8 +13,6 @@
 #include "iomarket.h"
 #include "monsters.h"
 #include "outfit.h"
-#include "protocollogin.h"
-#include "protocolold.h"
 #include "protocolstatus.h"
 #include "rsa.h"
 #include "scheduler.h"
@@ -216,18 +214,14 @@ void mainLoader(ServiceManager* services)
 
 	// Game client protocols
 	services->add<ProtocolGame>(static_cast<uint16_t>(getNumber(ConfigManager::GAME_PORT)));
-	services->add<ProtocolLogin>(static_cast<uint16_t>(getNumber(ConfigManager::LOGIN_PORT)));
 
 	// OT protocols
 	services->add<ProtocolStatus>(static_cast<uint16_t>(getNumber(ConfigManager::STATUS_PORT)));
 
-	// Legacy login protocol
-	services->add<ProtocolOld>(static_cast<uint16_t>(getNumber(ConfigManager::LOGIN_PORT)));
-
 #ifdef HTTP
 	// HTTP server
-	tfs::http::start(getString(ConfigManager::IP), getNumber(ConfigManager::HTTP_PORT),
-	                 getNumber(ConfigManager::HTTP_WORKERS));
+	tfs::http::start(getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS), getString(ConfigManager::IP),
+	                 getNumber(ConfigManager::HTTP_PORT), getNumber(ConfigManager::HTTP_WORKERS));
 #endif
 
 	RentPeriod_t rentPeriod;
@@ -247,8 +241,8 @@ void mainLoader(ServiceManager* services)
 
 	g_game.map.houses.payHouses(rentPeriod);
 
-	IOMarket::checkExpiredOffers();
-	IOMarket::getInstance().updateStatistics();
+	tfs::iomarket::checkExpiredOffers();
+	tfs::iomarket::updateStatistics();
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 

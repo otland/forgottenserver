@@ -4,7 +4,6 @@
 #ifndef FS_ITEM_H
 #define FS_ITEM_H
 
-#include "cylinder.h"
 #include "items.h"
 #include "luascript.h"
 #include "thing.h"
@@ -405,9 +404,12 @@ private:
 	{
 		if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 			removeCustomAttribute(key);
-		} else {
+		}
+
+		if (!getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom) {
 			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 		}
+
 		auto lowercaseKey = boost::algorithm::to_lower_copy(std::string{key});
 		getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->emplace(lowercaseKey, value);
 	}
@@ -416,9 +418,12 @@ private:
 	{
 		if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 			removeCustomAttribute(key);
-		} else {
+		}
+
+		if (!getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom) {
 			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 		}
+
 		auto lowercaseKey = boost::algorithm::to_lower_copy(std::string{key});
 		getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->emplace(lowercaseKey, value);
 	}
@@ -452,6 +457,10 @@ private:
 			auto lowercaseKey = boost::algorithm::to_lower_copy(std::string{key});
 			if (auto it = customAttrMap->find(lowercaseKey); it != customAttrMap->end()) {
 				customAttrMap->erase(it);
+
+				if (customAttrMap->empty()) {
+					removeAttribute(ITEM_ATTRIBUTE_CUSTOM);
+				}
 				return true;
 			}
 		}
@@ -502,6 +511,8 @@ public:
 
 	Item* getItem() override final { return this; }
 	const Item* getItem() const override final { return this; }
+	virtual Container* getContainer() { return nullptr; }
+	virtual const Container* getContainer() const { return nullptr; }
 	virtual Teleport* getTeleport() { return nullptr; }
 	virtual const Teleport* getTeleport() const { return nullptr; }
 	virtual TrashHolder* getTrashHolder() { return nullptr; }
@@ -715,7 +726,6 @@ public:
 	                                      bool addArticle = true);
 	static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
-	std::string getDescription(int32_t lookDistance) const override final;
 	std::string getNameDescription() const;
 	std::string getWeightDescription() const;
 
@@ -913,18 +923,13 @@ public:
 		}
 	}
 
-	bool hasParent() const override { return getParent(); }
-	Cylinder* getParent() const override { return parent; }
-	void setParent(Cylinder* cylinder) override { parent = cylinder; }
-	Cylinder* getTopParent();
-	const Cylinder* getTopParent() const;
+	Thing* getTopParent();
+	const Thing* getTopParent() const;
 	Tile* getTile() override;
 	const Tile* getTile() const override;
-	bool isRemoved() const override { return !parent || parent->isRemoved(); }
+	bool isRemoved() const override { return !getParent() || getParent()->isRemoved(); }
 
 protected:
-	Cylinder* parent = nullptr;
-
 	uint16_t id; // the same id as in ItemType
 
 private:

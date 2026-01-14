@@ -84,7 +84,7 @@ public:
 
 	void onAttackedCreatureDisappear(bool isLogout) override;
 
-	void onCreatureAppear(Creature* creature, bool isLogin) override;
+	void onCreatureAppear(Creature* creature, bool, MagicEffectClasses) override;
 	void onRemoveCreature(Creature* creature, bool isLogout) override;
 	void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
 	                    const Position& oldPos, bool teleport) override;

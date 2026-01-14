@@ -5,12 +5,12 @@
 #define FS_IOMAPSERIALIZE_H
 
 class Container;
-class Cylinder;
 class House;
 class Item;
 class Map;
 class PropStream;
 class PropWriteStream;
+class Thing;
 class Tile;
 
 class IOMapSerialize
@@ -28,7 +28,7 @@ private:
 	static void saveTile(PropWriteStream& stream, const Tile* tile);
 
 	static bool loadContainer(PropStream& propStream, Container* container);
-	static bool loadItem(PropStream& propStream, Cylinder* parent);
+	static bool loadItem(PropStream& propStream, Thing* parent);
 };
 
 #endif // FS_IOMAPSERIALIZE_H

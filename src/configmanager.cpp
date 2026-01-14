@@ -208,10 +208,6 @@ bool ConfigManager::load()
 			integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
 		}
 
-		if (integer[LOGIN_PORT] == 0) {
-			integer[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
-		}
-
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
 		integer[HTTP_PORT] = getGlobalNumber(L, "httpPort", 8080);
 		integer[HTTP_WORKERS] = getGlobalNumber(L, "httpWorkers", 1);
@@ -285,6 +281,7 @@ bool ConfigManager::load()
 	integer[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
 	integer[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", -1);
 	integer[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5000);
+	integer[STATUS_COUNT_MAX_PLAYERS_PER_IP] = getGlobalNumber(L, "statusCountMaxPlayersPerIp", 0);
 	integer[FRAG_TIME] = getGlobalNumber(L, "timeToDecreaseFrags", 24 * 60 * 60);
 	integer[WHITE_SKULL_TIME] = getGlobalNumber(L, "whiteSkullTime", 15 * 60);
 	integer[STAIRHOP_DELAY] = getGlobalNumber(L, "stairJumpExhaustion", 2000);

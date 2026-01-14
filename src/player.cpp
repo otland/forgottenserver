@@ -58,7 +58,7 @@ Player::~Player()
 	}
 
 	for (const auto& [_, depot] : depotChests) {
-		if (Cylinder* parent = depot->getRealParent()) {
+		if (const auto parent = depot->getRealParent()) {
 			// remove chest from depot locker, because of possible double free when shared_ptr decides to free up the
 			// resource
 			parent->internalRemoveThing(depot.get());
@@ -1114,51 +1114,26 @@ void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemT
 	}
 }
 
-void Player::onCreatureAppear(Creature* creature, bool isLogin)
+void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClasses magicEffect)
 {
-	Creature::onCreatureAppear(creature, isLogin);
+	if (creature != this) {
+		sendAddCreature(creature, creature->getPosition(), magicEffect);
+		return;
+	}
 
-	if (isLogin && creature == this) {
-		sendItems();
-		onEquipInventory();
+	setLastPosition(getPosition());
 
+	if (isLogin) {
+		// Restore conditions stored during previous logout
 		for (Condition* condition : storedConditionList) {
 			addCondition(condition);
 		}
 		storedConditionList.clear();
 
-		updateRegeneration();
-
-		BedItem* bed = g_game.getBedBySleeper(guid);
-		if (bed) {
-			bed->wakeUp(this);
-		}
-
-		// load mount speed bonus
-		uint16_t currentMountId = currentOutfit.lookMount;
-		if (currentMountId != 0) {
-			Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId);
-			if (currentMount && hasMount(currentMount)) {
-				g_game.changeSpeed(this, currentMount->speed);
-			} else {
-				defaultOutfit.lookMount = 0;
-				g_game.internalCreatureChangeOutfit(this, defaultOutfit);
-			}
-		}
-
-		// mounted player moved to pz on login, update mount status
-		onChangeZone(getZone());
-
-		if (guild) {
-			guild->addMember(this);
-		}
-
-		int32_t offlineTime;
+		int32_t offlineTime = 0;
 		if (getLastLogout() != 0) {
-			// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
+			// Cap offline time to 21 days to avoid integer overflow when converting to milliseconds
 			offlineTime = std::min<int32_t>(time(nullptr) - getLastLogout(), 86400 * 21);
-		} else {
-			offlineTime = 0;
 		}
 
 		for (Condition* condition : getMuteConditions()) {
@@ -1168,8 +1143,71 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			}
 		}
 
+		updateRegeneration();
+
+		onChangeZone(getZone());
+
+		uint16_t currentMountId = currentOutfit.lookMount;
+		if (currentMountId != 0) {
+			if (Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId)) {
+				if (hasMount(currentMount)) {
+					g_game.changeSpeed(this, currentMount->speed);
+				} else {
+					defaultOutfit.lookMount = 0;
+					g_game.internalCreatureChangeOutfit(this, defaultOutfit);
+				}
+			}
+		}
+
 		g_game.checkPlayersRecord();
+
 		IOLoginData::updateOnlineStatus(guid, true);
+
+		if (BedItem* bed = g_game.getBedBySleeper(guid)) {
+			bed->wakeUp(this);
+		}
+
+		if (guild) {
+			guild->addMember(this);
+		}
+
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+			if (const auto item = inventory[slot]) {
+				item->startDecaying();
+				g_moveEvents->onPlayerEquip(this, item, static_cast<slots_t>(slot), false);
+				tfs::events::player::onInventoryUpdate(this, item, static_cast<slots_t>(slot), true);
+			}
+		}
+
+		if (!g_creatureEvents->playerLogin(this)) {
+			kickPlayer(true);
+			return;
+		}
+	}
+
+	sendStats();
+	sendSkills();
+	sendIcons();
+	sendLight();
+	sendVIPEntries();
+	sendItemClasses();
+	sendClientFeatures();
+	sendBasicData();
+	sendItems();
+	sendPendingStateEntered();
+	sendEnterWorld();
+	sendMapDescription();
+
+	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+		auto slot = static_cast<slots_t>(i);
+		sendInventoryItem(slot, getInventoryItem(slot));
+	}
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, getStoreInbox()->getItem());
+
+	openSavedContainers();
+
+	if (magicEffect != CONST_ME_NONE) {
+		sendMagicEffect(magicEffect);
 	}
 }
 
@@ -1245,8 +1283,6 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 	Creature::onRemoveCreature(creature, isLogout);
 
 	if (creature == this) {
-		onDeEquipInventory();
-
 		if (isLogout) {
 			loginPosition = getPosition();
 		}
@@ -1276,6 +1312,13 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		}
 
 		IOLoginData::updateOnlineStatus(guid, false);
+
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+			if (const auto item = inventory[slot]) {
+				g_moveEvents->onPlayerDeEquip(this, item, static_cast<slots_t>(slot));
+				tfs::events::player::onInventoryUpdate(this, item, static_cast<slots_t>(slot), false);
+			}
+		}
 
 		bool saved = false;
 		for (uint32_t tries = 0; tries < 3; ++tries) {
@@ -1379,29 +1422,6 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 			if (Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED, ticks, 0)) {
 				addCondition(condition);
 			}
-		}
-	}
-}
-
-void Player::onEquipInventory()
-{
-	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-		Item* item = inventory[slot];
-		if (item) {
-			item->startDecaying();
-			g_moveEvents->onPlayerEquip(this, item, static_cast<slots_t>(slot), false);
-			tfs::events::player::onInventoryUpdate(this, item, static_cast<slots_t>(slot), true);
-		}
-	}
-}
-
-void Player::onDeEquipInventory()
-{
-	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-		Item* item = inventory[slot];
-		if (item) {
-			g_moveEvents->onPlayerDeEquip(this, item, static_cast<slots_t>(slot));
-			tfs::events::player::onInventoryUpdate(this, item, static_cast<slots_t>(slot), false);
 		}
 	}
 }
@@ -2638,9 +2658,10 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 	const Item* inventoryItem = getInventoryItem(static_cast<slots_t>(index));
 	if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
 		if (!getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS)) {
-			const Cylinder* cylinder = item->getTopParent();
-			if (cylinder && (dynamic_cast<const DepotChest*>(cylinder) || dynamic_cast<const Player*>(cylinder))) {
-				return RETURNVALUE_NEEDEXCHANGE;
+			if (const auto topParent = item->getTopParent()) {
+				if (dynamic_cast<const DepotChest*>(topParent) || dynamic_cast<const Player*>(topParent)) {
+					return RETURNVALUE_NEEDEXCHANGE;
+				}
 			}
 			return RETURNVALUE_NOTENOUGHROOM;
 		}
@@ -2750,11 +2771,11 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
+Thing* Player::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
 {
-	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
-		*destItem = nullptr;
+	*destItem = nullptr;
 
+	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
 		const Item* item = thing.getItem();
 		if (!item) {
 			return this;
@@ -2862,18 +2883,24 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 		return this;
 	}
 
-	Thing* destThing = getThing(index);
-	if (destThing) {
-		*destItem = destThing->getItem();
+	const auto destThing = getThing(index);
+	if (!destThing) {
+		return this;
 	}
 
-	Cylinder* subCylinder = dynamic_cast<Cylinder*>(destThing);
-	if (subCylinder) {
-		index = INDEX_WHEREEVER;
-		*destItem = nullptr;
-		return subCylinder;
+	const auto item = destThing->getItem();
+	if (!item) {
+		return this;
 	}
-	return this;
+
+	const auto receiver = item->getReceiver();
+	if (!receiver) {
+		*destItem = item;
+		return this;
+	}
+
+	index = INDEX_WHEREEVER;
+	return receiver;
 }
 
 void Player::addThing(int32_t index, Thing* thing)
@@ -2997,10 +3024,6 @@ int32_t Player::getThingIndex(const Thing* thing) const
 	return -1;
 }
 
-size_t Player::getFirstIndex() const { return CONST_SLOT_FIRST; }
-
-size_t Player::getLastIndex() const { return CONST_SLOT_LAST + 1; }
-
 uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
@@ -3103,8 +3126,8 @@ Thing* Player::getThing(size_t index) const
 	return nullptr;
 }
 
-void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-                                 cylinderlink_t link /*= LINK_OWNER*/)
+void Player::postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
+                                 ReceiverLink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
@@ -3160,8 +3183,8 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 	}
 }
 
-void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-                                    cylinderlink_t link /*= LINK_OWNER*/)
+void Player::postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
+                                    ReceiverLink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
@@ -3277,8 +3300,6 @@ bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 		       (!itemType.isFluidContainer() || shopInfo.subType == subType);
 	});
 }
-
-void Player::internalAddThing(Thing* thing) { internalAddThing(0, thing); }
 
 void Player::internalAddThing(uint32_t index, Thing* thing)
 {
@@ -3677,14 +3698,6 @@ void Player::onIdleStatus()
 
 	if (party) {
 		party->clearPlayerPoints(this);
-	}
-}
-
-void Player::onPlacedCreature()
-{
-	// scripting event - onLogin
-	if (!g_creatureEvents->playerLogin(this)) {
-		kickPlayer(true);
 	}
 }
 

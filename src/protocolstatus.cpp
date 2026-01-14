@@ -9,6 +9,8 @@
 #include "game.h"
 #include "outputmessage.h"
 
+#include <ranges>
+
 extern Game g_game;
 
 std::map<Connection::Address, int64_t> ProtocolStatus::ipConnectMap;
@@ -92,7 +94,7 @@ void ProtocolStatus::sendStatusString()
 	serverinfo.append_attribute("uptime") = std::to_string(uptime).c_str();
 	serverinfo.append_attribute("ip") = getString(ConfigManager::IP).c_str();
 	serverinfo.append_attribute("servername") = getString(ConfigManager::SERVER_NAME).c_str();
-	serverinfo.append_attribute("port") = std::to_string(getNumber(ConfigManager::LOGIN_PORT)).c_str();
+	serverinfo.append_attribute("port") = std::to_string(getNumber(ConfigManager::HTTP_PORT)).c_str();
 	serverinfo.append_attribute("location") = getString(ConfigManager::LOCATION).c_str();
 	serverinfo.append_attribute("url") = getString(ConfigManager::URL).c_str();
 	serverinfo.append_attribute("server") = STATUS_SERVER_NAME;
@@ -104,7 +106,25 @@ void ProtocolStatus::sendStatusString()
 	owner.append_attribute("email") = getString(ConfigManager::OWNER_EMAIL).c_str();
 
 	pugi::xml_node players = tsqp.append_child("players");
-	players.append_attribute("online") = std::to_string(g_game.getPlayersOnline()).c_str();
+
+	uint32_t reportableOnlinePlayerCount = 0;
+	uint32_t maxPlayersPerIp = getNumber(ConfigManager::STATUS_COUNT_MAX_PLAYERS_PER_IP);
+	if (maxPlayersPerIp > 0) {
+		std::map<Connection::Address, uint32_t> playersPerIp;
+		for (const auto& it : g_game.getPlayers()) {
+			if (!it.second->getIP().is_unspecified()) {
+				++playersPerIp[it.second->getIP()];
+			}
+		}
+
+		for (auto& p : playersPerIp | std::views::values) {
+			reportableOnlinePlayerCount += std::min(p, maxPlayersPerIp);
+		}
+	} else {
+		reportableOnlinePlayerCount = g_game.getPlayersOnline();
+	}
+
+	players.append_attribute("online") = std::to_string(reportableOnlinePlayerCount).c_str();
 	players.append_attribute("max") = std::to_string(getNumber(ConfigManager::MAX_PLAYERS)).c_str();
 	players.append_attribute("peak") = std::to_string(g_game.getPlayersRecord()).c_str();
 
@@ -150,7 +170,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->addByte(0x10);
 		output->addString(getString(ConfigManager::SERVER_NAME));
 		output->addString(getString(ConfigManager::IP));
-		output->addString(std::to_string(getNumber(ConfigManager::LOGIN_PORT)));
+		output->addString(std::to_string(getNumber(ConfigManager::HTTP_PORT)));
 	}
 
 	if (requestedInfo & REQUEST_OWNER_SERVER_INFO) {

@@ -240,10 +240,10 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	uint32_t flags = 0;
 	Item* toItem = nullptr;
 
-	Cylinder* toCylinder = tile->queryDestination(index, *creature, &toItem, flags);
-	toCylinder->internalAddThing(creature);
+	const auto toThing = tile->queryDestination(index, *creature, &toItem, flags);
+	toThing->internalAddThing(creature);
 
-	const Position& dest = toCylinder->getPosition();
+	const Position& dest = toThing->getPosition();
 	getQTNode(dest.x, dest.y)->addCreature(creature);
 	return true;
 }
@@ -667,7 +667,7 @@ static uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 {
 	uint16_t dx = std::abs(p1.getX() - p2.getX());
 	uint16_t dy = std::abs(p1.getY() - p2.getY());
-	return MAP_NORMALWALKCOST * (dx + dy);
+	return dx * dx + dy * dy;
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,

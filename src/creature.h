@@ -103,6 +103,7 @@ public:
 
 	virtual const std::string& getName() const = 0;
 	virtual const std::string& getNameDescription() const = 0;
+	virtual std::string getDescription(int32_t lookDistance) const = 0;
 
 	virtual CreatureType_t getType() const = 0;
 
@@ -169,7 +170,14 @@ public:
 	void setCurrentOutfit(Outfit_t outfit) { currentOutfit = outfit; }
 	const Outfit_t getDefaultOutfit() const { return defaultOutfit; }
 	bool isInvisible() const;
-	ZoneType_t getZone() const { return getTile()->getZone(); }
+	ZoneType_t getZone() const
+	{
+		const Tile* tile = getTile();
+		if (!tile) {
+			return ZONE_NORMAL;
+		}
+		return tile->getZone();
+	}
 
 	// creature icons
 	CreatureIconHashMap& getIcons() { return creatureIcons; }
@@ -202,10 +210,11 @@ public:
 	virtual void onUnfollowCreature();
 
 	// Pathfinding functions
-	bool isFollower(Creature* creature);
+	bool isFollower(const Creature* creature);
 	void addFollower(Creature* creature);
 	void removeFollower(Creature* creature);
 	void removeFollowers();
+	void releaseFollowers();
 
 	// Pathfinding events
 	void updateFollowersPaths();
@@ -240,8 +249,6 @@ public:
 	virtual int32_t getDefense() const { return 0; }
 	virtual float getAttackFactor() const { return 1.0f; }
 	virtual float getDefenseFactor() const { return 1.0f; }
-
-	virtual uint8_t getSpeechBubble() const { return SPEECHBUBBLE_NONE; }
 
 	bool addCondition(Condition* condition, bool force = false);
 	bool addCombatCondition(Condition* condition);
@@ -302,13 +309,12 @@ public:
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
-	virtual void onAddTileItem(const Tile*, const Position&) {}
 	virtual void onUpdateTileItem(const Tile*, const Position&, const Item*, const ItemType&, const Item*,
 	                              const ItemType&)
 	{}
 	virtual void onRemoveTileItem(const Tile*, const Position&, const ItemType&, const Item*) {}
 
-	virtual void onCreatureAppear(Creature* creature, bool isLogin);
+	virtual void onCreatureAppear(Creature*, bool, MagicEffectClasses) {}
 	virtual void onRemoveCreature(Creature* creature, bool isLogout);
 	virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
 	                            const Position& oldPos, bool teleport);
@@ -317,8 +323,6 @@ public:
 	virtual void onFollowCreatureDisappear(bool) {}
 
 	virtual void onCreatureSay(Creature*, SpeakClasses, const std::string&) {}
-
-	virtual void onPlacedCreature() {}
 
 	virtual bool getCombatValues(int32_t&, int32_t&) { return false; }
 
@@ -337,11 +341,10 @@ public:
 	bool registerCreatureEvent(const std::string& name);
 	bool unregisterCreatureEvent(const std::string& name);
 
-	bool hasParent() const override { return getParent(); }
-	Cylinder* getParent() const override final { return tile; }
-	void setParent(Cylinder* cylinder) override final
+	Thing* getParent() const override final { return tile; }
+	void setParent(Thing* thing) override final
 	{
-		tile = static_cast<Tile*>(cylinder);
+		tile = thing->getTile();
 		position = tile->getPosition();
 	}
 

@@ -14,25 +14,18 @@ class DepotChest final : public Container
 public:
 	explicit DepotChest(uint16_t type, bool paginated = true);
 
-	// Serialization
 	void setMaxDepotItems(uint32_t maxitems) { maxDepotItems = maxitems; }
 
-	// Cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
 	                     Creature* actor = nullptr) const override;
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                            cylinderlink_t link = LINK_OWNER) override;
+	void postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
+	                         ReceiverLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
+	                            ReceiverLink_t link = LINK_OWNER) override;
 
-	// Item implementations
 	bool canRemove() const override { return false; }
-
-	// Thing implementations
-	bool hasParent() const override { return getParent(); }
-	Cylinder* getParent() const override;
-	Cylinder* getRealParent() const override { return parent; }
+	Thing* getParent() const override;
 
 private:
 	uint32_t maxDepotItems = 0;

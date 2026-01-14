@@ -5,7 +5,6 @@
 #define FS_PLAYER_H
 
 #include "creature.h"
-#include "cylinder.h"
 #include "depotchest.h"
 #include "depotlocker.h"
 #include "enums.h"
@@ -89,7 +88,7 @@ static constexpr int32_t PLAYER_MIN_SPEED = 10;
 
 static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
-class Player final : public Creature, public Cylinder
+class Player final : public Creature
 {
 public:
 	explicit Player(ProtocolGame_ptr p);
@@ -103,6 +102,9 @@ public:
 
 	Player* getPlayer() override { return this; }
 	const Player* getPlayer() const override { return this; }
+
+	Thing* getReceiver() override final { return this; }
+	const Thing* getReceiver() const override final { return this; }
 
 	void setID() final;
 
@@ -507,7 +509,6 @@ public:
 	void onChangeZone(ZoneType_t zone) override;
 	void onAttackedCreatureChangeZone(ZoneType_t zone) override;
 	void onIdleStatus() override;
-	void onPlacedCreature() override;
 
 	LightInfo getCreatureLight() const override;
 
@@ -603,8 +604,7 @@ public:
 			client->sendChannelEvent(channelId, playerName, channelEvent);
 		}
 	}
-	void sendCreatureAppear(const Creature* creature, const Position& pos,
-	                        MagicEffectClasses magicEffect = CONST_ME_NONE)
+	void sendAddCreature(const Creature* creature, const Position& pos, MagicEffectClasses magicEffect = CONST_ME_NONE)
 	{
 		if (client) {
 			client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature),
@@ -678,6 +678,12 @@ public:
 			} else {
 				client->sendRemoveTileCreature(creature, creature->getPosition(), stackpos);
 			}
+		}
+	}
+	void sendLight()
+	{
+		if (client) {
+			client->sendCreatureLight(this);
 		}
 	}
 	void sendCreatureLight(const Creature* creature)
@@ -780,13 +786,10 @@ public:
 	                      const Item* newItem, const ItemType& newType) override;
 	void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item) override;
 
-	void onCreatureAppear(Creature* creature, bool isLogin) override;
+	void onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClasses magicEffect) override;
 	void onRemoveCreature(Creature* creature, bool isLogout) override;
 	void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
 	                    const Position& oldPos, bool teleport) override;
-
-	void onEquipInventory();
-	void onDeEquipInventory();
 
 	void onAttackedCreatureDisappear(bool isLogout) override;
 	void onFollowCreatureDisappear(bool isLogout) override;
@@ -804,6 +807,36 @@ public:
 	void onUpdateInventoryItem(Item* oldItem, Item* newItem);
 	void onRemoveInventoryItem(Item* item);
 
+	void sendVIPEntries() const
+	{
+		if (client) {
+			client->sendVIPEntries();
+		}
+	}
+	void sendItemClasses() const
+	{
+		if (client) {
+			client->sendItemClasses();
+		}
+	}
+	void sendClientFeatures() const
+	{
+		if (client) {
+			client->sendClientFeatures();
+		}
+	}
+	void sendMapDescription() const
+	{
+		if (client) {
+			client->sendMapDescription(position);
+		}
+	}
+	void sendPendingStateEntered() const
+	{
+		if (client) {
+			client->sendPendingStateEntered();
+		}
+	}
 	void sendCancelMessage(const std::string& msg) const
 	{
 		if (client) {
@@ -853,6 +886,12 @@ public:
 	{
 		if (client) {
 			client->sendIcons(getClientIcons());
+		}
+	}
+	void sendMagicEffect(uint8_t type) const
+	{
+		if (client) {
+			client->sendMagicEffect(position, type);
 		}
 	}
 	void sendMagicEffect(const Position& pos, uint8_t type) const
@@ -1086,10 +1125,10 @@ public:
 
 	void onThink(uint32_t interval) override;
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                            cylinderlink_t link = LINK_OWNER) override;
+	void postAddNotification(Thing* thing, const Thing* oldParent, int32_t index,
+	                         ReceiverLink_t link = LINK_OWNER) override;
+	void postRemoveNotification(Thing* thing, const Thing* newParent, int32_t index,
+	                            ReceiverLink_t link = LINK_OWNER) override;
 
 	void setNextAction(int64_t time)
 	{
@@ -1143,16 +1182,14 @@ private:
 	                bool mostDamageUnjustified) override;
 	Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) override;
 
-	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
 	                     Creature* actor = nullptr) const override;
 	ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 	                          uint32_t flags) const override;
 	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
 	                        Creature* actor = nullptr) const override;
-	Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
+	Thing* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
 
-	void addThing(Thing*) override {}
 	void addThing(int32_t index, Thing* thing) override;
 
 	void updateThing(Thing* thing, uint16_t itemId, uint32_t count) override;
@@ -1161,13 +1198,13 @@ private:
 	void removeThing(Thing* thing, uint32_t count) override;
 
 	int32_t getThingIndex(const Thing* thing) const override;
-	size_t getFirstIndex() const override;
-	size_t getLastIndex() const override;
+	size_t getFirstIndex() const override { return CONST_SLOT_FIRST; }
+	size_t getLastIndex() const override { return CONST_SLOT_LAST + 1; }
 	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
 	Thing* getThing(size_t index) const override;
 
-	void internalAddThing(Thing* thing) override;
+	void internalAddThing(Thing* thing) override { internalAddThing(0, thing); }
 	void internalAddThing(uint32_t index, Thing* thing) override;
 
 	std::unordered_set<uint32_t> attackedSet;

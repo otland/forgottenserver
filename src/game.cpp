@@ -177,7 +177,7 @@ bool Game::loadMainMap(const std::string& filename)
 
 void Game::loadMap(const std::string& path, bool isCalledByLua) { map.loadMap(path, false, isCalledByLua); }
 
-Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
+Thing* Game::internalGetThing(Player* player, const Position& pos) const
 {
 	if (pos.x != 0xFFFF) {
 		return map.getTile(pos);
@@ -202,13 +202,14 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			return nullptr;
 		}
 
-		Thing* thing;
 		switch (type) {
 			case STACKPOS_LOOK: {
 				return tile->getTopVisibleThing(player);
 			}
 
 			case STACKPOS_MOVE: {
+				Thing* thing = nullptr;
+
 				Item* item = tile->getTopDownItem();
 				if (item && item->isMoveable()) {
 					thing = item;
@@ -221,43 +222,44 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 					if (thing && thing->getItem()) {
 						if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
 							if (player->getPosition().x + 1 == tile->getPosition().x) {
-								thing = nullptr;
+								return nullptr;
 							}
 						} else { // horizontal
 							if (player->getPosition().y + 1 == tile->getPosition().y) {
-								thing = nullptr;
+								return nullptr;
 							}
 						}
 					}
 				}
-				break;
+
+				return thing;
 			}
 
 			case STACKPOS_USEITEM: {
-				thing = tile->getUseItem(index);
-				break;
+				return tile->getUseItem(index);
 			}
 
 			case STACKPOS_TOPDOWN_ITEM: {
-				thing = tile->getTopDownItem();
-				break;
+				return tile->getTopDownItem();
 			}
 
 			case STACKPOS_USETARGET: {
-				thing = tile->getTopVisibleCreature(player);
-				if (!thing) {
-					thing = tile->getUseItem(index);
+				if (const auto creature = tile->getTopVisibleCreature(player)) {
+					return creature;
+				}
+
+				if (const auto item = tile->getUseItem(index)) {
+					return item;
 				}
 				break;
 			}
 
 			default: {
-				thing = nullptr;
 				break;
 			}
 		}
 
-		return thing;
+		return nullptr;
 	}
 
 	// container
@@ -318,8 +320,7 @@ void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
 	pos.z = 0;
 	stackpos = 0;
 
-	Cylinder* topParent = item->getTopParent();
-	if (topParent) {
+	if (const auto topParent = item->getTopParent()) {
 		if (Player* player = dynamic_cast<Player*>(topParent)) {
 			pos.x = 0xFFFF;
 
@@ -522,22 +523,18 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		return false;
 	}
 
-	SpectatorVec spectators;
-	map.getSpectators(spectators, creature->getPosition(), true);
-	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendCreatureAppear(creature, creature->getPosition(), magicEffect);
-		}
-	}
-
-	for (Creature* spectator : spectators) {
-		spectator->onCreatureAppear(creature, true);
-	}
-
-	creature->getParent()->postAddNotification(creature, nullptr, 0);
-
 	addCreatureCheck(creature);
-	creature->onPlacedCreature();
+
+	const auto& position = creature->getPosition();
+	const auto& tile = creature->getTile();
+
+	SpectatorVec spectators;
+	map.getSpectators(spectators, position, true);
+	for (Creature* spectator : spectators) {
+		spectator->onCreatureAppear(creature, true, magicEffect);
+	}
+
+	tile->postAddNotification(creature, nullptr, 0);
 	return true;
 }
 
@@ -547,10 +544,14 @@ bool Game::removeCreature(Creature* creature, bool isLogout /* = true*/)
 		return false;
 	}
 
+<<<<<<< HEAD
 	if (Creature* followCreature = creature->getFollowCreature()) {
 		followCreature->removeFollower(creature);
 		creature->decrementReferenceCounter();
 	}
+=======
+	creature->releaseFollowers();
+>>>>>>> 5b3b0d7460f377a599d5d7df6627e3a1c9fc7e46
 
 	Tile* tile = creature->getTile();
 
@@ -651,14 +652,14 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t 
 		} else {
 			playerMoveCreature(player, movingCreature, movingCreature->getPosition(), tile);
 		}
-	} else if (thing->getItem()) {
-		Cylinder* toCylinder = internalGetCylinder(player, toPos);
-		if (!toCylinder) {
+	} else if (const auto item = thing->getItem()) {
+		const auto toThing = internalGetThing(player, toPos);
+		if (!toThing) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return;
 		}
 
-		playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, thing->getItem(), toCylinder);
+		playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, item, toThing);
 	}
 }
 
@@ -847,22 +848,22 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 
 	int32_t index = 0;
 	Item* toItem = nullptr;
-	Tile* subCylinder = nullptr;
-	Tile* toCylinder = &toTile;
-	Tile* fromCylinder = nullptr;
+	Tile* subThing = nullptr;
+	Tile* toThing = &toTile;
+	Tile* fromThing = nullptr;
 	uint32_t n = 0;
 
-	while ((subCylinder = toCylinder->queryDestination(index, creature, &toItem, flags)) != toCylinder) {
-		map.moveCreature(creature, *subCylinder);
+	while ((subThing = toThing->queryDestination(index, creature, &toItem, flags)) != toThing) {
+		map.moveCreature(creature, *subThing);
 
-		if (creature.getParent() != subCylinder) {
+		if (creature.getParent() != subThing) {
 			// could happen if a script move the creature
-			fromCylinder = nullptr;
+			fromThing = nullptr;
 			break;
 		}
 
-		fromCylinder = toCylinder;
-		toCylinder = subCylinder;
+		fromThing = toThing;
+		toThing = subThing;
 		flags = 0;
 
 		// to prevent infinite loop
@@ -871,9 +872,9 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 		}
 	}
 
-	if (fromCylinder) {
-		const Position& fromPosition = fromCylinder->getPosition();
-		const Position& toPosition = toCylinder->getPosition();
+	if (fromThing) {
+		const Position& fromPosition = fromThing->getPosition();
+		const Position& toPosition = toThing->getPosition();
 		if (fromPosition.z != toPosition.z && (fromPosition.x != toPosition.x || fromPosition.y != toPosition.y)) {
 			Direction dir = getDirectionTo(fromPosition, toPosition);
 			if ((dir & DIRECTION_DIAGONAL_MASK) == 0) {
@@ -896,7 +897,7 @@ void Game::playerMoveItemByPlayerID(uint32_t playerId, const Position& fromPos, 
 }
 
 void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos,
-                          const Position& toPos, uint8_t count, Item* item, Cylinder* toCylinder)
+                          const Position& toPos, uint8_t count, Item* item, Thing* toThing)
 {
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
@@ -935,15 +936,15 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 		return;
 	}
 
-	Cylinder* fromCylinder = internalGetCylinder(player, fromPos);
-	if (!fromCylinder) {
+	const auto fromThing = internalGetThing(player, fromPos);
+	if (!fromThing) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
 
-	if (!toCylinder) {
-		toCylinder = internalGetCylinder(player, toPos);
-		if (!toCylinder) {
+	if (!toThing) {
+		toThing = internalGetThing(player, toPos);
+		if (!toThing) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return;
 		}
@@ -955,7 +956,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 	}
 
 	const Position& playerPos = player->getPosition();
-	const Position& mapFromPos = fromCylinder->getTile()->getPosition();
+	const Position& mapFromPos = fromThing->getTile()->getPosition();
 	if (playerPos.z != mapFromPos.z) {
 		player->sendCancelMessage(playerPos.z > mapFromPos.z ? RETURNVALUE_FIRSTGOUPSTAIRS
 		                                                     : RETURNVALUE_FIRSTGODOWNSTAIRS);
@@ -980,13 +981,13 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 		return;
 	}
 
-	const Tile* toCylinderTile = toCylinder->getTile();
-	const Position& mapToPos = toCylinderTile->getPosition();
+	const Tile* toThingTile = toThing->getTile();
+	const Position& mapToPos = toThingTile->getPosition();
 
 	// hangable item specific code
-	if (item->isHangable() && toCylinderTile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
+	if (item->isHangable() && toThingTile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 		// destination supports hangable objects so need to move there first
-		bool vertical = toCylinderTile->hasProperty(CONST_PROP_ISVERTICAL);
+		bool vertical = toThingTile->hasProperty(CONST_PROP_ISVERTICAL);
 		if (vertical) {
 			if (playerPos.x + 1 == mapToPos.x) {
 				player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
@@ -1015,7 +1016,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 				// need to pickup the item first
 				Item* moveItem = nullptr;
 
-				ReturnValue ret = internalMoveItem(fromCylinder, player, INDEX_WHEREEVER, item, count, &moveItem, 0,
+				ReturnValue ret = internalMoveItem(fromThing, player, INDEX_WHEREEVER, item, count, &moveItem, 0,
 				                                   player, nullptr, &fromPos, &toPos);
 				if (ret != RETURNVALUE_NOERROR) {
 					player->sendCancelMessage(ret);
@@ -1070,41 +1071,40 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 	}
 
 	ReturnValue ret =
-	    internalMoveItem(fromCylinder, toCylinder, toIndex, item, count, nullptr, 0, player, nullptr, &fromPos, &toPos);
+	    internalMoveItem(fromThing, toThing, toIndex, item, count, nullptr, 0, player, nullptr, &fromPos, &toPos);
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 	}
 }
 
-ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index, Item* item,
-                                   uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/,
-                                   Creature* actor /* = nullptr*/, Item* tradeItem /* = nullptr*/,
-                                   const Position* fromPos /*= nullptr*/, const Position* toPos /*= nullptr*/)
+ReturnValue Game::internalMoveItem(Thing* fromThing, Thing* toThing, int32_t index, Item* item, uint32_t count,
+                                   Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor /* = nullptr*/,
+                                   Item* tradeItem /* = nullptr*/, const Position* fromPos /*= nullptr*/,
+                                   const Position* toPos /*= nullptr*/)
 {
 	Player* actorPlayer = actor ? actor->getPlayer() : nullptr;
 	if (actorPlayer && fromPos && toPos) {
 		const ReturnValue ret =
-		    tfs::events::player::onMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
+		    tfs::events::player::onMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromThing, toThing);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
 		}
 	}
 
-	Tile* fromTile = fromCylinder->getTile();
+	Tile* fromTile = fromThing->getTile();
 	if (fromTile) {
 		auto it = browseFields.find(fromTile);
-		if (it != browseFields.end() && it->second == fromCylinder) {
-			fromCylinder = fromTile;
+		if (it != browseFields.end() && it->second == fromThing) {
+			fromThing = fromTile;
 		}
 	}
 
 	Item* toItem = nullptr;
-
-	Cylinder* subCylinder;
+	Thing* subThing = nullptr;
 	int floorN = 0;
 
-	while ((subCylinder = toCylinder->queryDestination(index, *item, &toItem, flags)) != toCylinder) {
-		toCylinder = subCylinder;
+	while ((subThing = toThing->queryDestination(index, *item, &toItem, flags)) != toThing) {
+		toThing = subThing;
 
 		// to prevent infinite loop
 		if (++floorN >= MAP_MAX_LAYERS) {
@@ -1118,14 +1118,14 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	// check if we can add this item
-	ReturnValue ret = toCylinder->queryAdd(index, *item, count, flags, actor);
+	ReturnValue ret = toThing->queryAdd(index, *item, count, flags, actor);
 	if (ret == RETURNVALUE_NEEDEXCHANGE) {
-		// check if we can add it to source cylinder
-		ret = fromCylinder->queryAdd(fromCylinder->getThingIndex(item), *toItem, toItem->getItemCount(), 0);
+		// check if we can add it to source thing
+		ret = fromThing->queryAdd(fromThing->getThingIndex(item), *toItem, toItem->getItemCount(), 0);
 		if (ret == RETURNVALUE_NOERROR) {
 			if (actorPlayer && fromPos && toPos) {
 				const ReturnValue eventRet = tfs::events::player::onMoveItem(
-				    actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos, toCylinder, fromCylinder);
+				    actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos, toThing, fromThing);
 				if (eventRet != RETURNVALUE_NOERROR) {
 					return eventRet;
 				}
@@ -1134,31 +1134,31 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 			// check how much we can move
 			uint32_t maxExchangeQueryCount = 0;
 			ReturnValue retExchangeMaxCount =
-			    fromCylinder->queryMaxCount(INDEX_WHEREEVER, *toItem, toItem->getItemCount(), maxExchangeQueryCount, 0);
+			    fromThing->queryMaxCount(INDEX_WHEREEVER, *toItem, toItem->getItemCount(), maxExchangeQueryCount, 0);
 
 			if (retExchangeMaxCount != RETURNVALUE_NOERROR && maxExchangeQueryCount == 0) {
 				return retExchangeMaxCount;
 			}
 
-			if (toCylinder->queryRemove(*toItem, toItem->getItemCount(), flags, actor) == RETURNVALUE_NOERROR) {
-				int32_t oldToItemIndex = toCylinder->getThingIndex(toItem);
-				toCylinder->removeThing(toItem, toItem->getItemCount());
-				fromCylinder->addThing(toItem);
+			if (toThing->queryRemove(*toItem, toItem->getItemCount(), flags, actor) == RETURNVALUE_NOERROR) {
+				int32_t oldToItemIndex = toThing->getThingIndex(toItem);
+				toThing->removeThing(toItem, toItem->getItemCount());
+				fromThing->addThing(toItem);
 
 				if (oldToItemIndex != -1) {
-					toCylinder->postRemoveNotification(toItem, fromCylinder, oldToItemIndex);
+					toThing->postRemoveNotification(toItem, fromThing, oldToItemIndex);
 				}
 
-				int32_t newToItemIndex = fromCylinder->getThingIndex(toItem);
+				int32_t newToItemIndex = fromThing->getThingIndex(toItem);
 				if (newToItemIndex != -1) {
-					fromCylinder->postAddNotification(toItem, toCylinder, newToItemIndex);
+					fromThing->postAddNotification(toItem, toThing, newToItemIndex);
 				}
 
-				ret = toCylinder->queryAdd(index, *item, count, flags);
+				ret = toThing->queryAdd(index, *item, count, flags);
 
 				if (actorPlayer && fromPos && toPos && !toItem->isRemoved()) {
 					tfs::events::player::onItemMoved(actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos,
-					                                 toCylinder, fromCylinder);
+					                                 toThing, fromThing);
 				}
 
 				toItem = nullptr;
@@ -1172,7 +1172,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	// check how much we can move
 	uint32_t maxQueryCount = 0;
-	ReturnValue retMaxCount = toCylinder->queryMaxCount(index, *item, count, maxQueryCount, flags);
+	ReturnValue retMaxCount = toThing->queryMaxCount(index, *item, count, maxQueryCount, flags);
 	if (retMaxCount != RETURNVALUE_NOERROR && maxQueryCount == 0) {
 		return retMaxCount;
 	}
@@ -1185,28 +1185,28 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	// check if we can remove this item
-	ret = fromCylinder->queryRemove(*item, moveCount, flags, actor);
+	ret = fromThing->queryRemove(*item, moveCount, flags, actor);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
 
 	if (tradeItem) {
-		if (toCylinder->getItem() == tradeItem) {
+		if (toThing->getItem() == tradeItem) {
 			return RETURNVALUE_NOTENOUGHROOM;
 		}
 
-		Cylinder* tmpCylinder = toCylinder->getParent();
-		while (tmpCylinder) {
-			if (tmpCylinder->getItem() == tradeItem) {
+		auto parent = toThing->getParent();
+		while (parent) {
+			if (parent->getItem() == tradeItem) {
 				return RETURNVALUE_NOTENOUGHROOM;
 			}
 
-			tmpCylinder = tmpCylinder->getParent();
+			parent = parent->getParent();
 		}
 	}
 
 	Item* moveItem = item;
-	int32_t itemIndex = fromCylinder->getThingIndex(item);
+	int32_t itemIndex = fromThing->getThingIndex(item);
 	Item* updateItem = nullptr;
 
 	if (item->isStackable()) {
@@ -1217,8 +1217,8 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		if (item->equals(toItem) && moveCount != ITEM_STACK_SIZE) {
 			allowedCount = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), moveCount);
 			if (allowedCount > 0) {
-				fromCylinder->removeThing(item, allowedCount);
-				toCylinder->updateThing(toItem, toItem->getID(), toItem->getItemCount() + allowedCount);
+				fromThing->removeThing(item, allowedCount);
+				toThing->updateThing(toItem, toItem->getID(), toItem->getItemCount() + allowedCount);
 				updateItem = toItem;
 				moveCount -= allowedCount;
 
@@ -1243,25 +1243,25 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	// add item
 	if (moveItem) {
-		fromCylinder->removeThing(item, moveCount);
-		toCylinder->addThing(index, moveItem);
+		fromThing->removeThing(item, moveCount);
+		toThing->addThing(index, moveItem);
 	}
 
 	if (itemIndex != -1) {
-		fromCylinder->postRemoveNotification(item, toCylinder, itemIndex);
+		fromThing->postRemoveNotification(item, toThing, itemIndex);
 	}
 
 	if (moveItem) {
-		int32_t moveItemIndex = toCylinder->getThingIndex(moveItem);
+		int32_t moveItemIndex = toThing->getThingIndex(moveItem);
 		if (moveItemIndex != -1) {
-			toCylinder->postAddNotification(moveItem, fromCylinder, moveItemIndex);
+			toThing->postAddNotification(moveItem, fromThing, moveItemIndex);
 		}
 	}
 
 	if (updateItem) {
-		int32_t updateItemIndex = toCylinder->getThingIndex(updateItem);
+		int32_t updateItemIndex = toThing->getThingIndex(updateItem);
 		if (updateItemIndex != -1) {
-			toCylinder->postAddNotification(updateItem, fromCylinder, updateItemIndex);
+			toThing->postAddNotification(updateItem, fromThing, updateItemIndex);
 		}
 	}
 
@@ -1293,48 +1293,46 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	if (actorPlayer && fromPos && toPos) {
 		if (updateItem && !updateItem->isRemoved()) {
-			tfs::events::player::onItemMoved(actorPlayer, updateItem, count, *fromPos, *toPos, fromCylinder,
-			                                 toCylinder);
+			tfs::events::player::onItemMoved(actorPlayer, updateItem, count, *fromPos, *toPos, fromThing, toThing);
 		} else if (moveItem && !moveItem->isRemoved()) {
-			tfs::events::player::onItemMoved(actorPlayer, moveItem, count, *fromPos, *toPos, fromCylinder, toCylinder);
+			tfs::events::player::onItemMoved(actorPlayer, moveItem, count, *fromPos, *toPos, fromThing, toThing);
 		} else if (item && !item->isRemoved()) {
-			tfs::events::player::onItemMoved(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
+			tfs::events::player::onItemMoved(actorPlayer, item, count, *fromPos, *toPos, fromThing, toThing);
 		}
 	}
 
 	return ret;
 }
 
-ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t index /*= INDEX_WHEREEVER*/,
+ReturnValue Game::internalAddItem(Thing* toThing, Item* item, int32_t index /*= INDEX_WHEREEVER*/,
                                   uint32_t flags /* = 0*/, bool test /* = false*/)
 {
 	uint32_t remainderCount = 0;
-	return internalAddItem(toCylinder, item, index, flags, test, remainderCount);
+	return internalAddItem(toThing, item, index, flags, test, remainderCount);
 }
 
-ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t index, uint32_t flags, bool test,
+ReturnValue Game::internalAddItem(Thing* toThing, Item* item, int32_t index, uint32_t flags, bool test,
                                   uint32_t& remainderCount)
 {
-	if (!toCylinder || !item) {
+	if (!toThing || !item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	Cylinder* destCylinder = toCylinder;
 	Item* toItem = nullptr;
-	toCylinder = toCylinder->queryDestination(index, *item, &toItem, flags);
+	const auto destThing = toThing->queryDestination(index, *item, &toItem, flags);
 
 	// check if we can add this item
-	ReturnValue ret = toCylinder->queryAdd(index, *item, item->getItemCount(), flags);
+	ReturnValue ret = destThing->queryAdd(index, *item, item->getItemCount(), flags);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
 
 	/*
-	Check if we can move add the whole amount, we do this by checking against the original cylinder,
-	since the queryDestination can return a cylinder that might only hold a part of the full amount.
+	Check if we can move add the whole amount, we do this by checking against the original thing,
+	since the queryDestination can return a thing that might only hold a part of the full amount.
 	*/
 	uint32_t maxQueryCount = 0;
-	ret = destCylinder->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), maxQueryCount, flags);
+	ret = toThing->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), maxQueryCount, flags);
 
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
@@ -1348,24 +1346,23 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		uint32_t m = std::min<uint32_t>(item->getItemCount(), maxQueryCount);
 		uint32_t n = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), m);
 
-		toCylinder->updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
+		destThing->updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
 
 		int32_t count = m - n;
 		if (count > 0) {
 			if (item->getItemCount() != count) {
 				Item* remainderItem = item->clone();
 				remainderItem->setItemCount(count);
-				if (internalAddItem(destCylinder, remainderItem, INDEX_WHEREEVER, flags, false) !=
-				    RETURNVALUE_NOERROR) {
+				if (internalAddItem(toThing, remainderItem, INDEX_WHEREEVER, flags, false) != RETURNVALUE_NOERROR) {
 					ReleaseItem(remainderItem);
 					remainderCount = count;
 				}
 			} else {
-				toCylinder->addThing(index, item);
+				destThing->addThing(index, item);
 
-				int32_t itemIndex = toCylinder->getThingIndex(item);
+				int32_t itemIndex = destThing->getThingIndex(item);
 				if (itemIndex != -1) {
-					toCylinder->postAddNotification(item, nullptr, itemIndex);
+					destThing->postAddNotification(item, nullptr, itemIndex);
 				}
 			}
 		} else {
@@ -1373,17 +1370,17 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 			item->onRemoved();
 			ReleaseItem(item);
 
-			int32_t itemIndex = toCylinder->getThingIndex(toItem);
+			int32_t itemIndex = destThing->getThingIndex(toItem);
 			if (itemIndex != -1) {
-				toCylinder->postAddNotification(toItem, nullptr, itemIndex);
+				destThing->postAddNotification(toItem, nullptr, itemIndex);
 			}
 		}
 	} else {
-		toCylinder->addThing(index, item);
+		destThing->addThing(index, item);
 
-		int32_t itemIndex = toCylinder->getThingIndex(item);
+		int32_t itemIndex = destThing->getThingIndex(item);
 		if (itemIndex != -1) {
-			toCylinder->postAddNotification(item, nullptr, itemIndex);
+			destThing->postAddNotification(item, nullptr, itemIndex);
 		}
 	}
 
@@ -1400,16 +1397,16 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 
 ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool test /*= false*/, uint32_t flags /*= 0*/)
 {
-	Cylinder* cylinder = item->getParent();
-	if (!cylinder) {
+	auto parent = item->getParent();
+	if (!parent) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	Tile* fromTile = cylinder->getTile();
+	Tile* fromTile = parent->getTile();
 	if (fromTile) {
 		auto it = browseFields.find(fromTile);
-		if (it != browseFields.end() && it->second == cylinder) {
-			cylinder = fromTile;
+		if (it != browseFields.end() && it->second == parent) {
+			parent = fromTile;
 		}
 	}
 
@@ -1418,7 +1415,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 	}
 
 	// check if we can remove this item
-	ReturnValue ret = cylinder->queryRemove(*item, count, flags | FLAG_IGNORENOTMOVEABLE);
+	ReturnValue ret = parent->queryRemove(*item, count, flags | FLAG_IGNORENOTMOVEABLE);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1428,10 +1425,10 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 	}
 
 	if (!test) {
-		int32_t index = cylinder->getThingIndex(item);
+		int32_t index = parent->getThingIndex(item);
 
 		// remove the item
-		cylinder->removeThing(item, count);
+		parent->removeThing(item, count);
 
 		if (item->isRemoved()) {
 			item->onRemoved();
@@ -1441,7 +1438,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 			ReleaseItem(item);
 		}
 
-		cylinder->postRemoveNotification(item, nullptr, index);
+		parent->postRemoveNotification(item, nullptr, index);
 	}
 
 	return RETURNVALUE_NOERROR;
@@ -1467,16 +1464,16 @@ ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnM
 	return ret;
 }
 
-Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId, bool depthSearch /*= true*/,
+Item* Game::findItemOfType(Thing* fromThing, uint16_t itemId, bool depthSearch /*= true*/,
                            int32_t subType /*= -1*/) const
 {
-	if (!cylinder) {
+	if (!fromThing) {
 		return nullptr;
 	}
 
 	std::vector<Container*> containers;
-	for (size_t i = cylinder->getFirstIndex(), j = cylinder->getLastIndex(); i < j; ++i) {
-		Thing* thing = cylinder->getThing(i);
+	for (size_t i = fromThing->getFirstIndex(), j = fromThing->getLastIndex(); i < j; ++i) {
+		const auto thing = fromThing->getThing(i);
 		if (!thing) {
 			continue;
 		}
@@ -1515,9 +1512,9 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId, bool depthSearch
 	return nullptr;
 }
 
-bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
+bool Game::removeMoney(Thing* fromThing, uint64_t money, uint32_t flags /*= 0*/)
 {
-	if (!cylinder) {
+	if (!fromThing) {
 		return false;
 	}
 
@@ -1530,8 +1527,8 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 	std::multimap<uint32_t, Item*> moneyMap;
 	uint64_t moneyCount = 0;
 
-	for (size_t i = cylinder->getFirstIndex(), j = cylinder->getLastIndex(); i < j; ++i) {
-		Thing* thing = cylinder->getThing(i);
+	for (size_t i = fromThing->getFirstIndex(), j = fromThing->getLastIndex(); i < j; ++i) {
+		const auto thing = fromThing->getThing(i);
 		if (!thing) {
 			continue;
 		}
@@ -1583,7 +1580,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			const uint32_t worth = moneyEntry.first / item->getItemCount();
 			const uint32_t removeCount = std::ceil(money / static_cast<double>(worth));
 
-			addMoney(cylinder, (worth * removeCount) - money, flags);
+			addMoney(fromThing, (worth * removeCount) - money, flags);
 			internalRemoveItem(item, removeCount);
 			break;
 		} else {
@@ -1594,7 +1591,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 	return true;
 }
 
-void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
+void Game::addMoney(Thing* thing, uint64_t money, uint32_t flags /*= 0*/)
 {
 	if (money == 0) {
 		return;
@@ -1614,9 +1611,9 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 
 			Item* remaindItem = Item::CreateItem(it.second, count);
 
-			ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+			ReturnValue ret = internalAddItem(thing, remaindItem, INDEX_WHEREEVER, flags);
 			if (ret != RETURNVALUE_NOERROR) {
-				internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+				internalAddItem(thing->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 			}
 
 			currencyCoins -= count;
@@ -1631,20 +1628,20 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		return item;
 	}
 
-	Cylinder* cylinder = item->getParent();
-	if (!cylinder) {
+	auto parent = item->getParent();
+	if (!parent) {
 		return nullptr;
 	}
 
-	Tile* fromTile = cylinder->getTile();
+	Tile* fromTile = parent->getTile();
 	if (fromTile) {
 		auto it = browseFields.find(fromTile);
-		if (it != browseFields.end() && it->second == cylinder) {
-			cylinder = fromTile;
+		if (it != browseFields.end() && it->second == parent) {
+			parent = fromTile;
 		}
 	}
 
-	int32_t itemIndex = cylinder->getThingIndex(item);
+	int32_t itemIndex = parent->getThingIndex(item);
 	if (itemIndex == -1) {
 		return item;
 	}
@@ -1662,23 +1659,22 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	if (curType.alwaysOnTop != newType.alwaysOnTop) {
 		// This only occurs when you transform items on tiles from a downItem to a topItem (or vice versa)
 		// Remove the old, and add the new
-		cylinder->removeThing(item, item->getItemCount());
-		cylinder->postRemoveNotification(item, cylinder, itemIndex);
+		parent->removeThing(item, item->getItemCount());
+		parent->postRemoveNotification(item, parent, itemIndex);
 
 		item->setID(newId);
 		if (newCount != -1) {
 			item->setSubType(newCount);
 		}
-		cylinder->addThing(item);
+		parent->addThing(item);
 
-		Cylinder* newParent = item->getParent();
-		if (!newParent) {
-			ReleaseItem(item);
-			return nullptr;
+		if (auto itemParent = item->getParent()) {
+			itemParent->postAddNotification(item, parent, itemParent->getThingIndex(item));
+			return item;
 		}
 
-		newParent->postAddNotification(item, cylinder, newParent->getThingIndex(item));
-		return item;
+		ReleaseItem(item);
+		return nullptr;
 	}
 
 	if (curType.type == newType.type) {
@@ -1693,7 +1689,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 					newItemId = item->getDecayTo();
 				}
 
-				if (newItemId < 0) {
+				if (newItemId <= 0) {
 					internalRemoveItem(item);
 					return nullptr;
 				} else if (newItemId != newId) {
@@ -1703,18 +1699,18 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 						return nullptr;
 					}
 
-					cylinder->replaceThing(itemIndex, newItem);
-					cylinder->postAddNotification(newItem, cylinder, itemIndex);
+					parent->replaceThing(itemIndex, newItem);
+					parent->postAddNotification(newItem, parent, itemIndex);
 
 					item->setParent(nullptr);
-					cylinder->postRemoveNotification(item, cylinder, itemIndex);
+					parent->postRemoveNotification(item, parent, itemIndex);
 					ReleaseItem(item);
 					return newItem;
 				}
 				return transformItem(item, newItemId);
 			}
 		} else {
-			cylinder->postRemoveNotification(item, cylinder, itemIndex);
+			parent->postRemoveNotification(item, parent, itemIndex);
 			uint16_t itemId = item->getID();
 			int32_t count = item->getSubType();
 
@@ -1730,8 +1726,8 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 				count = newCount;
 			}
 
-			cylinder->updateThing(item, itemId, count);
-			cylinder->postAddNotification(item, cylinder, itemIndex);
+			parent->updateThing(item, itemId, count);
+			parent->postAddNotification(item, parent, itemIndex);
 			return item;
 		}
 	}
@@ -1748,11 +1744,11 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		return nullptr;
 	}
 
-	cylinder->replaceThing(itemIndex, newItem);
-	cylinder->postAddNotification(newItem, cylinder, itemIndex);
+	parent->replaceThing(itemIndex, newItem);
+	parent->postAddNotification(newItem, parent, itemIndex);
 
 	item->setParent(nullptr);
-	cylinder->postRemoveNotification(item, cylinder, itemIndex);
+	parent->postRemoveNotification(item, parent, itemIndex);
 	ReleaseItem(item);
 
 	if (newItem->getDuration() > 0) {
@@ -2467,9 +2463,7 @@ void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, std::string
 		return;
 	}
 
-	Cylinder* topParent = writeItem->getTopParent();
-
-	Player* owner = dynamic_cast<Player*>(topParent);
+	Player* owner = dynamic_cast<Player*>(writeItem->getTopParent());
 	if (owner && owner != player) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -2682,10 +2676,12 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	}
 
 	if (getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(tradeItem->getTile())) {
-			if (!tradeItem->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
-				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
-				return;
+		if (const auto tile = tradeItem->getTile()) {
+			if (const auto houseTile = tile->getHouseTile()) {
+				if (!tradeItem->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
+					player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
+					return;
+				}
 			}
 		}
 	}
@@ -3831,7 +3827,6 @@ void Game::checkCreatureWalk(uint32_t creatureId)
 	Creature* creature = getCreatureByID(creatureId);
 	if (creature && !creature->isDead()) {
 		creature->onWalk();
-		cleanup();
 	}
 }
 
@@ -5136,7 +5131,8 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 	// TODO: move debug assertions to database
 	FILE* file = fopen("client_assertions.txt", "a");
 	if (file) {
-		fprintf(file, "----- %s - %s (%s) -----\n", formatDate(time(nullptr)).c_str(), player->getName().c_str(),
+		const auto& timestamp = std::format("{:%d/%m/%Y %T}", std::chrono::system_clock::now());
+		fprintf(file, "----- %s - %s (%s) -----\n", timestamp.c_str(), player->getName().c_str(),
 		        player->getIP().to_string().c_str());
 		fprintf(file, "%s\n%s\n%s\n%s\n", assertLine.c_str(), date.c_str(), description.c_str(), comment.c_str());
 		fclose(file);
@@ -5173,8 +5169,8 @@ void Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 		return;
 	}
 
-	const MarketOfferList& buyOffers = IOMarket::getActiveOffers(MARKETACTION_BUY, it.id);
-	const MarketOfferList& sellOffers = IOMarket::getActiveOffers(MARKETACTION_SELL, it.id);
+	const MarketOfferList& buyOffers = tfs::iomarket::getActiveOffers(MARKETACTION_BUY, it.id);
+	const MarketOfferList& sellOffers = tfs::iomarket::getActiveOffers(MARKETACTION_SELL, it.id);
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
 	tfs::events::player::onLookInMarket(player, &it);
 }
@@ -5190,8 +5186,8 @@ void Game::playerBrowseMarketOwnOffers(uint32_t playerId)
 		return;
 	}
 
-	const MarketOfferList& buyOffers = IOMarket::getOwnOffers(MARKETACTION_BUY, player->getGUID());
-	const MarketOfferList& sellOffers = IOMarket::getOwnOffers(MARKETACTION_SELL, player->getGUID());
+	const MarketOfferList& buyOffers = tfs::iomarket::getOwnOffers(MARKETACTION_BUY, player->getGUID());
+	const MarketOfferList& sellOffers = tfs::iomarket::getOwnOffers(MARKETACTION_SELL, player->getGUID());
 	player->sendMarketBrowseOwnOffers(buyOffers, sellOffers);
 }
 
@@ -5206,8 +5202,8 @@ void Game::playerBrowseMarketOwnHistory(uint32_t playerId)
 		return;
 	}
 
-	const HistoryMarketOfferList& buyOffers = IOMarket::getOwnHistory(MARKETACTION_BUY, player->getGUID());
-	const HistoryMarketOfferList& sellOffers = IOMarket::getOwnHistory(MARKETACTION_SELL, player->getGUID());
+	const HistoryMarketOfferList& buyOffers = tfs::iomarket::getOwnHistory(MARKETACTION_BUY, player->getGUID());
+	const HistoryMarketOfferList& sellOffers = tfs::iomarket::getOwnHistory(MARKETACTION_SELL, player->getGUID());
 	player->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
 }
 
@@ -5255,7 +5251,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	const uint32_t maxOfferCount = getNumber(ConfigManager::MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER);
-	if (maxOfferCount != 0 && IOMarket::getPlayerOfferCount(player->getGUID()) >= maxOfferCount) {
+	if (maxOfferCount != 0 && tfs::iomarket::getPlayerOfferCount(player->getGUID()) >= maxOfferCount) {
 		return;
 	}
 
@@ -5266,8 +5262,9 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		fee = MAX_MARKET_FEE;
 	}
 
+	uint64_t playerMoney = player->getMoney();
 	if (type == MARKETACTION_SELL) {
-		if (fee > (player->getMoney() + player->bankBalance)) {
+		if (fee > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
@@ -5293,28 +5290,28 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			}
 		}
 
-		const auto debitCash = std::min(player->getMoney(), fee);
+		const auto debitCash = std::min(playerMoney, fee);
 		const auto debitBank = fee - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
 	} else {
 		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
-		if (totalPrice > (player->getMoney() + player->bankBalance)) {
+		if (totalPrice > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
-		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
 	}
 
-	IOMarket::createOffer(player->getGUID(), static_cast<MarketAction_t>(type), it.id, amount, price, anonymous);
+	tfs::iomarket::createOffer(player->getGUID(), static_cast<MarketAction_t>(type), it.id, amount, price, anonymous);
 
 	player->sendMarketEnter();
-	const MarketOfferList& buyOffers = IOMarket::getActiveOffers(MARKETACTION_BUY, it.id);
-	const MarketOfferList& sellOffers = IOMarket::getActiveOffers(MARKETACTION_SELL, it.id);
+	const MarketOfferList& buyOffers = tfs::iomarket::getActiveOffers(MARKETACTION_BUY, it.id);
+	const MarketOfferList& sellOffers = tfs::iomarket::getActiveOffers(MARKETACTION_SELL, it.id);
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
 }
 
@@ -5329,7 +5326,7 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return;
 	}
 
-	MarketOfferEx offer = IOMarket::getOfferByCounter(timestamp, counter);
+	MarketOfferEx offer = tfs::iomarket::getOfferByCounter(timestamp, counter);
 	if (offer.id == 0 || offer.playerId != player->getGUID()) {
 		return;
 	}
@@ -5375,7 +5372,7 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		}
 	}
 
-	IOMarket::moveOfferToHistory(offer.id, OFFERSTATE_CANCELLED);
+	tfs::iomarket::moveOfferToHistory(offer.id, OFFERSTATE_CANCELLED);
 	offer.amount = 0;
 	offer.timestamp += getNumber(ConfigManager::MARKET_OFFER_DURATION);
 	player->sendMarketCancelOffer(offer);
@@ -5397,7 +5394,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return;
 	}
 
-	MarketOfferEx offer = IOMarket::getOfferByCounter(timestamp, counter);
+	MarketOfferEx offer = tfs::iomarket::getOfferByCounter(timestamp, counter);
 	if (offer.id == 0) {
 		return;
 	}
@@ -5544,19 +5541,19 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	IOMarket::appendHistory(player->getGUID(), (offer.type == MARKETACTION_BUY ? MARKETACTION_SELL : MARKETACTION_BUY),
-	                        offer.itemId, amount, offer.price, offer.timestamp + marketOfferDuration,
-	                        OFFERSTATE_ACCEPTEDEX);
+	tfs::iomarket::appendHistory(player->getGUID(),
+	                             (offer.type == MARKETACTION_BUY ? MARKETACTION_SELL : MARKETACTION_BUY), offer.itemId,
+	                             amount, offer.price, offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTEDEX);
 
-	IOMarket::appendHistory(offer.playerId, offer.type, offer.itemId, amount, offer.price,
-	                        offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTED);
+	tfs::iomarket::appendHistory(offer.playerId, offer.type, offer.itemId, amount, offer.price,
+	                             offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTED);
 
 	offer.amount -= amount;
 
 	if (offer.amount == 0) {
-		IOMarket::deleteOffer(offer.id);
+		tfs::iomarket::deleteOffer(offer.id);
 	} else {
-		IOMarket::acceptOffer(offer.id, amount);
+		tfs::iomarket::acceptOffer(offer.id, amount);
 	}
 
 	player->sendMarketEnter();

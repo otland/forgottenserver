@@ -112,7 +112,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 	return true;
 }
 
-bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
+bool IOMapSerialize::loadItem(PropStream& propStream, Thing* parent)
 {
 	uint16_t id;
 	if (!propStream.read<uint16_t>(id)) {
@@ -318,7 +318,7 @@ bool IOMapSerialize::saveHouseInfo()
 
 		std::string listText;
 		if (house->getAccessList(GUEST_LIST, listText) && !listText.empty()) {
-			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), tfs::to_underlying(GUEST_LIST),
+			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), std::to_underlying(GUEST_LIST),
 			                             db.escapeString(listText)))) {
 				return false;
 			}
@@ -327,7 +327,7 @@ bool IOMapSerialize::saveHouseInfo()
 		}
 
 		if (house->getAccessList(SUBOWNER_LIST, listText) && !listText.empty()) {
-			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), tfs::to_underlying(SUBOWNER_LIST),
+			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), std::to_underlying(SUBOWNER_LIST),
 			                             db.escapeString(listText)))) {
 				return false;
 			}
