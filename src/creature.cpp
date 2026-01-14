@@ -860,6 +860,7 @@ void Creature::releaseFollowers()
 {
 	for (const auto& follower : followers) {
 		follower->decrementReferenceCounter();
+		follower->setFollowCreature(nullptr);
 	}
 }
 
