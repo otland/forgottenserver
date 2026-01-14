@@ -517,7 +517,6 @@ void Creature::onDeath()
 
 	if (followCreature) {
 		followCreature->removeFollower(this);
-		setFollowCreature(nullptr);
 	}
 	releaseFollowers();
 
