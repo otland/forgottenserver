@@ -515,13 +515,10 @@ void Creature::onDeath()
 		setMaster(nullptr);
 	}
 
-	if (followCreature) {
-		followCreature->removeFollower(this);
-	}
-	releaseFollowers();
-
 	if (droppedCorpse) {
 		g_game.removeCreature(this, false);
+	} else {
+		releaseFollowers();
 	}
 }
 
