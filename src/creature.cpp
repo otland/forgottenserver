@@ -994,7 +994,7 @@ bool Creature::onKilledCreature(Creature* target, bool)
 		master->onKilledCreature(target);
 	}
 
-	if (Player* tmpPlayer = getPlayer()) {
+	if (getPlayer()) {
 		if (followCreature && followCreature == target) {
 			decrementReferenceCounter();
 		}
