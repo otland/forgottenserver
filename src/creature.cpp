@@ -733,10 +733,8 @@ void Creature::setAttackedCreature(Creature* creature)
 	}
 
 	attackedCreature = creature;
-	creature->addFollower(this);
 	onAttackedCreature(attackedCreature);
 	attackedCreature->onAttacked();
-	forceUpdatePath();
 
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(creature);
@@ -828,15 +826,6 @@ void Creature::addFollower(Creature* creature)
 	}
 }
 
-void Creature::removeFollower(Creature* creature)
-{
-	auto it = std::find(followers.begin(), followers.end(), creature);
-	if (it != followers.end()) {
-		creature->decrementReferenceCounter();
-		followers.erase(it);
-	}
-}
-
 void Creature::removeOutOfRangeFollowers()
 {
 	const Position& position = getPosition();
@@ -858,8 +847,8 @@ void Creature::removeOutOfRangeFollowers()
 void Creature::releaseFollowers()
 {
 	for (const auto& follower : followers) {
-		follower->decrementReferenceCounter();
 		follower->setFollowCreature(nullptr);
+		follower->decrementReferenceCounter();
 	}
 }
 
@@ -1006,6 +995,12 @@ bool Creature::onKilledCreature(Creature* target, bool)
 {
 	if (master) {
 		master->onKilledCreature(target);
+	}
+
+	if (Player* tmpPlayer = getPlayer()) {
+		if (followCreature && followCreature == target) {
+			decrementReferenceCounter();
+		}
 	}
 
 	// scripting event - onKill

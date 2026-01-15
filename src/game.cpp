@@ -560,6 +560,11 @@ bool Game::removeCreature(Creature* creature, bool isLogout /* = true*/)
 		if (Player* player = spectator->getPlayer()) {
 			oldStackPosVector.push_back(
 			    player->canSeeCreature(creature) ? tile->getClientIndexOfCreature(player, creature) : -1);
+			// Bug making player ref increase forever when creature is removed (/r) after the player targeted
+			// This fixes it.
+			if (spectator->attackedCreature && spectator->attackedCreature == creature) {
+				spectator->decrementReferenceCounter();
+			}
 		}
 	}
 
