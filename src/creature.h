@@ -212,8 +212,7 @@ public:
 	// Pathfinding functions
 	bool isFollower(const Creature* creature);
 	void addFollower(Creature* creature);
-	void removeFollower(Creature* creature);
-	void removeFollowers();
+	void removeOutOfRangeFollowers();
 	void releaseFollowers();
 
 	// Pathfinding events
