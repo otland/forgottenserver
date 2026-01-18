@@ -111,7 +111,7 @@ if (APPLE)
     find_package(Iconv REQUIRED)
 endif()
 
-set(BOOST_REQUIRED_COMPONENTS system iostreams)
+set(BOOST_REQUIRED_COMPONENTS iostreams)
 if (ENABLE_HTTP)
     list(APPEND BOOST_REQUIRED_COMPONENTS json)
 endif ()

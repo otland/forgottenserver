@@ -246,7 +246,7 @@ bool ChatChannel::executeOnSpeakEvent(const std::shared_ptr<const Player>& playe
 	int size0 = lua_gettop(L);
 	int ret = tfs::lua::protectedCall(L, 3, 1);
 	if (ret != 0) {
-		tfs::lua::reportError(L, tfs::lua::popString(L));
+		tfs::lua::reportError(L, tfs::lua::popString(L), true);
 	} else if (lua_gettop(L) > 0) {
 		if (lua_isboolean(L, -1)) {
 			result = tfs::lua::getBoolean(L, -1);
@@ -258,7 +258,7 @@ bool ChatChannel::executeOnSpeakEvent(const std::shared_ptr<const Player>& playe
 	}
 
 	if ((lua_gettop(L) + 4) != size0) {
-		tfs::lua::reportError(L, "Stack size changed!");
+		tfs::lua::reportError(L, "Stack size changed!", true);
 	}
 	tfs::lua::resetScriptEnv();
 	return result;

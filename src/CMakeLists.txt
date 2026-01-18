@@ -158,7 +158,6 @@ set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/otserv.cpp)
 add_library(tfslib ${tfs_SRC})
 target_link_libraries(tfslib PRIVATE
 	Boost::iostreams
-	Boost::system
 	OpenSSL::Crypto
 	pugixml::pugixml
 	simdutf::simdutf

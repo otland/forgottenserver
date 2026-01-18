@@ -521,7 +521,7 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, const std::shared_
 	// execute it
 	ret = tfs::lua::protectedCall(L, 0, 0);
 	if (ret != 0) {
-		tfs::lua::reportError(L, tfs::lua::popString(L));
+		tfs::lua::reportError(L, tfs::lua::popString(L), true);
 		tfs::lua::resetScriptEnv();
 		return -1;
 	}
@@ -672,14 +672,14 @@ bool LuaScriptInterface::callFunction(int params)
 	bool result = false;
 	int size = lua_gettop(L);
 	if (tfs::lua::protectedCall(L, params, 1) != 0) {
-		tfs::lua::reportError(L, tfs::lua::getString(L, -1));
+		tfs::lua::reportError(L, tfs::lua::getString(L, -1), true);
 	} else {
 		result = tfs::lua::getBoolean(L, -1);
 	}
 
 	lua_pop(L, 1);
 	if ((lua_gettop(L) + params + 1) != size) {
-		tfs::lua::reportError(L, "Stack size changed!");
+		tfs::lua::reportError(L, "Stack size changed!", true);
 	}
 
 	tfs::lua::resetScriptEnv();
@@ -690,11 +690,11 @@ void LuaScriptInterface::callVoidFunction(int params)
 {
 	int size = lua_gettop(L);
 	if (tfs::lua::protectedCall(L, params, 0) != 0) {
-		tfs::lua::reportError(L, tfs::lua::popString(L));
+		tfs::lua::reportError(L, tfs::lua::popString(L), true);
 	}
 
 	if ((lua_gettop(L) + params + 1) != size) {
-		tfs::lua::reportError(L, "Stack size changed!");
+		tfs::lua::reportError(L, "Stack size changed!", true);
 	}
 
 	tfs::lua::resetScriptEnv();

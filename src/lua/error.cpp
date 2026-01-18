@@ -6,6 +6,8 @@
 #include "env.h"
 #include "script.h"
 
+#include <boost/stacktrace.hpp>
+
 namespace {
 
 std::string getStackTrace(lua_State* L, std::string_view error_desc)
@@ -59,8 +61,7 @@ int luaErrorHandler(lua_State* L)
 	return 1;
 }
 
-void reportError(std::string_view function, std::string_view error_desc, lua_State* L /*= nullptr*/,
-                 bool stack_trace /*= false*/)
+void reportError(lua_State* L, std::string_view error_desc, bool stacktrace /*= false*/)
 {
 	auto [scriptId, luaScriptInterface, callbackId, timerEvent] = getScriptEnv()->getEventInfo();
 
@@ -80,17 +81,15 @@ void reportError(std::string_view function, std::string_view error_desc, lua_Sta
 		std::cout << luaScriptInterface->getFileById(scriptId) << '\n';
 	}
 
-	if (!function.empty()) {
-		std::cout << function << "(). ";
-	}
+	if (stacktrace) {
+		std::cout << "\nStack trace:\n" << boost::stacktrace::stacktrace() << '\n';
 
-	if (L && stack_trace) {
-		std::cout << getStackTrace(L, error_desc) << '\n';
-	} else {
-		std::cout << error_desc << '\n';
+		if (L) {
+			std::cout << "\nLua stack trace:\n" << getStackTrace(L, error_desc) << '\n';
+		} else {
+			std::cout << "\n" << error_desc << '\n';
+		}
 	}
 }
-
-void reportError(lua_State* L, std::string_view error_desc) { reportError(__FUNCTION__, error_desc, L, true); }
 
 } // namespace tfs::lua

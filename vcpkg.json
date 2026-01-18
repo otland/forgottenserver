@@ -5,6 +5,7 @@
     "boost-container",
     "boost-iostreams",
     "boost-lockfree",
+    "boost-stacktrace",
     "boost-system",
     {
       "name": "libiconv",
