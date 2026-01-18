@@ -5,7 +5,6 @@
 
 #include "actions.h"
 
-#include "bed.h"
 #include "configmanager.h"
 #include "game.h"
 #include "housetile.h"
@@ -185,26 +184,6 @@ ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, cons
 		} else if (action->function && action->function(player, item, pos, nullptr, pos, isHotkey)) {
 			return RETURNVALUE_NOERROR;
 		}
-	}
-
-	if (const auto& bed = item->getBed()) {
-		if (!bed->canUse(player)) {
-			if (!bed->getHouse()) {
-				return RETURNVALUE_YOUCANNOTUSETHISBED;
-			}
-
-			if (!player->isPremium()) {
-				return RETURNVALUE_YOUNEEDPREMIUMACCOUNT;
-			}
-			return RETURNVALUE_CANNOTUSETHISOBJECT;
-		}
-
-		if (bed->trySleep(player)) {
-			player->setBedItem(bed);
-			g_game.sendOfflineTrainingDialog(player);
-		}
-
-		return RETURNVALUE_NOERROR;
 	}
 
 	if (auto container = item->getContainer()) {

@@ -222,6 +222,7 @@ ModalWindow = {}
 ---@field transform fun(self: Item, newItem: number|string, count?: number)
 ---@field decay fun(self: Item)
 ---@field getSpecialDescription fun(self: Item): string
+---@field setSpecialDescription fun(self: Item, description: string)
 ---@field hasProperty fun(self: Item, property: number): boolean
 ---@field isLoadedFromMap fun(self: Item): boolean
 ---@field setStoreItem fun(self: Item, store: boolean)
@@ -2307,6 +2308,8 @@ GAME_STATE_MAINTAIN = 6
 REPORT_TYPE_NAME = 0
 REPORT_TYPE_STATEMENT = 1
 REPORT_TYPE_BOT = 2
+
+SCHEDULER_MINTICKS = 50
 
 TEXTCOLOR_BLUE = 5
 TEXTCOLOR_LIGHTGREEN = 30

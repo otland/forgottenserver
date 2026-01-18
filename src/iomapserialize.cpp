@@ -5,7 +5,6 @@
 
 #include "iomapserialize.h"
 
-#include "bed.h"
 #include "database.h"
 #include "game.h"
 #include "house.h"
@@ -39,7 +38,7 @@ void loadItem(OTB::iterator& first, const OTB::iterator& last, const std::shared
 			item->startDecaying();
 		}
 	} else {
-		// Stationary items like doors/beds/blackboards/bookcases
+		// Stationary items like doors/blackboards/bookcases
 		std::shared_ptr<Item> item = nullptr;
 		if (const TileItemVector* items = tile->getItemList()) {
 			for (const auto& findItem : *items) {
@@ -47,9 +46,6 @@ void loadItem(OTB::iterator& first, const OTB::iterator& last, const std::shared
 					item = findItem;
 					break;
 				} else if (iType.isDoor() && findItem->getDoor()) {
-					item = findItem;
-					break;
-				} else if (iType.isBed() && findItem->getBed()) {
 					item = findItem;
 					break;
 				}
@@ -70,10 +66,6 @@ void loadItem(OTB::iterator& first, const OTB::iterator& last, const std::shared
 				dummy->unserializeAttr(first, last);
 				if (const auto& container = dummy->getContainer()) {
 					loadContainer(first, last, container);
-				} else if (const auto& bedItem = dummy->getBed()) {
-					if (uint32_t sleeperGUID = bedItem->getSleeper(); sleeperGUID != 0) {
-						g_game.removeBedSleeper(sleeperGUID);
-					}
 				}
 			}
 		}
@@ -208,7 +200,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const std::shared_ptr<con
 
 		// Note that these are NEGATED, ie. these are the items that will be saved.
 		if (!(it.moveable || it.forceSerialize || item->getDoor() ||
-		      (item->getContainer() && !item->getContainer()->empty()) || it.canWriteText || item->getBed())) {
+		      (item->getContainer() && !item->getContainer()->empty()) || it.canWriteText)) {
 			continue;
 		}
 
@@ -276,13 +268,13 @@ bool IOMapSerialize::saveHouseInfo()
 			    "UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}",
 			    house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
 			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
-			    house->getBedCount(), house->getId()));
+			    house->getMaxBeds(), house->getId()));
 		} else {
 			db.executeQuery(std::format(
 			    "INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES ({:d}, {:d}, {:d}, {:d}, {:s}, {:d}, {:d}, {:d}, {:d})",
 			    house->getId(), house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
 			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
-			    house->getBedCount()));
+			    house->getMaxBeds()));
 		}
 	}
 

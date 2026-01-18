@@ -101,9 +101,6 @@
     <ClCompile Include="..\src\baseevents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\bed.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\chat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -440,9 +437,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\baseevents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\bed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\chat.h">

@@ -54,6 +54,10 @@ bool loadHousesXML(const std::filesystem::path& filename)
 		house->setTownId(pugi::cast<uint32_t>(houseNode.attribute("townid").value()));
 
 		house->setOwner(0, false);
+
+		if (auto attr = houseNode.attribute("maxbeds")) {
+			house->setMaxBeds(pugi::cast<uint8_t>(attr.value()));
+		}
 	}
 	return true;
 }

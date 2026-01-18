@@ -1027,7 +1027,6 @@ void tfs::lua::registerItemType(LuaScriptInterface& lsi)
 	registerEnum(lsi, ITEM_TYPE_DOOR);
 	registerEnum(lsi, ITEM_TYPE_MAGICFIELD);
 	registerEnum(lsi, ITEM_TYPE_TELEPORT);
-	registerEnum(lsi, ITEM_TYPE_BED);
 	registerEnum(lsi, ITEM_TYPE_KEY);
 	registerEnum(lsi, ITEM_TYPE_RUNE);
 	registerEnum(lsi, ITEM_TYPE_PODIUM);

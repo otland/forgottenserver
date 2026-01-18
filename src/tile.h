@@ -8,7 +8,6 @@
 #include "map.h"
 #include "tools.h"
 
-class BedItem;
 class Creature;
 class HouseTile;
 class MagicField;
@@ -38,7 +37,6 @@ enum tileflags_t : uint32_t
 	TILESTATE_MAGICFIELD = 1 << 12,
 	TILESTATE_MAILBOX = 1 << 13,
 	TILESTATE_TRASHHOLDER = 1 << 14,
-	TILESTATE_BED = 1 << 15,
 	TILESTATE_DEPOT = 1 << 16,
 	TILESTATE_BLOCKSOLID = 1 << 17,
 	TILESTATE_BLOCKPATH = 1 << 18,
@@ -156,7 +154,6 @@ public:
 	std::shared_ptr<Teleport> getTeleportItem() const;
 	std::shared_ptr<TrashHolder> getTrashHolder() const;
 	std::shared_ptr<Mailbox> getMailbox() const;
-	std::shared_ptr<BedItem> getBedItem() const;
 
 	std::shared_ptr<Creature> getTopCreature() const;
 	std::shared_ptr<const Creature> getBottomCreature() const;

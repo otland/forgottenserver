@@ -674,17 +674,6 @@ int luaItemDecay(lua_State* L)
 	return 1;
 }
 
-int luaItemGetSpecialDescription(lua_State* L)
-{
-	// item:getSpecialDescription()
-	if (const auto& item = tfs::lua::getSharedPtr<Item>(L, 1)) {
-		tfs::lua::pushString(L, item->getSpecialDescription());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int luaItemHasProperty(lua_State* L)
 {
 	// item:hasProperty(property)
@@ -861,8 +850,6 @@ void tfs::lua::registerItem(LuaScriptInterface& lsi)
 	lsi.registerMethod("Item", "moveTo", luaItemMoveTo);
 	lsi.registerMethod("Item", "transform", luaItemTransform);
 	lsi.registerMethod("Item", "decay", luaItemDecay);
-
-	lsi.registerMethod("Item", "getSpecialDescription", luaItemGetSpecialDescription);
 
 	lsi.registerMethod("Item", "hasProperty", luaItemHasProperty);
 	lsi.registerMethod("Item", "isLoadedFromMap", luaItemIsLoadedFromMap);

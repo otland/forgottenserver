@@ -9,7 +9,6 @@
 #include "lua/script.h"
 #include "thing.h"
 
-class BedItem;
 class Container;
 class Door;
 class MagicField;
@@ -478,8 +477,6 @@ public:
 	virtual std::shared_ptr<const Door> getDoor() const { return nullptr; }
 	virtual std::shared_ptr<MagicField> getMagicField() { return nullptr; }
 	virtual std::shared_ptr<const MagicField> getMagicField() const { return nullptr; }
-	virtual std::shared_ptr<BedItem> getBed() { return nullptr; }
-	virtual std::shared_ptr<const BedItem> getBed() const { return nullptr; }
 	virtual std::shared_ptr<Podium> getPodium() { return nullptr; }
 	virtual std::shared_ptr<const Podium> getPodium() const { return nullptr; }
 

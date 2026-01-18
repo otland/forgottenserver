@@ -254,12 +254,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
     {"suppresscurse", ITEM_PARSE_SUPPRESSCURSE},
     {"field", ITEM_PARSE_FIELD},
     {"replaceable", ITEM_PARSE_REPLACEABLE},
-    {"partnerdirection", ITEM_PARSE_PARTNERDIRECTION},
     {"leveldoor", ITEM_PARSE_LEVELDOOR},
-    {"maletransformto", ITEM_PARSE_MALETRANSFORMTO},
-    {"malesleeper", ITEM_PARSE_MALETRANSFORMTO},
-    {"femaletransformto", ITEM_PARSE_FEMALETRANSFORMTO},
-    {"femalesleeper", ITEM_PARSE_FEMALETRANSFORMTO},
     {"transformto", ITEM_PARSE_TRANSFORMTO},
     {"destroyto", ITEM_PARSE_DESTROYTO},
     {"elementice", ITEM_PARSE_ELEMENTICE},
@@ -327,50 +322,6 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
     {"mead", FLUID_MEAD},
     {"ink", FLUID_INK},
 };
-
-const std::unordered_map<std::string_view, Direction> DirectionsMap = {
-    {"north", DIRECTION_NORTH},
-    {"n", DIRECTION_NORTH},
-    {"0", DIRECTION_NORTH},
-    {"east", DIRECTION_EAST},
-    {"e", DIRECTION_EAST},
-    {"1", DIRECTION_EAST},
-    {"south", DIRECTION_SOUTH},
-    {"s", DIRECTION_SOUTH},
-    {"2", DIRECTION_SOUTH},
-    {"west", DIRECTION_WEST},
-    {"w", DIRECTION_WEST},
-    {"3", DIRECTION_WEST},
-    {"southwest", DIRECTION_SOUTHWEST},
-    {"south west", DIRECTION_SOUTHWEST},
-    {"south-west", DIRECTION_SOUTHWEST},
-    {"sw", DIRECTION_SOUTHWEST},
-    {"4", DIRECTION_SOUTHWEST},
-    {"southeast", DIRECTION_SOUTHEAST},
-    {"south east", DIRECTION_SOUTHEAST},
-    {"south-east", DIRECTION_SOUTHEAST},
-    {"se", DIRECTION_SOUTHEAST},
-    {"5", DIRECTION_SOUTHEAST},
-    {"northwest", DIRECTION_NORTHWEST},
-    {"north west", DIRECTION_NORTHWEST},
-    {"north-west", DIRECTION_NORTHWEST},
-    {"nw", DIRECTION_NORTHWEST},
-    {"6", DIRECTION_NORTHWEST},
-    {"northeast", DIRECTION_NORTHEAST},
-    {"north east", DIRECTION_NORTHEAST},
-    {"north-east", DIRECTION_NORTHEAST},
-    {"ne", DIRECTION_NORTHEAST},
-    {"7", DIRECTION_NORTHEAST},
-};
-
-Direction getDirection(std::string_view string)
-{
-	if (auto it = DirectionsMap.find(string); it != DirectionsMap.end()) {
-		return it->second;
-	}
-	std::println("[Warning - getDirection] Invalid direction: {}", string);
-	return DIRECTION_NORTH;
-}
 
 } // namespace
 
@@ -1784,47 +1735,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					break;
 				}
 
-				case ITEM_PARSE_PARTNERDIRECTION: {
-					it.bedPartnerDir = getDirection(valueAttribute.as_string());
-					break;
-				}
-
 				case ITEM_PARSE_LEVELDOOR: {
 					it.levelDoor = pugi::cast<uint32_t>(valueAttribute.value());
-					break;
-				}
-
-				case ITEM_PARSE_MALETRANSFORMTO: {
-					uint16_t value = pugi::cast<uint16_t>(valueAttribute.value());
-					it.transformToOnUse[PLAYERSEX_MALE] = value;
-					ItemType& other = getItemType(value);
-					if (other.transformToFree == 0) {
-						other.transformToFree = it.id;
-					}
-
-					if (it.transformToOnUse[PLAYERSEX_FEMALE] == 0) {
-						it.transformToOnUse[PLAYERSEX_FEMALE] = value;
-					}
-					break;
-				}
-
-				case ITEM_PARSE_FEMALETRANSFORMTO: {
-					uint16_t value = pugi::cast<uint16_t>(valueAttribute.value());
-					it.transformToOnUse[PLAYERSEX_FEMALE] = value;
-
-					ItemType& other = getItemType(value);
-					if (other.transformToFree == 0) {
-						other.transformToFree = it.id;
-					}
-
-					if (it.transformToOnUse[PLAYERSEX_MALE] == 0) {
-						it.transformToOnUse[PLAYERSEX_MALE] = value;
-					}
-					break;
-				}
-
-				case ITEM_PARSE_TRANSFORMTO: {
-					it.transformToFree = pugi::cast<uint16_t>(valueAttribute.value());
 					break;
 				}
 
@@ -1913,13 +1825,6 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			std::cout << "[Warning - Items::parseItemNode] Unknown key value: " << keyAttribute.as_string()
 			          << std::endl;
 		}
-	}
-
-	// check bed items
-	if ((it.transformToFree != 0 || it.transformToOnUse[PLAYERSEX_FEMALE] != 0 ||
-	     it.transformToOnUse[PLAYERSEX_MALE] != 0) &&
-	    it.type != ITEM_TYPE_BED) {
-		std::cout << "[Warning - Items::parseItemNode] Item " << it.id << " is not set as a bed-type" << std::endl;
 	}
 }
 

@@ -72,7 +72,7 @@ static constexpr uint8_t ITEM_STACK_SIZE = 100;
 class Game
 {
 public:
-	Game();
+	Game() = default;
 
 	// non-copyable
 	Game(const Game&) = delete;
@@ -448,8 +448,6 @@ public:
 
 	void startDecay(const std::shared_ptr<Item>& item);
 
-	void sendOfflineTrainingDialog(const std::shared_ptr<Player>& player);
-
 	auto getPlayers() const { return players | std::views::values; }
 	auto getNpcs() const { return npcs | std::views::values; }
 	auto getMonsters() const { return monsters | std::views::values; }
@@ -461,10 +459,6 @@ public:
 	std::unordered_map<Tile*, std::shared_ptr<Container>> browseFields;
 
 	void internalRemoveItems(const std::vector<std::shared_ptr<Item>>& itemList, uint32_t amount, bool stackable);
-
-	std::shared_ptr<BedItem> getBedBySleeper(uint32_t guid) const;
-	void setBedSleeper(std::shared_ptr<BedItem> bed, uint32_t guid) { bedSleepersMap[guid] = std::move(bed); }
-	void removeBedSleeper(uint32_t guid) { bedSleepersMap.erase(guid); }
 
 	void updatePodium(const std::shared_ptr<Podium>& podium);
 
@@ -531,13 +525,9 @@ private:
 	// list of items that are in trading state, mapped to the player holding them
 	std::map<std::shared_ptr<Item>, uint32_t> tradeItems;
 
-	std::map<uint32_t, std::shared_ptr<BedItem>> bedSleepersMap;
-
 	std::unordered_set<std::shared_ptr<Tile>> tilesToClean;
 
 	std::set<std::shared_ptr<Party>> parties;
-
-	ModalWindow offlineTrainingWindow{std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:"};
 
 	GameState_t gameState = GAME_STATE_NORMAL;
 	WorldType_t worldType = WORLD_TYPE_PVP;

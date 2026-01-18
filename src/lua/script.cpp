@@ -2,7 +2,6 @@
 
 #include "../script.h"
 
-#include "../bed.h"
 #include "../chat.h"
 #include "../combat.h"
 #include "../configmanager.h"

@@ -249,9 +249,6 @@ public:
 
 	bool hasFlag(PlayerFlags value) const { return (group->flags & value) != 0; }
 
-	std::shared_ptr<BedItem> getBedItem() const { return bedItem.lock(); }
-	void setBedItem(const std::shared_ptr<BedItem>& bedItem) { this->bedItem = bedItem; }
-
 	void addBlessing(uint8_t blessing) { blessings.set(blessing); }
 	void removeBlessing(uint8_t blessing) { blessings.reset(blessing); }
 	bool hasBlessing(uint8_t blessing) const { return blessings.test(blessing); }
@@ -1297,7 +1294,6 @@ private:
 
 	ProtocolGame_ptr client;
 	Connection::Address lastIP = {};
-	std::weak_ptr<BedItem> bedItem;
 	std::weak_ptr<Guild> guild;
 	std::weak_ptr<GuildRank> guildRank;
 	Group* group = nullptr;

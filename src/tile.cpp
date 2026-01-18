@@ -190,26 +190,6 @@ std::shared_ptr<Mailbox> Tile::getMailbox() const
 	return nullptr;
 }
 
-std::shared_ptr<BedItem> Tile::getBedItem() const
-{
-	if (!hasFlag(TILESTATE_BED)) {
-		return nullptr;
-	}
-
-	if (ground && ground->getBed()) {
-		return ground->getBed();
-	}
-
-	if (const TileItemVector* items = getItemList()) {
-		for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
-			if ((*it)->getBed()) {
-				return (*it)->getBed();
-			}
-		}
-	}
-	return nullptr;
-}
-
 std::shared_ptr<Creature> Tile::getTopCreature() const
 {
 	if (const CreatureVector* creatures = getCreatures()) {
@@ -658,7 +638,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 							return RETURNVALUE_NOTENOUGHROOM;
 						}
 
-						if (!iiType.hasHeight || iiType.pickupable || iiType.isBed()) {
+						if (!iiType.hasHeight || iiType.pickupable) {
 							return RETURNVALUE_NOTENOUGHROOM;
 						}
 					}
@@ -680,7 +660,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 						return RETURNVALUE_NOTENOUGHROOM;
 					}
 
-					if (!iiType.hasHeight || iiType.pickupable || iiType.isBed()) {
+					if (!iiType.hasHeight || iiType.pickupable) {
 						return RETURNVALUE_NOTENOUGHROOM;
 					}
 				}
@@ -1438,10 +1418,6 @@ void Tile::setTileFlags(const std::shared_ptr<const Item>& item)
 		setFlag(TILESTATE_BLOCKSOLID);
 	}
 
-	if (item->getBed()) {
-		setFlag(TILESTATE_BED);
-	}
-
 	if (const auto& container = item->getContainer()) {
 		if (container->getDepotLocker()) {
 			setFlag(TILESTATE_DEPOT);
@@ -1499,10 +1475,6 @@ void Tile::resetTileFlags(const std::shared_ptr<const Item>& item)
 
 	if (item->getTrashHolder()) {
 		resetFlag(TILESTATE_TRASHHOLDER);
-	}
-
-	if (item->getBed()) {
-		resetFlag(TILESTATE_BED);
 	}
 
 	if (const auto& container = item->getContainer()) {

@@ -49,10 +49,6 @@ void HouseTile::updateHouse(const std::shared_ptr<Item>& item)
 				house->addDoor(door);
 			}
 		}
-	} else if (const auto& bed = item->getBed()) {
-		if (const auto& house = getHouse()) {
-			house->addBed(bed);
-		}
 	}
 }
 

@@ -692,6 +692,8 @@ void tfs::lua::registerGame(LuaScriptInterface& lsi)
 	registerEnum(lsi, GAME_STATE_CLOSING);
 	registerEnum(lsi, GAME_STATE_MAINTAIN);
 
+	registerEnum(lsi, SCHEDULER_MINTICKS);
+
 	registerEnum(lsi, WORLD_TYPE_NO_PVP);
 	registerEnum(lsi, WORLD_TYPE_PVP);
 	registerEnum(lsi, WORLD_TYPE_PVP_ENFORCED);

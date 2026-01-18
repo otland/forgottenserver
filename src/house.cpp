@@ -5,7 +5,6 @@
 
 #include "house.h"
 
-#include "bed.h"
 #include "configmanager.h"
 #include "game.h"
 #include "housetile.h"
@@ -50,13 +49,6 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 				for (int32_t i = creatures->size(); --i >= 0;) {
 					kickPlayer(nullptr, (*creatures)[i]->asPlayer());
 				}
-			}
-		}
-
-		// Remove players from beds
-		for (const auto& bed : beds | tfs::views::lock_weak_ptrs) {
-			if (bed->getSleeper() != 0) {
-				bed->wakeUp(nullptr);
 			}
 		}
 
@@ -271,12 +263,6 @@ void House::addDoor(const std::shared_ptr<Door>& door)
 }
 
 void House::removeDoor(const std::shared_ptr<Door>& door) { doors.erase(door); }
-
-void House::addBed(const std::shared_ptr<BedItem>& bed)
-{
-	bed->setHouse(shared_from_this());
-	beds.emplace(bed);
-}
 
 std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 {

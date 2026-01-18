@@ -5,7 +5,6 @@
 
 #include "item.h"
 
-#include "bed.h"
 #include "combat.h"
 #include "container.h"
 #include "game.h"
@@ -54,9 +53,6 @@ std::shared_ptr<Item> Item::CreateItem(const uint16_t type, uint16_t count /*= 0
 	}
 	if (it.isMailbox()) {
 		return std::make_shared<Mailbox>(type);
-	}
-	if (it.isBed()) {
-		return std::make_shared<BedItem>(type);
 	}
 	if (it.isPodium()) {
 		return std::make_shared<Podium>(type);
@@ -540,6 +536,16 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator&
 			}
 			break;
 		}
+
+		case ATTR_SLEEPERGUID:
+			OTB::skip(first, last, sizeof(uint32_t));
+			spdlog::warn("Sleeper GUID attribute is no longer supported.");
+			break;
+
+		case ATTR_SLEEPSTART:
+			OTB::skip(first, last, sizeof(uint32_t));
+			spdlog::warn("Sleep start attribute is no longer supported.");
+			break;
 
 		default:
 #ifndef NDEBUG

@@ -256,9 +256,6 @@ int luaTileGetItemByType(lua_State* L)
 		case ITEM_TYPE_TRASHHOLDER:
 			found = tile->hasFlag(TILESTATE_TRASHHOLDER);
 			break;
-		case ITEM_TYPE_BED:
-			found = tile->hasFlag(TILESTATE_BED);
-			break;
 		case ITEM_TYPE_DEPOT:
 			found = tile->hasFlag(TILESTATE_DEPOT);
 			break;
@@ -749,7 +746,6 @@ void tfs::lua::registerTile(LuaScriptInterface& lsi)
 	registerEnum(lsi, TILESTATE_MAGICFIELD);
 	registerEnum(lsi, TILESTATE_MAILBOX);
 	registerEnum(lsi, TILESTATE_TRASHHOLDER);
-	registerEnum(lsi, TILESTATE_BED);
 	registerEnum(lsi, TILESTATE_DEPOT);
 	registerEnum(lsi, TILESTATE_BLOCKSOLID);
 	registerEnum(lsi, TILESTATE_BLOCKPATH);

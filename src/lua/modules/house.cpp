@@ -2,7 +2,6 @@
 
 #include "../../house.h"
 
-#include "../../bed.h"
 #include "../../game.h"
 #include "../../housetile.h"
 #include "../../iologindata.h"
@@ -249,39 +248,6 @@ int luaHouseStartTrade(lua_State* L)
 	return 1;
 }
 
-int luaHouseGetBeds(lua_State* L)
-{
-	// house:getBeds()
-	const auto& house = tfs::lua::getSharedPtr<House>(L, 1);
-	if (!house) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	const auto& beds = house->getBeds() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
-	lua_createtable(L, beds.size(), 0);
-
-	int index = 0;
-	for (const auto& bedItem : beds) {
-		tfs::lua::pushSharedPtr(L, bedItem);
-		tfs::lua::setItemMetatable(L, -1, bedItem);
-		lua_rawseti(L, -2, ++index);
-	}
-	return 1;
-}
-
-int luaHouseGetBedCount(lua_State* L)
-{
-	// house:getBedCount()
-	const auto& house = tfs::lua::getSharedPtr<House>(L, 1);
-	if (house) {
-		tfs::lua::pushNumber(L, house->getBedCount());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int luaHouseGetDoors(lua_State* L)
 {
 	// house:getDoors()
@@ -496,9 +462,6 @@ void tfs::lua::registerHouse(LuaScriptInterface& lsi)
 	lsi.registerMethod("House", "getOwnerGuid", luaHouseGetOwnerGuid);
 	lsi.registerMethod("House", "setOwnerGuid", luaHouseSetOwnerGuid);
 	lsi.registerMethod("House", "startTrade", luaHouseStartTrade);
-
-	lsi.registerMethod("House", "getBeds", luaHouseGetBeds);
-	lsi.registerMethod("House", "getBedCount", luaHouseGetBedCount);
 
 	lsi.registerMethod("House", "getDoors", luaHouseGetDoors);
 	lsi.registerMethod("House", "getDoorCount", luaHouseGetDoorCount);
