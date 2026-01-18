@@ -8,4 +8,5 @@ actionIds = {
 }
 
 uniqueIds = {
+	annihilatorLever = 30015,
 }
