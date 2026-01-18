@@ -23,7 +23,7 @@
 
 #include <string>
 
-extern Chat* g_chat;
+extern Chat g_chat;
 extern Game g_game;
 extern GlobalEvents* g_globalEvents;
 extern Monsters g_monsters;
@@ -282,7 +282,7 @@ int luaSendChannelMessage(lua_State* L)
 {
 	// sendChannelMessage(channelId, type, message)
 	uint32_t channelId = tfs::lua::getNumber<uint32_t>(L, 1);
-	ChatChannel* channel = g_chat->getChannelById(channelId);
+	const auto& channel = g_chat.getChannelById(channelId);
 	if (!channel) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -299,7 +299,7 @@ int luaSendGuildChannelMessage(lua_State* L)
 {
 	// sendGuildChannelMessage(guildId, type, message)
 	uint32_t guildId = tfs::lua::getNumber<uint32_t>(L, 1);
-	ChatChannel* channel = g_chat->getGuildChannelById(guildId);
+	const auto& channel = g_chat.getGuildChannelById(guildId);
 	if (!channel) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;

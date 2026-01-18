@@ -19,7 +19,7 @@
 #include "podium.h"
 #include "scheduler.h"
 
-extern Chat* g_chat;
+extern Chat g_chat;
 extern Dispatcher g_dispatcher;
 extern Game g_game;
 extern Scheduler g_scheduler;
@@ -270,7 +270,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 
 	player = foundPlayer;
 
-	g_chat->removeUserFromAllChannels(player);
+	g_chat.removeUserFromAllChannels(player);
 	player->clearModalWindows();
 	player->setOperatingSystem(operatingSystem);
 
@@ -1811,9 +1811,9 @@ void ProtocolGame::sendChannelsDialog()
 	NetworkMessage msg;
 	msg.addByte(0xAB);
 
-	const ChannelList& list = g_chat->getChannelList(player);
+	const auto& list = g_chat.getChannelList(player);
 	msg.addByte(list.size());
-	for (ChatChannel* channel : list) {
+	for (const auto& channel : list) {
 		msg.add<uint16_t>(channel->getId());
 		msg.addString(channel->getName());
 	}
@@ -1831,8 +1831,10 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 	msg.addString(channelName);
 
 	if (channelUsers) {
-		msg.add<uint16_t>(channelUsers->size());
-		for (const auto& user : *channelUsers | std::views::values | tfs::views::lock_weak_ptrs) {
+		const auto& filteredChannelUsers =
+		    *channelUsers | std::views::values | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+		msg.add<uint16_t>(filteredChannelUsers.size());
+		for (auto&& user : filteredChannelUsers) {
 			msg.addString(user->getName());
 		}
 	} else {
@@ -1840,8 +1842,10 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 	}
 
 	if (invitedUsers) {
-		msg.add<uint16_t>(invitedUsers->size());
-		for (const auto& user : *invitedUsers | std::views::values | tfs::views::lock_weak_ptrs) {
+		const auto& filteredInvitedUsers =
+		    *invitedUsers | std::views::values | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+		msg.add<uint16_t>(filteredInvitedUsers.size());
+		for (auto&& user : filteredInvitedUsers) {
 			msg.addString(user->getName());
 		}
 	} else {

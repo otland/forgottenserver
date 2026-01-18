@@ -16,7 +16,7 @@
 #include "weapons.h"
 
 Actions* g_actions = nullptr;
-Chat* g_chat = nullptr;
+Chat g_chat;
 GlobalEvents* g_globalEvents = nullptr;
 Spells* g_spells = nullptr;
 TalkActions* g_talkActions = nullptr;
@@ -33,7 +33,6 @@ ScriptingManager::~ScriptingManager()
 	delete g_actions;
 	delete g_talkActions;
 	delete g_moveEvents;
-	delete g_chat;
 	delete g_globalEvents;
 	delete g_scripts;
 }
@@ -50,8 +49,6 @@ bool ScriptingManager::loadScriptSystems()
 		std::cout << "> ERROR: Unable to load lua libs!" << std::endl;
 		return false;
 	}
-
-	g_chat = new Chat();
 
 	g_weapons = std::make_unique<Weapons>();
 	g_weapons->loadDefaults();

@@ -15,7 +15,7 @@
 #include "../register.h"
 #include "../script.h"
 
-extern Chat* g_chat;
+extern Chat g_chat;
 extern Game g_game;
 extern Spells* g_spells;
 extern Vocations g_vocations;
@@ -1390,7 +1390,7 @@ int luaPlayerSendTextMessage(lua_State* L)
 	TextMessage message(tfs::lua::getNumber<MessageClasses>(L, 2), tfs::lua::getString(L, 3));
 	if (parameters == 4) {
 		uint16_t channelId = tfs::lua::getNumber<uint16_t>(L, 4);
-		ChatChannel* channel = g_chat->getChannel(player, channelId);
+		const auto& channel = g_chat.getChannel(player, channelId);
 		if (!channel || !channel->hasUser(player)) {
 			tfs::lua::pushBoolean(L, false);
 			return 1;

@@ -630,13 +630,14 @@ public:
 		}
 	}
 
-	void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel)
+	void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type,
+	                        uint16_t channel) const
 	{
 		if (client) {
 			client->sendChannelMessage(author, text, type, channel);
 		}
 	}
-	void sendChannelEvent(uint16_t channelId, const std::string& playerName, ChannelEvent_t channelEvent)
+	void sendChannelEvent(uint16_t channelId, const std::string& playerName, ChannelEvent_t channelEvent) const
 	{
 		if (client) {
 			client->sendChannelEvent(channelId, playerName, channelEvent);
@@ -928,7 +929,7 @@ public:
 			client->sendCreatePrivateChannel(channelId, channelName);
 		}
 	}
-	void sendClosePrivate(uint16_t channelId);
+	void sendClosePrivate(uint16_t channelId) const;
 	void sendIcons() const
 	{
 		if (client) {
