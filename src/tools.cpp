@@ -809,62 +809,38 @@ uint8_t clientFluidToServer(uint8_t clientFluid)
 
 itemAttrTypes stringToItemAttribute(const std::string& str)
 {
-	if (str == "aid") {
-		return ITEM_ATTRIBUTE_ACTIONID;
-	} else if (str == "uid") {
-		return ITEM_ATTRIBUTE_UNIQUEID;
-	} else if (str == "description") {
-		return ITEM_ATTRIBUTE_DESCRIPTION;
-	} else if (str == "text") {
-		return ITEM_ATTRIBUTE_TEXT;
-	} else if (str == "date") {
-		return ITEM_ATTRIBUTE_DATE;
-	} else if (str == "writer") {
-		return ITEM_ATTRIBUTE_WRITER;
-	} else if (str == "name") {
-		return ITEM_ATTRIBUTE_NAME;
-	} else if (str == "article") {
-		return ITEM_ATTRIBUTE_ARTICLE;
-	} else if (str == "pluralname") {
-		return ITEM_ATTRIBUTE_PLURALNAME;
-	} else if (str == "weight") {
-		return ITEM_ATTRIBUTE_WEIGHT;
-	} else if (str == "attack") {
-		return ITEM_ATTRIBUTE_ATTACK;
-	} else if (str == "defense") {
-		return ITEM_ATTRIBUTE_DEFENSE;
-	} else if (str == "extradefense") {
-		return ITEM_ATTRIBUTE_EXTRADEFENSE;
-	} else if (str == "armor") {
-		return ITEM_ATTRIBUTE_ARMOR;
-	} else if (str == "hitchance") {
-		return ITEM_ATTRIBUTE_HITCHANCE;
-	} else if (str == "shootrange") {
-		return ITEM_ATTRIBUTE_SHOOTRANGE;
-	} else if (str == "owner") {
-		return ITEM_ATTRIBUTE_OWNER;
-	} else if (str == "duration") {
-		return ITEM_ATTRIBUTE_DURATION;
-	} else if (str == "decaystate") {
-		return ITEM_ATTRIBUTE_DECAYSTATE;
-	} else if (str == "corpseowner") {
-		return ITEM_ATTRIBUTE_CORPSEOWNER;
-	} else if (str == "charges") {
-		return ITEM_ATTRIBUTE_CHARGES;
-	} else if (str == "fluidtype") {
-		return ITEM_ATTRIBUTE_FLUIDTYPE;
-	} else if (str == "doorid") {
-		return ITEM_ATTRIBUTE_DOORID;
-	} else if (str == "decayto") {
-		return ITEM_ATTRIBUTE_DECAYTO;
-	} else if (str == "wrapid") {
-		return ITEM_ATTRIBUTE_WRAPID;
-	} else if (str == "storeitem") {
-		return ITEM_ATTRIBUTE_STOREITEM;
-	} else if (str == "attackspeed") {
-		return ITEM_ATTRIBUTE_ATTACK_SPEED;
-	}
-	return ITEM_ATTRIBUTE_NONE;
+	static const std::unordered_map<std::string, itemAttrTypes> attributeMap = {
+	    {"aid", ITEM_ATTRIBUTE_ACTIONID},
+	    {"uid", ITEM_ATTRIBUTE_UNIQUEID},
+	    {"description", ITEM_ATTRIBUTE_DESCRIPTION},
+	    {"text", ITEM_ATTRIBUTE_TEXT},
+	    {"date", ITEM_ATTRIBUTE_DATE},
+	    {"writer", ITEM_ATTRIBUTE_WRITER},
+	    {"name", ITEM_ATTRIBUTE_NAME},
+	    {"article", ITEM_ATTRIBUTE_ARTICLE},
+	    {"pluralname", ITEM_ATTRIBUTE_PLURALNAME},
+	    {"weight", ITEM_ATTRIBUTE_WEIGHT},
+	    {"attack", ITEM_ATTRIBUTE_ATTACK},
+	    {"defense", ITEM_ATTRIBUTE_DEFENSE},
+	    {"extradefense", ITEM_ATTRIBUTE_EXTRADEFENSE},
+	    {"armor", ITEM_ATTRIBUTE_ARMOR},
+	    {"hitchance", ITEM_ATTRIBUTE_HITCHANCE},
+	    {"shootrange", ITEM_ATTRIBUTE_SHOOTRANGE},
+	    {"owner", ITEM_ATTRIBUTE_OWNER},
+	    {"duration", ITEM_ATTRIBUTE_DURATION},
+	    {"decaystate", ITEM_ATTRIBUTE_DECAYSTATE},
+	    {"corpseowner", ITEM_ATTRIBUTE_CORPSEOWNER},
+	    {"charges", ITEM_ATTRIBUTE_CHARGES},
+	    {"fluidtype", ITEM_ATTRIBUTE_FLUIDTYPE},
+	    {"doorid", ITEM_ATTRIBUTE_DOORID},
+	    {"decayto", ITEM_ATTRIBUTE_DECAYTO},
+	    {"wrapid", ITEM_ATTRIBUTE_WRAPID},
+	    {"storeitem", ITEM_ATTRIBUTE_STOREITEM},
+	    {"attackspeed", ITEM_ATTRIBUTE_ATTACK_SPEED},
+	};
+
+	auto it = attributeMap.find(str);
+	return it != attributeMap.end() ? it->second : ITEM_ATTRIBUTE_NONE;
 }
 
 const char* getReturnMessage(ReturnValue value)
