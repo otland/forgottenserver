@@ -299,8 +299,6 @@ public:
 
 	void sendGuildMotd(uint32_t playerId);
 	void kickPlayer(uint32_t playerId, bool displayEffect);
-	void playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date,
-	                       const std::string& description, const std::string& comment);
 	void playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, uint8_t button, uint8_t choice);
 	void playerReportRuleViolation(uint32_t playerId, const std::string& targetName, uint8_t reportType,
 	                               uint8_t reportReason, const std::string& comment, const std::string& translation);

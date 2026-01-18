@@ -4937,18 +4937,6 @@ void Game::playerReportRuleViolation(uint32_t playerId, const std::string& targe
 	}
 }
 
-void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date,
-                             const std::string& description, const std::string& comment)
-{
-	if (const auto& player = getPlayerByID(playerId)) {
-		// TODO: move debug assertions to database
-		auto fs = std::ofstream{"client_assertions.txt", std::ios::app};
-		std::println(fs, "----- {:%d/%m/%Y %T} - {:s} ({:s}) -----\n{:s}\n{:s}\n{:s}\n{:s}\n",
-		             std::chrono::system_clock::now(), player->getName(), player->getIP().to_string(), assertLine, date,
-		             description, comment);
-	}
-}
-
 void Game::playerLeaveMarket(uint32_t playerId)
 {
 	if (const auto& player = getPlayerByID(playerId)) {
