@@ -44,7 +44,7 @@ extern Scripts* g_scripts;
 extern Spells* g_spells;
 extern TalkActions* g_talkActions;
 extern Vocations g_vocations;
-extern Weapons* g_weapons;
+extern std::unique_ptr<Weapons> g_weapons;
 
 Game g_game;
 

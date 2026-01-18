@@ -10,7 +10,7 @@
 #include "weapons.h"
 
 extern MoveEvents* g_moveEvents;
-extern Weapons* g_weapons;
+extern std::unique_ptr<Weapons> g_weapons;
 
 namespace {
 

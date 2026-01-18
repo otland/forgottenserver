@@ -15,13 +15,13 @@
 
 extern Game g_game;
 extern Vocations g_vocations;
-extern Weapons* g_weapons;
+extern std::unique_ptr<Weapons> g_weapons;
 
 Weapons::Weapons() { scriptInterface.initState(); }
 
 Weapons::~Weapons() { clear(false); }
 
-const Weapon* Weapons::getWeapon(const std::shared_ptr<const Item>& item) const
+std::shared_ptr<const Weapon> Weapons::getWeapon(const std::shared_ptr<const Item>& item) const
 {
 	if (!item) {
 		return nullptr;
@@ -38,7 +38,7 @@ void Weapons::clear(bool fromLua)
 {
 	for (auto it = weapons.begin(); it != weapons.end();) {
 		if (fromLua == it->second->fromLua) {
-			it = weapons.erase(it);
+			it = weapons.erase(it); // shared_ptr releases reference
 		} else {
 			++it;
 		}
@@ -61,7 +61,7 @@ void Weapons::loadDefaults()
 			case WEAPON_AXE:
 			case WEAPON_SWORD:
 			case WEAPON_CLUB: {
-				WeaponMelee* weapon = new WeaponMelee(&scriptInterface);
+				auto weapon = std::make_shared<WeaponMelee>(&scriptInterface);
 				weapon->configureWeapon(it);
 				weapons[i] = weapon;
 				break;
@@ -73,7 +73,7 @@ void Weapons::loadDefaults()
 					continue;
 				}
 
-				WeaponDistance* weapon = new WeaponDistance(&scriptInterface);
+				auto weapon = std::make_shared<WeaponDistance>(&scriptInterface);
 				weapon->configureWeapon(it);
 				weapons[i] = weapon;
 				break;
@@ -99,30 +99,24 @@ Event_ptr Weapons::getEvent(const std::string& nodeName)
 
 bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
-	Weapon* weapon = static_cast<Weapon*>(event.release()); // event is guaranteed to be a Weapon
+	Weapon_ptr weapon{static_cast<Weapon*>(event.release())};
+	uint16_t weaponId = weapon->getID();
 
-	auto result = weapons.emplace(weapon->getID(), weapon);
+	auto result = weapons.emplace(weaponId, std::move(weapon));
 	if (!result.second) {
-		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID()
-		          << std::endl;
+		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weaponId << std::endl;
 	}
 	return result.second;
 }
 
-bool Weapons::registerLuaEvent(Weapon* weapon)
+bool Weapons::registerLuaEvent(Weapon_ptr weapon)
 {
-	weapons[weapon->getID()] = weapon;
+	auto weaponId = weapon->getID();
+	weapons[weaponId] = std::move(weapon);
 	return true;
 }
 
-// monsters
-int32_t Weapons::getMaxMeleeDamage(int32_t attackSkill, int32_t attackValue)
-{
-	return static_cast<int32_t>(std::ceil((attackSkill * (attackValue * 0.05)) + (attackValue * 0.5)));
-}
-
-// players
-int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor)
+static int32_t getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor)
 {
 	return static_cast<int32_t>(
 	    std::round((level / 5) + (((((attackSkill / 4.) + 1) * (attackValue / 3.)) * 1.03) / attackFactor)));
@@ -247,7 +241,7 @@ bool Weapon::useFist(const std::shared_ptr<Player>& player, const std::shared_pt
 	int32_t attackSkill = player->getSkillLevel(SKILL_FIST);
 	int32_t attackValue = 7;
 
-	int32_t maxDamage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
+	int32_t maxDamage = getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 
 	CombatParams params;
 	params.combatType = COMBAT_PHYSICALDAMAGE;
@@ -511,7 +505,7 @@ int32_t WeaponMelee::getElementDamage(const std::shared_ptr<const Player>& playe
 	int32_t attackValue = elementDamage;
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
+	int32_t maxValue = getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 	return -normal_random(0, static_cast<int32_t>(maxValue * player->getVocation()->meleeDamageMultiplier));
 }
 
@@ -524,7 +518,7 @@ int32_t WeaponMelee::getWeaponDamage(const std::shared_ptr<const Player>& player
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue =
-	    static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) *
+	    static_cast<int32_t>(getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) *
 	                         player->getVocation()->meleeDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;
@@ -563,8 +557,7 @@ bool WeaponDistance::useWeapon(const std::shared_ptr<Player>& player, const std:
 	const ItemType& it = Item::items[id];
 	if (it.weaponType == WEAPON_AMMO) {
 		const auto& mainWeaponItem = player->getWeapon(true);
-		const Weapon* mainWeapon = g_weapons->getWeapon(mainWeaponItem);
-		if (mainWeapon) {
+		if (const auto& mainWeapon = g_weapons->getWeapon(mainWeaponItem)) {
 			damageModifier = mainWeapon->playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
 		} else if (mainWeaponItem) {
 			damageModifier = playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
@@ -732,7 +725,7 @@ int32_t WeaponDistance::getElementDamage(const std::shared_ptr<const Player>& pl
 	float attackFactor = player->getAttackFactor();
 
 	int32_t minValue = 0;
-	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
+	int32_t maxValue = getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 	if (target) {
 		if (target->asPlayer()) {
 			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.1));
@@ -760,7 +753,7 @@ int32_t WeaponDistance::getWeaponDamage(const std::shared_ptr<const Player>& pla
 	float attackFactor = player->getAttackFactor();
 
 	int32_t maxValue =
-	    static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) *
+	    static_cast<int32_t>(getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) *
 	                         player->getVocation()->distDamageMultiplier);
 	if (maxDamage) {
 		return -maxValue;

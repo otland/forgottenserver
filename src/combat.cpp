@@ -15,7 +15,7 @@
 #include "weapons.h"
 
 extern Game g_game;
-extern Weapons* g_weapons;
+extern std::unique_ptr<Weapons> g_weapons;
 
 std::vector<std::shared_ptr<Tile>> getList(const MatrixArea& area, const Position& targetPos, const Direction dir)
 {

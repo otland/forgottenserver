@@ -31,7 +31,7 @@ extern Monsters g_monsters;
 extern TalkActions* g_talkActions;
 extern MoveEvents* g_moveEvents;
 extern Spells* g_spells;
-extern Weapons* g_weapons;
+extern std::unique_ptr<Weapons> g_weapons;
 extern Game g_game;
 extern GlobalEvents* g_globalEvents;
 extern Chat* g_chat;

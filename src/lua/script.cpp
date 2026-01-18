@@ -34,7 +34,6 @@ extern Actions* g_actions;
 extern TalkActions* g_talkActions;
 extern Scheduler g_scheduler;
 extern Scripts* g_scripts;
-extern Weapons* g_weapons;
 
 LuaEnvironment g_luaEnvironment;
 
