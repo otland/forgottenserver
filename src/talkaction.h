@@ -33,7 +33,7 @@ public:
 		wordsMap.emplace_back(word);
 	}
 	std::string getSeparator() const { return separator; }
-	void setSeparator(std::string sep) { separator = sep; }
+	void setSeparator(std::string sep) { separator = std::move(sep); }
 
 	// scripting
 	bool executeSay(const std::shared_ptr<Player>& player, const std::string& words, const std::string& param,

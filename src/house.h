@@ -123,7 +123,7 @@ public:
 	void setEntryPos(Position pos) { posEntry = pos; }
 	const Position& getEntryPosition() const { return posEntry; }
 
-	void setName(std::string houseName) { this->houseName = houseName; }
+	void setName(std::string houseName) { this->houseName = std::move(houseName); }
 	const std::string& getName() const { return houseName; }
 
 	const std::string& getOwnerName() const { return ownerName; }

@@ -310,6 +310,7 @@ void Map::moveCreature(const std::shared_ptr<Creature>& creature, const std::sha
 	spectators.insert(newPosSpectators.begin(), newPosSpectators.end());
 
 	std::vector<int32_t> oldStackPosVector;
+	oldStackPosVector.reserve(spectators.size());
 	for (const auto& spectator : spectators) {
 		if (const auto& tmpPlayer = spectator->asPlayer()) {
 			if (tmpPlayer->canSeeCreature(creature)) {

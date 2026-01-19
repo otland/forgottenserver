@@ -62,7 +62,7 @@ public:
 	void setEventType(GlobalEvent_t type) { eventType = type; }
 
 	const std::string& getName() const { return name; }
-	void setName(std::string eventName) { name = eventName; }
+	void setName(std::string eventName) { name = std::move(eventName); }
 
 	uint32_t getInterval() const { return interval; }
 	void setInterval(uint32_t eventInterval) { interval |= eventInterval; }

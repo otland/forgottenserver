@@ -13,7 +13,7 @@ Scripts::Scripts() : scriptInterface("Scripts Interface") { scriptInterface.init
 
 Scripts::~Scripts() { scriptInterface.reInitState(); }
 
-bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
+bool Scripts::loadScripts(std::string_view folderName, bool isLib, bool reload)
 {
 	namespace fs = std::filesystem;
 
@@ -25,7 +25,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 
 	fs::recursive_directory_iterator endit;
 	std::vector<fs::path> v;
-	std::string disable = ("#");
+	static constexpr std::string_view disable = "#";
 	for (fs::recursive_directory_iterator it(dir); it != endit; ++it) {
 		auto fn = it->path().parent_path().filename();
 		if (fn == "lib" && !isLib) {

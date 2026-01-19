@@ -528,10 +528,11 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 
 	const auto& tile = creature->getTile();
 
-	std::vector<int32_t> oldStackPosVector;
-
 	SpectatorVec spectators;
 	map.getSpectators(spectators, tile->getPosition(), true);
+
+	std::vector<int32_t> oldStackPosVector;
+	oldStackPosVector.reserve(spectators.size());
 	for (const auto& spectator : spectators) {
 		if (const auto& player = spectator->asPlayer()) {
 			oldStackPosVector.push_back(
