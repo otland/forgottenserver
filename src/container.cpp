@@ -310,19 +310,17 @@ ReturnValue Container::queryMaxCount(int32_t index, const std::shared_ptr<const 
 			// Iterate through every item and check how much free stackable slots there is.
 			uint32_t slotIndex = 0;
 			for (const auto& containerItem : itemList) {
-				if (containerItem != item && *containerItem == *item &&
+				if (containerItem && containerItem != item && *containerItem == *item &&
 				    containerItem->getItemCount() < ITEM_STACK_SIZE) {
 					if (queryAdd(slotIndex++, item, count, flags) == RETURNVALUE_NOERROR) {
 						n += ITEM_STACK_SIZE - containerItem->getItemCount();
 					}
 				}
 			}
-		} else {
-			if (const auto& destItem = getItemByIndex(index);
-			    *item == *destItem && destItem->getItemCount() < ITEM_STACK_SIZE) {
-				if (queryAdd(index, item, count, flags) == RETURNVALUE_NOERROR) {
-					n = ITEM_STACK_SIZE - destItem->getItemCount();
-				}
+		} else if (const auto& destItem = getItemByIndex(index);
+		           destItem && *destItem == *item && destItem->getItemCount() < ITEM_STACK_SIZE) {
+			if (queryAdd(index, item, count, flags) == RETURNVALUE_NOERROR) {
+				n = ITEM_STACK_SIZE - destItem->getItemCount();
 			}
 		}
 
