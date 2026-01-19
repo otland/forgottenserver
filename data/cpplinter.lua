@@ -742,6 +742,7 @@ Outfit = {}
 ---@field canWalkOnPoison fun(self: MonsterType): boolean
 ---@field name fun(self: MonsterType): string
 ---@field nameDescription fun(self: MonsterType): string
+---@field monsterName fun(self: MonsterType): string
 ---@field health fun(self: MonsterType): number
 ---@field maxHealth fun(self: MonsterType): number
 ---@field runHealth fun(self: MonsterType): number
