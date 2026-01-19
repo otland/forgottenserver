@@ -1049,7 +1049,6 @@ Weapon = {}
 ---@field onMonsterSpawn fun(monster:Monster, position:Position, startup:boolean, artificial:boolean):nil
 ---@operator call():Event
 Event = {}
-EventCallback = Event()
 
 -- MARK: Thing
 ---@class Thing

@@ -1,6 +1,3 @@
-local unpack = unpack
-local pack = table.pack
-
 local EventData, callbacks, updateableParameters, autoID = {}, {}, {}, 0
 -- This metatable creates an auto-configuration mechanism to create new types of Events
 local ec = setmetatable({}, { __newindex = function(self, key, value)
@@ -154,7 +151,7 @@ Event = setmetatable({
 
 		local updateableParams = updateableParameters[callback]
 		return function(...)
-			local results, args, info = {}, pack(...), callbacks[callback]
+			local results, args, info = {}, table.pack(...), callbacks[callback]
 			for index = 1, eventsCount do
 				repeat
 					results = {events[index].callback(unpack(args))}
@@ -187,6 +184,3 @@ Event = setmetatable({
 		end
 	end
 })
-
--- For compatibility with the previous version.
-EventCallback = Event()
