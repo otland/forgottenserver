@@ -1,4 +1,4 @@
-local event = CreatureEvent("BedLogin")
+local event = Event()
 
 local function findRelevantBed(player)
     local pos = player:getPosition()
@@ -52,7 +52,7 @@ local function regeneratePlayer(player, sleptSeconds)
     end
 end
 
-function event.onLogin(player)
+function event.onPlayerLogin(player)
     local headboard, footboard = findRelevantBed(player)
     if not headboard or not footboard or headboard:getSleeper() ~= player:getGuid() then
         return true
