@@ -473,6 +473,10 @@ void Creature::onDeath()
 
 	if (droppedCorpse) {
 		g_game.removeCreature(asCreature(), false);
+	} else {
+		while (!conditions.empty()) {
+			removeCondition(conditions.back(), true);
+		}
 	}
 }
 
