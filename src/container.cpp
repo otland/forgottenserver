@@ -123,11 +123,11 @@ std::shared_ptr<Item> Container::getItemByIndex(size_t index) const
 
 uint32_t Container::getItemHoldingCount() const
 {
-	uint32_t counter = 0;
+	uint32_t itemCount = 0;
 	for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
-		++counter;
+		++itemCount;
 	}
-	return counter;
+	return itemCount;
 }
 
 bool Container::isHoldingItem(const std::shared_ptr<const Item>& item) const
@@ -304,7 +304,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const std::shared_ptr<const 
 	int32_t freeSlots = std::max<int32_t>(capacity() - size(), 0);
 
 	if (item->isStackable()) {
-		uint32_t n = 0;
+		uint32_t availableStackSpace = 0;
 
 		if (index == INDEX_WHEREEVER) {
 			// Iterate through every item and check how much free stackable slots there is.
@@ -313,18 +313,18 @@ ReturnValue Container::queryMaxCount(int32_t index, const std::shared_ptr<const 
 				if (containerItem && containerItem != item && *containerItem == *item &&
 				    containerItem->getItemCount() < ITEM_STACK_SIZE) {
 					if (queryAdd(slotIndex++, item, count, flags) == RETURNVALUE_NOERROR) {
-						n += ITEM_STACK_SIZE - containerItem->getItemCount();
+						availableStackSpace += ITEM_STACK_SIZE - containerItem->getItemCount();
 					}
 				}
 			}
 		} else if (const auto& destItem = getItemByIndex(index);
 		           destItem && *destItem == *item && destItem->getItemCount() < ITEM_STACK_SIZE) {
 			if (queryAdd(index, item, count, flags) == RETURNVALUE_NOERROR) {
-				n = ITEM_STACK_SIZE - destItem->getItemCount();
+				availableStackSpace = ITEM_STACK_SIZE - destItem->getItemCount();
 			}
 		}
 
-		maxQueryCount = freeSlots * ITEM_STACK_SIZE + n;
+		maxQueryCount = freeSlots * ITEM_STACK_SIZE + availableStackSpace;
 		if (maxQueryCount < count) {
 			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
@@ -429,14 +429,14 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 		}
 
 		// try find a suitable item to stack with
-		uint32_t n = 0;
+		uint32_t slotIndex = 0;
 		for (const auto& listItem : itemList) {
 			if (listItem != item && *listItem == *item && listItem->getItemCount() < ITEM_STACK_SIZE) {
 				destItem = listItem;
-				index = n;
+				index = slotIndex;
 				return shared_from_this();
 			}
-			++n;
+			++slotIndex;
 		}
 	}
 	return shared_from_this();
@@ -580,12 +580,12 @@ void Container::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 
 int32_t Container::getThingIndex(const std::shared_ptr<const Thing>& thing) const
 {
-	int32_t index = 0;
+	int32_t itemIndex = 0;
 	for (const auto& item : itemList) {
 		if (item == thing) {
-			return index;
+			return itemIndex;
 		}
-		++index;
+		++itemIndex;
 	}
 	return -1;
 }
@@ -707,8 +707,8 @@ ContainerIterator Container::iterator() const
 
 void ContainerIterator::advance()
 {
-	if (const auto i = cur->get()) {
-		if (const auto& c = i->getContainer()) {
+	if (const auto currentItem = cur->get()) {
+		if (const auto& c = currentItem->getContainer()) {
 			if (!c->empty()) {
 				over.push_back(c);
 			}
