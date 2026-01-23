@@ -1,5 +1,3 @@
-local weapon = Weapon(WEAPON_AMMO)
-
 local area = createCombatArea({
 	{0, 1, 1, 1, 0},
 	{1, 1, 1, 1, 1},
@@ -16,10 +14,18 @@ combat:setParameter(COMBAT_PARAM_BLOCKARMOR, true)
 combat:setFormula(COMBAT_FORMULA_SKILL, 0, 0, 1, 0)
 combat:setArea(area)
 
-function weapon.onUseWeapon(player, variant)
-	return combat:execute(player, variant)
+local function registerDiamondArrow(id)
+	local weapon = Weapon(WEAPON_AMMO)
+
+	function weapon.onUseWeapon(player, variant)
+		return combat:execute(player, variant)
+	end
+
+	weapon:id(id)
+	weapon:action("removecount")
+	weapon:level(150)
+	weapon:register()
 end
 
-weapon:action("removecount")
-weapon:level(150)
-weapon:register()
+registerDiamondArrow(28413)
+registerDiamondArrow(38557)

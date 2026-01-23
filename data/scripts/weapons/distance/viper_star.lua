@@ -20,5 +20,6 @@ function weapon.onUseWeapon(player, variant)
 	return true
 end
 
+weapon:id(7366)
 weapon:breakChance(9)
 weapon:register()

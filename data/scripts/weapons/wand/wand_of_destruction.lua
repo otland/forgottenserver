@@ -1,4 +1,5 @@
 local weapon = Weapon(WEAPON_WAND)
+weapon:id(30113)
 weapon:level(200)
 weapon:mana(18)
 weapon:damage(80, 110)

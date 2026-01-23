@@ -1,4 +1,5 @@
 local weapon = Weapon(WEAPON_DISTANCE)
+weapon:id(7367)
 weapon:breakChance(1)
 weapon:level(42)
 weapon:register()
