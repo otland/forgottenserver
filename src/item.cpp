@@ -352,10 +352,15 @@ void Item::setSubType(uint16_t n)
 void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last)
 {
 	switch (attr) {
-		case ATTR_CHARGES:
 		case ATTR_COUNT:
 		case ATTR_RUNE_CHARGES: {
 			auto count = OTB::read<uint8_t>(first, last);
+			setSubType(count);
+			break;
+		}
+
+		case ATTR_CHARGES: {
+			auto count = OTB::read<uint16_t>(first, last);
 			setSubType(count);
 			break;
 		}
