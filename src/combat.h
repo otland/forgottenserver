@@ -62,6 +62,8 @@ struct CombatParams
 	bool aggressive = true;
 	bool useCharges = false;
 	bool ignoreResistances = false;
+
+	void clearScripts() const;
 };
 
 class AreaCombat
@@ -109,6 +111,7 @@ public:
 
 	bool setCallback(CallBackParam_t key);
 	CallBack* getCallback(CallBackParam_t key);
+	void clearScripts() const { params.clearScripts(); }
 
 	bool setParam(CombatParam_t param, uint32_t value);
 	int32_t getParam(CombatParam_t param);

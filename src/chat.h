@@ -42,6 +42,8 @@ public:
 	bool executeOnLeaveEvent(const Player& player);
 	bool executeOnSpeakEvent(const Player& player, SpeakClasses& type, const std::string& message);
 
+	void clearScripts(LuaScriptInterface& interface) const;
+
 protected:
 	UsersMap users;
 
@@ -95,6 +97,7 @@ public:
 	Chat(const Chat&) = delete;
 	Chat& operator=(const Chat&) = delete;
 
+	bool reload();
 	bool load();
 
 	ChatChannel* createChannel(const Player& player, uint16_t channelId);

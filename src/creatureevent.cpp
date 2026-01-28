@@ -268,6 +268,7 @@ void CreatureEvent::copyEvent(CreatureEvent* creatureEvent)
 
 void CreatureEvent::clearEvent()
 {
+	clearScript();
 	scriptId = 0;
 	scriptInterface = nullptr;
 	scripted = false;
