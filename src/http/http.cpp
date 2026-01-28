@@ -6,6 +6,7 @@
 
 #include <fmt/core.h>
 #include <thread>
+#include "../logger.h"
 
 namespace asio = boost::asio;
 
@@ -27,7 +28,7 @@ void tfs::http::start(bool bindOnlyOtsIP, std::string_view otsIP, unsigned short
 	if (bindOnlyOtsIP) {
 		address = asio::ip::make_address(otsIP);
 	}
-	fmt::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address.to_string(), port, threads);
+	getLogger().info("Starting HTTP server on {}:{} with {} threads", address.to_string(), port, threads);
 
 	auto listener = make_listener(ioc, {address, port});
 	listener->run();
