@@ -391,7 +391,6 @@ private:
 	static int luaNetworkMessageAddItemId(lua_State* L);
 
 	static int luaNetworkMessageReset(lua_State* L);
-	static int luaNetworkMessageSeek(lua_State* L);
 	static int luaNetworkMessageTell(lua_State* L);
 	static int luaNetworkMessageLength(lua_State* L);
 	static int luaNetworkMessageSkipBytes(lua_State* L);
