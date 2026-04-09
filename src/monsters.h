@@ -12,8 +12,8 @@ class LuaScriptInterface;
 
 const uint32_t MAX_LOOTCHANCE = 100000;
 
-static constexpr int32_t BESTIARY_MAX_DIFFICULTY = 5;
-static constexpr int32_t BESTIARY_MAX_OCCURRENCE = 4;
+inline constexpr int32_t BESTIARY_MAX_DIFFICULTY = 5;
+inline constexpr int32_t BESTIARY_MAX_OCCURRENCE = 4;
 
 struct LootBlock
 {

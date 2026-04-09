@@ -7,7 +7,7 @@
 #include "tasks.h"
 #include "thread_holder_base.h"
 
-static constexpr int32_t SCHEDULER_MINTICKS = 50;
+inline constexpr int32_t SCHEDULER_MINTICKS = 50;
 
 class SchedulerTask : public Task
 {

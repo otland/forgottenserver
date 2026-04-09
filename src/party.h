@@ -11,8 +11,8 @@ class Player;
 
 using PlayerVector = std::vector<Player*>;
 
-static constexpr int32_t EXPERIENCE_SHARE_RANGE = 30;
-static constexpr int32_t EXPERIENCE_SHARE_FLOORS = 1;
+inline constexpr int32_t EXPERIENCE_SHARE_RANGE = 30;
+inline constexpr int32_t EXPERIENCE_SHARE_FLOORS = 1;
 
 enum SharedExpStatus_t : uint8_t
 {

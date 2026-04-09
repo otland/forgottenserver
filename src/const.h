@@ -4,9 +4,9 @@
 #ifndef FS_CONST_H
 #define FS_CONST_H
 
-static constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
-static constexpr int32_t MIN_MARKET_FEE = 20;
-static constexpr int32_t MAX_MARKET_FEE = 100000;
+inline constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
+inline constexpr int32_t MIN_MARKET_FEE = 20;
+inline constexpr int32_t MAX_MARKET_FEE = 100000;
 
 enum MagicEffectsType_t : uint8_t
 {
@@ -723,14 +723,14 @@ enum CreatureIcon_t : uint8_t
 	CREATURE_ICON_LAST = CREATURE_ICON_CROSS_RED
 };
 
-static constexpr int32_t CHANNEL_GUILD = 0x00;
-static constexpr int32_t CHANNEL_PARTY = 0x01;
-static constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;
+inline constexpr int32_t CHANNEL_GUILD = 0x00;
+inline constexpr int32_t CHANNEL_PARTY = 0x01;
+inline constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;
 
 // Reserved player storage key ranges;
 //[10000000 - 20000000];
-static constexpr int32_t PSTRG_RESERVED_RANGE_START = 10000000;
-static constexpr int32_t PSTRG_RESERVED_RANGE_SIZE = 10000000;
+inline constexpr int32_t PSTRG_RESERVED_RANGE_START = 10000000;
+inline constexpr int32_t PSTRG_RESERVED_RANGE_SIZE = 10000000;
 
 #define IS_IN_KEYRANGE(key, range) \
 	(key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) <= PSTRG_##range##_SIZE))
