@@ -20,7 +20,6 @@
 #include "databasetasks.h"
 #include "script.h"
 #include <fstream>
-#include <fmt/color.h>
 #if __has_include("gitmetadata.h")
 	#include "gitmetadata.h"
 #endif
@@ -42,7 +41,7 @@ std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
 void startupErrorMessage(const std::string& errorStr)
 {
-	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "> ERROR: {:s}\n", errorStr);
+	std::cout << "> ERROR: \n" << errorStr << std::endl;
 	g_loaderSignal.notify_all();
 }
 
@@ -264,7 +263,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 	} else {
 		std::cout << std::endl;
-		startupErrorMessage(fmt::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.", g_config.getString(ConfigManager::WORLD_TYPE)));
+		startupErrorMessage(std::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.", g_config.getString(ConfigManager::WORLD_TYPE)));
 		return;
 	}
 	std::cout << asUpperCaseString(worldType) << std::endl;

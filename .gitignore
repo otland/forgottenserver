@@ -12,6 +12,7 @@
 .idea/
 .vscode/
 .vs/
+vcpkg_installed/
 
 # Build results
 

@@ -8,7 +8,7 @@
 #include "pugicast.h"
 #include "scheduler.h"
 
-#include <fmt/format.h>
+#include <format>
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -33,9 +33,9 @@ void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer
 		return;
 	}
 
-	invitePlayer.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} invites you to {:s} private chat channel.", player.getName(), player.getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
+	invitePlayer.sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} invites you to {:s} private chat channel.", player.getName(), player.getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
 
-	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited.", invitePlayer.getName()));
+	player.sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} has been invited.", invitePlayer.getName()));
 
 	for (const auto& it : users) {
 		it.second->sendChannelEvent(id, invitePlayer.getName(), CHANNELEVENT_INVITE);
@@ -50,7 +50,7 @@ void PrivateChatChannel::excludePlayer(const Player& player, Player& excludePlay
 
 	removeUser(excludePlayer);
 
-	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been excluded.", excludePlayer.getName()));
+	player.sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} has been excluded.", excludePlayer.getName()));
 
 	excludePlayer.sendClosePrivate(id);
 

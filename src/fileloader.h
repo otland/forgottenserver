@@ -4,14 +4,77 @@
 #ifndef FS_FILELOADER_H_9B663D19E58D42E6BFACFE5B09D7A05E
 #define FS_FILELOADER_H_9B663D19E58D42E6BFACFE5B09D7A05E
 
+#include <filesystem>
+#include <fstream>
 #include <limits>
 #include <vector>
-#include <boost/iostreams/device/mapped_file.hpp>
 
 class PropStream;
 
 namespace OTB {
-using MappedFile = boost::iostreams::mapped_file_source;
+
+class MappedFile
+{
+public:
+    using container_type = std::vector<char>;
+    using iterator = container_type::const_iterator;
+
+    MappedFile() = default;
+
+    explicit MappedFile(const std::filesystem::path& path)
+    {
+        open(path);
+    }
+
+    bool open(const std::filesystem::path& path)
+    {
+        std::ifstream file(path, std::ios::binary);
+        if (!file) {
+            return false;
+        }
+
+        data_ = {
+            std::istreambuf_iterator<char>(file),
+            std::istreambuf_iterator<char>()
+        };
+
+        return true;
+    }
+
+    [[nodiscard]]
+    bool is_open() const noexcept
+    {
+        return !data_.empty();
+    }
+
+    [[nodiscard]]
+    iterator begin() const noexcept
+    {
+        return data_.begin();
+    }
+
+    [[nodiscard]]
+    iterator end() const noexcept
+    {
+        return data_.end();
+    }
+
+    [[nodiscard]]
+    const char* data() const noexcept
+    {
+        return data_.data();
+    }
+
+    [[nodiscard]]
+    std::size_t size() const noexcept
+    {
+        return data_.size();
+    }
+
+private:
+    container_type data_;
+};
+
 using ContentIt  = MappedFile::iterator;
 using Identifier = std::array<char, 4>;
 

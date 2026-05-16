@@ -8,7 +8,7 @@
 #include "databasetasks.h"
 #include "tools.h"
 
-#include <fmt/format.h>
+#include <format>
 
 bool Ban::acceptConnection(uint32_t clientIP)
 {
@@ -48,7 +48,7 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `reason`, `expires_at`, `banned_at`, `banned_by`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `account_bans` WHERE `account_id` = {:d}", accountId));
+	DBResult_ptr result = db.storeQuery(std::format("SELECT `reason`, `expires_at`, `banned_at`, `banned_by`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `account_bans` WHERE `account_id` = {:d}", accountId));
 	if (!result) {
 		return false;
 	}
@@ -56,8 +56,8 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(nullptr) > expiresAt) {
 		// Move the ban to history if it has expired
-		g_databaseTasks.addTask(fmt::format("INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, `expired_at`, `banned_by`) VALUES ({:d}, {:s}, {:d}, {:d}, {:d})", accountId, db.escapeString(result->getString("reason")), result->getNumber<time_t>("banned_at"), expiresAt, result->getNumber<uint32_t>("banned_by")));
-		g_databaseTasks.addTask(fmt::format("DELETE FROM `account_bans` WHERE `account_id` = {:d}", accountId));
+		g_databaseTasks.addTask(std::format("INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, `expired_at`, `banned_by`) VALUES ({:d}, {:s}, {:d}, {:d}, {:d})", accountId, db.escapeString(result->getString("reason")), result->getNumber<time_t>("banned_at"), expiresAt, result->getNumber<uint32_t>("banned_by")));
+		g_databaseTasks.addTask(std::format("DELETE FROM `account_bans` WHERE `account_id` = {:d}", accountId));
 		return false;
 	}
 
@@ -75,14 +75,14 @@ bool IOBan::isIpBanned(uint32_t clientIP, BanInfo& banInfo)
 
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = {:d}", clientIP));
+	DBResult_ptr result = db.storeQuery(std::format("SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = {:d}", clientIP));
 	if (!result) {
 		return false;
 	}
 
 	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(nullptr) > expiresAt) {
-		g_databaseTasks.addTask(fmt::format("DELETE FROM `ip_bans` WHERE `ip` = {:d}", clientIP));
+		g_databaseTasks.addTask(std::format("DELETE FROM `ip_bans` WHERE `ip` = {:d}", clientIP));
 		return false;
 	}
 
@@ -94,5 +94,5 @@ bool IOBan::isIpBanned(uint32_t clientIP, BanInfo& banInfo)
 
 bool IOBan::isPlayerNamelocked(uint32_t playerId)
 {
-	return Database::getInstance().storeQuery(fmt::format("SELECT 1 FROM `player_namelocks` WHERE `player_id` = {:d}", playerId)).get() != nullptr;
+	return Database::getInstance().storeQuery(std::format("SELECT 1 FROM `player_namelocks` WHERE `player_id` = {:d}", playerId)).get() != nullptr;
 }

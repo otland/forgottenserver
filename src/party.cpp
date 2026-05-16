@@ -8,7 +8,7 @@
 #include "configmanager.h"
 #include "events.h"
 
-#include <fmt/format.h>
+#include <format>
 
 extern Game g_game;
 extern ConfigManager g_config;
@@ -116,7 +116,7 @@ bool Party::leaveParty(Player* player)
 
 	clearPlayerPoints(player);
 
-	broadcastPartyMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has left the party.", player->getName()));
+	broadcastPartyMessage(MESSAGE_INFO_DESCR, std::format("{:s} has left the party.", player->getName()));
 
 	if (missingLeader || empty()) {
 		disband();
@@ -137,7 +137,7 @@ bool Party::passPartyLeadership(Player* player)
 		memberList.erase(it);
 	}
 
-	broadcastPartyMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} is now the leader of the party.", player->getName()), true);
+	broadcastPartyMessage(MESSAGE_INFO_DESCR, std::format("{:s} is now the leader of the party.", player->getName()), true);
 
 	Player* oldLeader = leader;
 	leader = player;
@@ -176,7 +176,7 @@ bool Party::joinParty(Player& player)
 
 	inviteList.erase(it);
 
-	broadcastPartyMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has joined the party.", player.getName()));
+	broadcastPartyMessage(MESSAGE_INFO_DESCR, std::format("{:s} has joined the party.", player.getName()));
 
 	player.setParty(this);
 
@@ -199,7 +199,7 @@ bool Party::joinParty(Player& player)
 	updateSharedExperience();
 
 	const std::string& leaderName = leader->getName();
-	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("You have joined {:s}'{:s} party. Open the party channel to communicate with your companions.", leaderName, leaderName.back() == 's' ? "" : "s"));
+	player.sendTextMessage(MESSAGE_INFO_DESCR, std::format("You have joined {:s}'{:s} party. Open the party channel to communicate with your companions.", leaderName, leaderName.back() == 's' ? "" : "s"));
 	return true;
 }
 
@@ -234,8 +234,8 @@ bool Party::removeInvite(Player& player, bool removeFromPlayer/* = true*/)
 
 void Party::revokeInvitation(Player& player)
 {
-	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has revoked {:s} invitation.", leader->getName(), leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
-	leader->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("Invitation for {:s} has been revoked.", player.getName()));
+	player.sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} has revoked {:s} invitation.", leader->getName(), leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
+	leader->sendTextMessage(MESSAGE_INFO_DESCR, std::format("Invitation for {:s} has been revoked.", player.getName()));
 	removeInvite(player);
 }
 
@@ -246,11 +246,11 @@ bool Party::invitePlayer(Player& player)
 	}
 
 	if (empty()) {
-		leader->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited. Open the party channel to communicate with your members.", player.getName()));
+		leader->sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} has been invited. Open the party channel to communicate with your members.", player.getName()));
 		g_game.updatePlayerShield(leader);
 		leader->sendCreatureSkull(leader);
 	} else {
-		leader->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited.", player.getName()));
+		leader->sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} has been invited.", player.getName()));
 	}
 
 	inviteList.push_back(&player);
@@ -265,7 +265,7 @@ bool Party::invitePlayer(Player& player)
 
 	player.addPartyInvitation(this);
 
-	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has invited you to {:s} party.", leader->getName(), leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
+	player.sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} has invited you to {:s} party.", leader->getName(), leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
 	return true;
 }
 

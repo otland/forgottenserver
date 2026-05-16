@@ -4,7 +4,7 @@
 #include "otpch.h"
 
 #include "scheduler.h"
-#include <boost/asio/post.hpp>
+#include <asio/post.hpp>
 #include <memory>
 
 uint32_t Scheduler::addEvent(SchedulerTask* task)
@@ -14,16 +14,16 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 		task->setEventId(++lastEventId);
 	}
 
-	boost::asio::post(io_context, [this, task]() {
+	asio::post(io_context, [this, task]() {
 		// insert the event id in the list of active events
-		auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::steady_timer{io_context});
+		auto it = eventIdTimerMap.emplace(task->getEventId(), asio::steady_timer{io_context});
 		auto& timer = it.first->second;
 
 		timer.expires_from_now(std::chrono::milliseconds(task->getDelay()));
-		timer.async_wait([this, task](const boost::system::error_code& error) {
+		timer.async_wait([this, task](const std::error_code& error) {
 			eventIdTimerMap.erase(task->getEventId());
 
-			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
+			if (error == asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
 				// the timer has been manually canceled(timer->cancel()) or Scheduler::shutdown has been called
 				delete task;
 				return;
@@ -42,7 +42,7 @@ void Scheduler::stopEvent(uint32_t eventId)
 		return;
 	}
 
-	boost::asio::post(io_context, [this, eventId]() {
+	asio::post(io_context, [this, eventId]() {
 		// search the event id
 		auto it = eventIdTimerMap.find(eventId);
 		if (it != eventIdTimerMap.end()) {
@@ -54,7 +54,7 @@ void Scheduler::stopEvent(uint32_t eventId)
 void Scheduler::shutdown()
 {
 	setState(THREAD_STATE_TERMINATED);
-	boost::asio::post(io_context, [this]() {
+	asio::post(io_context, [this]() {
 		// cancel all active timers
 		for (auto& it : eventIdTimerMap) {
 			it.second.cancel();

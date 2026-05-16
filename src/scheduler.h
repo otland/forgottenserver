@@ -46,9 +46,9 @@ class Scheduler : public ThreadHolder<Scheduler>
 		void threadMain() { io_context.run(); }
 	private:
 		std::atomic<uint32_t> lastEventId{0};
-		std::unordered_map<uint32_t, boost::asio::steady_timer> eventIdTimerMap;
-		boost::asio::io_context io_context;
-		boost::asio::io_context::work work{io_context};
+		std::unordered_map<uint32_t, asio::steady_timer> eventIdTimerMap;
+		asio::io_context io_context;
+		asio::io_context::work work{io_context};
 };
 
 extern Scheduler g_scheduler;

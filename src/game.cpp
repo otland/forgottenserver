@@ -26,7 +26,7 @@
 #include "weapons.h"
 #include "script.h"
 
-#include <fmt/format.h>
+#include <format>
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -2728,7 +2728,7 @@ bool Game::internalStartTrade(Player* player, Player* tradePartner, Item* tradeI
 	player->sendTradeItemRequest(player->getName(), tradeItem, true);
 
 	if (tradePartner->tradeState == TRADE_NONE) {
-		tradePartner->sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("{:s} wants to trade with you.", player->getName()));
+		tradePartner->sendTextMessage(MESSAGE_EVENT_ADVANCE, std::format("{:s} wants to trade with you.", player->getName()));
 		tradePartner->tradeState = TRADE_ACKNOWLEDGE;
 		tradePartner->tradePartner = player;
 	} else {
@@ -2860,9 +2860,9 @@ std::string Game::getTradeErrorDescription(ReturnValue ret, Item* item)
 {
 	if (item) {
 		if (ret == RETURNVALUE_NOTENOUGHCAPACITY) {
-			return fmt::format("You do not have enough capacity to carry {:s}.\n {:s}", item->isStackable() && item->getItemCount() > 1 ? "these objects" : "this object", item->getWeightDescription());
+			return std::format("You do not have enough capacity to carry {:s}.\n {:s}", item->isStackable() && item->getItemCount() > 1 ? "these objects" : "this object", item->getWeightDescription());
 		} else if (ret == RETURNVALUE_NOTENOUGHROOM || ret == RETURNVALUE_CONTAINERNOTENOUGHROOM) {
-			return fmt::format("You do not have enough room to carry {:s}.", item->isStackable() && item->getItemCount() > 1 ? "these objects" : "this object");
+			return std::format("You do not have enough room to carry {:s}.", item->isStackable() && item->getItemCount() > 1 ? "these objects" : "this object");
 		}
 	}
 	return "Trade could not be completed.";
@@ -3432,7 +3432,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 
 	uint32_t muteTime = player->isMuted();
 	if (muteTime > 0) {
-		player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You are still muted for {:d} seconds.", muteTime));
+		player->sendTextMessage(MESSAGE_STATUS_SMALL, std::format("You are still muted for {:d} seconds.", muteTime));
 		return;
 	}
 
@@ -3537,10 +3537,10 @@ bool Game::playerYell(Player* player, const std::string& text)
 				internalCreatureSay(player, TALKTYPE_YELL, asUpperCaseString(text), false);
 				return true;
 			} else {
-				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not yell unless you have reached level {:d} or have a premium account.", minimumLevel));
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, std::format("You may not yell unless you have reached level {:d} or have a premium account.", minimumLevel));
 			}
 		} else {
-			player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not yell unless you have reached level {:d}.", minimumLevel));
+			player->sendTextMessage(MESSAGE_STATUS_SMALL, std::format("You may not yell unless you have reached level {:d}.", minimumLevel));
 		}
 		return false;
 	}
@@ -3575,7 +3575,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 	if (toPlayer->isInGhostMode() && !player->canSeeGhostMode(toPlayer)) {
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name is not online.");
 	} else {
-		player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("Message sent to {:s}.", toPlayer->getName()));
+		player->sendTextMessage(MESSAGE_STATUS_SMALL, std::format("Message sent to {:s}.", toPlayer->getName()));
 	}
 	return true;
 }
@@ -4003,7 +4003,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		realHealthChange = target->getHealth() - realHealthChange;
 
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
-			auto damageString = fmt::format("{:d} hitpoint{:s}", realHealthChange, realHealthChange != 1 ? "s" : "");
+			auto damageString = std::format("{:d} hitpoint{:s}", realHealthChange, realHealthChange != 1 ? "s" : "");
 
 			std::string spectatorMessage;
 
@@ -4018,25 +4018,25 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				Player* tmpPlayer = spectator->getPlayer();
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_HEALED;
-					message.text = fmt::format("You heal {:s} for {:s}.", target->getNameDescription(), damageString);
+					message.text = std::format("You heal {:s} for {:s}.", target->getNameDescription(), damageString);
 				} else if (tmpPlayer == targetPlayer) {
 					message.type = MESSAGE_HEALED;
 					if (!attacker) {
-						message.text = fmt::format("You were healed for {:s}.", damageString);
+						message.text = std::format("You were healed for {:s}.", damageString);
 					} else if (targetPlayer == attackerPlayer) {
-						message.text = fmt::format("You healed yourself for {:s}.", damageString);
+						message.text = std::format("You healed yourself for {:s}.", damageString);
 					} else {
-						message.text = fmt::format("You were healed by {:s} for {:s}.", attacker->getNameDescription(), damageString);
+						message.text = std::format("You were healed by {:s} for {:s}.", attacker->getNameDescription(), damageString);
 					}
 				} else {
 					message.type = MESSAGE_HEALED_OTHERS;
 					if (spectatorMessage.empty()) {
 						if (!attacker) {
-							spectatorMessage = fmt::format("{:s} was healed for {:s}.", target->getNameDescription(), damageString);
+							spectatorMessage = std::format("{:s} was healed for {:s}.", target->getNameDescription(), damageString);
 						} else if (attacker == target) {
-							spectatorMessage = fmt::format("{:s} healed {:s}self for {:s}.", attacker->getNameDescription(), targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "him") : "it", damageString);
+							spectatorMessage = std::format("{:s} healed {:s}self for {:s}.", attacker->getNameDescription(), targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "him") : "it", damageString);
 						} else {
-							spectatorMessage = fmt::format("{:s} healed {:s} for {:s}.", attacker->getNameDescription(), target->getNameDescription(), damageString);
+							spectatorMessage = std::format("{:s} healed {:s} for {:s}.", attacker->getNameDescription(), target->getNameDescription(), damageString);
 						}
 						spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 					}
@@ -4111,26 +4111,26 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 					if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 						message.type = MESSAGE_DAMAGE_DEALT;
-						message.text = fmt::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaDamage);
+						message.text = std::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaDamage);
 						message.text[0] = std::toupper(message.text[0]);
 					} else if (tmpPlayer == targetPlayer) {
 						message.type = MESSAGE_DAMAGE_RECEIVED;
 						if (!attacker) {
-							message.text = fmt::format("You lose {:d} mana.", manaDamage);
+							message.text = std::format("You lose {:d} mana.", manaDamage);
 						} else if (targetPlayer == attackerPlayer) {
-							message.text = fmt::format("You lose {:d} mana due to your own attack.", manaDamage);
+							message.text = std::format("You lose {:d} mana due to your own attack.", manaDamage);
 						} else {
-							message.text = fmt::format("You lose {:d} mana due to an attack by {:s}.", manaDamage, attacker->getNameDescription());
+							message.text = std::format("You lose {:d} mana due to an attack by {:s}.", manaDamage, attacker->getNameDescription());
 						}
 					} else {
 						message.type = MESSAGE_DAMAGE_OTHERS;
 						if (spectatorMessage.empty()) {
 							if (!attacker) {
-								spectatorMessage = fmt::format("{:s} loses {:d} mana.", target->getNameDescription(), manaDamage);
+								spectatorMessage = std::format("{:s} loses {:d} mana.", target->getNameDescription(), manaDamage);
 							} else if (attacker == target) {
-								spectatorMessage = fmt::format("{:s} loses {:d} mana due to {:s} own attack.", target->getNameDescription(), manaDamage, targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
+								spectatorMessage = std::format("{:s} loses {:d} mana due to {:s} own attack.", target->getNameDescription(), manaDamage, targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
 							} else {
-								spectatorMessage = fmt::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaDamage, attacker->getNameDescription());
+								spectatorMessage = std::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaDamage, attacker->getNameDescription());
 							}
 							spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 						}
@@ -4199,7 +4199,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (message.primary.color != TEXTCOLOR_NONE || message.secondary.color != TEXTCOLOR_NONE) {
-			auto damageString = fmt::format("{:d} hitpoint{:s}", realDamage, realDamage != 1 ? "s" : "");
+			auto damageString = std::format("{:d} hitpoint{:s}", realDamage, realDamage != 1 ? "s" : "");
 
 			std::string spectatorMessage;
 
@@ -4211,26 +4211,26 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_DAMAGE_DEALT;
-					message.text = fmt::format("{:s} loses {:s} due to your attack.", target->getNameDescription(), damageString);
+					message.text = std::format("{:s} loses {:s} due to your attack.", target->getNameDescription(), damageString);
 					message.text[0] = std::toupper(message.text[0]);
 				} else if (tmpPlayer == targetPlayer) {
 					message.type = MESSAGE_DAMAGE_RECEIVED;
 					if (!attacker) {
-						message.text = fmt::format("You lose {:s}.", damageString);
+						message.text = std::format("You lose {:s}.", damageString);
 					} else if (targetPlayer == attackerPlayer) {
-						message.text = fmt::format("You lose {:s} due to your own attack.", damageString);
+						message.text = std::format("You lose {:s} due to your own attack.", damageString);
 					} else {
-						message.text = fmt::format("You lose {:s} due to an attack by {:s}.", damageString, attacker->getNameDescription());
+						message.text = std::format("You lose {:s} due to an attack by {:s}.", damageString, attacker->getNameDescription());
 					}
 				} else {
 					message.type = MESSAGE_DAMAGE_OTHERS;
 					if (spectatorMessage.empty()) {
 						if (!attacker) {
-							spectatorMessage = fmt::format("{:s} loses {:s}.", target->getNameDescription(), damageString);
+							spectatorMessage = std::format("{:s} loses {:s}.", target->getNameDescription(), damageString);
 						} else if (attacker == target) {
-							spectatorMessage = fmt::format("{:s} loses {:s} due to {:s} own attack.", target->getNameDescription(), damageString, targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
+							spectatorMessage = std::format("{:s} loses {:s} due to {:s} own attack.", target->getNameDescription(), damageString, targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
 						} else {
-							spectatorMessage = fmt::format("{:s} loses {:s} due to an attack by {:s}.", target->getNameDescription(), damageString, attacker->getNameDescription());
+							spectatorMessage = std::format("{:s} loses {:s} due to an attack by {:s}.", target->getNameDescription(), damageString, attacker->getNameDescription());
 						}
 						spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 					}
@@ -4350,26 +4350,26 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 				message.type = MESSAGE_DAMAGE_DEALT;
-				message.text = fmt::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaLoss);
+				message.text = std::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaLoss);
 				message.text[0] = std::toupper(message.text[0]);
 			} else if (tmpPlayer == targetPlayer) {
 				message.type = MESSAGE_DAMAGE_RECEIVED;
 				if (!attacker) {
-					message.text = fmt::format("You lose {:d} mana.", manaLoss);
+					message.text = std::format("You lose {:d} mana.", manaLoss);
 				} else if (targetPlayer == attackerPlayer) {
-					message.text = fmt::format("You lose {:d} mana due to your own attack.", manaLoss);
+					message.text = std::format("You lose {:d} mana due to your own attack.", manaLoss);
 				} else {
-					message.text = fmt::format("You lose {:d} mana due to an attack by {:s}.", manaLoss, attacker->getNameDescription());
+					message.text = std::format("You lose {:d} mana due to an attack by {:s}.", manaLoss, attacker->getNameDescription());
 				}
 			} else {
 				message.type = MESSAGE_DAMAGE_OTHERS;
 				if (spectatorMessage.empty()) {
 					if (!attacker) {
-						spectatorMessage = fmt::format("{:s} loses {:d} mana.", target->getNameDescription(), manaLoss);
+						spectatorMessage = std::format("{:s} loses {:d} mana.", target->getNameDescription(), manaLoss);
 					} else if (attacker == target) {
-						spectatorMessage = fmt::format("{:s} loses {:d} mana due to {:s} own attack.", target->getNameDescription(), manaLoss, targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
+						spectatorMessage = std::format("{:s} loses {:d} mana due to {:s} own attack.", target->getNameDescription(), manaLoss, targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
 					} else {
-						spectatorMessage = fmt::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaLoss, attacker->getNameDescription());
+						spectatorMessage = std::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaLoss, attacker->getNameDescription());
 					}
 					spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 				}
@@ -4487,7 +4487,7 @@ bool Game::saveAccountStorageValues() const
 
 		DBInsert accountStorageQuery("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES");
 		for (const auto& storageIt : accountIt.second) {
-			if (!accountStorageQuery.addRow(fmt::format("{:d}, {:d}, {:d}", accountIt.first, storageIt.first, storageIt.second))) {
+			if (!accountStorageQuery.addRow(std::format("{:d}, {:d}, {:d}", accountIt.first, storageIt.first, storageIt.second))) {
 				return false;
 			}
 		}
@@ -4783,8 +4783,8 @@ void Game::loadMotdNum()
 void Game::saveMotdNum() const
 {
 	Database& db = Database::getInstance();
-	db.executeQuery(fmt::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = 'motd_num'", motdNum));
-	db.executeQuery(fmt::format("UPDATE `server_config` SET `value` = '{:s}' WHERE `config` = 'motd_hash'", transformToSHA1(g_config.getString(ConfigManager::MOTD))));
+	db.executeQuery(std::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = 'motd_num'", motdNum));
+	db.executeQuery(std::format("UPDATE `server_config` SET `value` = '{:s}' WHERE `config` = 'motd_hash'", transformToSHA1(g_config.getString(ConfigManager::MOTD))));
 }
 
 void Game::checkPlayersRecord()
@@ -4804,7 +4804,7 @@ void Game::checkPlayersRecord()
 void Game::updatePlayersRecord() const
 {
 	Database& db = Database::getInstance();
-	db.executeQuery(fmt::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = 'players_record'", playersRecord));
+	db.executeQuery(std::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = 'players_record'", playersRecord));
 }
 
 void Game::loadPlayersRecord()
@@ -4836,7 +4836,7 @@ void Game::playerInviteToParty(uint32_t playerId, uint32_t invitedId)
 	}
 
 	if (invitedPlayer->getParty()) {
-		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} is already in a party.", invitedPlayer->getName()));
+		player->sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} is already in a party.", invitedPlayer->getName()));
 		return;
 	}
 

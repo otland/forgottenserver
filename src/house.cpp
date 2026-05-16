@@ -11,7 +11,7 @@
 #include "configmanager.h"
 #include "bed.h"
 
-#include <fmt/format.h>
+#include <format>
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -28,7 +28,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 {
 	if (updateDatabase && owner != guid) {
 		Database& db = Database::getInstance();
-		db.executeQuery(fmt::format("UPDATE `houses` SET `owner` = {:d}, `bid` = 0, `bid_end` = 0, `last_bid` = 0, `highest_bidder` = 0  WHERE `id` = {:d}", guid, id));
+		db.executeQuery(std::format("UPDATE `houses` SET `owner` = {:d}, `bid` = 0, `bid_end` = 0, `last_bid` = 0, `highest_bidder` = 0  WHERE `id` = {:d}", guid, id));
 	}
 
 	if (isLoaded && owner == guid) {
@@ -105,7 +105,7 @@ void House::updateDoorDescription() const
 {
 	const int32_t housePrice = g_config.getNumber(ConfigManager::HOUSE_PRICE);
 	for (const auto& it : doorSet) {
-		it->setSpecialDescription(fmt::format("It belongs to house '{:s}'. {:s} owns this house.{:s}", houseName, (owner != 0) ? ownerName : "Nobody", g_config.getBoolean(ConfigManager::HOUSE_DOOR_SHOW_PRICE) && (housePrice != -1) && (owner == 0) ? fmt::format(" It costs {:d} gold coins.", (houseTiles.size() * housePrice)) : ""));
+		it->setSpecialDescription(std::format("It belongs to house '{:s}'. {:s} owns this house.{:s}", houseName, (owner != 0) ? ownerName : "Nobody", g_config.getBoolean(ConfigManager::HOUSE_DOOR_SHOW_PRICE) && (housePrice != -1) && (owner == 0) ? std::format(" It costs {:d} gold coins.", (houseTiles.size() * housePrice)) : ""));
 	}
 }
 
@@ -353,7 +353,7 @@ HouseTransferItem* HouseTransferItem::createHouseTransferItem(House* house)
 	transferItem->incrementReferenceCounter();
 	transferItem->setID(ITEM_DOCUMENT_RO);
 	transferItem->setSubType(1);
-	transferItem->setSpecialDescription(fmt::format("It is a house transfer document for '{:s}'.", house->getName()));
+	transferItem->setSpecialDescription(std::format("It is a house transfer document for '{:s}'.", house->getName()));
 	return transferItem;
 }
 
@@ -709,7 +709,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 						break;
 				}
 
-				letter->setText(fmt::format("Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.", period, house->getRent(), house->getName(), daysLeft));
+				letter->setText(std::format("Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.", period, house->getRent(), house->getName(), daysLeft));
 				g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
 				house->setPayRentWarnings(house->getPayRentWarnings() + 1);
 			} else {

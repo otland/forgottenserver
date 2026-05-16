@@ -40,7 +40,7 @@ void ServiceManager::stop()
 	for (auto& servicePortIt : acceptors) {
 		try {
 			io_service.post(std::bind(&ServicePort::onStopServer, servicePortIt.second));
-		} catch (boost::system::system_error& e) {
+		} catch (std::system_error& e) {
 			std::cout << "[ServiceManager::stop] Network Error: " << e.what() << std::endl;
 		}
 	}
@@ -86,7 +86,7 @@ void ServicePort::accept()
 	acceptor->async_accept(connection->getSocket(), std::bind(&ServicePort::onAccept, shared_from_this(), connection, std::placeholders::_1));
 }
 
-void ServicePort::onAccept(Connection_ptr connection, const boost::system::error_code& error)
+void ServicePort::onAccept(Connection_ptr connection, const std::error_code& error)
 {
 	if (!error) {
 		if (services.empty()) {
@@ -106,7 +106,7 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 		}
 
 		accept();
-	} else if (error != boost::asio::error::operation_aborted) {
+	} else if (error != asio::error::operation_aborted) {
 		if (!pendingStart) {
 			close();
 			pendingStart = true;
@@ -152,17 +152,17 @@ void ServicePort::open(uint16_t port)
 
 	try {
 		if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
-			acceptor.reset(new boost::asio::ip::tcp::acceptor(io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4::from_string(g_config.getString(ConfigManager::IP))), serverPort)));
+			acceptor.reset(new asio::ip::tcp::acceptor(io_service, asio::ip::tcp::endpoint(
+			            asio::ip::address(asio::ip::address_v4::from_string(g_config.getString(ConfigManager::IP))), serverPort)));
 		} else {
-			acceptor.reset(new boost::asio::ip::tcp::acceptor(io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), serverPort)));
+			acceptor.reset(new asio::ip::tcp::acceptor(io_service, asio::ip::tcp::endpoint(
+			            asio::ip::address(asio::ip::address_v4(INADDR_ANY)), serverPort)));
 		}
 
-		acceptor->set_option(boost::asio::ip::tcp::no_delay(true));
+		acceptor->set_option(asio::ip::tcp::no_delay(true));
 
 		accept();
-	} catch (boost::system::system_error& e) {
+	} catch (std::system_error& e) {
 		std::cout << "[ServicePort::open] Error: " << e.what() << std::endl;
 
 		pendingStart = true;
@@ -174,7 +174,7 @@ void ServicePort::open(uint16_t port)
 void ServicePort::close()
 {
 	if (acceptor && acceptor->is_open()) {
-		boost::system::error_code error;
+		std::error_code error;
 		acceptor->close(error);
 	}
 }

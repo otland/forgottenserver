@@ -7,7 +7,7 @@
 #include "databasemanager.h"
 #include "luascript.h"
 
-#include <fmt/format.h>
+#include <format>
 
 extern ConfigManager g_config;
 
@@ -15,7 +15,7 @@ bool DatabaseManager::optimizeTables()
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = {:s} AND `DATA_FREE` > 0", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))));
+	DBResult_ptr result = db.storeQuery(std::format("SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = {:s} AND `DATA_FREE` > 0", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))));
 	if (!result) {
 		return false;
 	}
@@ -24,7 +24,7 @@ bool DatabaseManager::optimizeTables()
 		std::string tableName = result->getString("TABLE_NAME");
 		std::cout << "> Optimizing table " << tableName << "..." << std::flush;
 
-		if (db.executeQuery(fmt::format("OPTIMIZE TABLE `{:s}`", tableName))) {
+		if (db.executeQuery(std::format("OPTIMIZE TABLE `{:s}`", tableName))) {
 			std::cout << " [success]" << std::endl;
 		} else {
 			std::cout << " [failed]" << std::endl;
@@ -36,13 +36,13 @@ bool DatabaseManager::optimizeTables()
 bool DatabaseManager::tableExists(const std::string& tableName)
 {
 	Database& db = Database::getInstance();
-	return db.storeQuery(fmt::format("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s} AND `TABLE_NAME` = {:s} LIMIT 1", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)), db.escapeString(tableName))).get() != nullptr;
+	return db.storeQuery(std::format("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s} AND `TABLE_NAME` = {:s} LIMIT 1", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)), db.escapeString(tableName))).get() != nullptr;
 }
 
 bool DatabaseManager::isDatabaseSetup()
 {
 	Database& db = Database::getInstance();
-	return db.storeQuery(fmt::format("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s}", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)))).get() != nullptr;
+	return db.storeQuery(std::format("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s}", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)))).get() != nullptr;
 }
 
 int32_t DatabaseManager::getDatabaseVersion()
@@ -84,7 +84,7 @@ void DatabaseManager::updateDatabase()
 
 	int32_t version = getDatabaseVersion();
 	do {
-		if (luaL_dofile(L, fmt::format("data/migrations/{:d}.lua", version).c_str()) != 0) {
+		if (luaL_dofile(L, std::format("data/migrations/{:d}.lua", version).c_str()) != 0) {
 			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] " << lua_tostring(L, -1) << std::endl;
 			break;
 		}
@@ -118,7 +118,7 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `value` FROM `server_config` WHERE `config` = {:s}", db.escapeString(config)));
+	DBResult_ptr result = db.storeQuery(std::format("SELECT `value` FROM `server_config` WHERE `config` = {:s}", db.escapeString(config)));
 	if (!result) {
 		return false;
 	}
@@ -134,8 +134,8 @@ void DatabaseManager::registerDatabaseConfig(const std::string& config, int32_t 
 	int32_t tmp;
 
 	if (!getDatabaseConfig(config, tmp)) {
-		db.executeQuery(fmt::format("INSERT INTO `server_config` VALUES ({:s}, '{:d}')", db.escapeString(config), value));
+		db.executeQuery(std::format("INSERT INTO `server_config` VALUES ({:s}, '{:d}')", db.escapeString(config), value));
 	} else {
-		db.executeQuery(fmt::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = {:s}", value, db.escapeString(config)));
+		db.executeQuery(std::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = {:s}", value, db.escapeString(config)));
 	}
 }

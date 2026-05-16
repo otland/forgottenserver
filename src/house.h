@@ -80,7 +80,7 @@ class Door final : public Item
 		friend class House;
 };
 
-enum AccessList_t {
+enum AccessList_t : uint16_t {
 	GUEST_LIST = 0x100,
 	SUBOWNER_LIST = 0x101,
 };

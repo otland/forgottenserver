@@ -168,7 +168,7 @@ void dispatchSignalHandler(int signal)
 
 }
 
-Signals::Signals(boost::asio::io_service& service): set(service)
+Signals::Signals(asio::io_service& service): set(service)
 {
 	set.add(SIGINT);
 	set.add(SIGTERM);
@@ -187,7 +187,7 @@ Signals::Signals(boost::asio::io_service& service): set(service)
 
 void Signals::asyncWait()
 {
-	set.async_wait([this](const boost::system::error_code& err, int signal) {
+	set.async_wait([this](const std::error_code& err, int signal) {
 		if (err) {
 			std::cerr << "Signal handling error: "  << err.message() << std::endl;
 			return;

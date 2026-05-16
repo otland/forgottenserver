@@ -4,6 +4,7 @@
 #include "otpch.h"
 
 #include <stack>
+
 #include "fileloader.h"
 
 namespace OTB {
