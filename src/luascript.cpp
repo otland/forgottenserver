@@ -3,8 +3,7 @@
 
 #include "otpch.h"
 
-#include <boost/range/adaptor/reversed.hpp>
-#include <fmt/format.h>
+#include <ranges>
 
 #include "luascript.h"
 #include "chat.h"
@@ -3623,7 +3622,7 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 	//addEvent(callback, delay, ...)
 	int parameters = lua_gettop(L);
 	if (parameters < 2) {
-		reportErrorFunc(L, fmt::format("Not enough parameters: {:d}.", parameters));
+		reportErrorFunc(L, std::format("Not enough parameters: {:d}.", parameters));
 		pushBoolean(L, false);
 		return 1;
 	}
@@ -9185,7 +9184,7 @@ int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 	uint32_t key = getNumber<uint32_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
-		reportErrorFunc(L, fmt::format("Accessing reserved range: {:d}", key));
+		reportErrorFunc(L, std::format("Accessing reserved range: {:d}", key));
 		pushBoolean(L, false);
 		return 1;
 	}
@@ -17238,7 +17237,7 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
 
 	//push parameters
-	for (auto parameter : boost::adaptors::reverse(timerEventDesc.parameters)) {
+	for (auto parameter : std::views::reverse(timerEventDesc.parameters)) {
 		lua_rawgeti(luaState, LUA_REGISTRYINDEX, parameter);
 	}
 

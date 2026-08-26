@@ -7,60 +7,52 @@ on:
       - v*
 
     paths:
+      - .github/workflows/build-vcpkg.yml
       - cmake/**
       - src/**
       - CMakeLists.txt
+      - vcpkg.json
 
   pull_request:
     paths:
+      - .github/workflows/build-vcpkg.yml
       - cmake/**
       - src/**
       - CMakeLists.txt
+      - vcpkg.json
 
 jobs:
-  unix:
-    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
-    runs-on: ${{ matrix.os }}-latest
+  build-vcpkg:
+    name: ${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       max-parallel: 8
       matrix:
-        name: [ubuntu-gcc, ubuntu-clang, macos-clang]
+        name: [ubuntu, macos, windows]
         buildtype: [Debug, Release]
         luajit: [on, off]
         include:
-          - name: ubuntu-gcc
-            os: ubuntu
-            cxx: g++
-            cc: gcc
+          - name: ubuntu
+            os: ubuntu-24.04
             triplet: x64-linux
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp fmt
-          - name: ubuntu-clang
-            os: ubuntu
-            cxx: clang++
-            cc: clang
-            triplet: x64-linux
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp fmt
-          - name: macos-clang
-            os: macos
-            cxx: clang++
-            cc: clang
-            triplet: x64-osx
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp fmt
+          - name: macos
+            os: macos-latest
+            triplet: arm64-osx
+          - name: windows
+            os: windows-2022
+            triplet: x64-windows
+        exclude:
+          # LuaJIT is pulled from vcpkg on Windows and is always enabled there.
+          - name: windows
+            luajit: off
+
+    env:
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
+      VCPKG_BUILD_TYPE: release
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-
-      - name: Unshallow
-        run: git fetch --prune --unshallow
+      - uses: actions/checkout@v7
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -68,135 +60,57 @@ jobs:
 
       - name: Ubuntu - install luajit, remove libmysqlclient-dev
         run: |
-          sudo apt-get install libluajit-5.1-dev
+          sudo apt-get update
+          sudo apt-get install -y libluajit-5.1-dev
           sudo apt-get remove -y libmysqlclient-dev
-        if: contains( matrix.os, 'ubuntu')
+        if: matrix.name == 'ubuntu'
 
-      - name: MacOS - install luajit pkgconfig
+      - name: macOS - install luajit pkgconfig
         run: brew install luajit pkgconfig
-        if: contains( matrix.os, 'macos')
-
-      - name: Set Environment vars
-        run: |
-          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
-          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
-
-      - name: Run vcpkg
-        uses: lukka/run-vcpkg@v7
-        with:
-          vcpkgArguments: ${{ matrix.packages }}
-          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
-          vcpkgTriplet: ${{ matrix.triplet }}
-          appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
-          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
-
-      - name: Build with CMake
-        uses: lukka/run-cmake@v3
-        with:
-          useVcpkgToolchainFile: true
-          buildDirectory: ${{ runner.workspace }}/build
-          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="${{ matrix.luajit }}"'
-
-      - name: dir
-        run: find $RUNNER_WORKSPACE
-        shell: bash
-
-      - name: Upload artifact binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs
-
-      - name: Prepare datapack contents
-        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
-        shell: bash
-
-      - name: Upload datapack contents
-        uses: actions/upload-artifact@v2
-        with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ github.workspace }}
-
-  windows:
-    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=on
-    runs-on: ${{ matrix.os }}-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 8
-      matrix:
-        name: [windows-msvc]
-        buildtype: [Debug, Release]
-        include:
-          - name: windows-msvc
-            os: windows
-            cxx: cl.exe
-            cc: cl.exe
-            triplet: x64-windows
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua luajit libmariadb pugixml cryptopp fmt
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-
-      - name: Unshallow
-        run: git fetch --prune --unshallow
-
-      - name: Get latest CMake
-        # Using 'latest' branch, the latest CMake is installed.
-        uses: lukka/get-cmake@latest
+        if: matrix.name == 'macos'
 
       - name: Windows - remove C:/mysql*
         run: rm -r -fo C:/mysql*
-
-      - name: Set Environment vars
-        run: |
-          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
-          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        if: matrix.name == 'windows'
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@v7
+        uses: lukka/run-vcpkg@v11
         with:
-          vcpkgArguments: ${{ matrix.packages }}
-          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
-          vcpkgTriplet: ${{ matrix.triplet }}
-          appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
-          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
+          runVcpkgInstall: true
 
-      - name: Build with CMake
-        uses: lukka/run-cmake@v3
-        with:
-          useVcpkgToolchainFile: true
-          buildDirectory: ${{ runner.workspace }}/build
-          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="on"'
-
-      - name: dir
-        run: find $RUNNER_WORKSPACE
+      # run-cmake@v10 only drives CMakePresets.json, which this branch does not
+      # have, so cmake is invoked directly. The build directory stays outside
+      # the workspace because the datapack step below deletes the workspace
+      # contents before collecting the binary.
+      # run-vcpkg exports VCPKG_ROOT. On Windows it contains backslashes, which
+      # an unquoted bash word would strip, so normalise them to forward slashes.
+      - name: Configure with cmake
+        run: >
+          cmake -B ../build -S .
+          -DCMAKE_BUILD_TYPE=${{ matrix.buildtype }}
+          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT//\\//}/scripts/buildsystems/vcpkg.cmake"
+          -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
+          -DUSE_LUAJIT=${{ matrix.luajit }}
         shell: bash
 
-      - name: Upload artifact binary (exe)
-        uses: actions/upload-artifact@v2
-        with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs.exe
+      - name: Build with cmake
+        run: cmake --build ../build --config ${{ matrix.buildtype }} --parallel 2
+        shell: bash
 
-      - name: Upload artifact binary (dlls)
-        uses: actions/upload-artifact@v2
-        with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/*.dll
-
+      # upload-artifact v4 and later reject a second upload to an existing
+      # artifact name, so the binary and the datapack are collected into the
+      # workspace and uploaded by a single step.
       - name: Prepare datapack contents
-        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+        run: |
+          find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+          # Single-config generators emit ../build/tfs, multi-config ones emit
+          # ../build/<buildtype>/tfs.exe, so look one level deep either way.
+          find ../build -maxdepth 2 -type f \( -name tfs -o -name tfs.exe -o -name '*.dll' \) -exec cp {} . \;
+          [ -f tfs ] || [ -f tfs.exe ] || { echo "::error::no tfs binary was produced"; exit 1; }
         shell: bash
 
-      - name: Upload datapack contents
-        uses: actions/upload-artifact@v2
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
+          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ github.workspace }}
-

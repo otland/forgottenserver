@@ -1,0 +1,18 @@
+{
+  "name": "forgottenserver",
+  "version-string": "1.4",
+  "dependencies": [
+    "asio",
+    "boost-lexical-cast",
+    "boost-variant",
+    "cryptopp",
+    "libmariadb",
+    "lua",
+    "pugixml",
+    {
+      "name": "luajit",
+      "platform": "windows"
+    }
+  ],
+  "builtin-baseline": "a2b75031b909a2d6b051725c3909230c72d4bd4a"
+}

@@ -10,7 +10,7 @@
 #include "game.h"
 #include "pugicast.h"
 #include "spells.h"
-#include <fmt/format.h>
+#include <format>
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -394,11 +394,11 @@ static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t coun
 {
 	const ItemType& it = Item::items[item->getID()];
 	if (!it.showCount) {
-		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("Using one of {:s}...",  item->getName()));
+		player->sendTextMessage(MESSAGE_INFO_DESCR, std::format("Using one of {:s}...",  item->getName()));
 	} else if (count == 1) {
-		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("Using the last {:s}...",  item->getName()));
+		player->sendTextMessage(MESSAGE_INFO_DESCR, std::format("Using the last {:s}...",  item->getName()));
 	} else {
-		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("Using one of {:d} {:s}...", count, item->getPluralName()));
+		player->sendTextMessage(MESSAGE_INFO_DESCR, std::format("Using one of {:d} {:s}...", count, item->getPluralName()));
 	}
 }
 

@@ -11,16 +11,17 @@ env:
 
 jobs:
   scan:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     if: github.repository == 'otland/forgottenserver'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
 
       - name: Install dependencies
         run: >
-          sudo apt-get install git cmake build-essential libluajit-5.1-dev libgmp3-dev libmysqlclient-dev
-          libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
-          libpugixml-dev libcrypto++-dev libfmt-dev
+          sudo apt-get update &&
+          sudo apt-get install -y git cmake build-essential libluajit-5.1-dev libgmp3-dev libmysqlclient-dev
+          libboost-dev libasio-dev
+          libpugixml-dev libcrypto++-dev
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.

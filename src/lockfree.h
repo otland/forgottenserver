@@ -4,64 +4,94 @@
 #ifndef FS_LOCKFREE_H_8C707AEB7C7235A2FBC5D4EDDF03B008
 #define FS_LOCKFREE_H_8C707AEB7C7235A2FBC5D4EDDF03B008
 
-#if _MSC_FULL_VER >= 190023918 // Workaround for VS2015 Update 2. Boost.Lockfree is a header-only library, so this should be safe to do.
-#define _ENABLE_ATOMIC_ALIGNMENT_FIX
-#endif
+#include <mutex>
+#include <vector>
+#include <new>
 
-#include <boost/lockfree/stack.hpp>
-
-/*
- * we use this to avoid instantiating multiple free lists for objects of the
- * same size and it can be replaced by a variable template in C++14
- *
- * template <size_t TSize, size_t Capacity>
- * boost::lockfree::stack<void*, boost::lockfree::capacity<Capacity> lockfreeFreeList;
- */
 template <size_t TSize, size_t Capacity>
 struct LockfreeFreeList
 {
-	using FreeList = boost::lockfree::stack<void*, boost::lockfree::capacity<Capacity>>;
-	static FreeList& get()
-	{
-		static FreeList freeList;
-		return freeList;
-	}
+    class FreeList
+    {
+    public:
+        bool pop(void*& p)
+        {
+            std::lock_guard lock(mutex_);
+
+            if (storage_.empty()) {
+                return false;
+            }
+
+            p = storage_.back();
+            storage_.pop_back();
+            return true;
+        }
+
+        bool bounded_push(void* p)
+        {
+            std::lock_guard lock(mutex_);
+
+            if (storage_.size() >= Capacity) {
+                return false;
+            }
+
+            storage_.push_back(p);
+            return true;
+        }
+
+    private:
+        std::vector<void*> storage_;
+        std::mutex mutex_;
+    };
+
+    static FreeList& get()
+    {
+        static FreeList freeList;
+        return freeList;
+    }
 };
 
 template <typename T, size_t Capacity>
 class LockfreePoolingAllocator
 {
-	public:
-		template <class U>
-		struct rebind
-		{
-			using other = LockfreePoolingAllocator<U, Capacity>;
-		};
+public:
+    template <class U>
+    struct rebind
+    {
+        using other = LockfreePoolingAllocator<U, Capacity>;
+    };
 
-		LockfreePoolingAllocator() = default;
+    LockfreePoolingAllocator() = default;
 
-		template <typename U>
-		explicit constexpr LockfreePoolingAllocator(const LockfreePoolingAllocator<U, Capacity>&) {}
-		using value_type = T;
+    template <typename U>
+    explicit constexpr LockfreePoolingAllocator(
+        const LockfreePoolingAllocator<U, Capacity>&)
+    {
+    }
 
-		T* allocate(size_t) const {
-			auto& inst = LockfreeFreeList<sizeof(T), Capacity>::get();
-			void* p; // NOTE: p doesn't have to be initialized
-			if (!inst.pop(p)) {
-				//Acquire memory without calling the constructor of T
-				p = operator new (sizeof(T));
-			}
-			return static_cast<T*>(p);
-		}
+    using value_type = T;
 
-		void deallocate(T* p, size_t) const {
-			auto& inst = LockfreeFreeList<sizeof(T), Capacity>::get();
-			if (!inst.bounded_push(p)) {
-				//Release memory without calling the destructor of T
-				//(it has already been called at this point)
-				operator delete(p);
-			}
-		}
+    T* allocate(size_t) const
+    {
+        auto& inst = LockfreeFreeList<sizeof(T), Capacity>::get();
+
+        void* p;
+
+        if (!inst.pop(p)) {
+            p = ::operator new(sizeof(T));
+        }
+
+        return static_cast<T*>(p);
+    }
+
+    void deallocate(T* p, size_t) const
+    {
+        auto& inst = LockfreeFreeList<sizeof(T), Capacity>::get();
+
+        if (!inst.bounded_push(p)) {
+            ::operator delete(p);
+        }
+    }
 };
 
 #endif

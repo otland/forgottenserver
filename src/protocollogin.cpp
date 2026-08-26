@@ -13,7 +13,7 @@
 #include "ban.h"
 #include "game.h"
 
-#include <fmt/format.h>
+#include <format>
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -56,7 +56,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	if (!motd.empty()) {
 		//Add MOTD
 		output->addByte(0x14);
-		output->addString(fmt::format("{:d}\n{:s}", g_game.getMotdNum(), motd));
+		output->addString(std::format("{:d}\n{:s}", g_game.getMotdNum(), motd));
 	}
 
 	//Add session key
@@ -136,7 +136,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 */
 
 	if (version <= 760) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
+		disconnectClient(std::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
 		return;
 	}
 
@@ -154,7 +154,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	setXTEAKey(std::move(key));
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
+		disconnectClient(std::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
 		return;
 	}
 
@@ -179,7 +179,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 			banInfo.reason = "(none)";
 		}
 
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}", formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason), version);
+		disconnectClient(std::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}", formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason), version);
 		return;
 	}
 

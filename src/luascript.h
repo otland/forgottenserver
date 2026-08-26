@@ -10,6 +10,8 @@
 #include <lua.hpp>
 #endif
 
+#include <format>
+
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
 #ifndef LUA_COMPAT_MODULE
@@ -24,7 +26,6 @@
 #include "enums.h"
 #include "position.h"
 #include "outfit.h"
-#include <fmt/format.h>
 
 class Thing;
 class Creature;
@@ -284,7 +285,7 @@ class LuaScriptInterface
 		{
 			double num = lua_tonumber(L, arg);
 			if (num < static_cast<double>(std::numeric_limits<T>::lowest()) || num > static_cast<double>(std::numeric_limits<T>::max())) {
-				reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+				reportErrorFunc(L, std::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
 			}
 
 			return static_cast<T>(num);
@@ -296,7 +297,7 @@ class LuaScriptInterface
 		{
 			double num = lua_tonumber(L, arg);
 			if (num < static_cast<double>(std::numeric_limits<T>::lowest()) || num > static_cast<double>(std::numeric_limits<T>::max())) {
-				reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+				reportErrorFunc(L, std::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
 			}
 
 			return static_cast<T>(num);

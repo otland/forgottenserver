@@ -19,33 +19,32 @@ on:
 
 jobs:
   build-ubuntu:
-    runs-on: ubuntu-20.04
-    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
 
       - name: Install dependencies
         run: >
           sudo apt-get update &&
-          sudo apt-get install git cmake build-essential libluajit-5.1-dev libmysqlclient-dev
-          libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
-          libpugixml-dev libcrypto++-dev libfmt-dev
+          sudo apt-get install -y git cmake build-essential libluajit-5.1-dev libmysqlclient-dev
+          libboost-dev libasio-dev
+          libpugixml-dev libcrypto++-dev
+
+      # Replaces ashutoshvarma/action-cmake-build, which is unmaintained and
+      # still runs on a retired Node runtime. It only shelled out to cmake, so
+      # calling cmake directly is equivalent; the build directory is kept where
+      # the action put it so the artifact path is unchanged.
+      - name: Configure with cmake
+        env:
+          CC: gcc
+          CXX: g++
+        run: cmake -B ${{ runner.workspace }}/build -S . -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=on
 
       - name: Build with cmake
-        uses: ashutoshvarma/action-cmake-build@master
-        with:
-          build-dir: ${{ runner.workspace }}/build
-          # will set the CC & CXX for cmake
-          cc: gcc
-          cxx: g++
-          build-type: Release
-          # Extra options pass to cmake while configuring project
-          configure-options: -DUSE_LUAJIT=on
-          # run build using '-j [parallel]' to use multiple threads to build
-          parallel: 2
+        run: cmake --build ${{ runner.workspace }}/build --parallel 2
 
       - name: Upload binary
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v7
         with:
           name: ubuntu-tfs-amd64-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs

@@ -23,6 +23,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 #include <pugixml.hpp>

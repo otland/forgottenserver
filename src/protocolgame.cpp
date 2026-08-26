@@ -3,7 +3,7 @@
 
 #include "otpch.h"
 
-#include <boost/range/adaptor/reversed.hpp>
+#include <ranges>
 
 #include "protocolgame.h"
 
@@ -19,7 +19,7 @@
 #include "ban.h"
 #include "scheduler.h"
 
-#include <fmt/format.h>
+#include <format>
 
 extern ConfigManager g_config;
 extern Actions actions;
@@ -181,9 +181,9 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 				}
 
 				if (banInfo.expiresAt > 0) {
-					disconnectClient(fmt::format("Your account has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}", formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
+					disconnectClient(std::format("Your account has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}", formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
 				} else {
-					disconnectClient(fmt::format("Your account has been permanently banned by {:s}.\n\nReason specified:\n{:s}", banInfo.bannedBy, banInfo.reason));
+					disconnectClient(std::format("Your account has been permanently banned by {:s}.\n\nReason specified:\n{:s}", banInfo.bannedBy, banInfo.reason));
 				}
 				return;
 			}
@@ -193,7 +193,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			uint8_t retryTime = getWaitTime(currentSlot);
 			auto output = OutputMessagePool::getOutputMessage();
 			output->addByte(0x16);
-			output->addString(fmt::format("Too many players online.\nYou are at place {:d} on the waiting list.", currentSlot));
+			output->addString(std::format("Too many players online.\nYou are at place {:d} on the waiting list.", currentSlot));
 			output->addByte(retryTime);
 			send(output);
 			disconnect();
@@ -382,7 +382,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
+		disconnectClient(std::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
 		return;
 	}
 
@@ -402,7 +402,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 			banInfo.reason = "(none)";
 		}
 
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}", formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
+		disconnectClient(std::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}", formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
 		return;
 	}
 
@@ -606,7 +606,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 
 	const CreatureVector* creatures = tile->getCreatures();
 	if (creatures) {
-		for (const Creature* creature : boost::adaptors::reverse(*creatures)) {
+		for (const Creature* creature : std::views::reverse(*creatures)) {
 			if (!player->canSeeCreature(creature)) {
 				continue;
 			}
@@ -1904,7 +1904,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		// example:
 		// "attack +x, chance to hit +y%, z fields"
 		if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
-			msg.addString(fmt::format("{:d} physical +{:d} {:s}", it.attack, it.abilities->elementDamage, getCombatName(it.abilities->elementType)));
+			msg.addString(std::format("{:d} physical +{:d} {:s}", it.attack, it.abilities->elementDamage, getCombatName(it.abilities->elementType)));
 		} else {
 			msg.addString(std::to_string(it.attack));
 		}
@@ -1920,7 +1920,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 
 	if (it.defense != 0) {
 		if (it.extraDefense != 0) {
-			msg.addString(fmt::format("{:d} {:+d}", it.defense, it.extraDefense));
+			msg.addString(std::format("{:d} {:+d}", it.defense, it.extraDefense));
 		} else {
 			msg.addString(std::to_string(it.defense));
 		}
@@ -1940,7 +1940,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	}
 
 	if (it.decayTime != 0) {
-		msg.addString(fmt::format("{:d} seconds", it.decayTime));
+		msg.addString(std::format("{:d} seconds", it.decayTime));
 	} else {
 		msg.add<uint16_t>(0x00);
 	}
