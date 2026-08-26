@@ -7096,24 +7096,26 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L)
 		return 1;
 	}
 
-	ItemAttributes::CustomAttribute val;
+	// Construct the attribute directly instead of assigning into a default
+	// constructed one: GCC 15 reports a spurious -Wmaybe-uninitialized in
+	// boost::variant's assignment path otherwise.
+	using CustomAttribute = ItemAttributes::CustomAttribute;
 	if (isNumber(L, 3)) {
 		double tmp = tfs::lua::getNumber<double>(L, 3);
 		if (std::floor(tmp) < tmp) {
-			val.set<double>(tmp);
+			item->setCustomAttribute(key, CustomAttribute{tmp});
 		} else {
-			val.set<int64_t>(tmp);
+			item->setCustomAttribute(key, CustomAttribute{static_cast<int64_t>(tmp)});
 		}
 	} else if (lua_isstring(L, 3)) {
-		val.set<std::string>(tfs::lua::getString(L, 3));
+		item->setCustomAttribute(key, CustomAttribute{tfs::lua::getString(L, 3)});
 	} else if (lua_isboolean(L, 3)) {
-		val.set<bool>(tfs::lua::getBoolean(L, 3));
+		item->setCustomAttribute(key, CustomAttribute{tfs::lua::getBoolean(L, 3)});
 	} else {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	item->setCustomAttribute(key, val);
 	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
