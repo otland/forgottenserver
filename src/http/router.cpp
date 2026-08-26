@@ -35,7 +35,7 @@ beast::http::message_generator tfs::http::handle_request(const beast::http::requ
                                                          std::string_view ip)
 {
 	auto&& [status, responseBody] = [&req, ip]() {
-		json::error_code ec;
+		boost::system::error_code ec;
 		auto requestBody = json::parse(req.body(), ec, &mr);
 		if (ec || !requestBody.is_object()) {
 			return make_error_response({.code = 2, .message = "Invalid request body."});

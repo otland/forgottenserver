@@ -191,8 +191,6 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_token, LoginFixture)
 	BOOST_TEST(db.executeQuery(
 	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('abcd', 'fooba@example.com', SHA1('bar'), UNHEX('48656c6c6f21dead'))"));
 
-	auto now = duration_cast<seconds>(system_clock::now().time_since_epoch());
-
 	auto&& [status, body] = tfs::http::handle_login(
 	    {
 	        {"type", "login"},

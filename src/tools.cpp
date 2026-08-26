@@ -217,9 +217,25 @@ std::string randomBytes(size_t length)
 	return bytes;
 }
 
-std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
+namespace {
 
-std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
+// fmt::localtime was removed in fmt 12; format a std::tm instead.
+std::tm toLocalTime(time_t time)
+{
+	std::tm tm{};
+#ifdef _WIN32
+	localtime_s(&tm, &time);
+#else
+	localtime_r(&time, &tm);
+#endif
+	return tm;
+}
+
+} // namespace
+
+std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", toLocalTime(time)); }
+
+std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", toLocalTime(time)); }
 
 Position getNextPosition(Direction direction, Position pos)
 {

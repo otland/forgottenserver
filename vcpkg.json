@@ -46,5 +46,5 @@
   "default-features": [
     "lua"
   ],
-  "builtin-baseline": "215a2535590f1f63788ac9bd2ed58ad15e6afdff"
+  "builtin-baseline": "a2b75031b909a2d6b051725c3909230c72d4bd4a"
 }

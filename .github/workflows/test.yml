@@ -23,7 +23,7 @@ jobs:
           - 3306:3306
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
