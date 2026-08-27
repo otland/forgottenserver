@@ -24,15 +24,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - name: Setup LLVM repository
-        run: |
-          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo add-apt-repository -y 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy main'
-
-      - name: Install dependencies
-        run: sudo apt update -qq && sudo apt install -yqq clang-format
+      # The apt.llvm.org repository is no longer used. Setting it up needed
+      # apt-key, which is deprecated and no longer shipped on current Ubuntu
+      # images, and its unversioned "main" component currently advertises a
+      # clang-format metapackage whose versioned dependency does not exist,
+      # so installing from it fails outright.
+      #
+      # clang-format's output changes between releases, so the version is
+      # pinned instead of tracking whatever the runner image or the LLVM
+      # repository happens to provide. src/ as committed is clean under
+      # 18.1.8 through 20.x, and reports violations under both 21 and 18.1.3
+      # (the build ubuntu-24.04 ships), so the version cannot be left to the
+      # distro either.
+      - name: Install clang-format
+        run: pipx install clang-format==19.1.7
 
       - name: Check code style
         run: clang-format -n -style=file --Werror src/*.{cpp,h}

@@ -228,7 +228,7 @@ public:
 
 	bool configureEvent(const pugi::xml_node& node) override;
 
-	virtual bool playerCastInstant(Player* player, std::string& param);
+	bool playerCastInstant(Player* player, std::string& param);
 
 	bool castSpell(Creature* creature) override;
 	bool castSpell(Creature* creature, Creature* target) override;
