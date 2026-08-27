@@ -42,17 +42,6 @@ jobs:
       - run: echo CXX=g++-14 >> $GITHUB_ENV
         if: ${{ matrix.os == 'macos' || matrix.os == 'ubuntu' }}
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: cpp
-          # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
-          queries: +security-extended,security-and-quality
-          config: |
-            paths-ignore:
-              - 'vcpkg/**'
-        if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
-
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
@@ -60,17 +49,57 @@ jobs:
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
 
+      # Configure before CodeQL starts tracing. The vcpkg toolchain builds the
+      # dependencies from source during project(), and everything compiled inside
+      # the tracing window ends up in the CodeQL database.
+      # The unity build is disabled on the CodeQL leg so that alerts are reported
+      # against src/*.cpp instead of the generated Unity/unity_*.cxx files.
+      - name: Configure with CMake
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: vcpkg
+          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}', '-DENABLE_UNITY_BUILD=${{ (matrix.os == 'ubuntu' && matrix.buildtype == 'Debug') && 'OFF' || 'ON' }}']"
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: cpp
+          # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+          queries: +security-extended,security-and-quality
+        if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
+
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
           buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
-          configurePreset: vcpkg
-          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}']"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
+          category: "/language:cpp"
+          output: sarif-results
+          upload: failure-only
+        if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
+
+      # paths-ignore has no effect on a compiled language that is analysed with a
+      # build, so the dependency headers under build/vcpkg_installed and the
+      # generated files under build/src have to be dropped from the results.
+      - name: Filter out dependency and generated code
+        uses: advanced-security/filter-sarif@v1.1
+        with:
+          patterns: |
+            +**
+            -build/**
+            -vcpkg/**
+          input: sarif-results/cpp.sarif
+          output: sarif-results/cpp.sarif
+        if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
+
+      - name: Upload CodeQL results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: sarif-results/cpp.sarif
           category: "/language:cpp"
         if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
 
