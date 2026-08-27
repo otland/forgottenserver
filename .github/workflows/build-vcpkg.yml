@@ -28,6 +28,7 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
         buildtype: [Debug, Release]
@@ -37,13 +38,18 @@ jobs:
       VCPKG_BUILD_TYPE: release
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
+      # ubuntu-latest defaults to GCC 13, which lacks the C++23 support the
+      # tree needs, so pick the GCC 14 the image also ships. macOS builds
+      # with the Xcode clang instead: Homebrew's GCC cannot parse the macOS
+      # 26 SDK headers (mach/message.h uses clang-only static_assert
+      # macros), so every dependency that touches them fails to compile.
       - run: echo CXX=g++-14 >> $GITHUB_ENV
-        if: ${{ matrix.os == 'macos' || matrix.os == 'ubuntu' }}
+        if: ${{ matrix.os == 'ubuntu' }}
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: cpp
           # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
@@ -69,33 +75,26 @@ jobs:
           configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}']"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:cpp"
         if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
 
-      - name: Upload artifact binary
-        uses: actions/upload-artifact@v4
-        if: ${{ !startsWith(matrix.os, 'windows') }}
-        with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs
-
-      - name: Upload artifact binary (exe)
-        uses: actions/upload-artifact@v4
-        if: ${{ startsWith(matrix.os, 'windows') }}
-        with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: |
-            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
-            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/*.dll
-
+      # upload-artifact v4 and later reject a second upload to an existing
+      # artifact name, so the binaries and the datapack have to be collected
+      # into the workspace and uploaded by a single step.
+      # The vcpkg preset builds into ${sourceDir}/build, so the binary has to
+      # be pulled out before the workspace is pruned down to the datapack.
       - name: Prepare datapack contents
-        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+        run: |
+          build=build/${{ matrix.buildtype }}
+          cp $build/tfs $build/tfs.exe $build/*.dll . 2>/dev/null || true
+          find . -mindepth 1 -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql ! -name tfs ! -name tfs.exe ! -name '*.dll' -exec rm -r {} \;
+          [ -f tfs ] || [ -f tfs.exe ] || { echo "::error::no tfs binary found in $build"; exit 1; }
         shell: bash
 
-      - name: Upload datapack contents
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ github.workspace }}
