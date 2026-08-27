@@ -2996,6 +2996,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Group", "getAccess", LuaScriptInterface::luaGroupGetAccess);
 	registerMethod(L, "Group", "getMaxDepotItems", LuaScriptInterface::luaGroupGetMaxDepotItems);
 	registerMethod(L, "Group", "getMaxVipEntries", LuaScriptInterface::luaGroupGetMaxVipEntries);
+	registerMethod(L, "Group", "getMaxVipGroups", LuaScriptInterface::luaGroupGetMaxVipGroups);
 	registerMethod(L, "Group", "hasFlag", LuaScriptInterface::luaGroupHasFlag);
 
 	// Vocation
@@ -12196,6 +12197,18 @@ int LuaScriptInterface::luaGroupGetMaxVipEntries(lua_State* L)
 	Group* group = tfs::lua::getUserdata<Group>(L, 1);
 	if (group) {
 		lua_pushnumber(L, group->maxVipEntries);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGroupGetMaxVipGroups(lua_State* L)
+{
+	// group:getMaxVipGroups()
+	Group* group = tfs::lua::getUserdata<Group>(L, 1);
+	if (group) {
+		lua_pushnumber(L, group->maxVipGroups);
 	} else {
 		lua_pushnil(L);
 	}

@@ -119,6 +119,10 @@ depotPremiumLimit = 15000
 questTrackerFreeLimit = 10
 questTrackerPremiumLimit = 15
 
+-- VIP Group limits
+vipGroupFreeLimit = 3
+vipGroupPremiumLimit = 8
+
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes
 serverSaveNotifyMessage = true
