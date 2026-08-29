@@ -5,6 +5,10 @@ on:
     - cron: '0 0 * * 1' # Every Monday at 00:00 UTC
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   vcpkg-update-baseline:
     runs-on: ubuntu-latest
@@ -21,23 +25,29 @@ jobs:
         id: update
         run: |
           vcpkg/vcpkg x-update-baseline
-          echo "changed-files=$(git diff --name-only)" > "$GITHUB_OUTPUT"
-          echo "short=$(jq -r '.["builtin-baseline"][:7]' < vcpkg.json)" > "$GITHUB_OUTPUT"
-          echo "long=$(jq -r '.["builtin-baseline"]' < vcpkg.json)" > "$GITHUB_OUTPUT"
+          if git diff --quiet -- vcpkg.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          {
+            echo "short=$(jq -r '.["builtin-baseline"][:7]' < vcpkg.json)"
+            echo "long=$(jq -r '.["builtin-baseline"]' < vcpkg.json)"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Commit updated vcpkg manifest
-        if: contains(steps.update.outputs.changed-files, 'vcpkg.json')
+        if: steps.update.outputs.changed == 'true'
         run: |
-          git checkout -b vcpkg-update-baseline-${{ steps.update.output.short }}
+          git checkout -b vcpkg-update-baseline-${{ steps.update.outputs.short }}
           git add vcpkg.json
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Update vcpkg baseline to ${{ steps.update.output.short }}"
-          git push origin vcpkg-update-baseline-${{ steps.update.output.short }}
+          git commit -m "Update vcpkg baseline to ${{ steps.update.outputs.short }}"
+          git push origin vcpkg-update-baseline-${{ steps.update.outputs.short }}
 
       - name: Create pull request
-        if: contains(steps.update.outputs.changed-files, 'vcpkg.json')
+        if: steps.update.outputs.changed == 'true'
         run: |
-          gh pr create --title "Update vcpkg baseline to ${{ steps.update.output.short }}" --body "This PR updates the vcpkg baseline to [${{ steps.update.output.long }}](https://github.com/microsoft/vcpkg/tree/${{ steps.update.output.long }})." --base master --head vcpkg-update-baseline-${{ steps.update.output.short }}
+          gh pr create --title "Update vcpkg baseline to ${{ steps.update.outputs.short }}" --body "This PR updates the vcpkg baseline to [${{ steps.update.outputs.long }}](https://github.com/microsoft/vcpkg/tree/${{ steps.update.outputs.long }})." --base ${{ github.ref_name }} --head vcpkg-update-baseline-${{ steps.update.outputs.short }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
