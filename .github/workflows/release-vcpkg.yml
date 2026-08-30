@@ -17,7 +17,7 @@ jobs:
       VCPKG_BUILD_TYPE: release
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -34,12 +34,14 @@ jobs:
           configurePreset: vcpkg
           configurePresetAdditionalArgs: "['-DUSE_LUAJIT=ON']"
 
+      # The vcpkg preset builds into ${sourceDir}/build, so the binary has to
+      # be pulled out before the workspace is pruned down to the datapack.
       - name: Prepare datapack contents
         run: |
-          pwd
-          ls -al
-          find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
-          mv ../build/RelWithDebInfo/tfs ../build/RelWithDebInfo/tfs.exe* ../build/RelWithDebInfo/*.dll .
+          build=build/RelWithDebInfo
+          cp $build/tfs $build/tfs.exe $build/*.dll . 2>/dev/null || true
+          find . -mindepth 1 -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql ! -name tfs ! -name tfs.exe ! -name '*.dll' -exec rm -r {} \;
+          [ -f tfs ] || [ -f tfs.exe ] || { echo "::error::no tfs binary found in $build"; exit 1; }
         shell: bash
 
       - name: Zip the release files
