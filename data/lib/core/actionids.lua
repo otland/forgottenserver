@@ -1,3 +1,4 @@
+---@type table<string, number>
 actionIds = {
 	sandHole = 100, -- hidden sand hole
 	pickHole = 105, -- hidden mud hole
@@ -7,5 +8,6 @@ actionIds = {
 	citizenshipLast = 30050, -- citizenship teleport last
 }
 
+---@type table<string, number>
 uniqueIds = {
 }

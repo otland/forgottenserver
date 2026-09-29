@@ -1,6 +1,8 @@
 Quest = {}
 Quest.__index = Quest
 
+---Registers a quest with the game.
+---@return boolean
 function Quest:register()
 	local quests = Game.getQuests()
 	local missions = Game.getMissions()
@@ -17,10 +19,16 @@ function Quest:register()
 	return true
 end
 
+---Checks if the quest is started for a player.
+---@param player Player
+---@return boolean
 function Quest:isStarted(player)
 	return player:getStorageValue(self.storageId) >= self.storageValue
 end
 
+---Checks if the quest is completed for a player.
+---@param player Player
+---@return boolean
 function Quest:isCompleted(player)
 	for _, mission in pairs(self.missions) do
 		if not mission:isCompleted(player) then
@@ -30,6 +38,9 @@ function Quest:isCompleted(player)
 	return true
 end
 
+---Returns all missions that have been started for a specific quest, for a specific player.
+---@param player Player
+---@return table
 function Quest:getMissions(player)
 	local missions = {}
 	for _, mission in pairs(self.missions) do
@@ -40,6 +51,10 @@ function Quest:getMissions(player)
 	return missions
 end
 
+---Checks if the quest is being tracked
+---@param key number
+---@param value number
+---@return boolean
 function Quest:isTracking(key, value)
 	if self.storageId == key and value == self.storageValue then
 		return true
@@ -56,6 +71,9 @@ end
 Mission = {}
 Mission.__index = Mission
 
+---Checks is a mission has been started for the player.
+---@param player Player
+---@return boolean
 function Mission:isStarted(player)
 	local value = player:getStorageValue(self.storageId)
 	if value < self.startValue then
@@ -69,6 +87,9 @@ function Mission:isStarted(player)
 	return true
 end
 
+---Checks if the mission is completed for the player.
+---@param player Player
+---@return boolean
 function Mission:isCompleted(player)
 	if self.ignoreEndValue then
 		return player:getStorageValue(self.storageId) >= self.endValue
@@ -76,6 +97,9 @@ function Mission:isCompleted(player)
 	return player:getStorageValue(self.storageId) == self.endValue
 end
 
+---Gets the name of the mission, appending "(Completed)" if the mission is completed.
+---@param player Player
+---@return string
 function Mission:getName(player)
 	if self:isCompleted(player) then
 		return string.format("%s (Completed)", self.name)
@@ -83,6 +107,9 @@ function Mission:getName(player)
 	return self.name
 end
 
+---Gets the description of the mission at the current state for the player.
+---@param player Player
+---@return string
 function Mission:getDescription(player)
 	local descriptionType = type(self.description)
 	if descriptionType == "function" then

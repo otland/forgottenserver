@@ -1,6 +1,7 @@
 do
 	local accountsStorage = {}
-
+---Returns the accounts storage table.
+---@return table
 	function Game.getAccountsStorage() return accountsStorage end
 
 	function Game.clearAccountStorageValue(accountId, key)
@@ -9,12 +10,18 @@ do
 			accountStorage[key] = nil
 		end
 	end
-
+--- Returns the value of the specified key in the account storage.
+---@param accountId number
+---@param key any
+---@return any
 	function Game.getAccountStorageValue(accountId, key)
 		local accountStorage = accountsStorage[accountId]
 		return accountStorage and accountStorage[key] or nil
 	end
-
+--- Sets the value of the specified key in the account storage.
+---@param accountId number
+---@param key any
+---@param value any
 	function Game.setAccountStorageValue(accountId, key, value)
 		if not accountsStorage[accountId] then
 			accountsStorage[accountId] = {}
@@ -22,6 +29,8 @@ do
 		accountsStorage[accountId][key] = value
 	end
 
+--- Saves the current account storage table to the database.
+---@return boolean
 	function Game.saveAccountsStorage()
 		local transaction = DBTransaction()
 		if not transaction:begin() then

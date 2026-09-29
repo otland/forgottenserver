@@ -2,6 +2,10 @@ function Container.isContainer(self)
 	return true
 end
 
+---Creates a loot item in the container.
+---@param self Container
+---@param item MonsterLootBlock
+---@return boolean
 function Container.createLootItem(self, item)
 	if self:getEmptySlots() == 0 then
 		return true
@@ -68,6 +72,8 @@ function Container.createLootItem(self, item)
 	return true
 end
 
+---Returns a string with all the loot that was dropped.
+---@return table<number, string>|string
 function Container:getContentDescription()
 	local items = self:getItems()
 	if items and #items > 0 then
