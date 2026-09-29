@@ -302,6 +302,8 @@ bool ConfigManager::load()
 	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 6 * 60);
 	integer[PATHFINDING_INTERVAL] = getGlobalNumber(L, "pathfindingInterval", 200);
 	integer[PATHFINDING_DELAY] = getGlobalNumber(L, "pathfindingDelay", 300);
+	integer[VIPGROUP_FREE_LIMIT] = getGlobalNumber(L, "vipGroupFreeLimit", 3);
+	integer[VIPGROUP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipGroupPremiumLimit", 8);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {
