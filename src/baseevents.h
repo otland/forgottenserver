@@ -27,7 +27,9 @@ public:
 	bool scripted = false;
 	bool fromLua = false;
 
-	int32_t getScriptId() { return scriptId; }
+	int32_t getScriptId() const { return scriptId; }
+
+	void clearScript();
 
 protected:
 	virtual std::string_view getScriptEventName() const = 0;
@@ -63,6 +65,8 @@ public:
 	CallBack() = default;
 
 	bool loadCallBack(LuaScriptInterface* interface, const std::string& name);
+
+	void clearScript();
 
 protected:
 	int32_t scriptId = 0;

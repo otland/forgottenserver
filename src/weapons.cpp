@@ -29,13 +29,14 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 	if (it == weapons.end()) {
 		return nullptr;
 	}
-	return it->second;
+	return it->second.get();
 }
 
 void Weapons::clear(bool fromLua)
 {
 	for (auto it = weapons.begin(); it != weapons.end();) {
 		if (fromLua == it->second->fromLua) {
+			it->second->clearScript();
 			it = weapons.erase(it);
 		} else {
 			++it;
@@ -59,9 +60,9 @@ void Weapons::loadDefaults()
 			case WEAPON_AXE:
 			case WEAPON_SWORD:
 			case WEAPON_CLUB: {
-				WeaponMelee* weapon = new WeaponMelee(&scriptInterface);
+				auto weapon = std::make_unique<WeaponMelee>(&scriptInterface);
 				weapon->configureWeapon(it);
-				weapons[i] = weapon;
+				weapons.emplace(i, std::move(weapon));
 				break;
 			}
 
@@ -71,9 +72,9 @@ void Weapons::loadDefaults()
 					continue;
 				}
 
-				WeaponDistance* weapon = new WeaponDistance(&scriptInterface);
+				auto weapon = std::make_unique<WeaponDistance>(&scriptInterface);
 				weapon->configureWeapon(it);
-				weapons[i] = weapon;
+				weapons.emplace(i, std::move(weapon));
 				break;
 			}
 
@@ -97,9 +98,9 @@ Event_ptr Weapons::getEvent(const std::string& nodeName)
 
 bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
-	Weapon* weapon = static_cast<Weapon*>(event.release()); // event is guaranteed to be a Weapon
+	Weapon_ptr weapon(static_cast<Weapon*>(event.release())); // event is guaranteed to be a Weapon
 
-	auto result = weapons.emplace(weapon->getID(), weapon);
+	auto result = weapons.emplace(weapon->getID(), std::move(weapon));
 	if (!result.second) {
 		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID()
 		          << std::endl;
@@ -109,7 +110,8 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 
 bool Weapons::registerLuaEvent(Weapon* weapon)
 {
-	weapons[weapon->getID()] = weapon;
+	Weapon_ptr weaponPtr{weapon};
+	weapons.emplace(weapon->getID(), std::move(weaponPtr));
 	return true;
 }
 
