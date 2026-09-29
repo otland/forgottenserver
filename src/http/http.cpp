@@ -1,5 +1,3 @@
-#define BOOST_ASIO_NO_DEPRECATED
-
 #include "http.h"
 
 #include "listener.h"

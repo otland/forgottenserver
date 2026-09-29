@@ -11,6 +11,8 @@
 #include "server.h"
 #include "tasks.h"
 
+namespace proxy_protocol = tfs::net::proxy_protocol;
+
 Connection_ptr ConnectionManager::createConnection(boost::asio::io_context& io_context,
                                                    ConstServicePort_ptr servicePort)
 {
@@ -97,6 +99,14 @@ void Connection::accept(Protocol_ptr protocol)
 	accept();
 }
 
+void Connection::resolveRemoteAddress()
+{
+	boost::system::error_code error;
+	if (auto endpoint = socket.remote_endpoint(error); !error) {
+		remoteAddress = endpoint.address();
+	}
+}
+
 void Connection::accept()
 {
 	if (connectionState == CONNECTION_STATE_PENDING) {
@@ -104,11 +114,6 @@ void Connection::accept()
 	}
 
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
-
-	boost::system::error_code error;
-	if (auto endpoint = socket.remote_endpoint(error); !error) {
-		remoteAddress = endpoint.address();
-	}
 
 	try {
 		readTimer.expires_after(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
@@ -121,11 +126,10 @@ void Connection::accept()
 		auto bufferLength = !receivedLastChar && receivedName && connectionState == CONNECTION_STATE_GAMEWORLD_AUTH
 		                        ? 1
 		                        : NetworkMessage::HEADER_LENGTH;
-		boost::asio::async_read(
-		    socket, boost::asio::buffer(msg.getBuffer(), bufferLength),
-		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
-			    thisPtr->parseHeader(error);
-		    });
+		asyncRead(msg.getBuffer(), bufferLength,
+		          [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+			          thisPtr->parseHeader(error);
+		          });
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::accept] " << e.what() << std::endl;
 		close(FORCE_CLOSE);
@@ -142,6 +146,26 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		return;
 	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
 		return;
+	}
+
+	if (!receivedFirstHeader) {
+		receivedFirstHeader = true;
+
+		// Only a proxy running on the same host is trusted to announce the original client address. Only the two
+		// bytes of a regular packet header have been read at this point, so this is a probe: the rest of the
+		// signature is checked once the full header is in, and a mismatch there hands the bytes back to this flow
+		if (proxy_protocol::isTrustedPeer(remoteAddress)) {
+			if (proxy_protocol::matchesSignature(msg.getBuffer(), NetworkMessage::HEADER_LENGTH)) {
+				readProxyHeader();
+				return;
+			}
+
+			// Not relayed by a proxy, apply the connection limit that ServicePort defers for local peers
+			if (!acceptConnection(remoteAddress)) {
+				close(FORCE_CLOSE);
+				return;
+			}
+		}
 	}
 
 	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - timeConnected) + 1);
@@ -197,15 +221,135 @@ void Connection::parseHeader(const boost::system::error_code& error)
 
 		// Read packet content
 		msg.setLength(size + NetworkMessage::HEADER_LENGTH);
-		boost::asio::async_read(
-		    socket, boost::asio::buffer(msg.getBodyBuffer(), size),
-		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
-			    thisPtr->parsePacket(error);
-		    });
+		asyncRead(msg.getBodyBuffer(), size,
+		          [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+			          thisPtr->parsePacket(error);
+		          });
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::parseHeader] " << e.what() << std::endl;
 		close(FORCE_CLOSE);
 	}
+}
+
+void Connection::readProxyHeader()
+{
+	try {
+		readTimer.expires_after(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
+		readTimer.async_wait(
+		    [thisPtr = std::weak_ptr<Connection>(shared_from_this())](const boost::system::error_code& error) {
+			    Connection::handleTimeout(thisPtr, error);
+		    });
+
+		// Read the rest of the fixed-size header, the first NetworkMessage::HEADER_LENGTH bytes are already in
+		boost::asio::async_read(
+		    socket,
+		    boost::asio::buffer(msg.getBuffer() + NetworkMessage::HEADER_LENGTH,
+		                        proxy_protocol::HEADER_LENGTH - NetworkMessage::HEADER_LENGTH),
+		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+			    thisPtr->parseProxyHeader(error);
+		    });
+	} catch (boost::system::system_error& e) {
+		std::cout << "[Network error - Connection::readProxyHeader] " << e.what() << std::endl;
+		close(FORCE_CLOSE);
+	}
+}
+
+void Connection::parseProxyHeader(const boost::system::error_code& error)
+{
+	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
+	readTimer.cancel();
+
+	if (error) {
+		close(FORCE_CLOSE);
+		return;
+	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
+		return;
+	}
+
+	uint8_t* buffer = msg.getBuffer();
+	if (!proxy_protocol::matchesSignature(buffer, proxy_protocol::SIGNATURE.size())) {
+		// The first two bytes matched by coincidence: this is an ordinary packet that happens to start with 0x0D 0x0A.
+		// Hand everything read so far back to the regular flow, which consumes it before reading from the socket
+		pushback.assign(buffer, buffer + proxy_protocol::HEADER_LENGTH);
+
+		// Not relayed by a proxy, apply the connection limit that ServicePort defers for local peers
+		if (!acceptConnection(remoteAddress)) {
+			close(FORCE_CLOSE);
+			return;
+		}
+
+		accept();
+		return;
+	}
+
+	auto header = proxy_protocol::parseHeader(buffer);
+	if (!header || header->length > NETWORKMESSAGE_MAXSIZE - proxy_protocol::HEADER_LENGTH) {
+		std::cout << "[Warning - Connection::parseProxyHeader] Malformed PROXY protocol header from " << remoteAddress
+		          << std::endl;
+		close(FORCE_CLOSE);
+		return;
+	}
+
+	proxyHeader = *header;
+	if (proxyHeader.length == 0) {
+		applyProxyHeader();
+		return;
+	}
+
+	try {
+		readTimer.expires_after(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
+		readTimer.async_wait(
+		    [thisPtr = std::weak_ptr<Connection>(shared_from_this())](const boost::system::error_code& error) {
+			    Connection::handleTimeout(thisPtr, error);
+		    });
+
+		// Read the address block and any TLVs following it
+		boost::asio::async_read(
+		    socket, boost::asio::buffer(msg.getBuffer() + proxy_protocol::HEADER_LENGTH, proxyHeader.length),
+		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+			    thisPtr->parseProxyAddress(error);
+		    });
+	} catch (boost::system::system_error& e) {
+		std::cout << "[Network error - Connection::parseProxyHeader] " << e.what() << std::endl;
+		close(FORCE_CLOSE);
+	}
+}
+
+void Connection::parseProxyAddress(const boost::system::error_code& error)
+{
+	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
+	readTimer.cancel();
+
+	if (error) {
+		close(FORCE_CLOSE);
+		return;
+	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
+		return;
+	}
+
+	applyProxyHeader();
+}
+
+void Connection::applyProxyHeader()
+{
+	// A LOCAL command (e.g. a health check) is the proxy connecting on its own behalf, the real socket endpoints
+	// apply and the connection is not treated as relayed
+	if (proxyHeader.command == proxy_protocol::Command::PROXY) {
+		if (auto address =
+		        proxy_protocol::parseSourceAddress(proxyHeader, msg.getBuffer() + proxy_protocol::HEADER_LENGTH)) {
+			remoteAddress = *address;
+		}
+		proxied = true;
+	}
+
+	// The client address is known now, apply the connection limit that ServicePort defers for local peers
+	if (!acceptConnection(remoteAddress)) {
+		close(FORCE_CLOSE);
+		return;
+	}
+
+	// Continue with the regular protocol
+	accept();
 }
 
 void Connection::parsePacket(const boost::system::error_code& error)
@@ -256,11 +400,10 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		    });
 
 		// Wait to the next packet
-		boost::asio::async_read(
-		    socket, boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
-		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
-			    thisPtr->parseHeader(error);
-		    });
+		asyncRead(msg.getBuffer(), NetworkMessage::HEADER_LENGTH,
+		          [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+			          thisPtr->parseHeader(error);
+		          });
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::parsePacket] " << e.what() << std::endl;
 		close(FORCE_CLOSE);

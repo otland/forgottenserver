@@ -7,6 +7,9 @@
 #include "connection.h"
 #include "signals.h"
 
+// Per-IP connection rate limit, returns whether a new connection from clientIP should be accepted
+bool acceptConnection(const Connection::Address& clientIP);
+
 class ServiceBase
 {
 public:

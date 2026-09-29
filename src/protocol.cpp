@@ -144,3 +144,12 @@ Connection::Address Protocol::getIP() const
 
 	return {};
 }
+
+bool Protocol::isProxied() const
+{
+	if (auto connection = getConnection()) {
+		return connection->isProxied();
+	}
+
+	return false;
+}

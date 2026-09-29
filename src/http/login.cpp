@@ -33,7 +33,7 @@ int getPvpType()
 
 } // namespace
 
-std::pair<status, json::value> tfs::http::handle_login(const json::object& body, std::string_view ip)
+std::pair<status, json::value> tfs::http::handle_login(const json::object& body, std::string_view ip, bool proxied)
 {
 	using namespace std::chrono;
 
@@ -125,13 +125,15 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 		} while (result->next());
 	}
 
+	std::string serverIP = proxied ? "127.0.0.1" : getString(ConfigManager::IP);
+
 	json::array worlds{
 	    {
 	        {"id", 0}, // not implemented
 	        {"name", getString(ConfigManager::SERVER_NAME)},
-	        {"externaladdressprotected", getString(ConfigManager::IP)},
+	        {"externaladdressprotected", serverIP},
 	        {"externalportprotected", getNumber(ConfigManager::GAME_PORT)},
-	        {"externaladdressunprotected", getString(ConfigManager::IP)},
+	        {"externaladdressunprotected", serverIP},
 	        {"externalportunprotected", getNumber(ConfigManager::GAME_PORT)},
 	        {"previewstate", 0}, // not implemented
 	        {"location", getString(ConfigManager::LOCATION)},

@@ -216,6 +216,24 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_no_players, LoginFixture)
 	BOOST_TEST(characters.size() == 0);
 }
 
+BOOST_FIXTURE_TEST_CASE(test_login_success_proxied, LoginFixture)
+{
+	BOOST_TEST(db.executeQuery(
+	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('klmn', 'klmn@example.com', SHA1('bar'))"));
+
+	auto&& [status, body] = tfs::http::handle_login(
+	    {{"type", "login"}, {"email", "klmn@example.com"}, {"password", "bar"}}, ip, /*proxied=*/true);
+
+	BOOST_TEST(status == status::ok);
+
+	// a client connecting through a local proxy is told to keep going through it
+	auto& worlds = body.at("playdata").at("worlds").as_array();
+	BOOST_TEST(worlds.size() == 1);
+	BOOST_TEST(worlds[0].at("externaladdressprotected").as_string() == "127.0.0.1");
+	BOOST_TEST(worlds[0].at("externaladdressunprotected").as_string() == "127.0.0.1");
+	BOOST_TEST(worlds[0].at("externalportprotected").as_int64() == 7171);
+}
+
 BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 {
 	auto premiumEndsAt = now + days(30);

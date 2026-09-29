@@ -36,6 +36,7 @@ public:
 	Connection_ptr getConnection() const { return connection.lock(); }
 
 	Connection::Address getIP() const;
+	bool isProxied() const;
 
 	// Use this function for autosend messages only
 	OutputMessage_ptr getOutputBuffer(int32_t size);

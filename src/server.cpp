@@ -19,6 +19,23 @@ struct ConnectBlock
 	uint32_t count = 1;
 };
 
+boost::asio::ip::address getListenAddress()
+{
+	if (getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
+		return boost::asio::ip::make_address(getString(ConfigManager::IP));
+	}
+	return boost::asio::ip::address_v6::any();
+}
+
+void openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
+{
+	if (auto service = weak_service.lock()) {
+		service->open(port);
+	}
+}
+
+} // namespace
+
 bool acceptConnection(const Connection::Address& clientIP)
 {
 	static std::recursive_mutex mu;
@@ -54,23 +71,6 @@ bool acceptConnection(const Connection::Address& clientIP)
 	}
 	return true;
 }
-
-boost::asio::ip::address getListenAddress()
-{
-	if (getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
-		return boost::asio::ip::make_address(getString(ConfigManager::IP));
-	}
-	return boost::asio::ip::address_v6::any();
-}
-
-void openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
-{
-	if (auto service = weak_service.lock()) {
-		service->open(port);
-	}
-}
-
-} // namespace
 
 ServiceManager::~ServiceManager() { stop(); }
 
@@ -144,8 +144,12 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 			return;
 		}
 
+		connection->resolveRemoteAddress();
+
+		// A local peer may be a proxy announcing the real client address (PROXY protocol), so the connection limit
+		// for those is applied by Connection once the client address is known
 		const auto& remote_ip = connection->getIP();
-		if (acceptConnection(remote_ip)) {
+		if (tfs::net::proxy_protocol::isTrustedPeer(remote_ip) || acceptConnection(remote_ip)) {
 			Service_ptr service = services.front();
 			if (service->is_single_socket()) {
 				connection->accept(service->make_protocol(connection));

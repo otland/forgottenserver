@@ -13,6 +13,17 @@
 
 extern Game g_game;
 
+namespace {
+
+// Address clients on the given connection should use to reach the server: clients connecting through a local
+// proxy have to keep going through it
+std::string getServerIP(const Protocol& protocol)
+{
+	return protocol.isProxied() ? "127.0.0.1" : getString(ConfigManager::IP);
+}
+
+} // namespace
+
 std::map<Connection::Address, int64_t> ProtocolStatus::ipConnectMap;
 const uint64_t ProtocolStatus::start = OTSYS_TIME();
 
@@ -92,7 +103,7 @@ void ProtocolStatus::sendStatusString()
 	pugi::xml_node serverinfo = tsqp.append_child("serverinfo");
 	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
 	serverinfo.append_attribute("uptime") = std::to_string(uptime).c_str();
-	serverinfo.append_attribute("ip") = getString(ConfigManager::IP).c_str();
+	serverinfo.append_attribute("ip") = getServerIP(*this).c_str();
 	serverinfo.append_attribute("servername") = getString(ConfigManager::SERVER_NAME).c_str();
 	serverinfo.append_attribute("port") = std::to_string(getNumber(ConfigManager::HTTP_PORT)).c_str();
 	serverinfo.append_attribute("location") = getString(ConfigManager::LOCATION).c_str();
@@ -169,7 +180,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 	if (requestedInfo & REQUEST_BASIC_SERVER_INFO) {
 		output->addByte(0x10);
 		output->addString(getString(ConfigManager::SERVER_NAME));
-		output->addString(getString(ConfigManager::IP));
+		output->addString(getServerIP(*this));
 		output->addString(std::to_string(getNumber(ConfigManager::HTTP_PORT)));
 	}
 

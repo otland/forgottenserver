@@ -19,6 +19,9 @@ set(http_HDR
 	)
 
 add_library(http OBJECT ${http_SRC})
+# tfslib defines this in definitions.h; it changes the ABI of inline Boost.Asio functions (BOOST_ASIO_SYNC_OP_VOID),
+# so every translation unit linked into tfs must agree on it
+target_compile_definitions(http PRIVATE BOOST_ASIO_NO_DEPRECATED)
 target_link_libraries(http PRIVATE Boost::json)
 set_target_properties(http PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
 
