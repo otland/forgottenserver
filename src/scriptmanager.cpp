@@ -14,6 +14,7 @@
 #include "spells.h"
 #include "talkaction.h"
 #include "weapons.h"
+#include "logger.h"
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
@@ -47,7 +48,7 @@ bool ScriptingManager::loadScriptSystems()
 	}
 
 	g_scripts = new Scripts();
-	std::cout << ">> Loading lua libs" << std::endl;
+	getLogger().info("Loading lua libs");
 	if (!g_scripts->loadScripts("scripts/lib", true, false)) {
 		std::cout << "> ERROR: Unable to load lua libs!" << std::endl;
 		return false;
