@@ -93,8 +93,13 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 			return;
 		}
 
+		connection->resolveRemoteAddress();
+
+		// A local peer may be a proxy announcing the real client address (PROXY protocol), so the connection limit
+		// for those is applied by Connection once the client address is known
 		auto remote_ip = connection->getIP();
-		if (remote_ip != 0 && g_bans.acceptConnection(remote_ip)) {
+		if (remote_ip != 0 && (tfs::net::proxy_protocol::isTrustedPeer(connection->remoteAddress) ||
+		                       g_bans.acceptConnection(remote_ip))) {
 			Service_ptr service = services.front();
 			if (service->is_single_socket()) {
 				connection->accept(service->make_protocol(connection));

@@ -19,6 +19,10 @@ expFromPlayersLevelRange = 75
 -- Connection Config
 -- NOTE: maxPlayers set to 0 means no limit
 -- NOTE: allowWalkthrough is only applicable to players
+-- NOTE: connections from localhost may start with a PROXY protocol v2 header (e.g. HAProxy "send-proxy-v2"), the
+--       announced client address is then used instead of the socket address (bans, limits, lastIP) and the
+--       status and login responses advertise 127.0.0.1 as the server address so that clients keep using the proxy;
+--       only IPv4 clients are supported
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
