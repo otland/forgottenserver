@@ -4,10 +4,12 @@
 #include "otpch.h"
 
 #include "protocol.h"
+#include "configmanager.h"
 #include "outputmessage.h"
 #include "rsa.h"
 #include "xtea.h"
 
+extern ConfigManager g_config;
 extern RSA g_RSA;
 
 namespace {
@@ -94,4 +96,18 @@ uint32_t Protocol::getIP() const
 	}
 
 	return 0;
+}
+
+bool Protocol::isProxied() const
+{
+	if (auto connection = getConnection()) {
+		return connection->isProxied();
+	}
+
+	return false;
+}
+
+std::string Protocol::getServerIP() const
+{
+	return isProxied() ? "127.0.0.1" : g_config.getString(ConfigManager::IP);
 }

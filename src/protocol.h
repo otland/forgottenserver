@@ -33,6 +33,10 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		}
 
 		uint32_t getIP() const;
+		bool isProxied() const;
+		// Address clients on this connection should use to reach the server: clients connecting through a local
+		// proxy have to keep going through it
+		std::string getServerIP() const;
 
 		//Use this function for autosend messages only
 		OutputMessage_ptr getOutputBuffer(int32_t size);
