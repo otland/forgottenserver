@@ -699,6 +699,7 @@ do
 			end
 		end
 
+		local tooFarToRead = false
 		-- item text
 		if not isVirtual and itemType:hasAllowDistRead() then
 			local text = item:getText()
@@ -722,6 +723,7 @@ do
 					end
 				else
 					response[#response + 1] = "\nYou are too far away to read it."
+					tooFarToRead = true
 				end
 			else
 				response[#response + 1] = "\nNothing is written on it."
@@ -748,18 +750,18 @@ do
 				response[#response + 1] = string.format("\n%s", desc)
 			end
 		else
-			if lookDistance <= 4 then
-				local desc = not isVirtual and item:getSpecialDescription()
+			local desc = not isVirtual and item:getSpecialDescription()
 
-				if not desc or desc == "" then
-					desc = itemType:getDescription()
-				end
+			if not desc or desc == "" then
+				desc = itemType:getDescription()
+			end
 
-				if desc and desc:len() > 0 then
+			if desc and desc:len() > 0 then
+				if lookDistance <= 4 then
 					response[#response + 1] = string.format("\n%s", desc)
+				elseif not tooFarToRead then
+					response[#response + 1] = "\nYou are too far away to read it."
 				end
-			else
-				response[#response + 1] = "\nYou are too far away to read it."
 			end
 		end
 
